@@ -66,7 +66,7 @@ export default function HypothesisTest() {
         <line x1={sx(thr)} y1={PAD - 6} x2={sx(thr)} y2={BASE} stroke="#2a2f3a" strokeWidth="1.5" strokeDasharray="4 3" />
         <text x={sx(0)} y={PAD - 8} fill="#6b7280" fontSize="10" textAnchor="middle">H0: эффекта нет</text>
         <text x={sx(EFFECT)} y={PAD - 8} fill="#2ab8eb" fontSize="10" textAnchor="middle">H1: эффект есть</text>
-        <text x={sx(thr)} y={BASE + 14} fill="#2a2f3a" fontSize="10" textAnchor="middle">порог</text>
+        <text x={sx(thr)} y={BASE + 14} fill="#2a2f3a" fontSize="10" textAnchor="middle">критич. значение</text>
       </svg>
 
       <div className="flex flex-wrap gap-4 mt-1 text-sm">
@@ -77,7 +77,7 @@ export default function HypothesisTest() {
 
       <div className="grid sm:grid-cols-2 gap-x-5 gap-y-3 mt-4 text-sm">
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Порог решения</span><span className="tabular-nums text-cyanink">{thr.toFixed(1)}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>Критическое значение</span><span className="tabular-nums text-cyanink">{thr.toFixed(1)}</span></div>
           <input type="range" min="-2" max="10" step="0.1" value={thr} onChange={(e) => setThr(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>

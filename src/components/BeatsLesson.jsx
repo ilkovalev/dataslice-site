@@ -29,7 +29,7 @@ export default function BeatsLesson({ lesson }) {
 
   return (
     <article className="max-w-6xl">
-      <h2 className="text-2xl font-semibold mb-3">{lesson.title}</h2>
+      <h2 className="text-left text-2xl font-semibold mb-3">{lesson.title}</h2>
       {lesson.intro && <p className="text-gray-700 leading-relaxed mb-6 max-w-3xl">{gloss(lesson.intro)}</p>}
 
       <div className={Widget ? 'grid md:grid-cols-3 gap-8 items-start' : ''}>

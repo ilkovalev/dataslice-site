@@ -94,7 +94,7 @@ export default function PowerCurve() {
         <path d={curvePts(diff)} fill="none" stroke="#2ab8eb" strokeWidth="2.5" />
         {/* порог */}
         <line x1={sxD(crit)} y1={TOP - 6} x2={sxD(crit)} y2={base} stroke="#2a2f3a" strokeWidth="1.3" strokeDasharray="4 3" />
-        <text x={sxD(crit)} y={TOP - 10} fill="#2a2f3a" fontSize="10" textAnchor="middle">порог решения</text>
+        <text x={sxD(crit)} y={TOP - 10} fill="#2a2f3a" fontSize="10" textAnchor="middle">критич. значение</text>
         {/* центры */}
         <text x={sxD(0)} y={base + 14} fill="#6b7280" fontSize="10" textAnchor="middle">0 (нет эффекта)</text>
         <text x={sxD(diff)} y={base + 14} fill="#0d7fb0" fontSize="10" textAnchor="middle">разница = {diff}</text>

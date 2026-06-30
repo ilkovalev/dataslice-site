@@ -108,11 +108,11 @@ export default function DistributionExplorer({ only, allow }) {
         {only ? (
           <span className="text-sm font-medium text-gray-900">{dist.title}</span>
         ) : (
-          <select value={distId} onChange={(e) => selectDist(e.target.value)} className="bg-ink border border-black/15 rounded-md px-3 py-1.5 text-sm">
+          <select value={distId} onChange={(e) => selectDist(e.target.value)} className="min-w-0 flex-1 bg-ink border border-black/15 rounded-md px-3 py-1.5 text-sm">
             {(allow ? allow.map((id) => distributions[id]) : distributionList).map((dd) => <option key={dd.id} value={dd.id}>{dd.title}</option>)}
           </select>
         )}
-        <div className="flex gap-1">
+        <div className="flex gap-1 shrink-0">
           <button onClick={() => setMode('pdf')} className={`text-xs px-2 py-1 rounded border ${mode === 'pdf' ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{dist.kind === 'discrete' ? 'PMF' : 'PDF'}</button>
           <button onClick={() => setMode('cdf')} className={`text-xs px-2 py-1 rounded border ${mode === 'cdf' ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>CDF</button>
         </div>

@@ -1,3 +1,5 @@
+import { useLayoutEffect, useRef, useState } from 'react'
+
 // Дерево метрик как граф: боксы сверху вниз, соединённые линиями (как схема).
 const BOX_W = 150
 const BOX_H = 46
@@ -38,10 +40,24 @@ function buildLayout(root) {
 
 export default function MetricTreeGraph({ tree }) {
   const { nodes, edges, width, height } = buildLayout(tree.root)
+  // Вписываем дерево по ширине контейнера: на узких экранах видно ВСЮ схему
+  // (масштаб ≤1, центрировано), без горизонтального скролла.
+  const boxRef = useRef(null)
+  const [scale, setScale] = useState(1)
+  useLayoutEffect(() => {
+    const el = boxRef.current
+    if (!el) return
+    const apply = () => setScale(Math.min(1, el.clientWidth / width))
+    apply()
+    const ro = new ResizeObserver(apply)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [width])
   return (
     <div className="rounded-xl border border-black/10 bg-panel p-5">
-      <div className="overflow-x-auto">
-        <div className="relative mx-auto" style={{ width, height }}>
+      <div ref={boxRef}>
+        <div style={{ width: width * scale, height: height * scale, margin: '0 auto', position: 'relative' }}>
+        <div className="relative" style={{ width, height, position: 'absolute', top: 0, left: 0, transform: `scale(${scale})`, transformOrigin: 'top left' }}>
           <svg className="absolute inset-0 pointer-events-none" width={width} height={height}>
             {edges.map(([p, c], i) => (
               <path key={i} d={`M${p.cx},${p.y + BOX_H} C${p.cx},${p.y + BOX_H + 32} ${c.cx},${c.y - 32} ${c.cx},${c.y}`} stroke="#d6cebf" fill="none" strokeWidth="1.5" />
@@ -57,6 +73,7 @@ export default function MetricTreeGraph({ tree }) {
               {n.formula && <div className="text-[10px] font-mono text-cyanink/80 mt-0.5 leading-tight">{n.formula}</div>}
             </div>
           ))}
+        </div>
         </div>
       </div>
       {tree.counterMetrics && (

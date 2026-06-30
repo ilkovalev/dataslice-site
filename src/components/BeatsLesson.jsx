@@ -34,7 +34,7 @@ export default function BeatsLesson({ lesson }) {
 
       <div className={Widget ? 'grid md:grid-cols-3 gap-8 items-start' : ''}>
         {Widget && (
-          <div className="md:col-span-2 md:sticky md:top-20">
+          <div className="min-w-0 md:col-span-2 md:sticky md:top-20">
             {showGenericReset && (
               <div className="flex justify-end mb-1">
                 <button

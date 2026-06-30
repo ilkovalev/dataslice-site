@@ -84,7 +84,7 @@ export default function CoinFlips() {
         </svg>
 
         {/* частотная гистограмма исходов */}
-        <svg viewBox={`0 0 ${HW} ${HH}`} className="w-full md:w-[260px] h-auto select-none">
+        <svg viewBox={`0 0 ${HW} ${HH}`} className="w-full max-w-[280px] mx-auto md:max-w-none md:mx-0 md:w-[260px] h-auto select-none">
           <text x={HW / 2} y={12} fill="#6b7280" fontSize="10" textAnchor="middle">частоты исходов</text>
           <line x1={HPAD} y1={byBase} x2={HW - HPAD} y2={byBase} stroke="#d6cebf" strokeWidth="1.5" />
           {/* целевые доли p и 1−p */}

@@ -113,11 +113,11 @@ export default function Framework({ industries, onPick }) {
       <section>
         <h2 className="text-lg font-medium mb-2">Дерево против иерархии метрик</h2>
         <div className="grid md:grid-cols-2 gap-4">
-          <div>
+          <div className="min-w-0">
             <div className="text-sm text-gray-700 mb-2"><span className="text-cyanink">Дерево</span> раскладывает одну метрику на множители и слагаемые (Прибыль = Доход − Расход). Идём по причинно-следственным рычагам — какую «шестерёнку» подкрутить.</div>
             <MetricTreeGraph tree={profitTree} />
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="text-sm text-gray-700 mb-2"><span className="text-cyanink">Иерархия (пирамида)</span> группирует метрики по уровню абстракции и аудитории. Не «из чего складывается», а «кому и о чём» — чтобы согласовать метрики между уровнями команды.</div>
             <div className="rounded-xl border border-black/10 bg-panel p-5 flex flex-col items-center gap-2">
               {pyramidBands.map((b, i) => (

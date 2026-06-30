@@ -12,21 +12,21 @@ export default function App() {
     <div className="min-h-screen">
       <div className="h-1 bg-gradient-to-r from-accent to-brand" />
       <header className="border-b border-accent/20 sticky top-0 bg-accent/10 backdrop-blur z-10">
-        <div className="max-w-6xl mx-auto px-4 h-14 flex items-center gap-2">
-          <span className="font-semibold mr-4">«Кусочек пиццы» <span aria-hidden>🍕</span></span>
-          <nav className="flex gap-1">
-            <NavLink to="/stats" className={linkClass}>Статистика</NavLink>
-            <NavLink to="/metrics" className={linkClass}>Иерархии метрик</NavLink>
-            <NavLink to="/glossary" className={linkClass}>Глоссарий</NavLink>
-          </nav>
+        <div className="max-w-6xl mx-auto px-4 py-2 sm:py-0 sm:h-14 flex flex-wrap items-center gap-x-3 gap-y-2">
+          <span className="order-1 font-semibold whitespace-nowrap sm:mr-4">«Кусочек пиццы» <span aria-hidden>🍕</span></span>
           <a
             href="https://t.me/dataslice"
             target="_blank"
             rel="noreferrer"
-            className="ml-auto text-sm px-3 py-1.5 rounded-md bg-accent text-white border border-accent hover:opacity-90 transition-opacity whitespace-nowrap"
+            className="order-2 ml-auto text-sm px-3 py-1.5 rounded-md bg-accent text-white border border-accent hover:opacity-90 transition-opacity whitespace-nowrap sm:order-3"
           >
             🍕 Telegram-канал
           </a>
+          <nav className="order-3 w-full flex gap-1 overflow-x-auto sm:order-2 sm:w-auto">
+            <NavLink to="/stats" className={linkClass}>Статистика</NavLink>
+            <NavLink to="/metrics" className={linkClass}>Иерархии метрик</NavLink>
+            <NavLink to="/glossary" className={linkClass}>Глоссарий</NavLink>
+          </nav>
         </div>
       </header>
       <main className="max-w-6xl mx-auto px-4 py-8">

@@ -1,0 +1,122 @@
+{
+  "id": "foodtech",
+  "archetype": "Транзакционные платформы",
+  "industry": "Доставка еды (фудтех, 3 стороны)",
+  "northStar": "Completed Orders (выполненные заказы)",
+  "root": {
+    "id": "orders", "level": 0, "title": "Completed Orders", "formula": "Едоки × Частота × Fulfilment",
+    "note": "Трёхсторонняя платформа: едоки, рестораны, курьеры. Ценность — доставленный вовремя заказ.",
+    "children": [
+      { "id": "eaters", "level": 1, "title": "Едоки (спрос)", "formula": "польз. × частота", "note": "Сторона спроса.", "children": [
+        { "id": "active-eaters", "level": 2, "title": "Активные едоки", "note": "Кто реально заказывает.", "children": [
+          { "id": "freq", "level": 3, "title": "Заказов в месяц", "note": "Частота — ключ к юнит-экономике.", "children": [
+            { "id": "subscription", "level": 4, "title": "Подписка на доставку", "note": "Бесплатная доставка растит частоту." }
+          ] }
+        ] }
+      ] },
+      { "id": "restaurants", "level": 1, "title": "Рестораны (предложение)", "formula": "точки × меню", "note": "Сторона предложения.", "children": [
+        { "id": "active-rest", "level": 2, "title": "Активные рестораны", "note": "Ширина выбора.", "children": [
+          { "id": "selection", "level": 3, "title": "Selection (выбор рядом)", "note": "Сколько вариантов в радиусе.", "children": [
+            { "id": "menu-quality", "level": 4, "title": "Качество карточек/фото", "note": "Влияет на конверсию в заказ." }
+          ] }
+        ] }
+      ] },
+      { "id": "couriers", "level": 1, "title": "Курьеры + матчинг", "formula": "Fulfilment", "note": "Доставка вовремя.", "children": [
+        { "id": "delivery-time", "level": 2, "title": "Время доставки", "note": "Быстрее → выше повтор.", "children": [
+          { "id": "ontime", "level": 3, "title": "Доля вовремя", "note": "Опоздания убивают повтор." }
+        ] },
+        { "id": "courier-supply", "level": 2, "title": "Доступность курьеров", "note": "Хватает ли мощности в пик." }
+      ] }
+    ]
+  },
+  "pyramid": {
+    "note": "От юнит-экономики заказа (вершина) к логистике последней мили (основание).",
+    "bands": [
+      { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка/GMV", "Completed Orders", "Contribution margin/заказ"] },
+      { "label": "Продуктовые", "role": "продакты", "items": ["Активные едоки", "Частота", "Selection", "Активные рестораны"] },
+      { "label": "Операционные", "role": "операции", "items": ["Время доставки", "Доля вовремя", "Доступность курьеров"] },
+      { "label": "Платформенные", "role": "инженеры", "items": ["Матчинг курьера", "Точность ETA", "Аптайм приложения"] }
+    ]
+  },
+  "counterMetrics": [
+    { "title": "Доля проблемных заказов", "note": "опоздания, холодная еда, недовоз — бьют по повтору" },
+    { "title": "Маржа на заказ", "note": "рост заказов на субсидиях — путь в убыток" },
+    { "title": "Отток ресторанов", "note": "высокая комиссия выдавливает партнёров" }
+  ],
+  "companies": [
+    {
+      "id": "yandexeda", "name": "Яндекс Еда", "northStar": "Completed Orders (плотность городов + dark kitchens)",
+      "note": "ставка на плотность РФ-городов, экосистему Плюс и собственные dark kitchens для скорости.",
+      "root": {
+        "id": "ye-orders", "level": 0, "title": "Completed Orders", "formula": "Едоки × Частота × Fulfilment",
+        "note": "Плотность + экосистема Плюс + собственная логистика и виртуальные кухни.",
+        "children": [
+          { "id": "ye-eaters", "level": 1, "title": "Едоки", "note": "Спрос внутри экосистемы.", "children": [
+            { "id": "ye-plus", "level": 2, "title": "Плюс (подписка)", "note": "Кэшбэк и бесплатная доставка.", "children": [
+              { "id": "ye-freq", "level": 3, "title": "Частота заказов", "note": "Растёт у участников Плюса.", "children": [
+                { "id": "ye-retail", "level": 4, "title": "Кросс с Лавкой/продуктами", "note": "Один курьерский слой на сервисы." }
+              ] }
+            ] }
+          ] },
+          { "id": "ye-supply", "level": 1, "title": "Рестораны + кухни", "note": "Предложение.", "children": [
+            { "id": "ye-rest", "level": 2, "title": "Активные рестораны", "note": "Selection в городе.", "children": [
+              { "id": "ye-dark", "level": 3, "title": "Dark kitchens", "note": "Свои кухни закрывают пробелы меню." }
+            ] }
+          ] },
+          { "id": "ye-logi", "level": 1, "title": "Логистика", "note": "Скорость доставки.", "children": [
+            { "id": "ye-time", "level": 2, "title": "Время доставки", "note": "Конкурентное преимущество.", "children": [
+              { "id": "ye-courier", "level": 3, "title": "Доступность курьеров", "note": "Пеший+авто пул." }
+            ] }
+          ] }
+        ]
+      },
+      "pyramid": { "bands": [
+        { "label": "Бизнесовые", "role": "руководство", "items": ["GMV", "Completed Orders", "Маржа/заказ"] },
+        { "label": "Продуктовые", "role": "продакты", "items": ["Плюс", "Частота", "Selection"] },
+        { "label": "Операционные", "role": "операции", "items": ["Время доставки", "Dark kitchens", "Доступность курьеров"] },
+        { "label": "Платформенные", "role": "инженеры", "items": ["Матчинг", "ETA", "Аптайм"] }
+      ] },
+      "counterMetrics": [
+        { "title": "Опоздания в пик", "note": "нехватка курьеров бьёт по повтору" },
+        { "title": "Субсидии на заказ", "note": "рост на скидках убивает маржу" }
+      ]
+    },
+    {
+      "id": "doordash", "name": "DoorDash", "northStar": "Completed Orders (пригороды + DashPass)",
+      "note": "лидер США: ставка на пригороды (меньше конкуренции), подписку DashPass и логистику Drive для ресторанов.",
+      "root": {
+        "id": "dd-orders", "level": 0, "title": "Completed Orders", "formula": "Едоки × Частота × Fulfilment",
+        "note": "Сильны в пригородах, где плотность ниже, а лояльность и частота — выше.",
+        "children": [
+          { "id": "dd-eaters", "level": 1, "title": "Едоки", "note": "Спрос, в т.ч. в пригородах.", "children": [
+            { "id": "dd-pass", "level": 2, "title": "DashPass", "note": "Подписка повышает частоту и удержание.", "children": [
+              { "id": "dd-freq", "level": 3, "title": "Заказов в месяц", "note": "Частота на подписчика.", "children": [
+                { "id": "dd-suburb", "level": 4, "title": "Доля пригородных рынков", "note": "Меньше конкуренции — выше маржа." }
+              ] }
+            ] }
+          ] },
+          { "id": "dd-supply", "level": 1, "title": "Рестораны", "note": "Эксклюзивы и крупные сети.", "children": [
+            { "id": "dd-rest", "level": 2, "title": "Активные рестораны", "note": "Selection.", "children": [
+              { "id": "dd-drive", "level": 3, "title": "DoorDash Drive (white-label)", "note": "Логистика как услуга ресторанам." }
+            ] }
+          ] },
+          { "id": "dd-logi", "level": 1, "title": "Dasher-логистика", "note": "Сеть курьеров.", "children": [
+            { "id": "dd-time", "level": 2, "title": "Время доставки", "note": "Скорость и точность.", "children": [
+              { "id": "dd-dasher", "level": 3, "title": "Доступность Dasher'ов", "note": "Мощность доставки." }
+            ] }
+          ] }
+        ]
+      },
+      "pyramid": { "bands": [
+        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Completed Orders", "Contribution profit"] },
+        { "label": "Продуктовые", "role": "продакты", "items": ["DashPass", "Частота", "Selection"] },
+        { "label": "Операционные", "role": "операции", "items": ["Время доставки", "Доступность Dasher'ов", "Пригородный охват"] },
+        { "label": "Платформенные", "role": "инженеры", "items": ["Матчинг", "ETA", "Аптайм"] }
+      ] },
+      "counterMetrics": [
+        { "title": "Качество доставки", "note": "ошибки заказа и опоздания" },
+        { "title": "Жалобы ресторанов на комиссию", "note": "давление на партнёров" }
+      ]
+    }
+  ]
+}

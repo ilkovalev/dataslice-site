@@ -1,0 +1,50 @@
+import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
+import StatsPage from './pages/StatsPage.jsx'
+import MetricsPage from './pages/MetricsPage.jsx'
+import GlossaryPage from './pages/GlossaryPage.jsx'
+
+const linkBase = 'px-3 py-1.5 rounded-md text-sm transition-colors'
+const linkClass = ({ isActive }) =>
+  `${linkBase} ${isActive ? 'bg-accent/20 text-cyanink' : 'text-gray-700 hover:bg-black/5'}`
+
+export default function App() {
+  return (
+    <div className="min-h-screen">
+      <div className="h-1 bg-gradient-to-r from-accent to-brand" />
+      <header className="border-b border-accent/20 sticky top-0 bg-accent/10 backdrop-blur z-10">
+        <div className="max-w-6xl mx-auto px-4 h-14 flex items-center gap-2">
+          <span className="font-semibold mr-4">«Кусочек пиццы» <span aria-hidden>🍕</span></span>
+          <nav className="flex gap-1">
+            <NavLink to="/stats" className={linkClass}>Статистика</NavLink>
+            <NavLink to="/metrics" className={linkClass}>Иерархии метрик</NavLink>
+            <NavLink to="/glossary" className={linkClass}>Глоссарий</NavLink>
+          </nav>
+          <a
+            href="https://t.me/dataslice"
+            target="_blank"
+            rel="noreferrer"
+            className="ml-auto text-sm px-3 py-1.5 rounded-md bg-accent text-white border border-accent hover:opacity-90 transition-opacity whitespace-nowrap"
+          >
+            🍕 Telegram-канал
+          </a>
+        </div>
+      </header>
+      <main className="max-w-6xl mx-auto px-4 py-8">
+        <Routes>
+          <Route path="/" element={<Navigate to="/stats" replace />} />
+          <Route path="/stats" element={<StatsPage />} />
+          <Route path="/metrics" element={<MetricsPage />} />
+          <Route path="/glossary" element={<GlossaryPage />} />
+        </Routes>
+      </main>
+      <footer className="border-t border-black/10 mt-8">
+        <div className="max-w-6xl mx-auto px-4 py-6 text-sm text-gray-600">
+          Полезные материалы для аналитиков от канала{' '}
+          <a href="https://t.me/dataslice" target="_blank" rel="noreferrer" className="text-cyanink hover:underline">«Кусочек пиццы» 🍕</a>{' '}
+          — аналитика данных простыми словами.{' '}
+          <a href="https://t.me/dataslice" target="_blank" rel="noreferrer" className="text-cyanink hover:underline">Подписаться →</a>
+        </div>
+      </footer>
+    </div>
+  )
+}

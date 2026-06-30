@@ -1,0 +1,130 @@
+{
+  "id": "search",
+  "archetype": "Экономика внимания",
+  "industry": "Поисковые сервисы",
+  "northStar": "Successful Sessions (доля сессий с найденным ответом)",
+  "root": {
+    "id": "ss", "level": 0, "title": "Successful Sessions", "formula": "Сессии × Success Rate",
+    "note": "Нашёл ответ → вернётся → больше рекламных показов в выдаче.",
+    "children": [
+      { "id": "demand", "level": 1, "title": "Спрос (запросы)", "formula": "польз. × запросы/польз.", "note": "Сколько вообще ищут.", "children": [
+        { "id": "users", "level": 2, "title": "Активные пользователи", "note": "База ищущих.", "children": [
+          { "id": "default", "level": 3, "title": "Доля «поиск по умолчанию»", "note": "Браузеры/устройства с этим поиском.", "children": [
+            { "id": "deals", "level": 4, "title": "Дистрибуционные сделки", "note": "Договоры с вендорами устройств." }
+          ] }
+        ] },
+        { "id": "qpu", "level": 2, "title": "Запросов на пользователя", "note": "Глубина привычки искать." }
+      ] },
+      { "id": "quality", "level": 1, "title": "Качество выдачи", "formula": "Success Rate", "note": "Решает, вернётся ли юзер.", "children": [
+        { "id": "relevance", "level": 2, "title": "Релевантность", "note": "Попал ли в намерение.", "children": [
+          { "id": "ctr-top", "level": 3, "title": "CTR верхних результатов", "note": "Кликают ли по первым ссылкам.", "children": [
+            { "id": "dwell", "level": 4, "title": "Dwell time", "note": "Долго ли на странице — не вернулся ли искать дальше." }
+          ] },
+          { "id": "reformulate", "level": 3, "title": "Доля переформулировок", "note": "Пришлось ли переспрашивать — плохой сигнал." }
+        ] },
+        { "id": "speed", "level": 2, "title": "Скорость выдачи", "note": "Быстро ли пришёл ответ." }
+      ] },
+      { "id": "monet", "level": 1, "title": "Монетизация", "formula": "запросы × Ad Coverage × CPC", "note": "Реклама в выдаче.", "children": [
+        { "id": "coverage", "level": 2, "title": "Ad Coverage", "note": "Доля запросов с рекламой.", "children": [
+          { "id": "ad-ctr", "level": 3, "title": "CTR рекламы", "note": "Кликают ли по объявлениям." }
+        ] },
+        { "id": "cpc", "level": 2, "title": "CPC (цена клика)", "note": "Аукционная ставка." }
+      ] }
+    ]
+  },
+  "pyramid": {
+    "note": "От денег (вершина) к инженерии ранжирования (основание).",
+    "bands": [
+      { "label": "Бизнесовые", "role": "руководство", "items": ["Рекламная выручка", "Successful Sessions", "MAU"] },
+      { "label": "Продуктовые", "role": "продакты", "items": ["Спрос (запросы)", "Success Rate", "Ad Coverage"] },
+      { "label": "Операционные", "role": "аналитики качества", "items": ["CTR топа", "Доля переформулировок", "Dwell time"] },
+      { "label": "Платформенные", "role": "инженеры", "items": ["Латентность выдачи", "Свежесть индекса", "Аптайм"] }
+    ]
+  },
+  "counterMetrics": [
+    { "title": "Доля «плохих» кликов", "note": "клик и сразу назад — выдача обманула" },
+    { "title": "Доля рекламы над органикой", "note": "перебор рекламы выжигает доверие" }
+  ],
+  "companies": [
+    {
+      "id": "google", "name": "Google", "northStar": "Successful Sessions (веб-поиск)",
+      "note": "глобальный веб-поиск, ставка на дистрибуцию по умолчанию и рекламный аукцион.",
+      "root": {
+        "id": "g-ss", "level": 0, "title": "Successful Sessions", "formula": "Запросы × Success Rate",
+        "note": "Масштаб запросов × качество ранжирования по всему вебу.",
+        "children": [
+          { "id": "g-dist", "level": 1, "title": "Дистрибуция", "note": "Откуда берутся запросы.", "children": [
+            { "id": "g-default", "level": 2, "title": "Поиск по умолчанию", "note": "Сделки с Apple, Android, браузерами.", "children": [
+              { "id": "g-deal", "level": 3, "title": "Доля устройств с Google", "note": "Покрытие дистрибуции.", "children": [
+                { "id": "g-tac", "level": 4, "title": "TAC (плата за трафик)", "note": "Цена дистрибуции." }
+              ] }
+            ] }
+          ] },
+          { "id": "g-quality", "level": 1, "title": "Качество ранжирования", "note": "Сердце продукта.", "children": [
+            { "id": "g-rel", "level": 2, "title": "Релевантность", "note": "Сигналы ранжирования.", "children": [
+              { "id": "g-ctr", "level": 3, "title": "CTR топа", "note": "Клики по первым результатам.", "children": [
+                { "id": "g-short", "level": 4, "title": "Доля коротких кликов", "note": "Вернулся искать — плохо." }
+              ] }
+            ] },
+            { "id": "g-snippet", "level": 2, "title": "Featured snippets / AI-обзоры", "note": "Ответ прямо в выдаче." }
+          ] },
+          { "id": "g-ads", "level": 1, "title": "Рекламный аукцион", "note": "Основная выручка.", "children": [
+            { "id": "g-cov", "level": 2, "title": "Ad Coverage", "note": "Доля коммерческих запросов с рекламой." },
+            { "id": "g-cpc", "level": 2, "title": "CPC × Ad CTR", "note": "Доход с показа.", "children": [
+              { "id": "g-qs", "level": 3, "title": "Quality Score", "note": "Качество объявления влияет на цену." }
+            ] }
+          ] }
+        ]
+      },
+      "pyramid": { "bands": [
+        { "label": "Бизнесовые", "role": "руководство", "items": ["Ads-выручка", "Successful Sessions"] },
+        { "label": "Продуктовые", "role": "продакты", "items": ["Дистрибуция", "Качество ранжирования", "Ad Coverage"] },
+        { "label": "Операционные", "role": "Search Quality", "items": ["CTR топа", "Короткие клики", "Quality Score"] },
+        { "label": "Платформенные", "role": "инфраструктура", "items": ["Латентность", "Свежесть индекса веба", "Аптайм"] }
+      ] },
+      "counterMetrics": [
+        { "title": "Доля спам-сайтов в топе", "note": "SEO-накрутка портит выдачу" },
+        { "title": "Перегруз рекламой", "note": "много объявлений над органикой — отток доверия" }
+      ]
+    },
+    {
+      "id": "yandex", "name": "Яндекс", "northStar": "Successful Sessions (поиск + экосистема)",
+      "note": "локальный поиск внутри экосистемы; ключ — локальная релевантность и переходы в сервисы.",
+      "root": {
+        "id": "y-ss", "level": 0, "title": "Successful Sessions", "formula": "Запросы × Success Rate",
+        "note": "Локальная релевантность + втягивание в сервисы экосистемы.",
+        "children": [
+          { "id": "y-eco", "level": 1, "title": "Экосистемная дистрибуция", "note": "Поиск как вход в сервисы.", "children": [
+            { "id": "y-portal", "level": 2, "title": "Трафик с Главной/Браузера", "note": "Свои точки входа.", "children": [
+              { "id": "y-plus", "level": 3, "title": "Подписка Плюс", "note": "Связывает сервисы.", "children": [
+                { "id": "y-cross", "level": 4, "title": "Сервисов на пользователя", "note": "Глубина экосистемы." }
+              ] }
+            ] }
+          ] },
+          { "id": "y-quality", "level": 1, "title": "Локальное качество", "note": "Русскоязычная морфология и гео.", "children": [
+            { "id": "y-rel", "level": 2, "title": "Релевантность", "note": "Учёт языка и региона.", "children": [
+              { "id": "y-ctr", "level": 3, "title": "CTR топа", "note": "Клики по первым результатам.", "children": [
+                { "id": "y-reform", "level": 4, "title": "Переформулировки", "note": "Переспросы — плохой сигнал." }
+              ] }
+            ] },
+            { "id": "y-vertical", "level": 2, "title": "Колдунщики (вертикали)", "note": "Погода, карты, маркет прямо в выдаче." }
+          ] },
+          { "id": "y-monet", "level": 1, "title": "Монетизация", "note": "Директ-аукцион.", "children": [
+            { "id": "y-cov", "level": 2, "title": "Ad Coverage", "note": "Доля запросов с рекламой." },
+            { "id": "y-cpc", "level": 2, "title": "CPC × CTR", "note": "Доход с показа." }
+          ] }
+        ]
+      },
+      "pyramid": { "bands": [
+        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка Поиска", "Successful Sessions", "Доля рынка РФ"] },
+        { "label": "Продуктовые", "role": "продакты", "items": ["Экосистемный трафик", "Локальная релевантность", "Колдунщики"] },
+        { "label": "Операционные", "role": "качество", "items": ["CTR топа", "Переформулировки", "Cross-use сервисов"] },
+        { "label": "Платформенные", "role": "инженеры", "items": ["Латентность", "Свежесть индекса", "Аптайм"] }
+      ] },
+      "counterMetrics": [
+        { "title": "Перекос в свои сервисы", "note": "продвижение себя в ущерб релевантности" },
+        { "title": "Доля спама в топе", "note": "качество выдачи" }
+      ]
+    }
+  ]
+}

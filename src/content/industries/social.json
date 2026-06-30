@@ -1,0 +1,141 @@
+{
+  "id": "social",
+  "archetype": "Экономика внимания",
+  "industry": "Соцсети и контент",
+  "northStar": "Total Watch Time (общее время просмотра)",
+  "root": {
+    "id": "wt", "level": 0, "title": "Total Watch Time", "formula": "Reach × Frequency × Depth",
+    "note": "Валюта — минуты внимания: больше времени в приложении → больше рекламного инвентаря.",
+    "children": [
+      { "id": "reach", "level": 1, "title": "Reach (охват)", "formula": "DAU / MAU", "note": "Сколько активных вообще заходит.", "children": [
+        { "id": "new", "level": 2, "title": "Новые пользователи", "note": "Приток из всех каналов.", "children": [
+          { "id": "viral", "level": 3, "title": "Виральный коэффициент (K)", "note": "Сколько новых приводит один.", "children": [
+            { "id": "shares", "level": 4, "title": "Доля шеров", "note": "Как часто делятся вовне." },
+            { "id": "invite-cr", "level": 4, "title": "Конверсия приглашения", "note": "Доля перешедших по шеру и оставшихся." }
+          ] },
+          { "id": "paid-acq", "level": 3, "title": "Платный трафик", "note": "Установки из рекламы." }
+        ] },
+        { "id": "ret", "level": 2, "title": "Retention 1/7/30", "note": "Возвращаются ли после установки.", "children": [
+          { "id": "push-cr", "level": 3, "title": "Конверсия пуш → открытие", "note": "Доля уведомлений, вернувших юзера." }
+        ] }
+      ] },
+      { "id": "freq", "level": 1, "title": "Frequency (частота)", "formula": "сессии / польз.", "note": "Сколько раз в день заходят.", "children": [
+        { "id": "triggers", "level": 2, "title": "Триггеры возврата", "note": "Что возвращает в приложение.", "children": [
+          { "id": "push-sent", "level": 3, "title": "Отправленные пуши", "note": "Перебор бьёт по отпискам." },
+          { "id": "follow-graph", "level": 3, "title": "Размер графа подписок", "note": "Больше подписок — больше поводов вернуться." }
+        ] },
+        { "id": "habit", "level": 2, "title": "Привычка (D7 сессий)", "note": "Закрепилась ли регулярность." }
+      ] },
+      { "id": "depth", "level": 1, "title": "Depth (глубина)", "formula": "минуты / сессию", "note": "Сколько проводят за заход — работа алгоритма.", "children": [
+        { "id": "reco", "level": 2, "title": "Качество рекомендаций", "note": "Попадает ли лента в интерес.", "children": [
+          { "id": "ctr", "level": 3, "title": "CTR обложки/превью", "note": "Кликают ли на предложенное." },
+          { "id": "completion", "level": 3, "title": "Completion Rate", "note": "Какую долю видео досматривают.", "children": [
+            { "id": "avd", "level": 4, "title": "Средняя длительность просмотра", "note": "Минуты на ролик — сигнал качества." }
+          ] }
+        ] },
+        { "id": "scroll", "level": 2, "title": "Глубина скролла", "note": "Как далеко уходят по ленте." }
+      ] }
+    ]
+  },
+  "pyramid": {
+    "note": "Те же метрики, но сгруппированы по аудитории — от совета директоров (вершина) до инженеров (основание).",
+    "bands": [
+      { "label": "Бизнесовые", "role": "совет директоров", "items": ["Рекламная выручка", "Total Watch Time", "DAU"] },
+      { "label": "Продуктовые", "role": "продакт-команды", "items": ["Reach", "Frequency", "Depth", "Retention 1/7/30"] },
+      { "label": "Операционные", "role": "аналитики ленты", "items": ["CTR превью", "Completion Rate", "Глубина скролла", "Конверсия пушей"] },
+      { "label": "Платформенные", "role": "инженеры", "items": ["Время загрузки видео", "p99 латентности ленты", "Доля сбоев плеера"] }
+    ]
+  },
+  "counterMetrics": [
+    { "title": "Do Not Recommend / скрытия", "note": "сигнал, что алгоритм давит залипательным мусором" },
+    { "title": "Report Rate", "note": "жалобы на контент" },
+    { "title": "Long-term Retention", "note": "если Watch Time растёт, а удержание 30-го дня падает — выжигаем аудиторию" }
+  ],
+  "companies": [
+    {
+      "id": "youtube", "name": "YouTube", "northStar": "Total Watch Time (длинные сессии)",
+      "note": "длинный контент, осознанный выбор по превью и через поиск; ключ — рекомендации и подписки.",
+      "root": {
+        "id": "yt-wt", "level": 0, "title": "Total Watch Time", "formula": "Сессии × Длина сессии",
+        "note": "Ставка на длинные осознанные просмотры, а не на бесконечную ленту.",
+        "children": [
+          { "id": "yt-disc", "level": 1, "title": "Discovery (как находят видео)", "note": "Три разных входа в контент.", "children": [
+            { "id": "yt-home", "level": 2, "title": "Рекомендации на главной", "note": "Основной источник просмотров.", "children": [
+              { "id": "yt-ctr", "level": 3, "title": "CTR превью", "note": "Кликабельность обложки и заголовка.", "children": [
+                { "id": "yt-thumb", "level": 4, "title": "A/B обложек", "note": "Тест превью по кликам." }
+              ] }
+            ] },
+            { "id": "yt-search", "level": 2, "title": "Поиск", "note": "Осознанный запрос.", "children": [
+              { "id": "yt-ssr", "level": 3, "title": "Search Success Rate", "note": "Нашёл ли нужное." }
+            ] },
+            { "id": "yt-subs", "level": 2, "title": "Подписки", "note": "Возврат к любимым авторам.", "children": [
+              { "id": "yt-notif", "level": 3, "title": "CR уведомлений о новом видео", "note": "Открыли ли свежий ролик." }
+            ] }
+          ] },
+          { "id": "yt-eng", "level": 1, "title": "Вовлечение в видео", "note": "Удержание внутри ролика.", "children": [
+            { "id": "yt-avd", "level": 2, "title": "Average View Duration", "note": "Сколько минут досматривают.", "children": [
+              { "id": "yt-retcurve", "level": 3, "title": "Кривая удержания", "note": "Где зрители уходят из ролика." }
+            ] },
+            { "id": "yt-next", "level": 2, "title": "Переход к следующему видео", "note": "Удерживает ли сессию." }
+          ] },
+          { "id": "yt-creator", "level": 1, "title": "Здоровье авторов", "note": "Без авторов нет контента.", "children": [
+            { "id": "yt-upload", "level": 2, "title": "Частота загрузок", "note": "Регулярность новых видео." },
+            { "id": "yt-rev-share", "level": 2, "title": "Доход авторов (RPM)", "note": "Мотивация продолжать." }
+          ] }
+        ]
+      },
+      "pyramid": { "bands": [
+        { "label": "Бизнесовые", "role": "руководство", "items": ["Рекламная + Premium выручка", "Total Watch Time"] },
+        { "label": "Продуктовые", "role": "продакты", "items": ["Discovery (главная/поиск/подписки)", "Average View Duration"] },
+        { "label": "Операционные", "role": "аналитики", "items": ["CTR превью", "Search Success Rate", "Кривая удержания"] },
+        { "label": "Платформенные", "role": "инженеры", "items": ["Скорость старта видео", "Качество транскода", "Аптайм CDN"] }
+      ] },
+      "counterMetrics": [
+        { "title": "Кликбейт-сигналы", "note": "высокий CTR при низком досмотре — обманное превью" },
+        { "title": "Satisfaction-опросы", "note": "довольны ли просмотром, а не только досмотрели" }
+      ]
+    },
+    {
+      "id": "tiktok", "name": "TikTok", "northStar": "Total Watch Time (пассивная лента)",
+      "note": "короткий контент, бесконечная For You лента — видео включается само; ключ — мгновенный хук и досматриваемость.",
+      "root": {
+        "id": "tt-wt", "level": 0, "title": "Total Watch Time", "formula": "Сессии × Видео за сессию × Длина видео",
+        "note": "Копится из множества коротких пассивных просмотров в ленте For You.",
+        "children": [
+          { "id": "tt-feed", "level": 1, "title": "Качество For You", "note": "Лента — единственный вход.", "children": [
+            { "id": "tt-hook", "level": 2, "title": "Hook Rate (первые 3 сек)", "note": "Зацепило ли мгновенно.", "children": [
+              { "id": "tt-swipe", "level": 3, "title": "Скорость свайпа", "note": "Как быстро листают неинтересное.", "children": [
+                { "id": "tt-skip", "level": 4, "title": "Доля досвайпов до 1 сек", "note": "Совсем не зашло." }
+              ] }
+            ] },
+            { "id": "tt-completion", "level": 2, "title": "Completion Rate", "note": "Досмотрели ли короткое видео.", "children": [
+              { "id": "tt-replay", "level": 3, "title": "Replays / Loops", "note": "Пересматривают ли — сильный сигнал." }
+            ] }
+          ] },
+          { "id": "tt-inter", "level": 1, "title": "Интеракции", "note": "Сигналы для алгоритма и виральность.", "children": [
+            { "id": "tt-like", "level": 2, "title": "Like / Comment Rate", "note": "Обратная связь по видео.", "children": [
+              { "id": "tt-share", "level": 3, "title": "Share Rate", "note": "Двигатель виральности." }
+            ] },
+            { "id": "tt-follow", "level": 2, "title": "Конверсия в подписку", "note": "Из просмотра в фолловера." }
+          ] },
+          { "id": "tt-creator", "level": 1, "title": "Поток контента", "note": "Лента жива, пока авторы публикуют.", "children": [
+            { "id": "tt-posts", "level": 2, "title": "Видео в день", "note": "Объём нового контента." },
+            { "id": "tt-newcreator", "level": 2, "title": "Доля новых авторов", "note": "Приток создателей.", "children": [
+              { "id": "tt-firstview", "level": 3, "title": "Просмотры первого видео", "note": "Получает ли новичок аудиторию." }
+            ] }
+          ] }
+        ]
+      },
+      "pyramid": { "bands": [
+        { "label": "Бизнесовые", "role": "руководство", "items": ["Рекламная выручка", "Total Watch Time", "DAU"] },
+        { "label": "Продуктовые", "role": "продакты", "items": ["Качество For You", "Completion Rate", "Share Rate"] },
+        { "label": "Операционные", "role": "аналитики ленты", "items": ["Hook Rate 3 сек", "Replays", "Скорость свайпа"] },
+        { "label": "Платформенные", "role": "инженеры", "items": ["Предзагрузка следующего видео", "p99 ленты", "Сбои плеера"] }
+      ] },
+      "counterMetrics": [
+        { "title": "Doomscroll-усталость", "note": "падение D30 при росте времени — залипание выжигает" },
+        { "title": "Report / «не интересует»", "note": "негативные сигналы по контенту" }
+      ]
+    }
+  ]
+}

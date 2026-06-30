@@ -103,11 +103,11 @@ export default function StatsPage() {
               </button>
             ) : <span />}
           </nav>
-          {!next && (
-            <div className="max-w-6xl mt-10">
-              <SubscribeCTA heading="Поздравляем — вы дошли до конца! 🎉" text="Эти материалы делает канал «Кусочек пиццы». Подпишитесь, чтобы не потерять и получать разборы кейсов, метрик и карьеры в аналитике." />
-            </div>
-          )}
+          <div className="max-w-6xl mt-10">
+            {next
+              ? <SubscribeCTA />
+              : <SubscribeCTA heading="Поздравляем — вы дошли до конца! 🎉" text="Эти материалы делает канал «Кусочек пиццы». Подпишитесь, чтобы не потерять и получать разборы кейсов, метрик и карьеры в аналитике." />}
+          </div>
         </>
       ) : (
         <div className="rounded-xl border border-dashed border-black/15 bg-panel/50 p-10 text-center text-gray-500">

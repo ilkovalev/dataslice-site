@@ -30,7 +30,7 @@ export default function BeatsLesson({ lesson }) {
   return (
     <article className="max-w-6xl">
       <h2 className="text-left text-2xl font-semibold mb-3">{lesson.title}</h2>
-      {lesson.intro && <p className="text-gray-700 leading-relaxed mb-6 max-w-3xl">{gloss(lesson.intro)}</p>}
+      {lesson.intro && <p className="text-gray-700 leading-relaxed mb-6 max-w-[68ch]">{gloss(lesson.intro)}</p>}
 
       <div className={Widget ? 'grid md:grid-cols-3 gap-8 items-start' : ''}>
         {Widget && (
@@ -50,7 +50,7 @@ export default function BeatsLesson({ lesson }) {
           </div>
         )}
 
-        <div className={Widget ? '' : 'max-w-3xl'}>
+        <div className={Widget ? '' : 'max-w-[68ch]'}>
           <div className="flex gap-1.5 mb-4">
             {lesson.beats.map((_, k) => (
               <button
@@ -85,20 +85,20 @@ export default function BeatsLesson({ lesson }) {
             </p>
           )}
 
-          <div className="flex gap-2">
+          <div className="flex items-center gap-3">
             <button
               disabled={i === 0}
               onClick={() => setI(i - 1)}
-              className="text-sm px-3 py-1.5 rounded border border-black/15 text-gray-700 disabled:opacity-30 hover:bg-black/5"
+              className="text-sm text-gray-500 disabled:opacity-30 hover:text-gray-800 transition-colors"
             >
-              Назад
+              ← Назад
             </button>
             {!last && (
               <button
                 onClick={() => setI(i + 1)}
-                className="text-sm px-3 py-1.5 rounded border border-accent/40 text-cyanink hover:bg-accent/10"
+                className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-accent text-white hover:opacity-90 transition-opacity"
               >
-                Дальше
+                Дальше <span aria-hidden>→</span>
               </button>
             )}
           </div>

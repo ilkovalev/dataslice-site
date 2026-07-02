@@ -18,7 +18,7 @@ export default function App() {
             href="https://t.me/dataslice"
             target="_blank"
             rel="noreferrer"
-            className="order-2 ml-auto text-sm px-3 py-1.5 rounded-md bg-accent text-white border border-accent hover:opacity-90 transition-opacity whitespace-nowrap sm:order-3"
+            className="order-2 ml-auto text-sm px-3 py-1.5 rounded-md text-cyanink border border-accent/30 hover:bg-accent/10 transition-colors whitespace-nowrap sm:order-3"
           >
             🍕 Telegram-канал
           </a>

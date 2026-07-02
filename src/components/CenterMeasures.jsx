@@ -4,11 +4,19 @@ import { useRef, useState } from 'react'
 // Управляется уроком: highlight подсвечивает меру, unit — подпись единиц,
 // initial — стартовый набор значений.
 const W = 640
-const H = 170
-const PAD = 40
+const H = 210
+const PAD = 44
 const XMIN = 0
 const XMAX = 100
-const LINE_Y = 100
+const LINE_Y = 140
+
+// Цвет + форма + подпись — тройное кодирование каждой меры (различимо и для
+// дальтоников). Цвета живут только внутри виджета, не спорят с брендом.
+const METRICS = {
+  mean: { shape: 'circle', color: '#2ab8eb', label: 'среднее' },
+  median: { shape: 'diamond', color: '#7c3aed', label: 'медиана' },
+  mode: { shape: 'square', color: '#f59e0b', label: 'мода' },
+}
 
 function computeStats(points) {
   const n = points.length
@@ -23,6 +31,37 @@ function computeStats(points) {
   }
   const modes = best > 1 ? Object.keys(counts).filter((k) => counts[k] === best).map(Number) : []
   return { mean, median, modes }
+}
+
+// Разводит близкие подписи: держит минимальный зазор, не выходя за [lo, hi].
+// Пин 5 ревью — значения больше не слипаются в «32334538».
+function spread(xs, minGap, lo, hi) {
+  const n = xs.length
+  if (!n) return []
+  const order = [...xs.keys()].sort((a, b) => xs[a] - xs[b])
+  const pos = order.map((i) => xs[i])
+  for (let k = 1; k < n; k++) if (pos[k] < pos[k - 1] + minGap) pos[k] = pos[k - 1] + minGap
+  if (pos[n - 1] > hi) {
+    pos[n - 1] = hi
+    for (let k = n - 2; k >= 0; k--) if (pos[k] > pos[k + 1] - minGap) pos[k] = pos[k + 1] - minGap
+  }
+  if (pos[0] < lo) {
+    pos[0] = lo
+    for (let k = 1; k < n; k++) if (pos[k] < pos[k - 1] + minGap) pos[k] = pos[k - 1] + minGap
+  }
+  const out = new Array(n)
+  order.forEach((idx, rank) => (out[order[rank]] = pos[rank]))
+  return out
+}
+
+function Glyph({ shape, x, y, color, r = 5 }) {
+  if (shape === 'diamond') {
+    return <path d={`M ${x} ${y - r - 1} L ${x + r + 1} ${y} L ${x} ${y + r + 1} L ${x - r - 1} ${y} Z`} fill={color} />
+  }
+  if (shape === 'square') {
+    return <rect x={x - r} y={y - r} width={r * 2} height={r * 2} rx="1" fill={color} />
+  }
+  return <circle cx={x} cy={y} r={r} fill={color} />
 }
 
 export default function CenterMeasures({ highlight, unit = '', initial }) {
@@ -55,15 +94,27 @@ export default function CenterMeasures({ highlight, unit = '', initial }) {
   const u = unit ? ` ${unit}` : ''
   const { mean, median, modes } = computeStats(points)
 
-  const Marker = ({ x, color, label, dy, name }) => {
-    const op = !highlight || highlight === name ? 1 : 0.18
-    return (
-      <g opacity={op}>
-        <line x1={sx(x)} y1={28 + dy} x2={sx(x)} y2={LINE_Y} stroke={color} strokeWidth="1.5" strokeDasharray="4 3" />
-        <text x={sx(x)} y={20 + dy} fill={color} fontSize="11" textAnchor="middle">{label}</text>
-      </g>
-    )
-  }
+  // Разводим подписи значений под точками (пин 5).
+  const labelX = spread(points.map(sx), 24, PAD, W - PAD)
+
+  // Метки метрик над прямой: раскладываем по строкам, чтобы близкие значения
+  // не наезжали друг на друга (пин 4). Каждая метка — форма + название.
+  const ROW_Y = [30, 62, 94]
+  const markers = [
+    { name: 'mean', x: mean },
+    { name: 'median', x: median },
+    ...modes.map((m) => ({ name: 'mode', x: m })),
+  ]
+  const rowLastX = []
+  const placed = markers
+    .map((m) => ({ ...m, px: sx(m.x) }))
+    .sort((a, b) => a.px - b.px)
+    .map((m) => {
+      let row = 0
+      while (rowLastX[row] != null && m.px - rowLastX[row] < 96) row++
+      rowLastX[row] = m.px
+      return { ...m, row: Math.min(row, ROW_Y.length - 1) }
+    })
 
   return (
     <div className="rounded-xl border border-black/10 bg-panel p-5">
@@ -74,33 +125,67 @@ export default function CenterMeasures({ highlight, unit = '', initial }) {
         onPointerMove={onMove}
         onPointerUp={onUp}
       >
+        {/* числовая прямая */}
         <line x1={PAD} y1={LINE_Y} x2={W - PAD} y2={LINE_Y} stroke="#d6cebf" strokeWidth="1.5" />
-        <Marker x={mean} color="#2ab8eb" label="среднее" dy={0} name="mean" />
-        <Marker x={median} color="#0ea5e9" label="медиана" dy={median === mean ? 16 : 0} name="median" />
-        {modes.map((m) => (
-          <Marker key={m} x={m} color="#fbbf24" label="мода" dy={32} name="mode" />
-        ))}
+
+        {/* метки метрик над прямой */}
+        {placed.map((m, k) => {
+          const meta = METRICS[m.name]
+          const op = !highlight || highlight === m.name ? 1 : 0.16
+          const gy = ROW_Y[m.row] + 8
+          const lx = Math.max(PAD + 4, Math.min(W - PAD - 4, m.px))
+          return (
+            <g key={`${m.name}-${k}`} opacity={op}>
+              <line x1={m.px} y1={gy + 6} x2={m.px} y2={LINE_Y} stroke={meta.color} strokeWidth="1.5" strokeDasharray="4 3" />
+              <Glyph shape={meta.shape} x={m.px} y={gy} color={meta.color} />
+              <text x={lx} y={ROW_Y[m.row] - 5} fill={meta.color} fontSize="11" fontWeight="600" textAnchor="middle">
+                {meta.label}
+              </text>
+            </g>
+          )
+        })}
+
+        {/* точки данных */}
         {points.map((v, i) => (
-          <g key={i}>
-            <circle
-              cx={sx(v)}
-              cy={LINE_Y}
-              r={drag === i ? 10 : 8}
-              fill="#2a2f3a"
-              stroke="#ffffff"
-              strokeWidth="2"
-              className="cursor-grab"
-              onPointerDown={(e) => onDown(i, e)}
-            />
-            <text x={sx(v)} y={LINE_Y + 24} fill="#6b7280" fontSize="11" textAnchor="middle" className="select-none pointer-events-none">{v}</text>
-          </g>
+          <circle
+            key={i}
+            cx={sx(v)}
+            cy={LINE_Y}
+            r={drag === i ? 10 : 8}
+            fill="#2a2f3a"
+            stroke="#ffffff"
+            strokeWidth="2"
+            className="cursor-grab"
+            onPointerDown={(e) => onDown(i, e)}
+          />
         ))}
+
+        {/* подписи значений с выносками (разведены по коллизии) */}
+        {points.map((v, i) => {
+          const px = sx(v)
+          const lx = labelX[i]
+          return (
+            <g key={`lbl-${i}`} className="pointer-events-none select-none">
+              {Math.abs(lx - px) > 1 && (
+                <line x1={px} y1={LINE_Y + 12} x2={lx} y2={LINE_Y + 22} stroke="#c9c1b2" strokeWidth="1" />
+              )}
+              <text x={lx} y={LINE_Y + 34} fill="#6b7280" fontSize="11" textAnchor="middle">{v}</text>
+            </g>
+          )
+        })}
       </svg>
 
-      <div className="flex flex-wrap gap-4 mt-2 text-sm">
-        <span className="text-[#2ab8eb]" style={{ opacity: !highlight || highlight === 'mean' ? 1 : 0.4 }}>Среднее: {mean.toFixed(1)}{u}</span>
-        <span className="text-[#0ea5e9]" style={{ opacity: !highlight || highlight === 'median' ? 1 : 0.4 }}>Медиана: {median}{u}</span>
-        <span className="text-[#fbbf24]" style={{ opacity: !highlight || highlight === 'mode' ? 1 : 0.4 }}>Мода: {modes.length ? modes.join(', ') + u : '—'}</span>
+      {/* легенда: те же формы + цвет, что на маркерах */}
+      <div className="flex flex-wrap gap-x-5 gap-y-1 mt-2 text-sm">
+        <span className="inline-flex items-center gap-1.5" style={{ color: METRICS.mean.color, opacity: !highlight || highlight === 'mean' ? 1 : 0.4 }}>
+          <span aria-hidden>●</span> Среднее: {mean.toFixed(1)}{u}
+        </span>
+        <span className="inline-flex items-center gap-1.5" style={{ color: METRICS.median.color, opacity: !highlight || highlight === 'median' ? 1 : 0.4 }}>
+          <span aria-hidden>◆</span> Медиана: {median}{u}
+        </span>
+        <span className="inline-flex items-center gap-1.5" style={{ color: METRICS.mode.color, opacity: !highlight || highlight === 'mode' ? 1 : 0.4 }}>
+          <span aria-hidden>■</span> Мода: {modes.length ? modes.join(', ') + u : '—'}
+        </span>
       </div>
 
       <div className="flex gap-2 mt-4">

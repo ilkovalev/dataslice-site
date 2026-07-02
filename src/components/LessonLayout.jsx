@@ -20,7 +20,7 @@ export default function LessonLayout({ lesson }) {
   const Widget = widgets[interaction.widget]
 
   return (
-    <article className="max-w-3xl">
+    <article className="max-w-[70ch]">
       <h2 className="text-xl font-semibold mb-6">{lesson.title}</h2>
 
       <Step label="Зачем">

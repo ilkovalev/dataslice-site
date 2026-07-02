@@ -1,8 +1,9 @@
 import { useState } from 'react'
 
-// Две кривые: H0 (эффекта нет) и H1 (эффект есть). Порог делит «объявляем
-// эффект / нет». α — площадь H0 правее порога (ложное срабатывание), β — площадь
-// H1 левее порога (пропуск). Больше n — кривые уже, ошибки меньше.
+// Дизайн-картинка теста. H0 (эффекта нет, центр 0) и H1 (эффект есть, центр = MDE
+// — минимальный эффект, который хотим уметь ловить). Управляем α и видом теста —
+// критическое значение из них ВЫЧИСЛЯЕТСЯ (crit = σ·z). β и мощность следуют из
+// α, MDE, n и σ. Порог не крутят вручную; мощность поднимают размером выборки.
 const W = 640
 const H = 230
 const PAD = 36
@@ -18,82 +19,106 @@ function erf(x) {
 }
 const cdf = (x, mu, s) => 0.5 * (1 + erf((x - mu) / (s * Math.SQRT2)))
 const pdf = (x, mu, s) => Math.exp(-0.5 * ((x - mu) / s) ** 2) / (s * Math.sqrt(2 * Math.PI))
+function ndtri(p) {
+  const a = [-3.969683028665376e1, 2.209460984245205e2, -2.759285104469687e2, 1.38357751867269e2, -3.066479806614716e1, 2.506628277459239]
+  const b = [-5.447609879822406e1, 1.615858368580409e2, -1.556989798598866e2, 6.680131188771972e1, -1.328068155288572e1]
+  const c = [-7.784894002430293e-3, -3.223964580411365e-1, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783]
+  const d = [7.784695709041462e-3, 3.224671290700398e-1, 2.445134137142996, 3.754408661907416]
+  const pl = 0.02425
+  if (p < pl) { const q = Math.sqrt(-2 * Math.log(p)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1) }
+  if (p <= 1 - pl) { const q = p - 0.5; const r = q * q; return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1) }
+  const q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1)
+}
+const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x))
 
 export default function HypothesisTest() {
-  const [thr, setThr] = useState(2)
+  const [alpha, setAlpha] = useState(0.05)
+  const [twoSided, setTwoSided] = useState(false)
   const [n, setN] = useState(36)
-  const [effect, setEffect] = useState(4) // истинная разница (μ при H1)
-  const [sd, setSd] = useState(14) // разброс данных σ
-  const EFFECT = effect
+  const [mde, setMde] = useState(4) // минимальный эффект, который хотим ловить = центр H1
+  const [sd, setSd] = useState(14)
   const sigma = sd / Math.sqrt(n)
+
+  // критическое значение ВЫЧИСЛЯЕТСЯ из α и вида теста
+  const z = ndtri(1 - (twoSided ? alpha / 2 : alpha))
+  const crit = sigma * z
 
   const sx = (x) => PAD + ((x - DMIN) / (DMAX - DMIN)) * (W - 2 * PAD)
   const yMax = pdf(0, 0, sigma)
   const sy = (y) => BASE - (y / yMax) * (H - 2 * PAD)
-
   const curve = (mu) => {
     let dd = ''
-    for (let i = 0; i <= N; i++) {
-      const x = DMIN + ((DMAX - DMIN) * i) / N
-      dd += `${i === 0 ? 'M' : 'L'}${sx(x).toFixed(1)},${sy(pdf(x, mu, sigma)).toFixed(1)} `
-    }
+    for (let i = 0; i <= N; i++) { const x = DMIN + ((DMAX - DMIN) * i) / N; dd += `${i === 0 ? 'M' : 'L'}${sx(x).toFixed(1)},${sy(pdf(x, mu, sigma)).toFixed(1)} ` }
     return dd
   }
-  // площадь под кривой mu на интервале [a,b] как заливка
-  const area = (mu, a, b) => {
+  const area = (mu, a, bb) => {
     let dd = `M${sx(a).toFixed(1)},${BASE} `
-    const steps = 80
-    for (let i = 0; i <= steps; i++) {
-      const x = a + ((b - a) * i) / steps
-      dd += `L${sx(x).toFixed(1)},${sy(pdf(x, mu, sigma)).toFixed(1)} `
-    }
-    dd += `L${sx(b).toFixed(1)},${BASE} Z`
+    const steps = 70
+    for (let i = 0; i <= steps; i++) { const x = a + ((bb - a) * i) / steps; dd += `L${sx(x).toFixed(1)},${sy(pdf(x, mu, sigma)).toFixed(1)} ` }
+    dd += `L${sx(bb).toFixed(1)},${BASE} Z`
     return dd
   }
 
-  const alpha = 1 - cdf(thr, 0, sigma) // ложное срабатывание
-  const beta = cdf(thr, EFFECT, sigma) // пропуск
+  const beta = twoSided ? cdf(crit, mde, sigma) - cdf(-crit, mde, sigma) : cdf(crit, mde, sigma)
   const power = 1 - beta
+  const nFor80 = () => {
+    const zb = ndtri(0.8)
+    const need = (sd * (z + zb) / Math.max(0.1, mde)) ** 2
+    setN(clamp(Math.round(need), 4, 500))
+  }
 
   return (
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none">
-        <path d={area(0, thr, DMAX)} fill="#fbbf24" opacity="0.25" />
-        <path d={area(EFFECT, DMIN, thr)} fill="#f87171" opacity="0.2" />
+        <path d={area(0, crit, DMAX)} fill="#fbbf24" opacity="0.28" />
+        {twoSided && <path d={area(0, DMIN, -crit)} fill="#fbbf24" opacity="0.28" />}
+        <path d={area(mde, twoSided ? -crit : DMIN, crit)} fill="#f87171" opacity="0.22" />
         <line x1={PAD} y1={BASE} x2={W - PAD} y2={BASE} stroke="#d6cebf" strokeWidth="1.5" />
         <path d={curve(0)} fill="none" stroke="#6b7280" strokeWidth="2" />
-        <path d={curve(EFFECT)} fill="none" stroke="#2ab8eb" strokeWidth="2" />
-        <line x1={sx(thr)} y1={PAD - 6} x2={sx(thr)} y2={BASE} stroke="#2a2f3a" strokeWidth="1.5" strokeDasharray="4 3" />
+        <path d={curve(mde)} fill="none" stroke="#2ab8eb" strokeWidth="2" />
+        <line x1={sx(crit)} y1={PAD - 6} x2={sx(crit)} y2={BASE} stroke="#2a2f3a" strokeWidth="1.5" strokeDasharray="4 3" />
+        {twoSided && <line x1={sx(-crit)} y1={PAD - 6} x2={sx(-crit)} y2={BASE} stroke="#2a2f3a" strokeWidth="1.5" strokeDasharray="4 3" />}
         <text x={sx(0)} y={PAD - 8} fill="#6b7280" fontSize="10" textAnchor="middle">H0: эффекта нет</text>
-        <text x={sx(EFFECT)} y={PAD - 8} fill="#2ab8eb" fontSize="10" textAnchor="middle">H1: эффект есть</text>
-        <text x={sx(thr)} y={BASE + 14} fill="#2a2f3a" fontSize="10" textAnchor="middle">критич. значение</text>
+        <text x={sx(mde)} y={PAD - 8} fill="#2ab8eb" fontSize="10" textAnchor="middle">H1: эффект = MDE</text>
+        <text x={sx(crit)} y={BASE + 14} fill="#2a2f3a" fontSize="10" textAnchor="middle">критич. значение</text>
+        <text x={sx((crit + DMAX) / 2)} y={BASE - 6} fill="#c69214" fontSize="9" textAnchor="middle">α</text>
+        <text x={sx((crit + mde) / 2)} y={BASE - 6} fill="#dc4d4d" fontSize="9" textAnchor="middle">β</text>
       </svg>
 
-      <div className="flex flex-wrap gap-4 mt-1 text-sm">
-        <span className="text-[#fbbf24]">Ошибка 1 рода α (ложное срабатывание): {(alpha * 100).toFixed(1)}%</span>
-        <span className="text-[#f87171]">Ошибка 2 рода β (пропуск): {(beta * 100).toFixed(1)}%</span>
+      <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm">
+        <span className="text-gray-700">критич. значение = {twoSided ? '±' : ''}{crit.toFixed(2)}% (расчётное)</span>
+        <span className="text-[#d9a300]">α (ложное срабатывание): {(alpha * 100).toFixed(0)}%</span>
+        <span className="text-[#f87171]">β (пропуск): {(beta * 100).toFixed(1)}%</span>
         <span className="text-[#2ab8eb]">Мощность (1−β): {(power * 100).toFixed(1)}%</span>
       </div>
+      <p className="text-xs text-gray-500 mt-1">Критическое значение — граница решения: если результат заходит за неё, эффект считают значимым (H0 отвергают). Считается как crit = z·SE, где SE = σ/√n — стандартная ошибка, а z — множитель из нормального распределения под выбранную α (для одностороннего теста z оставляет α в одном хвосте, для двустороннего — α/2 в каждом). Жёлтая площадь — α (ошибка 1 рода), красная — β (пропуск эффекта MDE).</p>
 
-      <div className="grid sm:grid-cols-2 gap-x-5 gap-y-3 mt-4 text-sm">
+      <div className="flex flex-wrap gap-2 mt-3 items-center">
+        <span className="text-xs text-gray-600">Вид теста:</span>
+        <button onClick={() => setTwoSided(false)} className={`text-xs px-2.5 py-1 rounded border ${!twoSided ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>односторонний</button>
+        <button onClick={() => setTwoSided(true)} className={`text-xs px-2.5 py-1 rounded border ${twoSided ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>двусторонний</button>
+        <button onClick={nFor80} className="text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10 ml-1">подобрать n для мощности 80%</button>
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-x-5 gap-y-3 mt-3 text-sm">
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Критическое значение</span><span className="tabular-nums text-cyanink">{thr.toFixed(1)}</span></div>
-          <input type="range" min="-2" max="10" step="0.1" value={thr} onChange={(e) => setThr(Number(e.target.value))} className="w-full accent-accent" />
+          <div className="flex justify-between text-gray-700 mb-1"><span>Уровень значимости α</span><span className="tabular-nums text-cyanink">{(alpha * 100).toFixed(0)}%</span></div>
+          <input type="range" min="0.01" max="0.2" step="0.01" value={alpha} onChange={(e) => setAlpha(Number(e.target.value))} className="w-full accent-accent" />
+        </label>
+        <label>
+          <div className="flex justify-between text-gray-700 mb-1"><span>MDE — относительный прирост, который хотим ловить</span><span className="tabular-nums text-cyanink">{mde.toFixed(1)}%</span></div>
+          <input type="range" min="1" max="8" step="0.5" value={mde} onChange={(e) => setMde(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
           <div className="flex justify-between text-gray-700 mb-1"><span>Размер выборки n</span><span className="tabular-nums text-cyanink">{n}</span></div>
-          <input type="range" min="4" max="120" step="1" value={n} onChange={(e) => setN(Number(e.target.value))} className="w-full accent-accent" />
+          <input type="range" min="4" max="500" step="1" value={n} onChange={(e) => setN(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Истинный эффект (разница средних)</span><span className="tabular-nums text-cyanink">{effect.toFixed(1)}</span></div>
-          <input type="range" min="0" max="8" step="0.2" value={effect} onChange={(e) => setEffect(Number(e.target.value))} className="w-full accent-accent" />
-        </label>
-        <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Разброс данных σ</span><span className="tabular-nums text-cyanink">{sd}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>Разброс данных σ (% от среднего)</span><span className="tabular-nums text-cyanink">{sd}%</span></div>
           <input type="range" min="6" max="26" step="1" value={sd} onChange={(e) => setSd(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">Эффект ↑ или σ ↓ — кривые расходятся, обе ошибки падают. n ↑ — кривые сужаются (σ/√n), различить миры легче.</p>
+      <p className="text-xs text-gray-500 mt-2">Всё в процентах от текущего среднего метрики. MDE — на сколько процентов прироста мы хотим уметь замечать (центр синей H1), σ — разброс данных в тех же процентах. α задаёт критическое значение (выше α — порог ближе к нулю, ловить прирост легче, но ложных срабатываний больше). Мощность поднимают НЕ порогом, а размером выборки n (или меньшим σ) — кнопка подбирает n под 80%. Двусторонний тест ловит отклонение в любую сторону, поэтому при той же α его порог дальше от нуля.</p>
     </div>
   )
 }

@@ -56,7 +56,7 @@ export default function PValueExplorer() {
         <text x={sx(1.96)} y={BASE + 16} fill="#c69214" fontSize="9" textAnchor="middle">±1.96 · p=0.05</text>
         {/* наблюдаемый результат */}
         {[-a, a].map((v, i) => <line key={i} x1={sx(v)} y1={TOP} x2={sx(v)} y2={BASE} stroke="#2ab8eb" strokeWidth="2" />)}
-        <text x={sx(a)} y={TOP - 8} fill="#0d7fb0" fontSize="10" textAnchor="middle">наблюдали: {obs.toFixed(2)}</text>
+        <text x={sx(a)} y={TOP - 8} fill="#0d7fb0" fontSize="10" textAnchor="middle">наш результат: {obs.toFixed(2)} SE</text>
         <text x={sx(0)} y={TOP + 4} fill="#6b7280" fontSize="10" textAnchor="middle">H0: эффекта нет</text>
         <text x={PAD} y={H - 8} fill="#9a907c" fontSize="10" textAnchor="start">результат в стандартных ошибках от нуля →</text>
       </svg>
@@ -73,7 +73,7 @@ export default function PValueExplorer() {
         <div className="flex justify-between text-gray-700 mb-1"><span>Наблюдаемый результат (в стандартных ошибках)</span><span className="text-cyanink">{obs.toFixed(2)}</span></div>
         <input type="range" min="0" max="3.5" step="0.05" value={obs} onChange={(e) => setObs(Number(e.target.value))} className="w-full accent-accent" />
       </label>
-      <p className="text-xs text-gray-500 mt-2">Серый колокол — как «гулял» бы результат чисто от случайности, если эффекта нет (H0). Двигайте синюю линию (наблюдаемый результат): красные хвосты за ней — это p-value. Чем дальше результат от нуля, тем тоньше хвосты и меньше p. На отметке ±1.96 площадь хвостов ровно 0.05 — отсюда и знаменитый порог. Важно: p — это НЕ «вероятность, что H0 верна», а «насколько такие данные обычны при H0».</p>
+      <p className="text-xs text-gray-500 mt-2">Синие линии — «наш результат»: то, что мы реально намерили в эксперименте (разница групп), выраженная в стандартных ошибках от нуля (например, 2.0 SE = результат на 2 стандартные ошибки выше нуля). Серый колокол — как «гулял» бы результат чисто от случайности, если эффекта нет (H0). Двигайте наш результат: красные хвосты за ним — это p-value. Чем дальше результат от нуля, тем тоньше хвосты и меньше p. На отметке ±1.96 площадь хвостов ровно 0.05 — отсюда и знаменитый порог. Важно: p — это НЕ «вероятность, что H0 верна», а «насколько такие данные обычны при H0».</p>
     </div>
   )
 }

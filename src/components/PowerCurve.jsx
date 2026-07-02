@@ -4,7 +4,11 @@ import { useState } from 'react'
 // 1) Распределения оценки при H0 (эффекта нет) и H1 (эффект есть). Порог сдвигает
 //    границу решения; заливка показывает α (ложное срабатывание) и β (пропуск эффекта).
 // 2) Кривая мощности от размера выборки n с целевой линией и маркером текущего n.
-// Ползунки разницы, σ, n и α двигают обе картинки сразу — видно, как они связаны.
+// Управляем MDE (минимальным эффектом в % от среднего), σ, n и α — двигают обе
+// картинки сразу. Метрика — средний чек MU ₽; MDE % задаёт абсолютный эффект в ₽,
+// σ и критическое значение живут в рублях. Разницей средних напрямую не управляют:
+// её задаёт бизнес-цель (MDE), а n подбирают так, чтобы этот эффект уверенно ловить.
+const MU = 1000 // базовое среднее метрики, ₽ («средний чек»)
 const W = 560
 const HD = 230 // панель распределений
 const HP = 200 // панель кривой мощности
@@ -30,12 +34,13 @@ function ndtri(p) {
 }
 
 export default function PowerCurve() {
-  const [diff, setDiff] = useState(3)   // разница средних (эффект, в единицах метрики)
-  const [sigma, setSigma] = useState(6) // разброс данных σ
-  const [n, setN] = useState(20)        // размер выборки на группу
+  const [mde, setMde] = useState(3)      // MDE — минимальный эффект, % от среднего
+  const [sigma, setSigma] = useState(200) // разброс данных σ, ₽
+  const [n, setN] = useState(20)         // размер выборки на группу
   const [alpha, setAlpha] = useState(0.05)
   const [target, setTarget] = useState(0.8)
 
+  const diff = (MU * mde) / 100 // абсолютный эффект (центр H1), ₽
   const zA = ndtri(1 - alpha)
   const se = sigma / Math.sqrt(n)
   const d = diff / sigma
@@ -96,9 +101,9 @@ export default function PowerCurve() {
         <line x1={sxD(crit)} y1={TOP - 6} x2={sxD(crit)} y2={base} stroke="#2a2f3a" strokeWidth="1.3" strokeDasharray="4 3" />
         <text x={sxD(crit)} y={TOP - 10} fill="#2a2f3a" fontSize="10" textAnchor="middle">критич. значение</text>
         {/* центры */}
-        <text x={sxD(0)} y={base + 14} fill="#6b7280" fontSize="10" textAnchor="middle">0 (нет эффекта)</text>
-        <text x={sxD(diff)} y={base + 14} fill="#0d7fb0" fontSize="10" textAnchor="middle">разница = {diff}</text>
-        <text x={PADX} y={base + 28} fill="#9a907c" fontSize="10" textAnchor="start">оценка разницы между группами →</text>
+        <text x={sxD(0)} y={base + 14} fill="#6b7280" fontSize="10" textAnchor="middle">0</text>
+        <text x={sxD(diff)} y={base + 14} fill="#0d7fb0" fontSize="10" textAnchor="middle">MDE = +{Math.round(diff)} ₽ ({mde}%)</text>
+        <text x={PADX} y={base + 28} fill="#9a907c" fontSize="10" textAnchor="start">оценка разницы средних между группами, ₽ →</text>
       </svg>
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs mt-1 mb-1">
         <span className="text-gray-500"><span className="inline-block w-3 h-0.5 align-middle bg-[#9ca3af]" /> H0: эффекта нет</span>
@@ -132,12 +137,12 @@ export default function PowerCurve() {
 
       <div className="grid sm:grid-cols-2 gap-x-4 gap-y-3 mt-4 text-sm">
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Разница средних (эффект)</span><span className="text-cyanink">{diff}</span></div>
-          <input type="range" min="1" max="12" step="0.5" value={diff} onChange={(e) => setDiff(Number(e.target.value))} className="w-full accent-accent" />
+          <div className="flex justify-between text-gray-700 mb-1"><span>MDE — минимальный эффект, %</span><span className="text-cyanink tabular-nums">{mde.toFixed(1)}% · +{Math.round(diff)} ₽</span></div>
+          <input type="range" min="0.5" max="10" step="0.5" value={mde} onChange={(e) => setMde(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Разброс данных σ</span><span className="text-cyanink">{sigma}</span></div>
-          <input type="range" min="2" max="14" step="0.5" value={sigma} onChange={(e) => setSigma(Number(e.target.value))} className="w-full accent-accent" />
+          <div className="flex justify-between text-gray-700 mb-1"><span>σ — стандартное отклонение метрики</span><span className="text-cyanink tabular-nums">{sigma} ₽</span></div>
+          <input type="range" min="60" max="320" step="10" value={sigma} onChange={(e) => setSigma(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
           <div className="flex justify-between text-gray-700 mb-1"><span>Размер выборки n</span><span className="text-cyanink">{n}</span></div>
@@ -148,7 +153,7 @@ export default function PowerCurve() {
           <input type="range" min="0.01" max="0.1" step="0.01" value={alpha} onChange={(e) => setAlpha(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-3">Верхний график — два распределения оценки: серое при «эффекта нет» (H0), синее при «эффект есть» (H1). Порог делит ось на решения: красное справа от порога под H0 — α (приняли шум за эффект), жёлтое слева под H1 — β (проглядели реальный эффект). Меньше σ или больше n сужают колокола и раздвигают их → β падает, мощность растёт. Нижний график собирает это в кривую «мощность от n».</p>
+      <p className="text-xs text-gray-500 mt-3">Метрика — средний чек, {MU} ₽. Управляем не разницей средних напрямую (её задаёт бизнес-цель), а MDE — минимальным приростом в %, который хотим уверенно ловить; он и задаёт центр синей H1 (+{Math.round(diff)} ₽). Верхний график — два распределения оценки: серое при «эффекта нет» (H0), синее при «эффект есть» (H1). Порог делит ось на решения: красное справа от порога под H0 — α (приняли шум за эффект), жёлтое слева под H1 — β (проглядели реальный эффект). Меньше σ или больше n сужают колокола → β падает, мощность растёт. Нижний график собирает это в кривую «мощность от n»: под заданный MDE подбирают n, а не наоборот.</p>
     </div>
   )
 }

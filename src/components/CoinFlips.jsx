@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 
 // Закон больших чисел: доля орлов сходится к вероятности p по мере бросков.
 const W = 640
-const H = 200
-const PAD = 36
+const H = 260
+const PAD = 40
 
 export default function CoinFlips() {
   const [p, setP] = useState(0.5)
@@ -69,7 +69,7 @@ export default function CoinFlips() {
 
   return (
     <div className="rounded-xl border border-black/10 bg-panel p-5">
-      <div className="grid md:grid-cols-[1fr_auto] gap-4 items-start">
+      <div className="space-y-4">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none">
           {[0, 0.5, 1].map((g) => (
             <g key={g}>
@@ -84,7 +84,7 @@ export default function CoinFlips() {
         </svg>
 
         {/* частотная гистограмма исходов */}
-        <svg viewBox={`0 0 ${HW} ${HH}`} className="w-full max-w-[280px] mx-auto md:max-w-none md:mx-0 md:w-[260px] h-auto select-none">
+        <svg viewBox={`0 0 ${HW} ${HH}`} className="w-full max-w-[320px] h-auto select-none">
           <text x={HW / 2} y={12} fill="#6b7280" fontSize="10" textAnchor="middle">частоты исходов</text>
           <line x1={HPAD} y1={byBase} x2={HW - HPAD} y2={byBase} stroke="#d6cebf" strokeWidth="1.5" />
           {/* целевые доли p и 1−p */}

@@ -8,7 +8,7 @@ import { gloss } from './Glossed.jsx'
 // Виджеты с собственной кнопкой «сбросить» — общую не показываем (без дублей).
 const OWN_RESET = new Set([
   'bootstrap', 'center-measures', 'coin-flips', 'confidence-intervals', 'distribution',
-  'estimator-sampler', 'histogram', 'peeking', 'sampling-distribution', 'two-teams',
+  'estimator-sampler', 'histogram', 'peeking', 'sampling-distribution', 'sequential-test', 'two-teams',
 ])
 
 export default function BeatsLesson({ lesson }) {

@@ -54,6 +54,7 @@ import MannWhitney from './MannWhitney.jsx'
 import VarianceReduction from './VarianceReduction.jsx'
 import CriterionPicker from './CriterionPicker.jsx'
 import PValueExplorer from './PValueExplorer.jsx'
+import SequentialTest from './SequentialTest.jsx'
 
 export const widgets = {
   distribution: DistributionExplorer,
@@ -110,4 +111,5 @@ export const widgets = {
   'variance-reduction': VarianceReduction,
   'criterion-picker': CriterionPicker,
   'p-value-explorer': PValueExplorer,
+  'sequential-test': SequentialTest,
 }

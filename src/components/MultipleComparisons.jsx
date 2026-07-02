@@ -99,29 +99,32 @@ export default function MultipleComparisons() {
         {/* график BH */}
         <div>
           <svg viewBox={`0 0 ${CW} ${CH}`} className="w-full h-auto select-none">
-            <text x={CW / 2} y={12} fill="#6b7280" fontSize="10" textAnchor="middle">отсортированные p и три порога</text>
+            <text x={CW / 2} y={12} fill="#6b7280" fontSize="10" textAnchor="middle">отсортированные p и порог: {mode === 'none' ? 'без поправки' : mode === 'bonf' ? 'Бонферрони' : 'Бенджамини–Хохберг'}</text>
             <line x1={CP} y1={CH - 24} x2={CW - CP} y2={CH - 24} stroke="#d6cebf" strokeWidth="1" />
             <line x1={CP} y1={16} x2={CP} y2={CH - 24} stroke="#d6cebf" strokeWidth="1" />
-            {/* пороги */}
-            <line x1={CP} y1={syc(ALPHA)} x2={CW - CP} y2={syc(ALPHA)} stroke="#9ca3af" strokeWidth="1.3" strokeDasharray="4 3" />
-            <text x={CW - CP} y={syc(ALPHA) - 3} fill="#9ca3af" fontSize="9" textAnchor="end">α = 0.05 (без поправки)</text>
-            {analysis && <>
-              <line x1={CP} y1={syc(analysis.bonfThr)} x2={CW - CP} y2={syc(analysis.bonfThr)} stroke="#0d7fb0" strokeWidth="1.3" strokeDasharray="4 3" />
-              <text x={CW - CP} y={syc(analysis.bonfThr) + 10} fill="#0d7fb0" fontSize="9" textAnchor="end">Бонферрони α/m</text>
+            {/* порог ТОЛЬКО активного режима */}
+            {mode === 'none' && <>
+              <line x1={CP} y1={syc(ALPHA)} x2={CW - CP} y2={syc(ALPHA)} stroke="#9ca3af" strokeWidth="1.5" strokeDasharray="4 3" />
+              <text x={CW - CP} y={syc(ALPHA) - 3} fill="#9ca3af" fontSize="9" textAnchor="end">α = 0.05</text>
             </>}
-            {/* линия BH i/m·α */}
-            <line x1={sx(1)} y1={syc((1 / m) * ALPHA)} x2={sx(m)} y2={syc(ALPHA)} stroke="#16a34a" strokeWidth="1.5" />
-            <text x={sx(m)} y={syc(ALPHA) + 12} fill="#16a34a" fontSize="9" textAnchor="end">BH: i·α/m</text>
-            {/* отсортированные p-value */}
+            {mode === 'bonf' && analysis && <>
+              <line x1={CP} y1={syc(analysis.bonfThr)} x2={CW - CP} y2={syc(analysis.bonfThr)} stroke="#0d7fb0" strokeWidth="1.5" strokeDasharray="4 3" />
+              <text x={CW - CP} y={syc(analysis.bonfThr) - 3} fill="#0d7fb0" fontSize="9" textAnchor="end">порог α/m = {analysis.bonfThr.toFixed(4)}</text>
+            </>}
+            {mode === 'bh' && <>
+              <line x1={sx(1)} y1={syc((1 / m) * ALPHA)} x2={sx(m)} y2={syc(ALPHA)} stroke="#16a34a" strokeWidth="1.6" />
+              <text x={sx(m)} y={syc(ALPHA) + 12} fill="#16a34a" fontSize="9" textAnchor="end">лесенка i·α/m</text>
+              {analysis && analysis.bhK > 0 && (
+                <line x1={sx(analysis.bhK) + 3} y1={16} x2={sx(analysis.bhK) + 3} y2={CH - 24} stroke="#16a34a" strokeWidth="1" strokeDasharray="2 2" opacity="0.6" />
+              )}
+            </>}
+            {/* отсортированные p-value, окрашены по текущему режиму */}
             {analysis && analysis.sortedP.map((p, i) => {
               const rank = i + 1
-              const rejByBH = mode === 'bh' && analysis.bhK > 0 && rank <= analysis.bhK
-              return <circle key={i} cx={sx(rank)} cy={syc(p)} r="2.6" fill={rejByBH ? '#16a34a' : '#6b7280'} opacity="0.8" />
+              const rej = mode === 'none' ? p < ALPHA : mode === 'bonf' ? p < analysis.bonfThr : analysis.bhK > 0 && rank <= analysis.bhK
+              return <circle key={i} cx={sx(rank)} cy={syc(p)} r="2.6" fill={rej ? '#16a34a' : '#9ca3af'} opacity="0.85" />
             })}
-            {analysis && analysis.bhK > 0 && (
-              <line x1={sx(analysis.bhK) + 3} y1={16} x2={sx(analysis.bhK) + 3} y2={CH - 24} stroke="#16a34a" strokeWidth="1" strokeDasharray="2 2" opacity="0.6" />
-            )}
-            <text x={CP} y={CH - 8} fill="#9ca3af" fontSize="9" textAnchor="start">ранг i (по возрастанию p) →</text>
+            <text x={CP} y={CH - 8} fill="#9ca3af" fontSize="9" textAnchor="start">ранг i (по возрастанию p) →   ● зелёные — отвергнуты</text>
           </svg>
         </div>
       </div>

@@ -53,21 +53,24 @@ function simulate(hasEffect, sequential) {
 export default function Peeking({ sequential = false }) {
   const [effect, setEffect] = useState(false)
   const [traj, setTraj] = useState(null)
+  const [ghosts, setGhosts] = useState([]) // бледные траектории прошлых тестов
   const [tally, setTally] = useState({ peek: 0, fin: 0, total: 0 })
 
   function run(k) {
-    let last = null, peek = 0, fin = 0
+    const runs = []
+    let peek = 0, fin = 0
     for (let r = 0; r < k; r++) {
       const s = simulate(effect, sequential)
-      last = s
+      runs.push(s)
       if (s.everBelow) peek++
       if (s.finalP < 0.05) fin++
     }
-    setTraj(last)
+    setTraj(runs[runs.length - 1])
+    setGhosts((g) => [...g, ...runs].slice(-60)) // копим «облако» траекторий
     setTally((t) => ({ peek: t.peek + peek, fin: t.fin + fin, total: t.total + k }))
   }
-  const reset = () => { setTraj(null); setTally({ peek: 0, fin: 0, total: 0 }) }
-  function toggle(e) { setEffect(e); setTraj(null); setTally({ peek: 0, fin: 0, total: 0 }) }
+  const reset = () => { setTraj(null); setGhosts([]); setTally({ peek: 0, fin: 0, total: 0 }) }
+  function toggle(e) { setEffect(e); setTraj(null); setGhosts([]); setTally({ peek: 0, fin: 0, total: 0 }) }
 
   const sx = (d) => PAD + ((d - 1) / (DAYS - 1)) * (W - 2 * PAD)
   const syP = (p) => 24 + (1 - Math.min(p, YCAP) / YCAP) * (H1 - 24 - 28)
@@ -99,6 +102,11 @@ export default function Peeking({ sequential = false }) {
         <line x1={sx(DESIGN_DAY)} y1={16} x2={sx(DESIGN_DAY)} y2={H1 - 28} stroke="#2a2f3a" strokeWidth="1.2" strokeDasharray="3 3" />
         <text x={sx(DESIGN_DAY)} y={14} fill="#2a2f3a" fontSize="9" textAnchor="middle">план (дизайн)</text>
         <line x1={PAD} y1={H1 - 28} x2={W - PAD} y2={H1 - 28} stroke="#d6cebf" strokeWidth="1.5" />
+        {/* облако прошлых тестов: каждая бледная линия — отдельный A/A-эксперимент */}
+        {ghosts.map((g, gi) => (
+          <path key={gi} d={g.pts.map((pt, i) => `${i === 0 ? 'M' : 'L'}${sx(pt.d).toFixed(1)},${syP(pt.p).toFixed(1)}`).join(' ')}
+            fill="none" stroke={g.everBelow ? '#f87171' : '#9ca3af'} strokeWidth="1" opacity="0.13" />
+        ))}
         {traj && <path d={dP} fill="none" stroke={traj.everBelow ? '#f87171' : '#2ab8eb'} strokeWidth="2" />}
         {traj && <circle cx={sx(DESIGN_DAY)} cy={syP(traj.finalP)} r="4" fill={traj.finalP < 0.05 ? '#16a34a' : '#6b7280'} />}
         <text x={PAD} y={H1 - 10} fill="#6b7280" fontSize="10" textAnchor="start">день теста (выборка копится) →</text>
@@ -127,20 +135,28 @@ export default function Peeking({ sequential = false }) {
           : (traj.everBelow ? 'Эффекта НЕТ, но линия ныряла под 0.05 — подглядывающий остановился бы здесь и объявил ложную победу.' : 'Эффекта нет: за весь тест линия не опустилась под порог.')}
       </div>}
 
-      <div className="flex flex-wrap gap-4 mt-2 text-sm">
-        <span className="text-[#f87171]">Пересекали границу до плана: {tally.total ? ((tally.peek / tally.total) * 100).toFixed(0) : '—'}%</span>
-        <span className="text-[#16a34a]">Значимы строго на плане: {tally.total ? ((tally.fin / tally.total) * 100).toFixed(0) : '—'}%</span>
-        <span className="text-gray-500">(прогонов: {tally.total})</span>
-      </div>
-
       <div className="flex gap-2 mt-3">
-        <button onClick={() => run(1)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">запустить 1 эксперимент</button>
-        <button onClick={() => run(50)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">запустить ещё 50</button>
+        <button onClick={() => run(1)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+1 тест (одна траектория)</button>
+        <button onClick={() => run(50)} className="text-xs px-3 py-1 rounded-md bg-accent text-white hover:opacity-90">+50 тестов (набрать статистику)</button>
         <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
+
+      {/* итоговая статистика по многим тестам — ради этого и жмут «+50» */}
+      <div className="mt-3 rounded-lg border border-black/10 bg-ink/40 p-3">
+        <div className="text-xs text-gray-600 mb-2">Один тест — одна случайная траектория (её видно жирной линией, прошлые — бледным «облаком»). Чтобы увидеть, КАК ЧАСТО подглядывание даёт ложную «победу», нужно прогнать много тестов — для этого и кнопка «+50».</div>
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+          <span className="text-[#f87171]">хоть раз ныряли под порог до срока: <b>{tally.total ? ((tally.peek / tally.total) * 100).toFixed(0) : '—'}%</b></span>
+          <span className="text-[#16a34a]">значимы строго на плановом дне: {tally.total ? ((tally.fin / tally.total) * 100).toFixed(0) : '—'}%</span>
+          <span className="text-gray-500">(тестов: {tally.total})</span>
+        </div>
+        {!effect && tally.total > 0 && (
+          <div className="text-xs text-[#f87171] mt-1">Эффекта нет, честная доля ложных «побед» должна быть ~5%. Видите, насколько подглядывание её раздувает: {((tally.peek / tally.total) * 100).toFixed(0)}% против 5%.</div>
+        )}
+      </div>
+
       <p className="text-xs text-gray-500 mt-2">{sequential
-        ? 'Жёлтая граница α-spending строгая в начале и смягчается к плановому дню. Останавливаться можно досрочно, но только если линия p-value пробила ЭТУ границу, а не плоские 0.05. Прогоните «эффекта нет» много раз: пересечений мало (общий риск удержан на ~5%) — это и есть честное подглядывание, в отличие от обычного теста с плоским порогом.'
-        : 'Одна линия сверху — p-value ОДНОГО эксперимента по дням, пока копится выборка (снизу — как она копится к нужному по дизайну размеру). Без эффекта p-value случайно блуждает и почти наверняка хоть раз нырнёт под 0.05 — но это ложный повод остановиться. Честное правило: смотреть результат на запланированном дне (чёрный пунктир), а не «как только стало значимо».'}</p>
+        ? 'Жёлтая граница α-spending строгая в начале и смягчается к плановому дню. Останавливаться можно досрочно, но только если линия p-value пробила ЭТУ границу, а не плоские 0.05.'
+        : 'Верхний график — p-value по дням, пока копится выборка (снизу — как она копится к нужному размеру). Без эффекта p-value случайно блуждает и почти наверняка хоть раз нырнёт под 0.05 — но это ложный повод остановиться. Честное правило: смотреть результат на плановом дне (чёрный пунктир), а не «как только стало значимо».'}</p>
     </div>
   )
 }

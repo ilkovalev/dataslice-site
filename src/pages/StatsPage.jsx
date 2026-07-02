@@ -24,8 +24,12 @@ const moduleTitle = (id) => modules.find((m) => m.id === id)?.title ?? ''
 // Боковое оглавление с прогрессом (пины 1, 2 ревью): видно, где ты среди всех
 // уроков, что пройдено (галочки) и сколько осталось (полоса прогресса).
 function Sidebar({ activeModule, lessonId, globalIdx, onModule, onLesson }) {
+  const [open, setOpen] = useState(false) // раскрытие списка уроков на мобильном
   const total = lessons.length
   const pct = Math.round(((globalIdx + 1) / total) * 100)
+  const currentTitle = lessons[globalIdx]?.title ?? ''
+  // на мобильном после выбора урока список сворачиваем — сразу видно контент
+  const selectLesson = (l) => { onLesson(l); setOpen(false) }
   return (
     <aside className="md:sticky md:top-20 md:self-start">
       <div className="rounded-xl border border-black/10 bg-panel/70 p-4">
@@ -38,7 +42,17 @@ function Sidebar({ activeModule, lessonId, globalIdx, onModule, onLesson }) {
         </div>
       </div>
 
-      <nav className="mt-4 max-h-[60vh] md:max-h-none overflow-auto pr-1">
+      {/* мобильный переключатель: сворачивает/разворачивает список уроков */}
+      <button
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="md:hidden mt-3 w-full flex items-center justify-between gap-2 rounded-lg border border-black/10 bg-panel/70 px-3 py-2 text-sm text-gray-700"
+      >
+        <span className="truncate text-left"><span className="text-gray-400 mr-1.5">{open ? 'Свернуть' : 'Оглавление'} ·</span>{currentTitle}</span>
+        <span className={`shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} aria-hidden>▾</span>
+      </button>
+
+      <nav className={`${open ? 'block' : 'hidden'} md:block mt-3 md:mt-4 max-h-[60vh] md:max-h-none overflow-auto pr-1`}>
         <ol className="space-y-1">
           {modules.map((m) => {
             const list = lessonsByModule[m.id] ?? []
@@ -67,7 +81,7 @@ function Sidebar({ activeModule, lessonId, globalIdx, onModule, onLesson }) {
                       return (
                         <li key={l.id}>
                           <button
-                            onClick={() => onLesson(l)}
+                            onClick={() => selectLesson(l)}
                             className={`w-full text-left flex items-start gap-1.5 text-[13px] px-2 py-1 rounded transition-colors ${
                               current ? 'bg-black/[0.06] text-gray-900 font-medium' : 'text-gray-600 hover:bg-black/5'
                             }`}

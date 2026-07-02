@@ -1,27 +1,19 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
-// Последовательный тест «честного подглядывания». В отличие от урока про
-// подглядывание (где линия p-value просто блуждает под плоским порогом), здесь
-// данные набираются ПО НЕДЕЛЯМ, а решение об остановке сверяется с границей,
-// которая заранее заложила цену многократных проверок. Сравниваем три границы:
-//   • наивный порог |Z| ≥ 1.96 на каждой проверке — ложные остановки раздуваются;
-//   • Pocock — постоянный, но поднятый порог;
-//   • O'Brien–Fleming — очень строгий в начале, смягчается к финалу.
-// Значения границ — стандартные табличные для K=5 проверок, α=0.05 (двусторонний).
+// Последовательный тест = развитие графика подглядывания. Тот же p-value по дням,
+// но теперь граница остановки бывает двух видов:
+//   • наивный плоский порог 0.05 — проверяем каждый день → под A/A ложные
+//     остановки раздуваются далеко за 5% (та самая ошибка из прошлого урока);
+//   • последовательная граница (α-spending) — строгая в начале, смягчается к
+//     плановому дню → удерживает ложные остановки около честных 5%.
+// Пересечение границы под A/A — это ЛОЖНАЯ остановка, а не «эффект».
 const W = 560
-const H = 240
-const PAD = 46
-const TOP = 20
-const BASE = H - 34
-const K = 5 // число промежуточных проверок (недель)
-const ZCAP = 5
-const DRIFT = 1.05 // сила реального эффекта (сдвиг за неделю), когда «эффект есть»
-
-const BOUNDS = {
-  naive: { label: 'наивный порог 0.05', color: '#f87171', crit: () => 1.96 },
-  pocock: { label: 'Pocock', color: '#0d7fb0', crit: () => 2.413 },
-  obf: { label: "O'Brien–Fleming", color: '#16a34a', crit: (k) => 2.04 * Math.sqrt(K / k) },
-}
+const H = 210
+const PAD = 40
+const DAYS = 20
+const PERDAY = 110
+const DESIGN_DAY = 16
+const YCAP = 0.6
 
 function erf(x) {
   const t = 1 / (1 + 0.3275911 * Math.abs(x))
@@ -29,157 +21,153 @@ function erf(x) {
   return x >= 0 ? y : -y
 }
 const cdf = (z) => 0.5 * (1 + erf(z / Math.SQRT2))
-function gauss() {
-  let u = 0, v = 0
-  while (!u) u = Math.random()
-  while (!v) v = Math.random()
-  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v)
-}
 
-// один эксперимент: кумулятивный Z по неделям. Под H0 Z_k = (Σ e)/√k;
-// при эффекте добавляется дрейф g·√k. Возвращает массив Z по неделям 1..K.
-function simulate(effect) {
-  let s = 0
-  const zs = []
-  for (let k = 1; k <= K; k++) {
-    s += gauss()
-    zs.push(s / Math.sqrt(k) + (effect ? DRIFT : 0) * Math.sqrt(k))
+// граница остановки по дню: плоские 0.05 или α-spending (строго → мягко).
+// Коэффициент подобран так, чтобы под A/A общая доля ложных остановок за все
+// проверки была около 5% (наивный плоский порог даёт ~23%).
+const boundAt = (d, seq) => seq ? Math.max(0.001, 0.035 * (d / DESIGN_DAY) ** 3) : 0.05
+
+function simulate(hasEffect) {
+  const pA = 0.20
+  const pB = hasEffect ? 0.235 : 0.20
+  let cA = 0, cB = 0
+  const pts = []
+  for (let d = 1; d <= DAYS; d++) {
+    for (let u = 0; u < PERDAY; u++) {
+      if (Math.random() < pA) cA++
+      if (Math.random() < pB) cB++
+    }
+    const n = d * PERDAY
+    const pa = cA / n, pb = cB / n
+    const pool = (cA + cB) / (2 * n)
+    const se = Math.sqrt(pool * (1 - pool) * (2 / n)) || 1e-9
+    pts.push({ d, p: 2 * (1 - cdf(Math.abs((pa - pb) / se))) })
   }
-  return zs
+  return { pts, hasEffect }
 }
-// первая неделя, где |Z| пробил границу type (или null)
-function crossWeek(zs, type) {
-  for (let k = 1; k <= zs.length; k++) if (Math.abs(zs[k - 1]) >= BOUNDS[type].crit(k)) return k
+// день первой остановки под границей seq (или null), только до планового дня
+function stopDay(pts, seq) {
+  for (const pt of pts) { if (pt.d > DESIGN_DAY) break; if (pt.p < boundAt(pt.d, seq)) return pt.d }
   return null
 }
 
 export default function SequentialTest() {
-  const [type, setType] = useState('obf')
-  const [effect, setEffect] = useState(true)
-  const [zs, setZs] = useState([]) // раскрытые недели текущего эксперимента
-  const [full, setFull] = useState(() => simulate(true)) // весь заготовленный прогон
-  const [tally, setTally] = useState({ naive: 0, pocock: 0, obf: 0, total: 0 })
+  const [seq, setSeq] = useState(true) // true — последовательная граница, false — наивная
+  const [effect, setEffect] = useState(false)
+  const [traj, setTraj] = useState(null)
+  const [ghosts, setGhosts] = useState([])
+  const [tally, setTally] = useState({ naive: 0, seqStop: 0, total: 0 }) // ложные остановки под A/A
 
-  function newRun(eff = effect) { setFull(simulate(eff)); setZs([]) }
-  function nextWeek() {
-    if (zs.length >= K) return
-    setZs(full.slice(0, zs.length + 1))
-  }
-  function toggleEffect(e) { setEffect(e); setFull(simulate(e)); setZs([]) }
-  function runAA(n) {
-    let na = 0, po = 0, ob = 0
-    for (let i = 0; i < n; i++) {
-      const s = simulate(false) // A/A: эффекта нет
-      if (crossWeek(s, 'naive')) na++
-      if (crossWeek(s, 'pocock')) po++
-      if (crossWeek(s, 'obf')) ob++
+  function run(k) {
+    const runs = []
+    let naive = 0, seqStop = 0
+    for (let r = 0; r < k; r++) {
+      const s = simulate(effect)
+      runs.push(s)
+      if (!effect) { // копим статистику ложных остановок только под A/A
+        if (stopDay(s.pts, false) != null) naive++
+        if (stopDay(s.pts, true) != null) seqStop++
+      }
     }
-    setTally((t) => ({ naive: t.naive + na, pocock: t.pocock + po, obf: t.obf + ob, total: t.total + n }))
+    setTraj(runs[runs.length - 1])
+    setGhosts((g) => [...g, ...runs].slice(-60))
+    setTally((t) => ({ naive: t.naive + naive, seqStop: t.seqStop + seqStop, total: t.total + (effect ? 0 : k) }))
   }
-  const reset = () => { setZs([]); setTally({ naive: 0, pocock: 0, obf: 0, total: 0 }) }
+  const reset = () => { setTraj(null); setGhosts([]); setTally({ naive: 0, seqStop: 0, total: 0 }) }
+  const setScenario = (e) => { setEffect(e); setTraj(null); setGhosts([]); setTally({ naive: 0, seqStop: 0, total: 0 }) }
 
-  const sx = (k) => PAD + ((k - 1) / (K - 1)) * (W - 2 * PAD)
-  const syZ = (z) => BASE - (Math.min(Math.abs(z), ZCAP) / ZCAP) * (BASE - TOP)
-  const boundPath = useMemo(() => {
-    const paths = {}
-    for (const key of Object.keys(BOUNDS)) {
-      let d = ''
-      for (let k = 1; k <= K; k++) d += `${k === 1 ? 'M' : 'L'}${sx(k).toFixed(1)},${syZ(BOUNDS[key].crit(k)).toFixed(1)} `
-      paths[key] = d
-    }
-    return paths
-  }, [])
+  const sx = (d) => PAD + ((d - 1) / (DAYS - 1)) * (W - 2 * PAD)
+  const syP = (p) => 24 + (1 - Math.min(p, YCAP) / YCAP) * (H - 24 - 28)
+  const pathOf = (pts) => pts.map((pt, i) => `${i === 0 ? 'M' : 'L'}${sx(pt.d).toFixed(1)},${syP(pt.p).toFixed(1)}`).join(' ')
 
-  const runPath = zs.map((z, i) => `${i === 0 ? 'M' : 'L'}${sx(i + 1).toFixed(1)},${syZ(z).toFixed(1)}`).join(' ')
-  const cross = crossWeek(zs, type)
-  const lastZ = zs.length ? zs[zs.length - 1] : null
-  const naiveP = lastZ != null ? 2 * (1 - cdf(Math.abs(lastZ))) : null
-  const done = zs.length >= K
+  // граница (только выбранная): плоская 0.05 или кривая α-spending
+  let dBound = ''
+  if (seq) { for (let d = 1; d <= DESIGN_DAY; d++) dBound += `${d === 1 ? 'M' : 'L'}${sx(d).toFixed(1)},${syP(boundAt(d, true)).toFixed(1)} ` }
+
+  const curStop = traj ? stopDay(traj.pts, seq) : null
   const pct = (v) => (tally.total ? ((v / tally.total) * 100).toFixed(0) + '%' : '—')
 
   return (
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none">
-        {/* сетка недель */}
-        {Array.from({ length: K }, (_, i) => i + 1).map((k) => (
-          <text key={k} x={sx(k)} y={BASE + 16} fill="#9ca3af" fontSize="10" textAnchor="middle">нед. {k}</text>
-        ))}
-        <line x1={PAD} y1={BASE} x2={W - PAD} y2={BASE} stroke="#d6cebf" strokeWidth="1.5" />
-        <text x={PAD} y={12} fill="#6b7280" fontSize="10" textAnchor="start">|Z| — накопленная статистика ↑</text>
-
-        {/* границы: выбранная ярко, остальные бледно */}
-        {Object.entries(BOUNDS).map(([key, b]) => (
-          <path key={key} d={boundPath[key]} fill="none" stroke={b.color}
-            strokeWidth={key === type ? 2.2 : 1.2} strokeDasharray="5 4"
-            opacity={key === type ? 1 : 0.28} />
-        ))}
-        <text x={W - PAD} y={syZ(BOUNDS[type].crit(K)) - 5} fill={BOUNDS[type].color} fontSize="10" textAnchor="end">
-          граница: {BOUNDS[type].label}
-        </text>
-
-        {/* путь текущего эксперимента */}
-        {zs.length > 0 && <path d={runPath} fill="none" stroke="#2a2f3a" strokeWidth="2" />}
-        {zs.map((z, i) => (
-          <circle key={i} cx={sx(i + 1)} cy={syZ(z)} r="3.5"
-            fill={cross && i + 1 === cross ? BOUNDS[type].color : '#2a2f3a'} />
-        ))}
-        {cross && (
-          <text x={sx(cross)} y={syZ(zs[cross - 1]) - 8} fill={BOUNDS[type].color} fontSize="10" textAnchor="middle">
-            остановка ✓
-          </text>
+        {/* граница остановки — только выбранная */}
+        {seq ? (
+          <>
+            <path d={dBound} fill="none" stroke="#fbbf24" strokeWidth="1.8" strokeDasharray="5 4" />
+            <text x={sx(DESIGN_DAY)} y={syP(0.05) + 13} fill="#c69214" fontSize="10" textAnchor="end">последовательная граница (α-spending)</text>
+          </>
+        ) : (
+          <>
+            <rect x={PAD} y={syP(0.05)} width={W - 2 * PAD} height={H - 28 - syP(0.05)} fill="#f87171" opacity="0.06" />
+            <line x1={PAD} y1={syP(0.05)} x2={W - PAD} y2={syP(0.05)} stroke="#fbbf24" strokeWidth="1.6" strokeDasharray="5 4" />
+            <text x={W - PAD} y={syP(0.05) - 4} fill="#c69214" fontSize="10" textAnchor="end">наивный порог 0.05</text>
+          </>
         )}
+        {/* плановый день */}
+        <line x1={sx(DESIGN_DAY)} y1={16} x2={sx(DESIGN_DAY)} y2={H - 28} stroke="#2a2f3a" strokeWidth="1.2" strokeDasharray="3 3" />
+        <text x={sx(DESIGN_DAY)} y={14} fill="#2a2f3a" fontSize="9" textAnchor="middle">план (дизайн)</text>
+        <line x1={PAD} y1={H - 28} x2={W - PAD} y2={H - 28} stroke="#d6cebf" strokeWidth="1.5" />
+
+        {/* облако прошлых тестов; красные — те, что пересекли выбранную границу */}
+        {ghosts.map((g, gi) => {
+          const stopped = stopDay(g.pts, seq) != null
+          return <path key={gi} d={pathOf(g.pts)} fill="none" stroke={stopped ? '#f87171' : '#9ca3af'} strokeWidth="1" opacity="0.13" />
+        })}
+        {/* текущая траектория */}
+        {traj && <path d={pathOf(traj.pts)} fill="none" stroke={curStop ? '#f87171' : '#2ab8eb'} strokeWidth="2" />}
+        {/* точка остановки */}
+        {traj && curStop && (
+          <>
+            <circle cx={sx(curStop)} cy={syP(traj.pts[curStop - 1].p)} r="5" fill={traj.hasEffect ? '#16a34a' : '#f87171'} />
+            <text x={sx(curStop)} y={syP(traj.pts[curStop - 1].p) - 9} fill={traj.hasEffect ? '#16a34a' : '#f87171'} fontSize="10" textAnchor="middle">
+              {traj.hasEffect ? 'ранняя остановка' : 'ложная остановка'}
+            </text>
+          </>
+        )}
+        <text x={PAD} y={H - 10} fill="#6b7280" fontSize="10" textAnchor="start">день теста (выборка копится) →</text>
+        <text x={PAD} y={12} fill="#6b7280" fontSize="10" textAnchor="start">p-value ↑</text>
       </svg>
 
       {/* выбор границы */}
       <div className="flex flex-wrap items-center gap-2 mt-1">
-        <span className="text-xs text-gray-600 mr-1">Граница:</span>
-        {Object.entries(BOUNDS).map(([key, b]) => (
-          <button key={key} onClick={() => setType(key)}
-            className={`text-xs px-2.5 py-1 rounded border ${type === key ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>
-            {b.label}
-          </button>
-        ))}
+        <span className="text-xs text-gray-600 mr-1">Граница остановки:</span>
+        <button onClick={() => setSeq(false)} className={`text-xs px-2.5 py-1 rounded border ${!seq ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>наивный порог 0.05</button>
+        <button onClick={() => setSeq(true)} className={`text-xs px-2.5 py-1 rounded border ${seq ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>последовательная (α-spending)</button>
       </div>
-
       {/* сценарий данных */}
       <div className="flex flex-wrap items-center gap-2 mt-2">
         <span className="text-xs text-gray-600 mr-1">Данные:</span>
-        <button onClick={() => toggleEffect(false)} className={`text-xs px-2.5 py-1 rounded border ${!effect ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>эффекта нет (A/A)</button>
-        <button onClick={() => toggleEffect(true)} className={`text-xs px-2.5 py-1 rounded border ${effect ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>эффект есть</button>
+        <button onClick={() => setScenario(false)} className={`text-xs px-2.5 py-1 rounded border ${!effect ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>эффекта нет (A/A)</button>
+        <button onClick={() => setScenario(true)} className={`text-xs px-2.5 py-1 rounded border ${effect ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>эффект есть</button>
       </div>
 
-      {/* читаемый статус текущего эксперимента */}
-      <div className="mt-2 text-sm text-gray-700 min-h-[2.5rem]">
-        {zs.length === 0
-          ? <>Набирайте данные по неделям кнопкой «+1 неделя» и следите, пробьёт ли <b>|Z|</b> выбранную границу.</>
-          : cross
-            ? <span style={{ color: BOUNDS[type].color }}>Неделя {cross}: |Z| = {Math.abs(zs[cross - 1]).toFixed(2)} пробил границу {BOUNDS[type].label} → можно честно остановиться{effect ? ' на реальном эффекте.' : '. Но эффекта нет — это ложная остановка (у наивного порога такое случается заметно чаще).'}</span>
-            : done
-              ? <>Дошли до конца (нед. {K}): |Z| = {Math.abs(lastZ).toFixed(2)}, границу не пробили → эффект {effect ? 'не набрал значимости к сроку.' : 'не подтверждён — верное решение.'}</>
-              : <>Неделя {zs.length}: |Z| = {Math.abs(lastZ).toFixed(2)}, наивный p = {naiveP.toFixed(3)}. Граница {BOUNDS[type].label} = {BOUNDS[type].crit(zs.length).toFixed(2)} — пока не пробита, продолжаем.</>}
+      {traj && (
+        <div className="mt-2 text-sm text-gray-700">
+          {curStop
+            ? (traj.hasEffect
+              ? <span className="text-[#16a34a]">Линия пробила границу на дне {curStop} — это ранняя остановка на реальном эффекте.</span>
+              : <span className="text-[#f87171]">Эффекта нет, но линия нырнула под границу на дне {curStop} — это ЛОЖНАЯ остановка, а не эффект. Подглядывающий ошибочно объявил бы «победу».</span>)
+            : <span className="text-gray-600">Границу не пробили: {traj.hasEffect ? 'эффект к сроку не набрал значимости.' : 'под A/A честно дошли до планового дня без ложной остановки.'}</span>}
+        </div>
+      )}
+
+      <div className="flex gap-2 mt-3">
+        <button onClick={() => run(1)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+1 тест</button>
+        <button onClick={() => run(50)} className="text-xs px-3 py-1 rounded-md bg-accent text-white hover:opacity-90">+50 тестов (набрать статистику)</button>
+        <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
 
-      <div className="flex flex-wrap gap-2 mt-2">
-        <button onClick={nextWeek} disabled={done || !!cross} className="text-xs px-3 py-1 rounded-md bg-accent text-white disabled:opacity-30 hover:opacity-90">+1 неделя данных</button>
-        <button onClick={() => newRun()} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">новый эксперимент</button>
-      </div>
-
-      {/* многократный прогон под A/A: доля ложных остановок по каждой границе */}
-      <div className="mt-4 rounded-lg border border-black/10 bg-ink/40 p-3">
-        <div className="text-xs text-gray-600 mb-2">Прогон под A/A (эффекта нет): как часто граница ложно срабатывает хоть на одной из {K} проверок. Честная цель — около 5%.</div>
+      {/* сравнение долей ложных остановок под A/A */}
+      <div className="mt-3 rounded-lg border border-black/10 bg-ink/40 p-3">
+        <div className="text-xs text-gray-600 mb-2">Доля A/A-тестов с ложной остановкой (пересекли границу хоть раз до срока). Честная цель — около 5%. Прогоняйте «эффекта нет» кнопкой «+50».</div>
         <div className="flex flex-wrap gap-x-5 gap-y-1 text-sm">
-          <span className="text-[#f87171]">наивный 0.05: {pct(tally.naive)}</span>
-          <span className="text-[#0d7fb0]">Pocock: {pct(tally.pocock)}</span>
-          <span className="text-[#16a34a]">O'Brien–Fleming: {pct(tally.obf)}</span>
-          <span className="text-gray-500">(прогонов: {tally.total})</span>
-        </div>
-        <div className="flex gap-2 mt-2">
-          <button onClick={() => runAA(50)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">прогнать 50 A/A</button>
-          <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+          <span className="text-[#f87171]">наивный порог 0.05: <b>{pct(tally.naive)}</b></span>
+          <span className="text-[#16a34a]">последовательная граница: <b>{pct(tally.seqStop)}</b></span>
+          <span className="text-gray-500">(A/A-тестов: {tally.total})</span>
         </div>
       </div>
 
-      <p className="text-xs text-gray-500 mt-3">Ось — накопленная статистика |Z| по неделям. Наивный порог 1.96 проверяется на каждой неделе, поэтому под A/A ложные остановки раздуваются далеко за 5%. Pocock поднимает порог до постоянного уровня, O'Brien–Fleming делает его очень строгим в начале и почти обычным к финалу — оба удерживают общий риск около 5%, но при этом позволяют законно остановиться раньше, если эффект силён. Значения границ — стандартные табличные для {K} проверок.</p>
+      <p className="text-xs text-gray-500 mt-3">Это тот же график p-value по дням, что и в прошлом уроке, но граница остановки теперь честная. Наивный плоский порог 0.05 проверяется каждый день → под A/A линия то и дело ныряет под него (красные ложные остановки), и их доля куда больше 5%. Последовательная граница (α-spending) строгая в начале и смягчается к плановому дню → ложных остановок около 5%, при этом настоящий эффект всё ещё можно поймать раньше срока. Pocock и O'Brien–Fleming — конкретные семейства таких границ.</p>
     </div>
   )
 }

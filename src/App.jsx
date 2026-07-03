@@ -1,8 +1,12 @@
+import { Suspense, lazy } from 'react'
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
-import StatsPage from './pages/StatsPage.jsx'
-import MetricsPage from './pages/MetricsPage.jsx'
-import GlossaryPage from './pages/GlossaryPage.jsx'
 import { track } from './lib/analytics.js'
+
+// Каждая страница — свой чанк: курс (уроки + виджеты) не грузится
+// тем, кто пришёл за метриками или глоссарием, и наоборот.
+const StatsPage = lazy(() => import('./pages/StatsPage.jsx'))
+const MetricsPage = lazy(() => import('./pages/MetricsPage.jsx'))
+const GlossaryPage = lazy(() => import('./pages/GlossaryPage.jsx'))
 
 const linkBase = 'px-3 py-1.5 rounded-md text-sm transition-colors'
 const linkClass = ({ isActive }) =>
@@ -32,14 +36,16 @@ export default function App() {
         </div>
       </header>
       <main className="max-w-[1600px] mx-auto px-4 py-8">
-        <Routes>
-          <Route path="/" element={<Navigate to="/stats" replace />} />
-          <Route path="/stats" element={<StatsPage />} />
-          <Route path="/stats/:lessonSlug" element={<StatsPage />} />
-          <Route path="/metrics" element={<MetricsPage />} />
-          <Route path="/glossary" element={<GlossaryPage />} />
-          <Route path="*" element={<Navigate to="/stats" replace />} />
-        </Routes>
+        <Suspense fallback={null}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/stats" replace />} />
+            <Route path="/stats" element={<StatsPage />} />
+            <Route path="/stats/:lessonSlug" element={<StatsPage />} />
+            <Route path="/metrics" element={<MetricsPage />} />
+            <Route path="/glossary" element={<GlossaryPage />} />
+            <Route path="*" element={<Navigate to="/stats" replace />} />
+          </Routes>
+        </Suspense>
       </main>
       <footer className="border-t border-black/10 mt-8">
         <div className="max-w-[1600px] mx-auto px-4 py-6 text-sm text-gray-600">

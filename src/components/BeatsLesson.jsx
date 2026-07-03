@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { widgets } from './widgets.js'
 import Paragraphs from './Paragraphs.jsx'
 import { gloss } from './Glossed.jsx'
@@ -11,15 +11,27 @@ const OWN_RESET = new Set([
   'estimator-sampler', 'histogram', 'peeking', 'sampling-distribution', 'sequential-test', 'two-teams',
 ])
 
-export default function BeatsLesson({ lesson, onComplete }) {
+export default function BeatsLesson({ lesson, onComplete, onNext }) {
   const [i, setI] = useState(0)
   const [revealed, setRevealed] = useState(false)
   const [resetKey, setResetKey] = useState(0)
+  const widgetRef = useRef(null)
+  const summaryRef = useRef(null)
   useEffect(() => setRevealed(false), [i])
   // Урок считается пройденным, когда читатель дошёл до последнего бита.
   useEffect(() => {
     if (i === lesson.beats.length - 1) onComplete?.()
   }, [i, lesson, onComplete])
+  // Стрелки ←/→ листают биты (если фокус не в поле ввода).
+  useEffect(() => {
+    function onKey(e) {
+      if (e.target.closest?.('input, textarea, select')) return
+      if (e.key === 'ArrowRight' && i < lesson.beats.length - 1) setI(i + 1)
+      if (e.key === 'ArrowLeft' && i > 0) setI(i - 1)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [i, lesson])
 
   const beat = lesson.beats[i] ?? lesson.beats[0]
   // Бит может нести свой виджет (beat.widget.name) и доп. props — иначе берём
@@ -38,7 +50,7 @@ export default function BeatsLesson({ lesson, onComplete }) {
 
       <div className={Widget ? 'grid md:grid-cols-3 gap-8 items-start' : ''}>
         {Widget && (
-          <div className="min-w-0 md:col-span-2 md:sticky md:top-20">
+          <div ref={widgetRef} className="min-w-0 md:col-span-2 md:sticky md:top-20 scroll-mt-16">
             {showGenericReset && (
               <div className="flex justify-end mb-1">
                 <button
@@ -66,30 +78,33 @@ export default function BeatsLesson({ lesson, onComplete }) {
             ))}
           </div>
 
-          <p className="text-gray-900 leading-relaxed mb-4">{gloss(beat.text)}</p>
+          {/* min-height, чтобы кнопки не прыгали по вертикали между битами */}
+          <div className="min-h-[11rem]">
+            <p className="text-gray-900 leading-relaxed mb-4">{gloss(beat.text)}</p>
 
-          {beat.predict && (
-            <div className="rounded-lg border border-black/10 bg-ink/60 p-3 mb-4">
-              <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-1">Предскажите</div>
-              <p className="text-sm text-gray-700">{beat.predict}</p>
-              {!revealed && (
-                <button
-                  onClick={() => setRevealed(true)}
-                  className="mt-2 text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10"
-                >
-                  Показать ответ
-                </button>
-              )}
-            </div>
-          )}
+            {beat.predict && (
+              <div className="rounded-lg border border-black/10 bg-ink/60 p-3 mb-4">
+                <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-1">Предскажите</div>
+                <p className="text-sm text-gray-700">{beat.predict}</p>
+                {!revealed && (
+                  <button
+                    onClick={() => setRevealed(true)}
+                    className="mt-2 text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10"
+                  >
+                    Показать ответ
+                  </button>
+                )}
+              </div>
+            )}
 
-          {beat.reveal && (!beat.predict || revealed) && (
-            <p className="text-sm text-gray-600 mb-4">
-              <span className="text-gray-700">Ответ:</span> {gloss(beat.reveal)}
-            </p>
-          )}
+            {beat.reveal && (!beat.predict || revealed) && (
+              <p className="text-sm text-gray-600 mb-4">
+                <span className="text-gray-700">Ответ:</span> {gloss(beat.reveal)}
+              </p>
+            )}
+          </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
             <button
               disabled={i === 0}
               onClick={() => setI(i - 1)}
@@ -100,60 +115,86 @@ export default function BeatsLesson({ lesson, onComplete }) {
             {!last && (
               <button
                 onClick={() => setI(i + 1)}
-                className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-accent text-white hover:opacity-90 transition-opacity"
+                className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-cyanink text-white hover:opacity-90 transition-opacity"
               >
                 Дальше <span aria-hidden>→</span>
               </button>
             )}
+            {last && (
+              <button
+                onClick={() => summaryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-cyanink text-white hover:opacity-90 transition-opacity"
+              >
+                Итоги урока <span aria-hidden>↓</span>
+              </button>
+            )}
+            {Widget && (
+              <button
+                onClick={() => widgetRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                className="md:hidden text-xs text-cyanink hover:underline"
+              >
+                ↑ к графику
+              </button>
+            )}
           </div>
+          <div className="mt-2 hidden md:block text-[11px] text-gray-400">листать можно стрелками ← →</div>
         </div>
       </div>
 
-      {lesson.definitions && (
-        <div className="max-w-2xl mt-10">
-          <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-2">Определения</div>
-          <dl className="space-y-3">
-            {lesson.definitions.map((d) => (
-              <div key={d.term} className="text-sm">
-                <div>
-                  <span className="text-gray-900 font-medium">{d.term}</span>
-                  {d.formula && <span className="font-mono text-cyanink ml-2">{d.formula}</span>}
+      <div ref={summaryRef} className="scroll-mt-16">
+        {lesson.definitions && (
+          <div className="max-w-2xl mt-10">
+            <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-2">Определения</div>
+            <dl className="space-y-3">
+              {lesson.definitions.map((d) => (
+                <div key={d.term} className="text-sm">
+                  <div>
+                    <span className="text-gray-900 font-medium">{d.term}</span>
+                    {d.formula && <span className="font-mono text-cyanink ml-2">{d.formula}</span>}
+                  </div>
+                  <div className="text-gray-600 leading-relaxed">{d.text}</div>
                 </div>
-                <div className="text-gray-600 leading-relaxed">{d.text}</div>
-              </div>
-            ))}
-          </dl>
-        </div>
-      )}
+              ))}
+            </dl>
+          </div>
+        )}
 
-      <div className="max-w-2xl mt-10">
-        <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-2">{lesson.practiceTitle || 'Что это значит'}</div>
-        <Paragraphs text={lesson.practice} className="text-gray-700 leading-relaxed" />
-        {lesson.realLife && (
-          <div className="mt-4 rounded-lg border border-sky-500/30 bg-sky-500/5 px-4 py-3">
-            <div className="text-xs uppercase tracking-wider text-sky-600/90 mb-2">{lesson.realLifeTitle || 'Где это встречается'}</div>
-            <Paragraphs text={lesson.realLife} className="text-sm text-gray-700 leading-relaxed" />
-          </div>
-        )}
-        {lesson.assumptions && (
-          <div className="mt-4 rounded-lg border border-amber-400/40 bg-amber-400/[0.07] px-4 py-3">
-            <div className="text-xs uppercase tracking-wider text-amber-600 mb-2">Когда метод врёт (допущения)</div>
-            <Paragraphs text={lesson.assumptions} className="text-sm text-gray-700 leading-relaxed" />
-          </div>
-        )}
-        {lesson.deepDive && (
-          <details className="mt-4 rounded-lg border border-black/10 bg-black/[0.02] px-4 py-3">
-            <summary className="cursor-pointer text-sm text-cyanink select-none">Подробный разбор: математика и механизм (необязательно)</summary>
-            <div className="mt-2">
-              <Paragraphs text={lesson.deepDive} className="text-sm text-gray-700 leading-relaxed" />
+        <div className="max-w-2xl mt-10">
+          <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-2">{lesson.practiceTitle || 'Что это значит'}</div>
+          <Paragraphs text={lesson.practice} className="text-gray-700 leading-relaxed" />
+          {lesson.realLife && (
+            <div className="mt-4 rounded-lg border border-sky-500/30 bg-sky-500/5 px-4 py-3">
+              <div className="text-xs uppercase tracking-wider text-sky-600/90 mb-2">{lesson.realLifeTitle || 'Где это встречается'}</div>
+              <Paragraphs text={lesson.realLife} className="text-sm text-gray-700 leading-relaxed" />
             </div>
-          </details>
-        )}
-        {lesson.nextLabel && (
-          <div className="mt-6 pt-4 border-t border-black/10 text-sm text-gray-600">
-            Дальше → <span className="text-cyanink">{lesson.nextLabel}</span>
-          </div>
-        )}
+          )}
+          {lesson.assumptions && (
+            <div className="mt-4 rounded-lg border border-amber-400/40 bg-amber-400/[0.07] px-4 py-3">
+              <div className="text-xs uppercase tracking-wider text-amber-600 mb-2">Когда метод врёт (допущения)</div>
+              <Paragraphs text={lesson.assumptions} className="text-sm text-gray-700 leading-relaxed" />
+            </div>
+          )}
+          {lesson.deepDive && (
+            <details className="mt-4 rounded-lg border border-black/10 bg-black/[0.02] px-4 py-3">
+              <summary className="cursor-pointer text-sm text-cyanink select-none">Подробный разбор: математика и механизм (необязательно)</summary>
+              <div className="mt-2">
+                <Paragraphs text={lesson.deepDive} className="text-sm text-gray-700 leading-relaxed" />
+              </div>
+            </details>
+          )}
+          {lesson.nextLabel && (
+            <div className="mt-6 pt-4 border-t border-black/10 text-sm text-gray-600">
+              Дальше →{' '}
+              {onNext ? (
+                <button onClick={onNext} className="text-left text-cyanink hover:underline">
+                  {lesson.nextLabel}
+                </button>
+              ) : (
+                <span className="text-cyanink">{lesson.nextLabel}</span>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </article>
   )

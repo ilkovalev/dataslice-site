@@ -11,10 +11,10 @@ function Step({ label, children }) {
   )
 }
 
-export default function LessonLayout({ lesson, onComplete }) {
+export default function LessonLayout({ lesson, onComplete, onNext }) {
   // Новая модель: если есть beats — рендерим scrollytelling-стэппер.
   // key по id — чтобы при смене урока стэппер сбрасывался на первый бит.
-  if (lesson.beats) return <BeatsLesson key={lesson.id} lesson={lesson} onComplete={onComplete} />
+  if (lesson.beats) return <BeatsLesson key={lesson.id} lesson={lesson} onComplete={onComplete} onNext={onNext} />
 
   const { interaction } = lesson
   const Widget = widgets[interaction.widget]

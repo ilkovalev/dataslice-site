@@ -1,8 +1,29 @@
 import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import LessonLayout from '../components/LessonLayout.jsx'
 import SubscribeCTA from '../components/SubscribeCTA.jsx'
 import { lessons, lessonsByModule } from '../content/lessons/index.js'
 import { track } from '../lib/analytics.js'
+
+// Модули = части учебного пути. Уроки внутри модуля + сквозной маршрут
+// (массив lessons уже в порядке прохождения) с навигацией Назад/Дальше.
+const modules = [
+  { id: 1, title: 'Описательная статистика' },
+  { id: 2, title: 'Вероятность' },
+  { id: 3, title: 'Распределения' },
+  { id: 4, title: 'От выборки к миру' },
+  { id: 5, title: 'Проверка гипотез' },
+  { id: 6, title: 'Эксперименты: A/B' },
+  { id: 7, title: 'Связи и регрессия' },
+  { id: 8, title: 'Классификация' },
+  { id: 9, title: 'Ловушки данных' },
+  { id: 10, title: 'Байесовский вывод' },
+  { id: 11, title: 'Дисперсионный анализ' },
+  { id: 12, title: 'Капстоун' },
+]
+const moduleTitle = (id) => modules.find((m) => m.id === id)?.title ?? ''
+
+const DEFAULT_TITLE = '«Кусочек пиццы» — интерактивная статистика и метрики'
 
 // Прогресс живёт в localStorage: текущий урок + пройденные (пройден = дошёл
 // до последнего бита). Версия в ключе — на случай смены схемы.
@@ -28,26 +49,35 @@ function saveProgress(lessonId, completed) {
 }
 const saved = loadProgress()
 
-// Модули = части учебного пути. Уроки внутри модуля + сквозной маршрут
-// (массив lessons уже в порядке прохождения) с навигацией Назад/Дальше.
-const modules = [
-  { id: 1, title: 'Описательная статистика' },
-  { id: 2, title: 'Вероятность' },
-  { id: 3, title: 'Распределения' },
-  { id: 4, title: 'От выборки к миру' },
-  { id: 5, title: 'Проверка гипотез' },
-  { id: 6, title: 'Эксперименты: A/B' },
-  { id: 7, title: 'Связи и регрессия' },
-  { id: 8, title: 'Классификация' },
-  { id: 9, title: 'Ловушки данных' },
-  { id: 10, title: 'Байесовский вывод' },
-  { id: 11, title: 'Дисперсионный анализ' },
-  { id: 12, title: 'Капстоун' },
-]
-const moduleTitle = (id) => modules.find((m) => m.id === id)?.title ?? ''
+// Ссылка на урок: системный share на мобильном, копирование на десктопе.
+function ShareButton({ lesson }) {
+  const [copied, setCopied] = useState(false)
+  async function share() {
+    const url = `https://data-slice.ru/stats/${lesson.id}`
+    track('share', { id: lesson.id })
+    if (navigator.share) {
+      try { await navigator.share({ title: lesson.title, url }) } catch { /* отменили — ок */ }
+      return
+    }
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1600)
+    } catch { /* нет clipboard — молча */ }
+  }
+  return (
+    <button
+      onClick={share}
+      title="Ссылка на этот урок"
+      className="shrink-0 text-xs px-2.5 py-1 rounded-md border border-black/10 text-gray-600 hover:bg-black/5 transition-colors"
+    >
+      {copied ? '✓ ссылка скопирована' : '🔗 поделиться уроком'}
+    </button>
+  )
+}
 
-// Боковое оглавление с прогрессом (пины 1, 2 ревью): видно, где ты среди всех
-// уроков, что пройдено (галочки) и сколько осталось (полоса прогресса).
+// Боковое оглавление с прогрессом: видно, где ты среди всех уроков,
+// что пройдено (галочки) и сколько осталось (полоса прогресса).
 function Sidebar({ activeModule, lessonId, globalIdx, completed, onModule, onLesson }) {
   const [open, setOpen] = useState(false) // раскрытие списка уроков на мобильном
   const total = lessons.length
@@ -130,50 +160,63 @@ function Sidebar({ activeModule, lessonId, globalIdx, completed, onModule, onLes
 }
 
 export default function StatsPage() {
-  const [activeModule, setActiveModule] = useState(
-    lessons.find((l) => l.id === saved.lessonId)?.module ?? lessons[0].module,
-  )
-  const [lessonId, setLessonId] = useState(saved.lessonId)
+  const { lessonSlug } = useParams()
+  const navigate = useNavigate()
   const [completed, setCompleted] = useState(saved.completed)
 
+  // Урок задаётся URL-ом (/stats/:lessonSlug) — так уроки можно шарить
+  // и добавлять в закладки. Модуль всегда следует за текущим уроком.
+  const globalIdx = validIds.has(lessonSlug) ? lessons.findIndex((l) => l.id === lessonSlug) : -1
+  const current = globalIdx >= 0 ? lessons[globalIdx] : null
+  const prev = globalIdx > 0 ? lessons[globalIdx - 1] : null
+  const next = globalIdx >= 0 && globalIdx < lessons.length - 1 ? lessons[globalIdx + 1] : null
+  const activeModule = current?.module ?? null
+
+  // Голый /stats или неизвестный slug → на последний открытый (или первый) урок.
   useEffect(() => {
-    saveProgress(lessonId, completed)
-  }, [lessonId, completed])
+    if (!current) navigate(`/stats/${loadProgress().lessonId}`, { replace: true })
+  }, [current, navigate])
+
   useEffect(() => {
-    track('lesson_view', { id: lessonId })
-  }, [lessonId])
+    if (current) saveProgress(current.id, completed)
+  }, [current, completed])
+
+  useEffect(() => {
+    if (!current) return
+    track('lesson_view', { id: current.id })
+    document.title = `${current.title} — «Кусочек пиццы»`
+    return () => { document.title = DEFAULT_TITLE }
+  }, [current])
 
   function markComplete(id) {
     if (completed.has(id)) return
     track('lesson_complete', { id })
-    setCompleted((prev) => new Set(prev).add(id))
+    setCompleted((prevSet) => new Set(prevSet).add(id))
   }
 
-  const globalIdx = lessons.findIndex((l) => l.id === lessonId)
-  const current = globalIdx >= 0 ? lessons[globalIdx] : null
-  const prev = globalIdx > 0 ? lessons[globalIdx - 1] : null
-  const next = globalIdx >= 0 && globalIdx < lessons.length - 1 ? lessons[globalIdx + 1] : null
-
-  function goModule(mId) {
-    setActiveModule(mId)
-    const first = lessonsByModule[mId]?.[0]
-    setLessonId(first ? first.id : null)
-  }
   function goLesson(l) {
-    setActiveModule(l.module)
-    setLessonId(l.id)
+    navigate(`/stats/${l.id}`)
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+  function goModule(mId) {
+    const first = lessonsByModule[mId]?.[0]
+    if (first) goLesson(first)
+  }
+
+  if (!current) return null
 
   return (
     <div>
       <h1 className="text-2xl font-semibold mb-1">Интерактивная статистика</h1>
-      <p className="text-gray-600 mb-6 max-w-2xl">С нуля и через манипуляцию: читайте, предсказывайте, двигайте — и понимайте.</p>
+      <p className="text-gray-600 mb-6 max-w-2xl">
+        {lessons.length} бесплатных интерактивных уроков — от среднего и медианы до A/B-тестов и Байеса.
+        Читайте, предсказывайте, двигайте графики — и стройте интуицию. Без регистрации.
+      </p>
 
       <div className="md:grid md:grid-cols-[248px_minmax(0,1fr)] md:gap-8">
         <Sidebar
           activeModule={activeModule}
-          lessonId={lessonId}
+          lessonId={current.id}
           globalIdx={globalIdx}
           completed={completed}
           onModule={goModule}
@@ -181,39 +224,36 @@ export default function StatsPage() {
         />
 
         <div className="min-w-0 mt-8 md:mt-0">
-          {current ? (
-            <>
-              <div className="text-xs text-gray-500 mb-4">
-                Модуль {current.module} «{moduleTitle(current.module)}»
-              </div>
+          <div className="text-xs text-gray-500 mb-4 flex items-center justify-between gap-3 flex-wrap">
+            <span>Модуль {current.module} «{moduleTitle(current.module)}»</span>
+            <ShareButton lesson={current} />
+          </div>
 
-              <LessonLayout lesson={current} onComplete={() => markComplete(current.id)} />
+          <LessonLayout
+            lesson={current}
+            onComplete={() => markComplete(current.id)}
+            onNext={next ? () => goLesson(next) : undefined}
+          />
 
-              <nav className="mt-12 pt-5 border-t border-black/10 flex justify-between gap-3">
-                {prev ? (
-                  <button onClick={() => goLesson(prev)} className="text-left text-sm text-gray-700 hover:text-cyanink max-w-[45%]">
-                    <div className="text-gray-500 text-xs">← Назад</div>
-                    {prev.title}
-                  </button>
-                ) : <span />}
-                {next ? (
-                  <button onClick={() => goLesson(next)} className="text-right text-sm text-gray-700 hover:text-cyanink max-w-[45%]">
-                    <div className="text-gray-500 text-xs">Дальше →</div>
-                    {next.title}
-                  </button>
-                ) : <span />}
-              </nav>
-              <div className="mt-10">
-                {next
-                  ? <SubscribeCTA />
-                  : <SubscribeCTA heading="Поздравляем — вы дошли до конца! 🎉" text="Эти материалы делает канал «Кусочек пиццы». Подпишитесь, чтобы не потерять и получать разборы кейсов, метрик и карьеры в аналитике." />}
-              </div>
-            </>
-          ) : (
-            <div className="rounded-xl border border-dashed border-black/15 bg-panel/50 p-10 text-center text-gray-500">
-              Уроки этого модуля в разработке. Готова часть 1 — «Описательная статистика».
-            </div>
-          )}
+          <nav className="mt-12 pt-5 border-t border-black/10 flex justify-between gap-3">
+            {prev ? (
+              <button onClick={() => goLesson(prev)} className="text-left text-sm text-gray-700 hover:text-cyanink max-w-[45%]">
+                <div className="text-gray-500 text-xs">← Назад</div>
+                {prev.title}
+              </button>
+            ) : <span />}
+            {next ? (
+              <button onClick={() => goLesson(next)} className="text-right text-sm text-gray-700 hover:text-cyanink max-w-[45%]">
+                <div className="text-gray-500 text-xs">Дальше →</div>
+                {next.title}
+              </button>
+            ) : <span />}
+          </nav>
+          <div className="mt-10">
+            {next
+              ? <SubscribeCTA />
+              : <SubscribeCTA heading="Поздравляем — вы дошли до конца! 🎉" text="Эти материалы делает канал «Кусочек пиццы». Подпишитесь, чтобы не потерять и получать разборы кейсов, метрик и карьеры в аналитике." />}
+          </div>
         </div>
       </div>
     </div>

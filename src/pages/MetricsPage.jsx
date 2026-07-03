@@ -6,14 +6,6 @@ import Framework from '../components/Framework.jsx'
 import SubscribeCTA from '../components/SubscribeCTA.jsx'
 import { industries } from '../content/industries/index.js'
 
-// Группируем для <optgroup> в компактном выпадающем списке.
-const archetypes = []
-for (const ind of industries) {
-  let g = archetypes.find((a) => a.name === ind.archetype)
-  if (!g) { g = { name: ind.archetype, items: [] }; archetypes.push(g) }
-  g.items.push(ind)
-}
-
 export default function MetricsPage() {
   const [mode, setMode] = useState('basics') // basics | industries — вводная первой
   const [activeId, setActiveId] = useState(industries[0].id)
@@ -53,22 +45,24 @@ export default function MetricsPage() {
       {mode === 'basics' && <Framework industries={industries} onPick={goIndustry} />}
 
       {mode === 'industries' && (<>
-        <div className="flex flex-wrap items-center gap-3 mb-4">
-          <select
-            value={activeId}
-            onChange={(e) => goIndustry(e.target.value)}
-            className="bg-ink border border-black/15 rounded-md px-3 py-2 text-sm min-w-[260px]"
-          >
-            {archetypes.map((g) => (
-              <optgroup key={g.name} label={g.name}>
-                {g.items.map((i) => <option key={i.id} value={i.id}>{i.industry}</option>)}
-              </optgroup>
-            ))}
-          </select>
-          <div className="flex gap-1">
-            {viewBtn('tree', 'Дерево')}
-            {viewBtn('pyramid', 'Пирамида')}
-          </div>
+        {/* Все 15 индустрий видны сразу — чипами, а не спрятаны в выпадашке */}
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {industries.map((ind) => (
+            <button
+              key={ind.id}
+              onClick={() => goIndustry(ind.id)}
+              title={ind.archetype}
+              className={`text-sm px-3 py-1 rounded-md border transition-colors ${
+                ind.id === activeId ? 'border-accent/50 text-cyanink bg-accent/15 font-medium' : 'border-black/10 text-gray-600 hover:bg-black/5'
+              }`}
+            >
+              {ind.industry}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-1 mb-4">
+          {viewBtn('tree', 'Дерево')}
+          {viewBtn('pyramid', 'Пирамида')}
         </div>
 
         <div className="flex flex-wrap items-end gap-x-6 gap-y-2 mb-4">

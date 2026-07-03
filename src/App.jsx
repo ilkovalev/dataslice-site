@@ -35,8 +35,10 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/stats" replace />} />
           <Route path="/stats" element={<StatsPage />} />
+          <Route path="/stats/:lessonSlug" element={<StatsPage />} />
           <Route path="/metrics" element={<MetricsPage />} />
           <Route path="/glossary" element={<GlossaryPage />} />
+          <Route path="*" element={<Navigate to="/stats" replace />} />
         </Routes>
       </main>
       <footer className="border-t border-black/10 mt-8">
@@ -44,7 +46,9 @@ export default function App() {
           Полезные материалы для аналитиков от канала{' '}
           <a href="https://t.me/dataslice" target="_blank" rel="noreferrer" onClick={() => track('tg_click', { place: 'footer' })} className="text-cyanink hover:underline">«Кусочек пиццы» 🍕</a>{' '}
           — аналитика данных простыми словами.{' '}
-          <a href="https://t.me/dataslice" target="_blank" rel="noreferrer" onClick={() => track('tg_click', { place: 'footer' })} className="text-cyanink hover:underline">Подписаться →</a>
+          <a href="https://t.me/dataslice" target="_blank" rel="noreferrer" onClick={() => track('tg_click', { place: 'footer' })} className="text-cyanink hover:underline">Подписаться →</a>{' '}
+          <span className="text-gray-400">·</span>{' '}
+          <a href="https://t.me/dataslice/109" target="_blank" rel="noreferrer" onClick={() => track('feedback_click')} className="text-cyanink hover:underline">Оставить фидбек →</a>
         </div>
       </footer>
     </div>

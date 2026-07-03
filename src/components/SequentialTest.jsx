@@ -153,7 +153,7 @@ export default function SequentialTest() {
 
       <div className="flex gap-2 mt-3">
         <button onClick={() => run(1)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+1 тест</button>
-        <button onClick={() => run(50)} className="text-xs px-3 py-1 rounded-md bg-accent text-white hover:opacity-90">+50 тестов (набрать статистику)</button>
+        <button onClick={() => run(50)} className="text-xs px-3 py-1 rounded-md bg-cyanink text-white hover:opacity-90">+50 тестов (набрать статистику)</button>
         <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
 

@@ -13,9 +13,9 @@ const LINE_Y = 140
 // Цвет + форма + подпись — тройное кодирование каждой меры (различимо и для
 // дальтоников). Цвета живут только внутри виджета, не спорят с брендом.
 const METRICS = {
-  mean: { shape: 'circle', color: '#2ab8eb', label: 'среднее' },
+  mean: { shape: 'circle', color: '#0d7fb0', label: 'среднее' },
   median: { shape: 'diamond', color: '#7c3aed', label: 'медиана' },
-  mode: { shape: 'square', color: '#f59e0b', label: 'мода' },
+  mode: { shape: 'square', color: '#b45309', label: 'мода' },
 }
 
 function computeStats(points) {

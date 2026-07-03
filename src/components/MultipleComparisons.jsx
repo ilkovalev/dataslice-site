@@ -150,7 +150,7 @@ export default function MultipleComparisons() {
       </div>
 
       <div className="flex gap-2 mt-3">
-        <button onClick={run} className="text-xs px-3 py-1 rounded-md bg-accent text-white hover:opacity-90">запустить тесты</button>
+        <button onClick={run} className="text-xs px-3 py-1 rounded-md bg-cyanink text-white hover:opacity-90">запустить тесты</button>
         <button onClick={() => setTests([])} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
 

@@ -24,7 +24,7 @@ export default function SubscribeCTA({
           target="_blank"
           rel="noreferrer"
           onClick={() => track('tg_click', { place: 'cta' })}
-          className="shrink-0 px-5 py-2.5 rounded-lg bg-accent text-white font-semibold hover:opacity-90 transition-opacity whitespace-nowrap"
+          className="shrink-0 px-5 py-2.5 rounded-lg bg-cyanink text-white font-semibold hover:opacity-90 transition-opacity whitespace-nowrap"
         >
           Подписаться на «Кусочек пиццы»
         </a>

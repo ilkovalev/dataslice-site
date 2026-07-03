@@ -2,6 +2,7 @@ import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
 import StatsPage from './pages/StatsPage.jsx'
 import MetricsPage from './pages/MetricsPage.jsx'
 import GlossaryPage from './pages/GlossaryPage.jsx'
+import { track } from './lib/analytics.js'
 
 const linkBase = 'px-3 py-1.5 rounded-md text-sm transition-colors'
 const linkClass = ({ isActive }) =>
@@ -18,6 +19,7 @@ export default function App() {
             href="https://t.me/dataslice"
             target="_blank"
             rel="noreferrer"
+            onClick={() => track('tg_click', { place: 'header' })}
             className="order-2 ml-auto text-sm px-3 py-1.5 rounded-md text-cyanink border border-accent/30 hover:bg-accent/10 transition-colors whitespace-nowrap sm:order-3"
           >
             🍕 Telegram-канал
@@ -40,9 +42,9 @@ export default function App() {
       <footer className="border-t border-black/10 mt-8">
         <div className="max-w-[1600px] mx-auto px-4 py-6 text-sm text-gray-600">
           Полезные материалы для аналитиков от канала{' '}
-          <a href="https://t.me/dataslice" target="_blank" rel="noreferrer" className="text-cyanink hover:underline">«Кусочек пиццы» 🍕</a>{' '}
+          <a href="https://t.me/dataslice" target="_blank" rel="noreferrer" onClick={() => track('tg_click', { place: 'footer' })} className="text-cyanink hover:underline">«Кусочек пиццы» 🍕</a>{' '}
           — аналитика данных простыми словами.{' '}
-          <a href="https://t.me/dataslice" target="_blank" rel="noreferrer" className="text-cyanink hover:underline">Подписаться →</a>
+          <a href="https://t.me/dataslice" target="_blank" rel="noreferrer" onClick={() => track('tg_click', { place: 'footer' })} className="text-cyanink hover:underline">Подписаться →</a>
         </div>
       </footer>
     </div>

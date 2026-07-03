@@ -1,4 +1,6 @@
 // Призыв подписаться на канал. Брендовый блок (cyan + лёгкий пицца-паттерн).
+import { track } from '../lib/analytics.js'
+
 export default function SubscribeCTA({
   heading = 'Понравились материалы?',
   text = 'Эти материалы делает канал «Кусочек пиццы» — аналитика данных простыми словами: разборы реальных кейсов, метрики, карьера. Подпишитесь, чтобы не потерять.',
@@ -21,6 +23,7 @@ export default function SubscribeCTA({
           href="https://t.me/dataslice"
           target="_blank"
           rel="noreferrer"
+          onClick={() => track('tg_click', { place: 'cta' })}
           className="shrink-0 px-5 py-2.5 rounded-lg bg-accent text-white font-semibold hover:opacity-90 transition-opacity whitespace-nowrap"
         >
           Подписаться на «Кусочек пиццы»

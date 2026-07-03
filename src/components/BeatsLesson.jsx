@@ -11,11 +11,15 @@ const OWN_RESET = new Set([
   'estimator-sampler', 'histogram', 'peeking', 'sampling-distribution', 'sequential-test', 'two-teams',
 ])
 
-export default function BeatsLesson({ lesson }) {
+export default function BeatsLesson({ lesson, onComplete }) {
   const [i, setI] = useState(0)
   const [revealed, setRevealed] = useState(false)
   const [resetKey, setResetKey] = useState(0)
   useEffect(() => setRevealed(false), [i])
+  // Урок считается пройденным, когда читатель дошёл до последнего бита.
+  useEffect(() => {
+    if (i === lesson.beats.length - 1) onComplete?.()
+  }, [i, lesson, onComplete])
 
   const beat = lesson.beats[i] ?? lesson.beats[0]
   // Бит может нести свой виджет (beat.widget.name) и доп. props — иначе берём

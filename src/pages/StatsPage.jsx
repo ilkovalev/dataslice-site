@@ -1,7 +1,32 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import LessonLayout from '../components/LessonLayout.jsx'
 import SubscribeCTA from '../components/SubscribeCTA.jsx'
 import { lessons, lessonsByModule } from '../content/lessons/index.js'
+import { track } from '../lib/analytics.js'
+
+// Прогресс живёт в localStorage: текущий урок + пройденные (пройден = дошёл
+// до последнего бита). Версия в ключе — на случай смены схемы.
+const LS_KEY = 'pizza-progress-v1'
+const validIds = new Set(lessons.map((l) => l.id))
+function loadProgress() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(LS_KEY)) || {}
+    return {
+      lessonId: validIds.has(raw.lessonId) ? raw.lessonId : lessons[0].id,
+      completed: new Set((raw.completed || []).filter((id) => validIds.has(id))),
+    }
+  } catch {
+    return { lessonId: lessons[0].id, completed: new Set() }
+  }
+}
+function saveProgress(lessonId, completed) {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify({ lessonId, completed: [...completed] }))
+  } catch {
+    /* приватный режим — живём без сохранения */
+  }
+}
+const saved = loadProgress()
 
 // Модули = части учебного пути. Уроки внутри модуля + сквозной маршрут
 // (массив lessons уже в порядке прохождения) с навигацией Назад/Дальше.
@@ -23,10 +48,10 @@ const moduleTitle = (id) => modules.find((m) => m.id === id)?.title ?? ''
 
 // Боковое оглавление с прогрессом (пины 1, 2 ревью): видно, где ты среди всех
 // уроков, что пройдено (галочки) и сколько осталось (полоса прогресса).
-function Sidebar({ activeModule, lessonId, globalIdx, onModule, onLesson }) {
+function Sidebar({ activeModule, lessonId, globalIdx, completed, onModule, onLesson }) {
   const [open, setOpen] = useState(false) // раскрытие списка уроков на мобильном
   const total = lessons.length
-  const pct = Math.round(((globalIdx + 1) / total) * 100)
+  const pct = Math.round((completed.size / total) * 100)
   const currentTitle = lessons[globalIdx]?.title ?? ''
   // на мобильном после выбора урока список сворачиваем — сразу видно контент
   const selectLesson = (l) => { onLesson(l); setOpen(false) }
@@ -35,7 +60,7 @@ function Sidebar({ activeModule, lessonId, globalIdx, onModule, onLesson }) {
       <div className="rounded-xl border border-black/10 bg-panel/70 p-4">
         <div className="flex items-baseline justify-between text-sm mb-1.5">
           <span className="font-medium text-gray-900">Прогресс</span>
-          <span className="text-gray-500">урок {globalIdx + 1} / {total}</span>
+          <span className="text-gray-500">пройдено {completed.size} / {total}</span>
         </div>
         <div className="h-2 rounded-full bg-black/10 overflow-hidden">
           <div className="h-full rounded-full bg-gradient-to-r from-accent to-brand transition-all" style={{ width: `${pct}%` }} />
@@ -75,8 +100,7 @@ function Sidebar({ activeModule, lessonId, globalIdx, onModule, onLesson }) {
                 {isActive && list.length > 0 && (
                   <ul className="mt-0.5 ml-3 border-l border-black/10 pl-2 space-y-0.5">
                     {list.map((l) => {
-                      const idx = lessons.findIndex((x) => x.id === l.id)
-                      const done = idx < globalIdx
+                      const done = completed.has(l.id)
                       const current = l.id === lessonId
                       return (
                         <li key={l.id}>
@@ -106,8 +130,24 @@ function Sidebar({ activeModule, lessonId, globalIdx, onModule, onLesson }) {
 }
 
 export default function StatsPage() {
-  const [activeModule, setActiveModule] = useState(lessons[0].module)
-  const [lessonId, setLessonId] = useState(lessons[0].id)
+  const [activeModule, setActiveModule] = useState(
+    lessons.find((l) => l.id === saved.lessonId)?.module ?? lessons[0].module,
+  )
+  const [lessonId, setLessonId] = useState(saved.lessonId)
+  const [completed, setCompleted] = useState(saved.completed)
+
+  useEffect(() => {
+    saveProgress(lessonId, completed)
+  }, [lessonId, completed])
+  useEffect(() => {
+    track('lesson_view', { id: lessonId })
+  }, [lessonId])
+
+  function markComplete(id) {
+    if (completed.has(id)) return
+    track('lesson_complete', { id })
+    setCompleted((prev) => new Set(prev).add(id))
+  }
 
   const globalIdx = lessons.findIndex((l) => l.id === lessonId)
   const current = globalIdx >= 0 ? lessons[globalIdx] : null
@@ -135,6 +175,7 @@ export default function StatsPage() {
           activeModule={activeModule}
           lessonId={lessonId}
           globalIdx={globalIdx}
+          completed={completed}
           onModule={goModule}
           onLesson={goLesson}
         />
@@ -146,7 +187,7 @@ export default function StatsPage() {
                 Модуль {current.module} «{moduleTitle(current.module)}»
               </div>
 
-              <LessonLayout lesson={current} />
+              <LessonLayout lesson={current} onComplete={() => markComplete(current.id)} />
 
               <nav className="mt-12 pt-5 border-t border-black/10 flex justify-between gap-3">
                 {prev ? (

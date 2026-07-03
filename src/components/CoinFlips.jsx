@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
+import { useAutoRun, autoRunClass } from '../lib/useAutoRun.js'
 
 // Закон больших чисел: доля орлов сходится к вероятности p по мере бросков.
 const W = 640
 const H = 260
 const PAD = 40
+const CAP = 2500 // авто-стоп, чтобы история не росла бесконечно
 
 export default function CoinFlips() {
   const [p, setP] = useState(0.5)
@@ -32,20 +34,18 @@ export default function CoinFlips() {
     setN(total)
     setHist((prev) => [...prev, ...add])
   }
-  function animate() {
-    clearInterval(timer.current)
-    let c = 0
-    timer.current = setInterval(() => {
-      acc.current.n += 1
-      if (Math.random() < pRef.current) acc.current.h += 1
-      const { h, n: total } = acc.current
-      setHeads(h)
-      setN(total)
-      setHist((prev) => [...prev, h / total])
-      if ((c += 1) >= 120) clearInterval(timer.current)
-    }, 45)
-  }
+  // Автопрогон: монета бросается сама, пока не остановишь (или до CAP).
+  const [running, setRunning] = useAutoRun(() => {
+    acc.current.n += 1
+    if (Math.random() < pRef.current) acc.current.h += 1
+    const { h, n: total } = acc.current
+    setHeads(h)
+    setN(total)
+    setHist((prev) => [...prev, h / total])
+  }, 45)
+  useEffect(() => { if (n >= CAP) setRunning(false) }, [n, setRunning])
   function reset() {
+    setRunning(false)
     clearInterval(timer.current)
     acc.current = { h: 0, n: 0 }
     setHist([])
@@ -114,9 +114,9 @@ export default function CoinFlips() {
       </label>
 
       <div className="flex gap-2 mt-3">
-        <button onClick={() => flip(10)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+10 бросков</button>
-        <button onClick={() => flip(100)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+100 бросков</button>
-        <button onClick={animate} className="text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10">▶ насыпать</button>
+        <button onClick={() => { setRunning(false); flip(10) }} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+10 бросков</button>
+        <button onClick={() => { setRunning(false); flip(100) }} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+100 бросков</button>
+        <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? '⏸ стоп' : '▶ автопрогон'}</button>
         <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
     </div>

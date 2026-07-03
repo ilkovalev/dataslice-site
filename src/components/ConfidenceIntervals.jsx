@@ -1,14 +1,15 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useAutoRun, autoRunClass } from '../lib/useAutoRun.js'
 
 // Доверительные интервалы: каждая выборка даёт свой интервал; доля интервалов,
-// накрывающих истину, ≈ уровню доверия. Цвета поясняются легендой, ведётся счёт
-// «накрыли / не накрыли», показана формула CI (в т.ч. для доли в A/B).
+// накрывающих истину, ≈ уровню доверия. Истину можно перетащить мышью (как в
+// Seeing Theory): прошлые интервалы сбрасываются — они были взяты из старой истины.
 const W = 560
 const H = 250
 const PAD = 24
-const TRUE = 50
 const SE = 8
 const VISIBLE = 20
+const CAP = 600 // авто-стоп автопрогона
 const Z = { 90: 1.645, 95: 1.96, 99: 2.576 }
 
 function randn() {
@@ -21,21 +22,47 @@ function randn() {
 export default function ConfidenceIntervals() {
   const [items, setItems] = useState([]) // {lo,hi,covers}
   const [level, setLevel] = useState(95)
+  const [truth, setTruth] = useState(50)
+  const [drag, setDrag] = useState(false)
+  const svgRef = useRef(null)
   const z = Z[level]
   const sx = (x) => PAD + (x / 100) * (W - 2 * PAD)
 
   function draw(k) {
     const add = []
     for (let i = 0; i < k; i++) {
-      const mean = TRUE + randn() * SE
+      const mean = truth + randn() * SE
       const lo = mean - z * SE
       const hi = mean + z * SE
-      add.push({ lo, hi, covers: lo <= TRUE && hi >= TRUE })
+      add.push({ lo, hi, covers: lo <= truth && hi >= truth })
     }
     setItems((p) => [...p, ...add])
   }
-  function reset() { setItems([]) }
+  const [running, setRunning] = useAutoRun(() => draw(1), 110)
+  useEffect(() => { if (items.length >= CAP) setRunning(false) }, [items, setRunning])
+  function reset() { setRunning(false); setItems([]) }
   function changeLevel(l) { setLevel(l); setItems([]) }
+
+  // Перетаскивание истины: схватить можно рядом с пунктирной линией.
+  function eventVal(e) {
+    const r = svgRef.current.getBoundingClientRect()
+    const x = ((e.clientX - r.left) / r.width) * W
+    return Math.max(12, Math.min(88, ((x - PAD) / (W - 2 * PAD)) * 100))
+  }
+  function onDown(e) {
+    if (Math.abs(eventVal(e) - truth) < 7) {
+      setDrag(true)
+      setItems([]) // старые интервалы взяты из старой истины — обнуляем счёт
+      e.currentTarget.setPointerCapture?.(e.pointerId)
+    }
+  }
+  function onMove(e) {
+    if (!drag) return
+    setTruth(eventVal(e))
+    // интервалы, взятые из прежней истины, к новой не относятся
+    setItems((p) => (p.length ? [] : p))
+  }
+  function onUp() { setDrag(false) }
 
   const shown = items.slice(-VISIBLE)
   const covered = items.filter((it) => it.covers).length
@@ -44,9 +71,17 @@ export default function ConfidenceIntervals() {
 
   return (
     <div className="rounded-xl border border-black/10 bg-panel p-5">
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none">
-        <line x1={sx(TRUE)} y1={PAD - 6} x2={sx(TRUE)} y2={H - PAD} stroke="#2a2f3a" strokeWidth="1.5" strokeDasharray="4 3" />
-        <text x={sx(TRUE)} y={PAD - 10} fill="#2a2f3a" fontSize="10" textAnchor="middle">истинное значение</text>
+      <svg
+        ref={svgRef}
+        viewBox={`0 0 ${W} ${H}`}
+        className={`w-full h-auto select-none touch-none ${drag ? 'cursor-grabbing' : 'cursor-grab'}`}
+        onPointerDown={onDown}
+        onPointerMove={onMove}
+        onPointerUp={onUp}
+      >
+        <line x1={sx(truth)} y1={PAD - 6} x2={sx(truth)} y2={H - PAD} stroke="#2a2f3a" strokeWidth="1.5" strokeDasharray="4 3" />
+        <circle cx={sx(truth)} cy={PAD - 6} r="6" fill="#2a2f3a" opacity={drag ? 0.9 : 0.55} />
+        <text x={sx(truth)} y={PAD - 16} fill="#2a2f3a" fontSize="10" textAnchor="middle">истинное значение ⟷ (перетащите)</text>
         {shown.map((it, i) => {
           const y = PAD + i * rowH + rowH / 2
           const c = it.covers ? '#2ab8eb' : '#f87171'
@@ -79,6 +114,7 @@ export default function ConfidenceIntervals() {
         <span className="w-2" />
         <button onClick={() => draw(1)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">взять выборку</button>
         <button onClick={() => draw(20)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">взять 20</button>
+        <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? '⏸ стоп' : '▶ автопрогон'}</button>
         <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
     </div>

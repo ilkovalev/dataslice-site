@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useAutoRun, autoRunClass } from '../lib/useAutoRun.js'
 
 // Последовательный тест = развитие графика подглядывания. Тот же p-value по дням,
 // но теперь граница остановки бывает двух видов:
@@ -73,7 +74,9 @@ export default function SequentialTest() {
     setGhosts((g) => [...g, ...runs].slice(-60))
     setTally((t) => ({ naive: t.naive + naive, seqStop: t.seqStop + seqStop, total: t.total + (effect ? 0 : k) }))
   }
-  const reset = () => { setTraj(null); setGhosts([]); setTally({ naive: 0, seqStop: 0, total: 0 }) }
+  const [running, setRunning] = useAutoRun(() => run(1), 150)
+  useEffect(() => { if (tally.total >= 500) setRunning(false) }, [tally, setRunning])
+  const reset = () => { setRunning(false); setTraj(null); setGhosts([]); setTally({ naive: 0, seqStop: 0, total: 0 }) }
   const setScenario = (e) => { setEffect(e); setTraj(null); setGhosts([]); setTally({ naive: 0, seqStop: 0, total: 0 }) }
 
   const sx = (d) => PAD + ((d - 1) / (DAYS - 1)) * (W - 2 * PAD)
@@ -153,7 +156,8 @@ export default function SequentialTest() {
 
       <div className="flex gap-2 mt-3">
         <button onClick={() => run(1)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+1 тест</button>
-        <button onClick={() => run(50)} className="text-xs px-3 py-1 rounded-md bg-cyanink text-white hover:opacity-90">+50 тестов (набрать статистику)</button>
+        <button onClick={() => run(50)} className="text-xs px-3 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">+50 тестов</button>
+        <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? '⏸ стоп' : '▶ автопрогон'}</button>
         <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
 

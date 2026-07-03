@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useAutoRun, autoRunClass } from '../lib/useAutoRun.js'
 
 // Подглядывание. Один эксперимент = одна линия p-value по ДНЯМ, пока копится
 // выборка. Без эффекта (A/A) p-value блуждает и почти наверняка хоть раз нырнёт
@@ -69,8 +70,10 @@ export default function Peeking({ sequential = false }) {
     setGhosts((g) => [...g, ...runs].slice(-60)) // копим «облако» траекторий
     setTally((t) => ({ peek: t.peek + peek, fin: t.fin + fin, total: t.total + k }))
   }
-  const reset = () => { setTraj(null); setGhosts([]); setTally({ peek: 0, fin: 0, total: 0 }) }
-  function toggle(e) { setEffect(e); setTraj(null); setGhosts([]); setTally({ peek: 0, fin: 0, total: 0 }) }
+  const [running, setRunning] = useAutoRun(() => run(1), 150)
+  useEffect(() => { if (tally.total >= 500) setRunning(false) }, [tally, setRunning])
+  const reset = () => { setRunning(false); setTraj(null); setGhosts([]); setTally({ peek: 0, fin: 0, total: 0 }) }
+  function toggle(e) { setRunning(false); setEffect(e); setTraj(null); setGhosts([]); setTally({ peek: 0, fin: 0, total: 0 }) }
 
   const sx = (d) => PAD + ((d - 1) / (DAYS - 1)) * (W - 2 * PAD)
   const syP = (p) => 24 + (1 - Math.min(p, YCAP) / YCAP) * (H1 - 24 - 28)
@@ -137,7 +140,8 @@ export default function Peeking({ sequential = false }) {
 
       <div className="flex gap-2 mt-3">
         <button onClick={() => run(1)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+1 тест (одна траектория)</button>
-        <button onClick={() => run(50)} className="text-xs px-3 py-1 rounded-md bg-cyanink text-white hover:opacity-90">+50 тестов (набрать статистику)</button>
+        <button onClick={() => run(50)} className="text-xs px-3 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">+50 тестов</button>
+        <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? '⏸ стоп' : '▶ автопрогон'}</button>
         <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
 

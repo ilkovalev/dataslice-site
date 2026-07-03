@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useAutoRun, autoRunClass } from '../lib/useAutoRun.js'
 
 // ЦПТ в трёх панелях (как у Seeing Theory):
 //  1) генеральная совокупность (скошенная);
@@ -45,11 +46,10 @@ export default function SamplingDistribution() {
     setLast(s)
     setMeans((m) => [...m, ...add])
   }
-  function animate() {
-    clearInterval(timer.current); let c = 0
-    timer.current = setInterval(() => { drawN(1); if ((c += 1) >= 60) clearInterval(timer.current) }, 60)
-  }
-  function reset() { clearInterval(timer.current); setMeans([]); setLast(null) }
+  // Автопрогон: выборки берутся сами, колокол растёт, пока не остановишь.
+  const [running, setRunning] = useAutoRun(() => drawN(1), 60)
+  useEffect(() => { if (means.length >= 1500) setRunning(false) }, [means, setRunning])
+  function reset() { setRunning(false); clearInterval(timer.current); setMeans([]); setLast(null) }
 
   const sx = (x) => PAD + (x / DOM) * (W - 2 * PAD)
   const se = popSD / Math.sqrt(n)
@@ -114,7 +114,7 @@ export default function SamplingDistribution() {
       <div className="flex flex-wrap gap-2 mt-3">
         <button onClick={() => drawN(1)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">взять выборку</button>
         <button onClick={() => drawN(50)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">взять 50</button>
-        <button onClick={animate} className="text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10">▶ насыпать</button>
+        <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? '⏸ стоп' : '▶ автопрогон'}</button>
         <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
     </div>

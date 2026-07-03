@@ -153,6 +153,7 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
                     {d.formula && <span className="font-mono text-cyanink ml-2">{d.formula}</span>}
                   </div>
                   <div className="text-gray-600 leading-relaxed">{d.text}</div>
+                  {d.simple && <div className="text-sky-700/90 italic mt-0.5">По-простому: {d.simple}</div>}
                 </div>
               ))}
             </dl>
@@ -161,6 +162,12 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
 
         <div className="max-w-2xl mt-10">
           <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-2">{lesson.practiceTitle || 'Что это значит'}</div>
+          {lesson.decision && (
+            <div className="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/5 px-4 py-3">
+              <div className="text-xs uppercase tracking-wider text-emerald-700 mb-1.5">Какое решение это меняет</div>
+              <p className="text-sm text-gray-700 leading-relaxed">{lesson.decision}</p>
+            </div>
+          )}
           <Paragraphs text={lesson.practice} className="text-gray-700 leading-relaxed" />
           {lesson.realLife && (
             <div className="mt-4 rounded-lg border border-sky-500/30 bg-sky-500/5 px-4 py-3">

@@ -12,3 +12,13 @@ body {
   color: #20242e;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
+
+/* Плавные переходы в виджетах (полиш в духе Seeing Theory).
+   Геометрию анимируем только у столбиков (rect) — точки (circle)
+   таскают мышью, transition на них дал бы лаг за курсором. */
+svg circle, svg path, svg line, svg text {
+  transition: opacity 0.25s ease, fill 0.25s ease, stroke 0.25s ease;
+}
+svg rect {
+  transition: opacity 0.25s ease, fill 0.25s ease, height 0.2s ease, y 0.2s ease;
+}

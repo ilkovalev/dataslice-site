@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { widgets } from './widgets.js'
 import Paragraphs from './Paragraphs.jsx'
 import { gloss } from './Glossed.jsx'
@@ -44,7 +45,7 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
   const showGenericReset = Widget && !OWN_RESET.has(widgetId)
 
   return (
-    <article className="max-w-6xl">
+    <article className="max-w-7xl">
       <h2 className="text-left text-2xl font-semibold mb-3">{lesson.title}</h2>
       {lesson.intro && <p className="text-gray-700 leading-relaxed mb-6 max-w-[68ch]">{gloss(lesson.intro)}</p>}
 
@@ -188,6 +189,20 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
                 <Paragraphs text={lesson.deepDive} className="text-sm text-gray-700 leading-relaxed" />
               </div>
             </details>
+          )}
+          {lesson.related && (
+            <div className="mt-6 flex flex-wrap items-center gap-2">
+              <span className="text-xs text-gray-500">См. также:</span>
+              {lesson.related.map((r) => (
+                <Link
+                  key={r.id}
+                  to={`/stats/${r.id}`}
+                  className="text-xs px-2.5 py-1 rounded-full border border-accent/30 text-cyanink hover:bg-accent/10 transition-colors"
+                >
+                  {r.label}
+                </Link>
+              ))}
+            </div>
           )}
           {lesson.nextLabel && (
             <div className="mt-6 pt-4 border-t border-black/10 text-sm text-gray-600">

@@ -8,20 +8,21 @@ import { track } from '../lib/analytics.js'
 // Модули = части учебного пути. Уроки внутри модуля + сквозной маршрут
 // (массив lessons уже в порядке прохождения) с навигацией Назад/Дальше.
 const modules = [
-  { id: 1, title: 'Описательная статистика' },
-  { id: 2, title: 'Вероятность' },
-  { id: 3, title: 'Распределения' },
-  { id: 4, title: 'От выборки к миру' },
-  { id: 5, title: 'Проверка гипотез' },
-  { id: 6, title: 'Эксперименты: A/B' },
-  { id: 7, title: 'Связи и регрессия' },
-  { id: 8, title: 'Классификация' },
-  { id: 9, title: 'Ловушки данных' },
-  { id: 10, title: 'Байесовский вывод' },
-  { id: 11, title: 'Дисперсионный анализ' },
-  { id: 12, title: 'Капстоун' },
+  { id: 1, title: 'Описательная статистика', icon: '📊' },
+  { id: 2, title: 'Вероятность', icon: '🎲' },
+  { id: 3, title: 'Распределения', icon: '🔔' },
+  { id: 4, title: 'От выборки к миру', icon: '🎯' },
+  { id: 5, title: 'Проверка гипотез', icon: '⚖️' },
+  { id: 6, title: 'Эксперименты: A/B', icon: '🧪' },
+  { id: 7, title: 'Связи и регрессия', icon: '📈' },
+  { id: 8, title: 'Классификация', icon: '🏷️' },
+  { id: 9, title: 'Ловушки данных', icon: '🪤' },
+  { id: 10, title: 'Байесовский вывод', icon: '🔄' },
+  { id: 11, title: 'Дисперсионный анализ', icon: '🧩' },
+  { id: 12, title: 'Капстоун', icon: '🏁' },
 ]
 const moduleTitle = (id) => modules.find((m) => m.id === id)?.title ?? ''
+const moduleIcon = (id) => modules.find((m) => m.id === id)?.icon ?? ''
 
 const DEFAULT_TITLE = '«Кусочек пиццы» — интерактивная статистика и метрики'
 
@@ -123,7 +124,7 @@ function Sidebar({ activeModule, lessonId, globalIdx, completed, onModule, onLes
                   }`}
                 >
                   <span className="tabular-nums text-gray-400 mr-1.5">{m.id}.</span>
-                  {m.title}
+                  {m.title} <span className="opacity-70" aria-hidden>{m.icon}</span>
                   {!ready && <span className="ml-1.5 text-xs text-gray-400">скоро</span>}
                 </button>
 
@@ -181,6 +182,11 @@ export default function StatsPage() {
     if (current) saveProgress(current.id, completed)
   }, [current, completed])
 
+  // Скролл наверх при любой смене урока (клики, «См. также», назад/вперёд).
+  useEffect(() => {
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [lessonSlug])
+
   useEffect(() => {
     if (!current) return
     track('lesson_view', { id: current.id })
@@ -225,7 +231,7 @@ export default function StatsPage() {
 
         <div className="min-w-0 mt-8 md:mt-0">
           <div className="text-xs text-gray-500 mb-4 flex items-center justify-between gap-3 flex-wrap">
-            <span>Модуль {current.module} «{moduleTitle(current.module)}»</span>
+            <span><span aria-hidden>{moduleIcon(current.module)}</span> Модуль {current.module} «{moduleTitle(current.module)}»</span>
             <ShareButton lesson={current} />
           </div>
 

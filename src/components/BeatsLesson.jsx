@@ -45,7 +45,7 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
   const showGenericReset = Widget && !OWN_RESET.has(widgetId)
 
   return (
-    <article className="max-w-7xl">
+    <article className="max-w-7xl lesson-enter">
       <h2 className="text-left text-2xl md:text-3xl font-bold tracking-tight mb-3">{lesson.title}</h2>
       {lesson.intro && <p className="text-gray-700 leading-relaxed mb-6 max-w-[68ch]">{gloss(lesson.intro)}</p>}
 
@@ -63,7 +63,10 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
                 </button>
               </div>
             )}
-            <Widget key={`${widgetId}-${resetKey}`} {...widgetProps} highlight={beat.widget?.highlight} />
+            {/* Double-Bezel: виджет-«стекло» в мягком «алюминиевом» лотке */}
+            <div className="rounded-[1.15rem] bg-black/[0.04] ring-1 ring-black/5 p-1.5 shadow-[0_10px_36px_rgba(32,36,46,0.07)]">
+              <Widget key={`${widgetId}-${resetKey}`} {...widgetProps} highlight={beat.widget?.highlight} />
+            </div>
           </div>
         )}
 

@@ -15,7 +15,7 @@ const StatsPage = lazy(() => import('./pages/StatsPage.jsx'))
 const MetricsPage = lazy(() => import('./pages/MetricsPage.jsx'))
 const GlossaryPage = lazy(() => import('./pages/GlossaryPage.jsx'))
 
-const linkBase = 'px-3 py-1.5 rounded-md text-sm transition-colors'
+const linkBase = 'px-3 py-1.5 rounded-full text-sm transition-colors'
 const linkClass = ({ isActive }) =>
   `${linkBase} ${isActive ? 'bg-accent/20 text-cyanink' : 'text-gray-700 hover:bg-black/5'}`
 
@@ -23,15 +23,17 @@ export default function App() {
   return (
     <div className="min-h-screen">
       <div className="h-1 bg-gradient-to-r from-accent to-brand" />
-      <header className="border-b border-accent/20 sticky top-0 bg-accent/10 backdrop-blur z-10">
-        <div className="max-w-[1600px] mx-auto px-4 py-2 sm:py-0 sm:h-14 flex flex-wrap items-center gap-x-3 gap-y-2">
+      {/* Мобайл: обычная полоса. Десктоп (lg+): парящая glass-«капсула» (soft-skill). */}
+      <header className="sticky top-0 z-10 lg:top-4 lg:px-4">
+        <div className="border-b border-accent/20 bg-accent/10 backdrop-blur lg:max-w-fit lg:mx-auto lg:rounded-full lg:border lg:border-black/5 lg:bg-white/75 lg:shadow-[0_8px_30px_rgba(32,36,46,0.08)]">
+        <div className="max-w-[1600px] mx-auto px-4 py-2 sm:py-0 sm:h-14 lg:h-12 lg:px-3 flex flex-wrap items-center gap-x-3 gap-y-2">
           <span className="order-1 font-semibold whitespace-nowrap sm:mr-4">«Кусочек пиццы» <span aria-hidden>🍕</span></span>
           <a
             href="https://t.me/dataslice"
             target="_blank"
             rel="noreferrer"
             onClick={() => track('tg_click', { place: 'header' })}
-            className="order-2 ml-auto text-sm px-3 py-1.5 rounded-md text-cyanink border border-accent/30 hover:bg-accent/10 transition-colors whitespace-nowrap sm:order-3"
+            className="order-2 ml-auto text-sm px-3 py-1.5 rounded-full text-cyanink border border-accent/30 hover:bg-accent/10 transition-colors whitespace-nowrap sm:order-3"
           >
             🍕 Telegram-канал
           </a>
@@ -41,8 +43,9 @@ export default function App() {
             <NavLink to="/glossary" className={linkClass}>Глоссарий</NavLink>
           </nav>
         </div>
+        </div>
       </header>
-      <main className="max-w-[1600px] mx-auto px-4 py-8">
+      <main className="max-w-[1600px] mx-auto px-4 py-8 md:py-12">
         <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<ToStats />} />

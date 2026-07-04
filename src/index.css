@@ -57,8 +57,17 @@ button:active {
   }
   button {
     transition-property: color, background-color, border-color, opacity, transform, box-shadow;
-    transition-duration: 0.15s;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1); /* масса+пружина вместо ease */
   }
+  /* Мягкое появление контента при смене урока */
+  .lesson-enter {
+    animation: lesson-enter 0.45s cubic-bezier(0.32, 0.72, 0, 1) both;
+  }
+}
+@keyframes lesson-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

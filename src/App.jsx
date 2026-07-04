@@ -1,6 +1,13 @@
 import { Suspense, lazy } from 'react'
-import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
+import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { track } from './lib/analytics.js'
+
+// Редирект с сохранением query/hash: проверка счётчика Метрики (и любые
+// utm-метки) приходят параметрами на «/» — терять их при переадресации нельзя.
+function ToStats() {
+  const { search, hash } = useLocation()
+  return <Navigate to={`/stats${search}${hash}`} replace />
+}
 
 // Каждая страница — свой чанк: курс (уроки + виджеты) не грузится
 // тем, кто пришёл за метриками или глоссарием, и наоборот.
@@ -38,12 +45,12 @@ export default function App() {
       <main className="max-w-[1600px] mx-auto px-4 py-8">
         <Suspense fallback={null}>
           <Routes>
-            <Route path="/" element={<Navigate to="/stats" replace />} />
+            <Route path="/" element={<ToStats />} />
             <Route path="/stats" element={<StatsPage />} />
             <Route path="/stats/:lessonSlug" element={<StatsPage />} />
             <Route path="/metrics" element={<MetricsPage />} />
             <Route path="/glossary" element={<GlossaryPage />} />
-            <Route path="*" element={<Navigate to="/stats" replace />} />
+            <Route path="*" element={<ToStats />} />
           </Routes>
         </Suspense>
       </main>

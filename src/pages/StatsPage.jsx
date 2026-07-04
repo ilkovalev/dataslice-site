@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import LessonLayout from '../components/LessonLayout.jsx'
 import SubscribeCTA from '../components/SubscribeCTA.jsx'
 import { lessons, lessonsByModule } from '../content/lessons/index.js'
@@ -163,6 +163,7 @@ function Sidebar({ activeModule, lessonId, globalIdx, completed, onModule, onLes
 export default function StatsPage() {
   const { lessonSlug } = useParams()
   const navigate = useNavigate()
+  const { search, hash } = useLocation()
   const [completed, setCompleted] = useState(saved.completed)
 
   // Урок задаётся URL-ом (/stats/:lessonSlug) — так уроки можно шарить
@@ -174,9 +175,10 @@ export default function StatsPage() {
   const activeModule = current?.module ?? null
 
   // Голый /stats или неизвестный slug → на последний открытый (или первый) урок.
+  // Сохраняем query/hash (проверка Метрики, utm-метки) при авторедиректе.
   useEffect(() => {
-    if (!current) navigate(`/stats/${loadProgress().lessonId}`, { replace: true })
-  }, [current, navigate])
+    if (!current) navigate(`/stats/${loadProgress().lessonId}${search}${hash}`, { replace: true })
+  }, [current, navigate, search, hash])
 
   useEffect(() => {
     if (current) saveProgress(current.id, completed)

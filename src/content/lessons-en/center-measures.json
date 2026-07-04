@@ -1,0 +1,99 @@
+{
+  "id": "center-measures",
+  "module": 1,
+  "title": "Mean, median and mode",
+  "tier": 1,
+  "intro": "Your pizzeria \"Slice\" has seven employees: cooks, a cashier, couriers. Time to post a job opening, and you want to state the \"typical salary\". But \"typical\" can mean different things, and the measure you pick changes both the posting and the candidate's expectations. Let's work through a live example — drag the points and press the buttons to the right of the text.",
+  "widget": "center-measures",
+  "widgetProps": {
+    "unit": "k",
+    "initial": [
+      28,
+      32,
+      34,
+      35,
+      36,
+      38,
+      42
+    ]
+  },
+  "beats": [
+    {
+      "text": "On the line: the salaries of seven employees, in thousands of dollars. They sit close together. Above them, three markers: the mean, the median and the mode. Drag any point (with a finger or a mouse) — and notice that all three markers move together with the data.",
+      "widget": {
+        "highlight": null
+      }
+    },
+    {
+      "text": "While the salaries cluster together, all three measures nearly coincide: the \"typical\" salary reads unambiguously — around 35k. No catch so far.",
+      "predict": "Now a director joins the pizzeria with a salary of 95k. Drag the rightmost point to the edge of the line. Which marker do you think will jump more: the mean or the median?",
+      "reveal": "The mean. It adds up all salaries and divides by the headcount, so one big paycheck pulls it upward. Drag the point to the right and compare the numbers under the line.",
+      "widget": {
+        "highlight": "mean"
+      }
+    },
+    {
+      "text": "The mean jumped, the median barely moved. That is the whole point: the mean cares about the size of every number, the median only about the order. It simply stands in the middle of the sorted row, and one rich person at the edge cannot move it.",
+      "widget": {
+        "highlight": "median"
+      }
+    },
+    {
+      "text": "Play with it yourself: hire a couple more employees with \"add a point\", fire the director with \"remove a point\". Notice the pattern — the mean chases the extremes every time, while the median sticks with the \"middle of the team\".",
+      "widget": {
+        "highlight": null
+      }
+    },
+    {
+      "text": "The third measure, the mode, is the value that occurs most often (two points in the same spot). For salaries it is usually uninformative, but it is indispensable for categories: \"the best-selling shoe size\" or \"the most common payment method\".",
+      "widget": {
+        "highlight": "mode"
+      }
+    },
+    {
+      "text": "How do you pick the measure for the task? Symmetric data without outliers — take the mean, it uses all the information. A long tail or outliers (salaries, prices, time) — the median is more honest. Categories (\"which option is more popular\") — only the mode. In practice an analyst often shows a pair: the mean next to the median, and the gap between them is itself a signal that the data is skewed.",
+      "widget": {
+        "highlight": null
+      }
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Mean",
+      "formula": "(x₁ + x₂ + … + xₙ) / n",
+      "text": "add up all the values and divide by their count n. It weighs the size of every number — which is why it is sensitive to outliers.",
+      "simple": "the total split evenly — every dollar counts."
+    },
+    {
+      "term": "Median",
+      "text": "the value exactly in the middle when everything is sorted (with an even count, the average of the two central ones). It depends on order, not size — robust to outliers.",
+      "simple": "the person in the middle of the queue: the rich cannot budge them."
+    },
+    {
+      "term": "Mode",
+      "text": "the value that occurs most often. A dataset can have one mode, several, or none.",
+      "simple": "simply the most frequent answer."
+    }
+  ],
+  "practice": [
+    "Back to our pizzeria. You just saw it yourself: while salaries are close, the mean and the median walk side by side and calmly describe the \"typical\" income.",
+    "But as soon as one big paycheck appears — the director's — the mean drifts up, even though nothing changed for nine employees out of ten. That is why the \"average company salary\" often ends up higher than what most people actually earn: the top inflates it.",
+    "When you need to honestly show a regular person's income, you take the median — it stands in the middle of the row and does not yield to lone rich outliers. The mode is almost useless here: salaries identical to the cent are rare."
+  ],
+  "realLife": [
+    "The same effect works at the scale of a whole country. When household incomes or housing prices are discussed, statistical agencies deliberately publish the median next to the mean: a few billionaires or a couple of luxury mansions would drag the mean so far up it would stop describing an ordinary family's life.",
+    "So in salary news look for the word \"median\" — that is \"what the person in the middle earns\", not an \"average over the hospital, fevers included\".",
+    "And the rule is wider than salaries: service response times, call durations, order sizes — wherever rare large values drag the mean along, the median is more honest. We will meet this skew again when we get to distribution shapes."
+  ],
+  "nextLabel": "We found the center — but how spread out are the salaries around it? Two teams with the same mean can live completely differently → spread and standard deviation.",
+  "related": [
+    {
+      "id": "skew-tail",
+      "label": "Skewed data: when the mean lies"
+    },
+    {
+      "id": "percentiles",
+      "label": "Percentiles and the tails"
+    }
+  ]
+}

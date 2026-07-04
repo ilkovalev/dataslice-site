@@ -1,0 +1,72 @@
+{
+  "id": "histogram",
+  "module": 1,
+  "title": "The shape of data: histogram and box plot",
+  "tier": 1,
+  "intro": "Points on a line work while the numbers are few. But the \"Slice\" chain has grown to fifty employees — individual points no longer tell you anything. You need to see the whole shape: where salaries are dense, where sparse, whether there are outliers. So the data is dropped into \"bins\" — ranges — counting how many people fall into each. That is a histogram.",
+  "widget": "histogram",
+  "widgetProps": {
+    "unit": "k"
+  },
+  "beats": [
+    {
+      "text": "The height of a bar is how many people earn a salary from that range. The main thing is visible at once: there is a \"hump\" where most people are (around 33–37k) and thin edges. That is the shape of the data — in a single glance."
+    },
+    {
+      "text": "Bin width is a choice, and it changes the picture.",
+      "predict": "Play with the \"number of bins\". What happens to the shape when there are too few bins, or too many?",
+      "reveal": "Too few bins — everything merges into a couple of bars and the shape is lost. Too many — nearly every value gets its own bar, and you see noise instead of shape. The truth is in the middle: enough bars to make out the hump and the tails."
+    },
+    {
+      "text": "Below the histogram is a compact summary of the same data, the \"box-and-whiskers\" (box plot). The line inside the box is the median; the box spans Q1 to Q3, covering the middle half of the people; the whiskers reach the edges of ordinary values.",
+      "predict": "Now press \"add the director\" with their big salary. What appears on the right of the histogram and on the box plot?",
+      "reveal": "On the histogram a lonely bar grows far to the right — a long tail. On the box plot the director's salary flies past the whisker and is marked as a separate dot: an outlier, caught automatically."
+    },
+    {
+      "text": "How does the box plot know what counts as an outlier? A simple rule: whiskers extend no farther than 1.5 box-widths (1.5·IQR) from the box edges, and anything beyond gets its own dot. That is not \"an error\" — it is a formal signal: \"this value is unusually far from the bulk, take a look\"."
+    },
+    {
+      "text": "The same box plot reads nicely through percentiles. The median is the 50th percentile (half the people earn less). The bottom of the box, Q1, is the 25th; the top, Q3, the 75th. Service dashboards often watch the high percentiles: p95 and p99 of response time mean \"how bad it is for the unluckiest 5% and 1% of users\" — and that tail usually matters more than the mean."
+    },
+    {
+      "text": "One picture answers everything at once: where the center is (median), how wide the spread is (box and whiskers), whether there are outliers (dots past the whiskers) and what shape the data has — symmetric or tailed. That is why the histogram and the box plot are the first thing an analyst draws upon opening a new column of numbers."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Histogram",
+      "text": "bars showing how many values fall into each range (bin). The shape of the data becomes visible: where the hump is, where the tails.",
+      "simple": "data sorted into buckets: where it is dense and where it is empty."
+    },
+    {
+      "term": "Quartile (Q1, Q3)",
+      "text": "the values below which 25% and 75% of the data lie. Between Q1 and Q3 sits the middle half of the values.",
+      "simple": "the quarter-marks of the sorted row."
+    },
+    {
+      "term": "Box plot (box-and-whiskers)",
+      "text": "a box from Q1 to Q3 with a median line, whiskers to the edges of ordinary values, and separate dots for outliers.",
+      "simple": "five numbers instead of the whole pile: the box is the middle, whiskers are the edges."
+    },
+    {
+      "term": "Percentile",
+      "text": "the value below which a given share of the data lies: p95 is the threshold below which 95% of values sit.",
+      "simple": "what share of the data is below this point."
+    },
+    {
+      "term": "The 1.5·IQR rule",
+      "text": "the formal outlier boundary: a value farther than 1.5 box-widths from the box edges gets flagged as atypical.",
+      "simple": "the formal line beyond which a point looks suspicious."
+    }
+  ],
+  "practice": [
+    "In our pizzeria the salary histogram is a hump around 33–37k plus, once the director arrives, a lonely bar on the right. The box plot lays the same thing out neatly: where the median is, what the middle half looks like (the box) and who sticks out (the outlier dot).",
+    "This is the standard first step with any data: before computing means and fitting models, an analyst looks at the shape — it hints whether the data is normal-ish, whether there is skew, and whether outliers might poison the conclusions."
+  ],
+  "realLife": [
+    "Histograms are everywhere: the distribution of grades in a class, app load times, audience ages, store receipts. The shape instantly tells you whether the data is \"even\" or long-tailed.",
+    "Box plots are loved in dashboards for comparing groups: put salary boxes by department, or delivery times by city, side by side — and compare center, spread and outliers in one glance.",
+    "Shape is also the bridge to the next topic. We kept mentioning the \"bell\" and the \"long tail\". Time to see which canonical shapes exist and why."
+  ],
+  "nextLabel": "How to describe data by its edges rather than its center? → Percentiles and quartiles"
+}

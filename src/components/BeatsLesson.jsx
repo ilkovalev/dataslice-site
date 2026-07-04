@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { widgets } from './widgets.js'
 import Paragraphs from './Paragraphs.jsx'
 import { gloss } from './Glossed.jsx'
+import { STR, prefix } from '../lib/i18n.js'
 
 // Урок в beats-модели: один постоянный виджет + последовательность «бит».
 // Каждый бит — проза + состояние/подсветка виджета + опц. предсказание→раскрытие.
@@ -12,7 +13,8 @@ const OWN_RESET = new Set([
   'estimator-sampler', 'histogram', 'peeking', 'sampling-distribution', 'sequential-test', 'two-teams',
 ])
 
-export default function BeatsLesson({ lesson, onComplete, onNext }) {
+export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext }) {
+  const t = STR[locale]
   const [i, setI] = useState(0)
   const [revealed, setRevealed] = useState(false)
   const [resetKey, setResetKey] = useState(0)
@@ -56,16 +58,16 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
               <div className="flex justify-end mb-1">
                 <button
                   onClick={() => setResetKey((k) => k + 1)}
-                  title="Вернуть график к исходному состоянию"
+                  title={t.resetChartTitle}
                   className="text-xs px-2 py-0.5 rounded-md border border-black/10 text-gray-500 hover:bg-black/5"
                 >
-                  ↺ сбросить график
+                  {t.resetChart}
                 </button>
               </div>
             )}
             {/* Double-Bezel: виджет-«стекло» в мягком «алюминиевом» лотке */}
             <div className="rounded-[1.15rem] bg-black/[0.04] ring-1 ring-black/5 p-1.5 shadow-[0_10px_36px_rgba(32,36,46,0.07)]">
-              <Widget key={`${widgetId}-${resetKey}`} {...widgetProps} highlight={beat.widget?.highlight} />
+              <Widget key={`${widgetId}-${resetKey}`} {...widgetProps} locale={locale} highlight={beat.widget?.highlight} />
             </div>
           </div>
         )}
@@ -76,7 +78,7 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
               <button
                 key={k}
                 onClick={() => setI(k)}
-                aria-label={`Шаг ${k + 1}`}
+                aria-label={t.step(k + 1)}
                 className={`h-1.5 rounded-full transition-all ${k === i ? 'w-6 bg-accent' : 'w-3 bg-black/12 hover:bg-black/20'}`}
               />
             ))}
@@ -88,14 +90,14 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
 
             {beat.predict && (
               <div className="rounded-lg border border-black/10 bg-ink/60 p-3 mb-4">
-                <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-1">Предскажите</div>
+                <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-1">{t.predict}</div>
                 <p className="text-sm text-gray-700">{beat.predict}</p>
                 {!revealed && (
                   <button
                     onClick={() => setRevealed(true)}
                     className="mt-2 text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10"
                   >
-                    Показать ответ
+                    {t.revealAnswer}
                   </button>
                 )}
               </div>
@@ -103,7 +105,7 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
 
             {beat.reveal && (!beat.predict || revealed) && (
               <p className="text-sm text-gray-600 mb-4">
-                <span className="text-gray-700">Ответ:</span> {gloss(beat.reveal)}
+                <span className="text-gray-700">{t.answer}</span> {gloss(beat.reveal)}
               </p>
             )}
           </div>
@@ -114,14 +116,14 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
               onClick={() => setI(i - 1)}
               className="text-sm text-gray-500 disabled:opacity-30 hover:text-gray-800 transition-colors"
             >
-              ← Назад
+              {t.back}
             </button>
             {!last && (
               <button
                 onClick={() => setI(i + 1)}
                 className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-cyanink text-white hover:opacity-90 transition-opacity"
               >
-                Дальше <span aria-hidden>→</span>
+                {t.next} <span aria-hidden>→</span>
               </button>
             )}
             {last && (
@@ -129,7 +131,7 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
                 onClick={() => summaryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
                 className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-cyanink text-white hover:opacity-90 transition-opacity"
               >
-                Итоги урока <span aria-hidden>↓</span>
+                {t.lessonSummary} <span aria-hidden>↓</span>
               </button>
             )}
             {Widget && (
@@ -137,18 +139,18 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
                 onClick={() => widgetRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
                 className="md:hidden text-xs text-cyanink hover:underline"
               >
-                ↑ к графику
+                {t.toChart}
               </button>
             )}
           </div>
-          <div className="mt-2 hidden md:block text-[11px] text-gray-400">листать можно стрелками ← →</div>
+          <div className="mt-2 hidden md:block text-[11px] text-gray-400">{t.arrowsHint}</div>
         </div>
       </div>
 
       <div ref={summaryRef} className="scroll-mt-16">
         {lesson.definitions && (
           <div className="max-w-2xl mt-10">
-            <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-2">Определения</div>
+            <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-2">{t.definitions}</div>
             <dl className="space-y-3">
               {lesson.definitions.map((d) => (
                 <div key={d.term} className="text-sm">
@@ -157,7 +159,7 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
                     {d.formula && <span className="font-mono text-cyanink ml-2">{d.formula}</span>}
                   </div>
                   <div className="text-gray-600 leading-relaxed">{d.text}</div>
-                  {d.simple && <div className="text-sky-700/90 italic mt-0.5">По-простому: {d.simple}</div>}
+                  {d.simple && <div className="text-sky-700/90 italic mt-0.5">{t.simple} {d.simple}</div>}
                 </div>
               ))}
             </dl>
@@ -165,29 +167,29 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
         )}
 
         <div className="max-w-2xl mt-10">
-          <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-2">{lesson.practiceTitle || 'Что это значит'}</div>
+          <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-2">{lesson.practiceTitle || t.whatItMeans}</div>
           {lesson.decision && (
             <div className="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/5 px-4 py-3">
-              <div className="text-xs uppercase tracking-wider text-emerald-700 mb-1.5">Какое решение это меняет</div>
+              <div className="text-xs uppercase tracking-wider text-emerald-700 mb-1.5">{t.decisionLabel}</div>
               <p className="text-sm text-gray-700 leading-relaxed">{lesson.decision}</p>
             </div>
           )}
           <Paragraphs text={lesson.practice} className="text-gray-700 leading-relaxed" />
           {lesson.realLife && (
             <div className="mt-4 rounded-lg border border-sky-500/30 bg-sky-500/5 px-4 py-3">
-              <div className="text-xs uppercase tracking-wider text-sky-600/90 mb-2">{lesson.realLifeTitle || 'Где это встречается'}</div>
+              <div className="text-xs uppercase tracking-wider text-sky-600/90 mb-2">{lesson.realLifeTitle || t.whereItAppears}</div>
               <Paragraphs text={lesson.realLife} className="text-sm text-gray-700 leading-relaxed" />
             </div>
           )}
           {lesson.assumptions && (
             <div className="mt-4 rounded-lg border border-amber-400/40 bg-amber-400/[0.07] px-4 py-3">
-              <div className="text-xs uppercase tracking-wider text-amber-600 mb-2">Когда метод врёт (допущения)</div>
+              <div className="text-xs uppercase tracking-wider text-amber-600 mb-2">{t.whenItLies}</div>
               <Paragraphs text={lesson.assumptions} className="text-sm text-gray-700 leading-relaxed" />
             </div>
           )}
           {lesson.deepDive && (
             <details className="mt-4 rounded-lg border border-black/10 bg-black/[0.02] px-4 py-3">
-              <summary className="cursor-pointer text-sm text-cyanink select-none">Подробный разбор: математика и механизм (необязательно)</summary>
+              <summary className="cursor-pointer text-sm text-cyanink select-none">{t.deepDive}</summary>
               <div className="mt-2">
                 <Paragraphs text={lesson.deepDive} className="text-sm text-gray-700 leading-relaxed" />
               </div>
@@ -195,11 +197,11 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
           )}
           {lesson.related && (
             <div className="mt-6 flex flex-wrap items-center gap-2">
-              <span className="text-xs text-gray-500">См. также:</span>
+              <span className="text-xs text-gray-500">{t.seeAlso}</span>
               {lesson.related.map((r) => (
                 <Link
                   key={r.id}
-                  to={`/stats/${r.id}`}
+                  to={`${prefix(locale)}/stats/${r.id}`}
                   className="text-xs px-2.5 py-1 rounded-full border border-accent/30 text-cyanink hover:bg-accent/10 transition-colors"
                 >
                   {r.label}
@@ -209,7 +211,7 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
           )}
           {lesson.nextLabel && (
             <div className="mt-6 pt-4 border-t border-black/10 text-sm text-gray-600">
-              Дальше →{' '}
+              {t.nextLabel}{' '}
               {onNext ? (
                 <button onClick={onNext} className="text-left text-cyanink hover:underline">
                   {lesson.nextLabel}

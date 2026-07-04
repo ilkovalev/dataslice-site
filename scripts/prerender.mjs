@@ -23,19 +23,47 @@ const lessons = fs.readdirSync(lessonsDir)
 const truncate = (s, n = 160) => (s.length <= n ? s : s.slice(0, n - 1).trimEnd() + '…')
 const esc = (s) => s.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;')
 
-// Маршруты: разделы + все уроки. У голого /stats контент совпадает с первым
-// уроком (клиентский redirect), поэтому canonical ведёт на URL урока.
+// Английские уроки: переведённые id (для них есть /en-страницы и hreflang).
+const lessonsEnDir = path.join(root, 'src/content/lessons-en')
+const lessonsEn = fs.readdirSync(lessonsEnDir)
+  .filter((f) => f.endsWith('.json'))
+  .map((f) => JSON.parse(fs.readFileSync(path.join(lessonsEnDir, f), 'utf8')))
+const enIds = new Set(lessonsEn.map((l) => l.id))
+
+// hreflang-пара: русская и английская версии одной страницы.
+const alt = (ruPath, enPath) => [
+  { hreflang: 'ru', href: `${SITE}${ruPath}` },
+  { hreflang: 'en', href: `${SITE}${enPath}` },
+  { hreflang: 'x-default', href: `${SITE}${ruPath}` },
+]
+
+// Маршруты: разделы + все уроки (RU) + переведённые разделы/уроки (EN).
+// У голого /stats контент совпадает с первым уроком (клиентский redirect),
+// поэтому canonical ведёт на URL урока.
 const first = 'center-measures'
 const routes = [
   { url: '/stats', file: 'stats.html', canonical: `${SITE}/stats/${first}` },
-  { url: '/metrics', file: 'metrics.html', canonical: `${SITE}/metrics`, title: 'Иерархии метрик по 15 индустриям — «Кусочек пиццы»', desc: 'Деревья метрик North Star → драйверы → операционные → контр-метрики по 15 индустриям, с разборами реальных компаний. Бесплатно и интерактивно.' },
-  { url: '/glossary', file: 'glossary.html', canonical: `${SITE}/glossary`, title: 'Глоссарий статистики и бизнес-метрик — «Кусочек пиццы»', desc: 'Термины статистики и бизнес-метрики простыми словами, с поиском по-русски и по-английски и ссылками на интерактивные уроки.' },
+  { url: '/metrics', file: 'metrics.html', canonical: `${SITE}/metrics`, title: 'Иерархии метрик по 15 индустриям — «Кусочек пиццы»', desc: 'Деревья метрик North Star → драйверы → операционные → контр-метрики по 15 индустриям, с разборами реальных компаний. Бесплатно и интерактивно.', alternates: alt('/metrics', '/en/metrics') },
+  { url: '/glossary', file: 'glossary.html', canonical: `${SITE}/glossary`, title: 'Глоссарий статистики и бизнес-метрик — «Кусочек пиццы»', desc: 'Термины статистики и бизнес-метрики простыми словами, с поиском по-русски и по-английски и ссылками на интерактивные уроки.', alternates: alt('/glossary', '/en/glossary') },
   ...lessons.map((l) => ({
     url: `/stats/${l.id}`,
     file: `stats/${l.id}.html`,
     canonical: `${SITE}/stats/${l.id}`,
     title: `${l.title} — «Кусочек пиццы»`,
     desc: truncate(l.intro || ''),
+    alternates: enIds.has(l.id) ? alt(`/stats/${l.id}`, `/en/stats/${l.id}`) : undefined,
+  })),
+  { url: '/en/stats', file: 'en/stats.html', canonical: `${SITE}/en/stats/${first}`, lang: 'en' },
+  { url: '/en/metrics', file: 'en/metrics.html', canonical: `${SITE}/en/metrics`, lang: 'en', title: 'Metric trees for 15 industries — DataSlice', desc: 'North Star → drivers → operational → guardrail metric trees for 15 industries, with real-company breakdowns. Free and interactive.', alternates: alt('/metrics', '/en/metrics') },
+  { url: '/en/glossary', file: 'en/glossary.html', canonical: `${SITE}/en/glossary`, lang: 'en', title: 'Statistics and business-metrics glossary — DataSlice', desc: 'Statistics and business-metric terms in plain words, with search and links to interactive lessons.', alternates: alt('/glossary', '/en/glossary') },
+  ...lessonsEn.map((l) => ({
+    url: `/en/stats/${l.id}`,
+    file: `en/stats/${l.id}.html`,
+    canonical: `${SITE}/en/stats/${l.id}`,
+    lang: 'en',
+    title: `${l.title} — DataSlice`,
+    desc: truncate(l.intro || ''),
+    alternates: alt(`/stats/${l.id}`, `/en/stats/${l.id}`),
   })),
 ]
 
@@ -49,7 +77,15 @@ function patchHead(html, r) {
     html = html.replace(/(<meta property="og:description" content=")[^"]*(")/, `$1${esc(r.desc)}$2`)
   }
   html = html.replace(/(<meta property="og:url" content=")[^"]*(")/, `$1${r.canonical}$2`)
-  html = html.replace('</head>', `  <link rel="canonical" href="${r.canonical}" />\n  </head>`)
+  if (r.lang === 'en') {
+    html = html.replace('<html lang="ru">', '<html lang="en">')
+    html = html.replace(/(<meta property="og:locale" content=")[^"]*(")/, '$1en_US$2')
+  }
+  let head = `  <link rel="canonical" href="${r.canonical}" />\n`
+  for (const a of r.alternates ?? []) {
+    head += `  <link rel="alternate" hreflang="${a.hreflang}" href="${a.href}" />\n`
+  }
+  html = html.replace('</head>', `${head}  </head>`)
   return html
 }
 

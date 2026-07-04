@@ -5,8 +5,11 @@ import MetricPyramid from '../components/MetricPyramid.jsx'
 import Framework from '../components/Framework.jsx'
 import SubscribeCTA from '../components/SubscribeCTA.jsx'
 import { industries } from '../content/industries/index.js'
+import { useLocale, STR } from '../lib/i18n.js'
 
 export default function MetricsPage() {
+  const locale = useLocale()
+  const t = STR[locale]
   const [mode, setMode] = useState('basics') // basics | industries — вводная первой
   const [activeId, setActiveId] = useState(industries[0].id)
   const [companyId, setCompanyId] = useState(null)
@@ -34,12 +37,19 @@ export default function MetricsPage() {
 
   return (
     <div className="max-w-6xl">
-      <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">Метрики и их иерархии</h1>
-      <p className="text-gray-600 mb-4">Начните с вкладки <span className="text-cyanink">«Основы»</span> — что такое метрики, какие они бывают и как выстраивать иерархии. Затем переходите в <span className="text-cyanink">«Индустрии»</span> — готовые деревья по 15 направлениям с разбором по компаниям.</p>
+      <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">{t.metricsH1}</h1>
+      {locale === 'en' ? (
+        <p className="text-gray-600 mb-4">Start with <span className="text-cyanink">Basics</span>, then open <span className="text-cyanink">Industries</span>: ready-made metric trees for 15 verticals with real-company breakdowns.</p>
+      ) : (
+        <p className="text-gray-600 mb-4">Начните с вкладки <span className="text-cyanink">«Основы»</span> — что такое метрики, какие они бывают и как выстраивать иерархии. Затем переходите в <span className="text-cyanink">«Индустрии»</span> — готовые деревья по 15 направлениям с разбором по компаниям.</p>
+      )}
+      {t.metricsNotice && (
+        <div className="mb-4 rounded-lg border border-amber-400/40 bg-amber-400/[0.08] px-4 py-2.5 text-sm text-gray-700 max-w-3xl">{t.metricsNotice}</div>
+      )}
 
       <div className="flex gap-2 mb-6">
-        {tab('basics', 'Основы')}
-        {tab('industries', 'Индустрии')}
+        {tab('basics', locale === 'en' ? 'Basics' : 'Основы')}
+        {tab('industries', locale === 'en' ? 'Industries' : 'Индустрии')}
       </div>
 
       {mode === 'basics' && <Framework industries={industries} onPick={goIndustry} />}
@@ -61,8 +71,8 @@ export default function MetricsPage() {
           ))}
         </div>
         <div className="flex gap-1 mb-4">
-          {viewBtn('tree', 'Дерево')}
-          {viewBtn('pyramid', 'Пирамида')}
+          {viewBtn('tree', locale === 'en' ? 'Tree' : 'Дерево')}
+          {viewBtn('pyramid', locale === 'en' ? 'Pyramid' : 'Пирамида')}
         </div>
 
         <div className="flex flex-wrap items-end gap-x-6 gap-y-2 mb-4">

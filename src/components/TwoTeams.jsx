@@ -17,7 +17,15 @@ const std = (p) => {
   return Math.sqrt(p.reduce((a, b) => a + (b - m) ** 2, 0) / p.length)
 }
 
-export default function TwoTeams({ unit = '', initialA, initialB, labelA = 'Отдел А', labelB = 'Отдел Б' }) {
+const L = {
+  ru: { mean: 'среднее', shrink: 'сжать Б', stretch: 'растянуть Б', reset: 'сбросить', defA: 'Отдел А', defB: 'Отдел Б' },
+  en: { mean: 'mean', shrink: 'shrink B', stretch: 'stretch B', reset: 'reset', defA: 'Team A', defB: 'Team B' },
+}
+
+export default function TwoTeams({ unit = '', initialA, initialB, labelA, labelB, locale = 'ru' }) {
+  const l = L[locale] ?? L.ru
+  labelA = labelA ?? l.defA
+  labelB = labelB ?? l.defB
   const baseA = initialA ?? [32, 34, 35, 35, 36, 38]
   const baseB = initialB ?? [14, 24, 33, 37, 46, 56]
   const [A, setA] = useState(() => [...baseA])
@@ -96,14 +104,14 @@ export default function TwoTeams({ unit = '', initialA, initialB, labelA = 'От
       </svg>
 
       <div className="flex flex-wrap gap-4 mt-1 text-sm text-gray-700">
-        <span>{labelA}: среднее {mean(A).toFixed(1)}{u}, σ {std(A).toFixed(1)}{u}</span>
-        <span>{labelB}: среднее {mean(B).toFixed(1)}{u}, σ {std(B).toFixed(1)}{u}</span>
+        <span>{labelA}: {l.mean} {mean(A).toFixed(1)}{u}, σ {std(A).toFixed(1)}{u}</span>
+        <span>{labelB}: {l.mean} {mean(B).toFixed(1)}{u}, σ {std(B).toFixed(1)}{u}</span>
       </div>
 
       <div className="flex gap-2 mt-4">
-        <button onClick={() => scaleB(0.8)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">сжать Б</button>
-        <button onClick={() => scaleB(1.25)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">растянуть Б</button>
-        <button onClick={() => { setA([...baseA]); setB([...baseB]) }} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={() => scaleB(0.8)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{l.shrink}</button>
+        <button onClick={() => scaleB(1.25)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{l.stretch}</button>
+        <button onClick={() => { setA([...baseA]); setB([...baseB]) }} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">{l.reset}</button>
       </div>
     </div>
   )

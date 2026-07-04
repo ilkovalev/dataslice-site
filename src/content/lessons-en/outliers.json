@@ -1,0 +1,75 @@
+{
+  "id": "outliers",
+  "module": 1,
+  "title": "Outliers: find them and decide what to do",
+  "tier": 1,
+  "intro": "The register at \"Slice\" sees ordinary receipts — and suddenly an order for twenty pizzas: an office party. One such value can flip the mean, inflate the variance and ruin a model. Yet an outlier is not always \"an error\": sometimes it is the most valuable thing in the data. Let's learn to find them and, crucially, to decide deliberately what to do with them.",
+  "widget": "outlier-actions",
+  "beats": [
+    {
+      "text": "An outlier is a value that has broken far away from the bulk (the red point on the right). Watch the two markers: the green mean has drifted toward the outlier, while the yellow median stayed with the main group. One extreme moves the mean — and barely touches the median."
+    },
+    {
+      "text": "How to find outliers. The 1.5·IQR rule: anything farther than 1.5 box-widths from Q1/Q3 (from the percentiles lesson). Or by z-score: |z| > 3 sigmas from the mean. Careful: both the mean and σ are themselves inflated by the outlier, so on tailed data the 1.5·IQR rule (built on robust quartiles) is more reliable than z."
+    },
+    {
+      "text": "You found an outlier — now what? First question: is it an error or reality?",
+      "predict": "A salary of \"−5\" and a salary of \"director, 280\" — are these the same kind of case?",
+      "reveal": "No. \"−5\" is an obvious input error (salaries below zero do not exist): fix it or drop it. \"280\" is a real value: deleting it means lying about the data. A real outlier is not \"garbage\" but a signal — possibly the most interesting part."
+    },
+    {
+      "text": "Cycle through the action buttons and watch the mean and the median move.",
+      "predict": "Which action pulls the mean back to the main group hardest — capping, winsorizing or removing?",
+      "reveal": "All three remove the extreme's \"pull\", but differently: capping/winsorizing KEEP the observation (clipped to a sensible threshold), removal throws it away entirely — acceptable only for clear errors. The median barely moves in any case — it was robust to begin with."
+    },
+    {
+      "text": "The golden rule: never delete outliers just because they are inconvenient. First understand their nature, choose a deliberate action, document it, and check how it affects the conclusion. Quietly dropping inconvenient points is exactly what fitting the data to a desired answer looks like."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Outlier",
+      "text": "a value visibly detached from the bulk of the data.",
+      "simple": "a point living apart from the rest of the data."
+    },
+    {
+      "term": "The 1.5·IQR rule",
+      "text": "an outlier is farther than 1.5 box-widths from Q1/Q3. Robust, does not depend on the mean.",
+      "simple": "farther than one and a half \"boxes\" from the middle — an outlier candidate."
+    },
+    {
+      "term": "Winsorizing (capping)",
+      "text": "clip extreme values to a threshold (e.g. p1/p99) while keeping the observation in the data.",
+      "simple": "do not throw it out — trim it to an allowed ceiling."
+    },
+    {
+      "term": "Log transform",
+      "text": "take the logarithm to compress the long tail and pull the data toward symmetry.",
+      "simple": "squeezes huge values so the tail stops driving the analysis."
+    }
+  ],
+  "decision": "A decision about an outlier is a decision about its nature: a data error — fix it; a real \"big customer\" — keep it and change the method, not the data.",
+  "practice": [
+    "Before any analysis, an analyst draws a box plot or histogram and checks the outliers. Then separates: input errors get fixed, real extremes get handled deliberately (robust measures, capping, log), and the decision is documented so the analysis stays reproducible.",
+    "Sometimes the outlier IS the goal: a fraudulent transaction, a failing server, anomalous demand. Then you do not remove it — you hunt for it; a whole field of anomaly detection is built on this."
+  ],
+  "realLife": [
+    "In money and response times outliers are a fact of life, not a rarity: there is always a pair of giant orders or hung requests. That is why medians and percentiles are the default there.",
+    "In machine learning uncleaned erroneous outliers drag the model toward themselves (especially with squared error), while real ones are, on the contrary, informative; confusing the two is expensive."
+  ],
+  "assumptions": [
+    "The 1.5·IQR rule and the |z|>3 threshold are heuristics, not truth: different distributions have different \"normal\" shares of outliers. On heavily skewed data 1.5·IQR will flag many perfectly normal tail values.",
+    "Removing outliers changes conclusions and easily turns into result-fitting. Every removal must be justified by the nature of the data and documented."
+  ],
+  "nextLabel": "Data is random by nature. What is probability? → Probability basics",
+  "related": [
+    {
+      "id": "skew-tail",
+      "label": "Skewed data and long tails"
+    },
+    {
+      "id": "spread",
+      "label": "Spread and σ"
+    }
+  ]
+}

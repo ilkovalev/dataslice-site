@@ -17,7 +17,13 @@ function quantile(sorted, p) {
   return lo === hi ? sorted[lo] : sorted[lo] + (sorted[hi] - sorted[lo]) * (idx - lo)
 }
 
-export default function Histogram({ unit = '', data: initial, bins: initialBins = 9 }) {
+const L = {
+  ru: { box: 'ящик с усами', bins: 'Число корзин', addBoss: '+ добавить директора', reset: 'сбросить' },
+  en: { box: 'box plot', bins: 'Number of bins', addBoss: '+ add the director', reset: 'reset' },
+}
+
+export default function Histogram({ unit = '', data: initial, bins: initialBins = 9 , locale = 'ru' }) {
+  const l = L[locale] ?? L.ru
   const base = initial ?? [22, 24, 26, 28, 28, 30, 30, 31, 32, 33, 33, 34, 34, 35, 35, 36, 36, 37, 38, 39, 40, 42, 44, 48]
   const [data, setData] = useState(() => [...base])
   const [bins, setBins] = useState(initialBins)
@@ -71,7 +77,7 @@ export default function Histogram({ unit = '', data: initial, bins: initialBins 
           <text key={i} x={sx(t)} y={HIST_BOTTOM + 16} fill="#6b7280" fontSize="10" textAnchor="middle">{t}</text>
         ))}
 
-        <text x={PAD} y={BOX_Y - 18} fill="#6b7280" fontSize="11">ящик с усами</text>
+        <text x={PAD} y={BOX_Y - 18} fill="#6b7280" fontSize="11">{l.box}</text>
         <line x1={sx(whiskLo)} y1={BOX_Y} x2={sx(whiskHi)} y2={BOX_Y} stroke="#0ea5e9" strokeWidth="1.5" />
         <line x1={sx(whiskLo)} y1={BOX_Y - 6} x2={sx(whiskLo)} y2={BOX_Y + 6} stroke="#0ea5e9" strokeWidth="1.5" />
         <line x1={sx(whiskHi)} y1={BOX_Y - 6} x2={sx(whiskHi)} y2={BOX_Y + 6} stroke="#0ea5e9" strokeWidth="1.5" />
@@ -90,15 +96,15 @@ export default function Histogram({ unit = '', data: initial, bins: initialBins 
 
       <label className="block mt-4 text-sm">
         <div className="flex justify-between text-gray-700 mb-1">
-          <span>Число корзин</span>
+          <span>{l.bins}</span>
           <span className="tabular-nums text-cyanink">{bins}</span>
         </div>
         <input type="range" min="3" max="14" step="1" value={bins} onChange={(e) => setBins(Number(e.target.value))} className="w-full accent-accent" />
       </label>
 
       <div className="flex gap-2 mt-3">
-        <button onClick={() => setData((d) => [...d, 90])} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">+ добавить директора</button>
-        <button onClick={() => setData([...base])} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={() => setData((d) => [...d, 90])} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{l.addBoss}</button>
+        <button onClick={() => setData([...base])} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">{l.reset}</button>
       </div>
     </div>
   )

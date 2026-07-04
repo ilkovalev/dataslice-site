@@ -1,0 +1,59 @@
+{
+  "id": "percentiles",
+  "module": 1,
+  "title": "Percentiles, quartiles and ranks",
+  "tier": 1,
+  "intro": "Mean and median are about the center. But a pizzeria customer does not care about the center: \"how long if I am unlucky?\" How long the unluckiest 5% of orders wait, what the top 10% earn, what counts as normal — that is the language of percentiles, one of the most practical for an analyst.",
+  "widget": "percentile-explorer",
+  "beats": [
+    {
+      "text": "A percentile is the value below which a given share of the data lies. Move the p slider: the shaded part of the histogram is the p% of values to the left, and the yellow line is the percentile value itself. p50 is the median: half the values are below. p90 is the threshold below which 90% of the data sits — above it, the top 10%."
+    },
+    {
+      "text": "Quartiles are percentiles that cut the data into quarters: Q1 = p25, Q2 = p50 (the median), Q3 = p75. Between Q1 and Q3 lies the middle half of the observations; its width is the interquartile range IQR = Q3 − Q1. These anchor percentiles are shown as numbers under the chart."
+    },
+    {
+      "text": "Why are percentiles better than the mean on \"tailed\" data?",
+      "predict": "The data here is right-skewed. Where will p50 (the median) sit relative to the mean — to the left or to the right?",
+      "reveal": "To the left: the long right tail drags the mean up, while the median and the quartiles stay with the bulk — they depend on ORDER, not size. That is why incomes, response times and durations are described with percentiles: robust to outliers, honest about both the typical and the extreme."
+    },
+    {
+      "text": "Slide to p95 and p99. That is \"how bad it gets for the unluckiest 5% and 1%\". The mean response time can look great while p99 is terrible — and p99 is what unhappy users feel. The mean hides it; the tail percentile exposes it. That is how SLAs are written: \"95% of requests faster than X\"."
+    },
+    {
+      "text": "A rank is a value's \"place\" in the sorted row, and a percentile is a rank expressed in percent. \"Your result is in the 80th percentile\" means \"you are above 80% of everyone else\". Ranks also power non-parametric methods (like Mann–Whitney): they look at order rather than raw numbers, which makes them robust to outliers."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Percentile",
+      "text": "the value below which a given share of the data lies (p90 — 90% below it).",
+      "simple": "p90 means you beat 90% of the data."
+    },
+    {
+      "term": "Quartiles Q1/Q2/Q3",
+      "text": "the 25/50/75 percentiles: they cut the data into quarters. Q2 is the median.",
+      "simple": "the row cut into four equal parts."
+    },
+    {
+      "term": "IQR",
+      "formula": "Q3 − Q1",
+      "text": "the interquartile range — the width of the middle half of the data; a robust measure of spread.",
+      "simple": "the distance from Q1 to Q3 — home of the central half."
+    },
+    {
+      "term": "Rank",
+      "text": "a value's position in the sorted row; a percentile is a rank in percent.",
+      "simple": "your number in the sorted list."
+    }
+  ],
+  "practice": [
+    "Percentiles are the language of SLAs and monitoring: \"95% of requests under 200 ms\" is about p95, not the mean. Reliability teams barely look at the average response time precisely because tails inflate or hide it.",
+    "In product analytics percentiles describe the user distribution: the median receipt, the top 10% by revenue (where the profit usually sits), the bottom 25% by activity (churn candidates)."
+  ],
+  "realLife": [
+    "Children's growth charts are percentile curves: a child at the 3rd percentile is small, at the 97th — large. The doctor reads the percentile, not the absolute number.",
+    "Salary surveys publish market p25/p50/p75: you see the range instead of a deceptive \"industry average\" inflated by the top earners."
+  ],
+  "nextLabel": "And what about the points that break out of the row? → Outliers"
+}

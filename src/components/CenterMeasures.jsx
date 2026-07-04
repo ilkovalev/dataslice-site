@@ -13,9 +13,9 @@ const LINE_Y = 140
 // Цвет + форма + подпись — тройное кодирование каждой меры (различимо и для
 // дальтоников). Цвета живут только внутри виджета, не спорят с брендом.
 const METRICS = {
-  mean: { shape: 'circle', color: '#0d7fb0', label: 'среднее' },
-  median: { shape: 'diamond', color: '#7c3aed', label: 'медиана' },
-  mode: { shape: 'square', color: '#b45309', label: 'мода' },
+  mean: { shape: 'circle', color: '#0d7fb0', label: 'mean' },
+  median: { shape: 'diamond', color: '#7c3aed', label: 'median' },
+  mode: { shape: 'square', color: '#b45309', label: 'mode' },
 }
 
 function computeStats(points) {
@@ -64,7 +64,13 @@ function Glyph({ shape, x, y, color, r = 5 }) {
   return <circle cx={x} cy={y} r={r} fill={color} />
 }
 
-export default function CenterMeasures({ highlight, unit = '', initial }) {
+const L = {
+  ru: { mean: 'среднее', median: 'медиана', mode: 'мода', Mean: 'Среднее', Median: 'Медиана', Mode: 'Мода', add: '+ добавить точку', remove: '− убрать точку', reset: 'сбросить' },
+  en: { mean: 'mean', median: 'median', mode: 'mode', Mean: 'Mean', Median: 'Median', Mode: 'Mode', add: '+ add a point', remove: '− remove a point', reset: 'reset' },
+}
+
+export default function CenterMeasures({ highlight, unit = '', initial, locale = 'ru' }) {
+  const l = L[locale] ?? L.ru
   const base = initial ?? [20, 30, 35, 35, 45]
   const [points, setPoints] = useState(() => [...base])
   const [drag, setDrag] = useState(null)
@@ -139,7 +145,7 @@ export default function CenterMeasures({ highlight, unit = '', initial }) {
               <line x1={m.px} y1={gy + 6} x2={m.px} y2={LINE_Y} stroke={meta.color} strokeWidth="1.5" strokeDasharray="4 3" />
               <Glyph shape={meta.shape} x={m.px} y={gy} color={meta.color} />
               <text x={lx} y={ROW_Y[m.row] - 5} fill={meta.color} fontSize="11" fontWeight="600" textAnchor="middle">
-                {meta.label}
+                {l[m.name]}
               </text>
             </g>
           )
@@ -178,13 +184,13 @@ export default function CenterMeasures({ highlight, unit = '', initial }) {
       {/* легенда: те же формы + цвет, что на маркерах */}
       <div className="flex flex-wrap gap-x-5 gap-y-1 mt-2 text-sm">
         <span className="inline-flex items-center gap-1.5" style={{ color: METRICS.mean.color, opacity: !highlight || highlight === 'mean' ? 1 : 0.4 }}>
-          <span aria-hidden>●</span> Среднее: {mean.toFixed(1)}{u}
+          <span aria-hidden>●</span> {l.Mean}: {mean.toFixed(1)}{u}
         </span>
         <span className="inline-flex items-center gap-1.5" style={{ color: METRICS.median.color, opacity: !highlight || highlight === 'median' ? 1 : 0.4 }}>
-          <span aria-hidden>◆</span> Медиана: {median}{u}
+          <span aria-hidden>◆</span> {l.Median}: {median}{u}
         </span>
         <span className="inline-flex items-center gap-1.5" style={{ color: METRICS.mode.color, opacity: !highlight || highlight === 'mode' ? 1 : 0.4 }}>
-          <span aria-hidden>■</span> Мода: {modes.length ? modes.join(', ') + u : '—'}
+          <span aria-hidden>■</span> {l.Mode}: {modes.length ? modes.join(', ') + u : '—'}
         </span>
       </div>
 
@@ -193,19 +199,19 @@ export default function CenterMeasures({ highlight, unit = '', initial }) {
           onClick={() => setPoints((p) => [...p, Math.round(30 + Math.random() * 40)])}
           className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5"
         >
-          + добавить точку
+          {l.add}
         </button>
         <button
           onClick={() => setPoints((p) => (p.length > 2 ? p.slice(0, -1) : p))}
           className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5"
         >
-          − убрать точку
+          {l.remove}
         </button>
         <button
           onClick={() => setPoints([...base])}
           className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5"
         >
-          сбросить
+          {l.reset}
         </button>
       </div>
     </div>

@@ -9,7 +9,19 @@ const BINS = 28
 
 function mulberry32(a) { return function () { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296 } }
 
-export default function PercentileExplorer() {
+const L = {
+  ru: {
+    median: 'p50 (медиана)', slider: 'Перцентиль p',
+    note: (p, val) => `p${p} = ${val}: ниже этого значения лежит ${p}% данных (закрашено). На скошенных данных хвостовые перцентили (p90, p99) важнее среднего — это «насколько плохо самым невезучим». Так задают SLA: «95% запросов быстрее X».`,
+  },
+  en: {
+    median: 'p50 (median)', slider: 'Percentile p',
+    note: (p, val) => `p${p} = ${val}: ${p}% of the data lies below this value (shaded). On skewed data the tail percentiles (p90, p99) matter more than the mean — they say "how bad it gets for the unluckiest". That is how SLAs are set: "95% of requests faster than X".`,
+  },
+}
+
+export default function PercentileExplorer({ locale = 'ru' }) {
+  const l = L[locale] ?? L.ru
   const data = useMemo(() => {
     const r = mulberry32(7)
     return Array.from({ length: 400 }, () => Math.round(Math.exp(3 + 0.9 * (Math.sqrt(-2 * Math.log(r() || 1e-9)) * Math.cos(2 * Math.PI * r()))))).filter((v) => v < 600)
@@ -42,16 +54,16 @@ export default function PercentileExplorer() {
 
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm text-gray-700">
         <span>p25 = {pct(25)}</span>
-        <span>p50 (медиана) = {pct(50)}</span>
+        <span>{l.median} = {pct(50)}</span>
         <span>p90 = {pct(90)}</span>
         <span>p99 = {pct(99)}</span>
       </div>
 
       <label className="block mt-3 text-sm">
-        <div className="flex justify-between text-gray-700 mb-1"><span>Перцентиль p</span><span className="tabular-nums text-cyanink">{p}</span></div>
+        <div className="flex justify-between text-gray-700 mb-1"><span>{l.slider}</span><span className="tabular-nums text-cyanink">{p}</span></div>
         <input type="range" min="1" max="99" step="1" value={p} onChange={(e) => setP(Number(e.target.value))} className="w-full accent-accent" />
       </label>
-      <p className="text-xs text-gray-500 mt-2">p{p} = {val}: ниже этого значения лежит {p}% данных (закрашено). На скошенных данных хвостовые перцентили (p90, p99) важнее среднего — это «насколько плохо самым невезучим». Так задают SLA: «95% запросов быстрее X».</p>
+      <p className="text-xs text-gray-500 mt-2">{l.note(p, val)}</p>
     </div>
   )
 }

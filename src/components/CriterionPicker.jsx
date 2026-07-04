@@ -128,7 +128,7 @@ export default function CriterionPicker({ locale = 'ru' }) {
           <svg viewBox={`0 0 ${W} 140`} className="w-full h-auto select-none">
             <RefDist crit={crit} />
           </svg>
-          <p className="text-xs text-gray-500 mt-1">{REF[crit].note}</p>
+          <p className="text-xs text-gray-500 mt-1">{en ? (REF[crit].noteEn ?? REF[crit].note) : REF[crit].note}</p>
           <p className="text-xs text-gray-500 mt-1">{en ? (MECH[crit + 'En'] ?? MECH[crit]) : MECH[crit]}</p>
         </div>
       )}

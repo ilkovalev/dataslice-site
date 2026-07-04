@@ -213,10 +213,10 @@ export default function StatsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold mb-1">Интерактивная статистика</h1>
+      <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">Интерактивная статистика</h1>
       <p className="text-gray-600 mb-6 max-w-2xl">
-        {lessons.length} бесплатных интерактивных уроков — от среднего и медианы до A/B-тестов и Байеса.
-        Читайте, предсказывайте, двигайте графики — и стройте интуицию. Без регистрации.
+        {lessons.length} бесплатных интерактивных уроков: от среднего и медианы до A/B-тестов и Байеса.
+        Двигайте графики и стройте интуицию. Без регистрации.
       </p>
 
       <div className="md:grid md:grid-cols-[248px_minmax(0,1fr)] md:gap-8">

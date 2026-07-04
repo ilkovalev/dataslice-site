@@ -99,7 +99,7 @@ export default function Regression() {
 
       <div className="flex items-center justify-between mt-3">
         <p className="text-xs text-gray-500">Перетаскивайте точки. Наклон b₁ — на сколько растёт y при +1 по x; r — сила связи от −1 до +1.</p>
-        <button onClick={() => setShowSquares((s) => !s)} className="shrink-0 text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">
+        <button onClick={() => setShowSquares((s) => !s)} className="shrink-0 text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">
           {showSquares ? 'скрыть квадраты' : 'показать квадраты ошибок'}
         </button>
       </div>

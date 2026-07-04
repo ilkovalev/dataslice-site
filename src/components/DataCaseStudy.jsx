@@ -133,14 +133,14 @@ export default function DataCaseStudy() {
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <div className="flex flex-wrap gap-1.5 mb-3">
         {STEPS.map((s, i) => (
-          <button key={s} onClick={() => setStep(i)} className={`text-xs px-2.5 py-1 rounded border ${step === i ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{i + 1}. {s}</button>
+          <button key={s} onClick={() => setStep(i)} className={`text-xs px-2.5 py-1 rounded-md border ${step === i ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{i + 1}. {s}</button>
         ))}
       </div>
       {body[step].chart}
       <p className="text-sm text-gray-700 mt-2 leading-relaxed">{body[step].text}</p>
       <div className="flex gap-2 mt-3">
-        <button disabled={step === 0} onClick={() => setStep(step - 1)} className="text-sm px-3 py-1.5 rounded border border-black/15 text-gray-700 disabled:opacity-30 hover:bg-black/5">Назад</button>
-        {step < STEPS.length - 1 && <button onClick={() => setStep(step + 1)} className="text-sm px-3 py-1.5 rounded border border-accent/40 text-cyanink hover:bg-accent/10">Дальше</button>}
+        <button disabled={step === 0} onClick={() => setStep(step - 1)} className="text-sm px-3 py-1.5 rounded-md border border-black/15 text-gray-700 disabled:opacity-30 hover:bg-black/5">Назад</button>
+        {step < STEPS.length - 1 && <button onClick={() => setStep(step + 1)} className="text-sm px-3 py-1.5 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">Дальше</button>}
       </div>
     </div>
   )

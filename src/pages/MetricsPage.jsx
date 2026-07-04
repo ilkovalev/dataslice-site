@@ -34,7 +34,7 @@ export default function MetricsPage() {
 
   return (
     <div className="max-w-6xl">
-      <h1 className="text-2xl font-semibold mb-1">Метрики и их иерархии</h1>
+      <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">Метрики и их иерархии</h1>
       <p className="text-gray-600 mb-4">Начните с вкладки <span className="text-cyanink">«Основы»</span> — что такое метрики, какие они бывают и как выстраивать иерархии. Затем переходите в <span className="text-cyanink">«Индустрии»</span> — готовые деревья по 15 направлениям с разбором по компаниям.</p>
 
       <div className="flex gap-2 mb-6">

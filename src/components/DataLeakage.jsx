@@ -52,8 +52,8 @@ export default function DataLeakage() {
       </div>
 
       <div className="flex flex-wrap gap-2 mt-3">
-        <button onClick={() => setFuture((f) => !f)} className={`text-xs px-2.5 py-1 rounded border ${future ? 'border-[#dc4d4d]/50 bg-[#dc4d4d]/10 text-[#dc4d4d]' : 'border-black/15 text-gray-700 hover:bg-black/5'}`}>признак «из будущего»</button>
-        <button onClick={() => setPrep((p) => !p)} className={`text-xs px-2.5 py-1 rounded border ${prep ? 'border-[#dc4d4d]/50 bg-[#dc4d4d]/10 text-[#dc4d4d]' : 'border-black/15 text-gray-700 hover:bg-black/5'}`}>предобработка до сплита</button>
+        <button onClick={() => setFuture((f) => !f)} className={`text-xs px-2.5 py-1 rounded-md border ${future ? 'border-[#dc4d4d]/50 bg-[#dc4d4d]/10 text-[#dc4d4d]' : 'border-black/15 text-gray-700 hover:bg-black/5'}`}>признак «из будущего»</button>
+        <button onClick={() => setPrep((p) => !p)} className={`text-xs px-2.5 py-1 rounded-md border ${prep ? 'border-[#dc4d4d]/50 bg-[#dc4d4d]/10 text-[#dc4d4d]' : 'border-black/15 text-gray-700 hover:bg-black/5'}`}>предобработка до сплита</button>
       </div>
       <p className="text-xs text-gray-500 mt-2">Прод-качество (зелёное) — настоящее, оно не меняется. Утечка раздувает только train/test: «признак из будущего» (например, дата закрытия счёта при прогнозе оттока) выдаёт ответ; предобработка на всех данных до сплита даёт тесту подсмотреть в обучение. Цель валидации — чтобы тест ≈ прод.</p>
     </div>

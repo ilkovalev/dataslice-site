@@ -75,7 +75,7 @@ export default function RandomVariable() {
       )}
 
       <div className="flex items-center gap-3 mt-3">
-        <button onClick={() => setSum((s) => !s)} className="text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10">
+        <button onClick={() => setSum((s) => !s)} className="text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">
           {sum ? '← одна величина X' : 'показать сумму двух независимых X+X'}
         </button>
         {sum && <span className="text-xs text-gray-500">E удвоилось ({(2 * EX).toFixed(2)}), Var удвоилась ({(2 * VarX).toFixed(2)}), форма ближе к колоколу.</span>}

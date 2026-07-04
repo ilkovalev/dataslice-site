@@ -77,8 +77,8 @@ export default function EventsProbability({ highlight }) {
               style={{ background: colorOf[region(i)], opacity: a[i] || b[i] ? 0.8 : 0.35, outline: showCompl && !a[i] ? '2px dashed #6b7280' : 'none', outlineOffset: '1px' }}
             >{v}</div>
             <div className="flex gap-1 mt-1 justify-center">
-              <button onClick={() => toggle(a, setA, i)} className={`text-[10px] px-1.5 py-0.5 rounded border ${a[i] ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-500'}`}>A</button>
-              <button onClick={() => toggle(b, setB, i)} className={`text-[10px] px-1.5 py-0.5 rounded border ${b[i] ? 'border-amber-400/60 text-amber-600 bg-amber-400/15' : 'border-black/10 text-gray-500'}`}>B</button>
+              <button onClick={() => toggle(a, setA, i)} className={`text-[10px] px-1.5 py-0.5 rounded-md border ${a[i] ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-500'}`}>A</button>
+              <button onClick={() => toggle(b, setB, i)} className={`text-[10px] px-1.5 py-0.5 rounded-md border ${b[i] ? 'border-amber-400/60 text-amber-600 bg-amber-400/15' : 'border-black/10 text-gray-500'}`}>B</button>
             </div>
           </div>
         ))}

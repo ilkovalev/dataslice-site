@@ -67,7 +67,7 @@ export default function CorrelationShapes() {
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <div className="flex flex-wrap gap-2 mb-3">
         {Object.entries(SETS).map(([key, v]) => (
-          <button key={key} onClick={() => setK(key)} className={`text-xs px-2.5 py-1 rounded border ${k === key ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{v.label}</button>
+          <button key={key} onClick={() => setK(key)} className={`text-xs px-2.5 py-1 rounded-md border ${k === key ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{v.label}</button>
         ))}
       </div>
 

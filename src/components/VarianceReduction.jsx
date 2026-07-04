@@ -56,8 +56,8 @@ export default function VarianceReduction() {
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <div className="flex flex-wrap items-center gap-2 mb-3">
         <span className="text-xs text-gray-600 mr-1">Метод:</span>
-        <button onClick={() => setMethod('cuped')} className={`text-xs px-2.5 py-1 rounded border ${method === 'cuped' ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>CUPED (ковариат)</button>
-        <button onClick={() => setMethod('strat')} className={`text-xs px-2.5 py-1 rounded border ${method === 'strat' ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>Стратификация (слои)</button>
+        <button onClick={() => setMethod('cuped')} className={`text-xs px-2.5 py-1 rounded-md border ${method === 'cuped' ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>CUPED (ковариат)</button>
+        <button onClick={() => setMethod('strat')} className={`text-xs px-2.5 py-1 rounded-md border ${method === 'strat' ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>Стратификация (слои)</button>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4">

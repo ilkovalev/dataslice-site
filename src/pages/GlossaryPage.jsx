@@ -19,7 +19,7 @@ export default function GlossaryPage() {
 
   return (
     <div className="max-w-3xl">
-      <h1 className="text-2xl font-semibold mb-1">Глоссарий</h1>
+      <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">Глоссарий</h1>
       <p className="text-gray-600 mb-5">Термины статистики и бизнес-метрики — в одном месте.</p>
 
       <input

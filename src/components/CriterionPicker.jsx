@@ -89,7 +89,7 @@ export default function CriterionPicker() {
       <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-1">Шаг 1 · что за метрика?</div>
       <div className="flex flex-wrap gap-2 mb-1">
         {Object.entries(METRICS).map(([k, m]) => (
-          <button key={k} onClick={() => { setMetric(k); setCrit(null) }} className={`text-xs px-2.5 py-1 rounded border ${metric === k ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{m.label}</button>
+          <button key={k} onClick={() => { setMetric(k); setCrit(null) }} className={`text-xs px-2.5 py-1 rounded-md border ${metric === k ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{m.label}</button>
         ))}
       </div>
       <p className="text-xs text-gray-500 mb-3">{METRICS[metric].hint}</p>
@@ -107,7 +107,7 @@ export default function CriterionPicker() {
       <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-1">Шаг 2 · какой критерий примените?</div>
       <div className="flex flex-wrap gap-2">
         {Object.entries(CRITERIA).map(([k, label]) => (
-          <button key={k} onClick={() => setCrit(k)} className={`text-xs px-2.5 py-1 rounded border ${crit === k ? 'border-accent/60 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{label}</button>
+          <button key={k} onClick={() => setCrit(k)} className={`text-xs px-2.5 py-1 rounded-md border ${crit === k ? 'border-accent/60 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{label}</button>
         ))}
       </div>
 

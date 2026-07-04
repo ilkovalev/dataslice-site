@@ -101,9 +101,9 @@ export default function TwoTeams({ unit = '', initialA, initialB, labelA = 'От
       </div>
 
       <div className="flex gap-2 mt-4">
-        <button onClick={() => scaleB(0.8)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">сжать Б</button>
-        <button onClick={() => scaleB(1.25)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">растянуть Б</button>
-        <button onClick={() => { setA([...baseA]); setB([...baseB]) }} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={() => scaleB(0.8)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">сжать Б</button>
+        <button onClick={() => scaleB(1.25)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">растянуть Б</button>
+        <button onClick={() => { setA([...baseA]); setB([...baseB]) }} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
     </div>
   )

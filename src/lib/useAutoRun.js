@@ -17,6 +17,6 @@ export function useAutoRun(cb, delay = 120) {
 // Единая кнопка-тумблер автопрогона.
 export function autoRunClass(running) {
   return running
-    ? 'text-xs px-2.5 py-1 rounded bg-cyanink text-white hover:opacity-90'
-    : 'text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10'
+    ? 'text-xs px-2.5 py-1 rounded-md bg-cyanink text-white hover:opacity-90'
+    : 'text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10'
 }

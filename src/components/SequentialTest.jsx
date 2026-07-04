@@ -134,14 +134,14 @@ export default function SequentialTest() {
       {/* выбор границы */}
       <div className="flex flex-wrap items-center gap-2 mt-1">
         <span className="text-xs text-gray-600 mr-1">Граница остановки:</span>
-        <button onClick={() => setSeq(false)} className={`text-xs px-2.5 py-1 rounded border ${!seq ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>наивный порог 0.05</button>
-        <button onClick={() => setSeq(true)} className={`text-xs px-2.5 py-1 rounded border ${seq ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>последовательная (α-spending)</button>
+        <button onClick={() => setSeq(false)} className={`text-xs px-2.5 py-1 rounded-md border ${!seq ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>наивный порог 0.05</button>
+        <button onClick={() => setSeq(true)} className={`text-xs px-2.5 py-1 rounded-md border ${seq ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>последовательная (α-spending)</button>
       </div>
       {/* сценарий данных */}
       <div className="flex flex-wrap items-center gap-2 mt-2">
         <span className="text-xs text-gray-600 mr-1">Данные:</span>
-        <button onClick={() => setScenario(false)} className={`text-xs px-2.5 py-1 rounded border ${!effect ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>эффекта нет (A/A)</button>
-        <button onClick={() => setScenario(true)} className={`text-xs px-2.5 py-1 rounded border ${effect ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>эффект есть</button>
+        <button onClick={() => setScenario(false)} className={`text-xs px-2.5 py-1 rounded-md border ${!effect ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>эффекта нет (A/A)</button>
+        <button onClick={() => setScenario(true)} className={`text-xs px-2.5 py-1 rounded-md border ${effect ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>эффект есть</button>
       </div>
 
       {traj && (
@@ -155,10 +155,10 @@ export default function SequentialTest() {
       )}
 
       <div className="flex gap-2 mt-3">
-        <button onClick={() => run(1)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+1 тест</button>
+        <button onClick={() => run(1)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">+1 тест</button>
         <button onClick={() => run(50)} className="text-xs px-3 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">+50 тестов</button>
         <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? '⏸ стоп' : '▶ автопрогон'}</button>
-        <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
 
       {/* сравнение долей ложных остановок под A/A */}

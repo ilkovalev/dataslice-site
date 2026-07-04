@@ -71,7 +71,7 @@ export default function TTest() {
           <input type="range" min="5" max="120" step="1" value={n} onChange={(e) => setN(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <button onClick={() => setTick((t) => t + 1)} className="mt-3 text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">пересобрать выборку</button>
+      <button onClick={() => setTick((t) => t + 1)} className="mt-3 text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">пересобрать выборку</button>
     </div>
   )
 }

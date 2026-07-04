@@ -58,7 +58,7 @@ export default function SimpsonParadox() {
       <div className="mt-2 text-sm text-gray-600">
         {grouped ? 'Внутри каждой группы связь восходящая (положительная).' : 'В целом по всем точкам связь нисходящая (отрицательная).'}
       </div>
-      <button onClick={() => setGrouped((g) => !g)} className="mt-3 text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">
+      <button onClick={() => setGrouped((g) => !g)} className="mt-3 text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">
         {grouped ? 'показать все точки вместе' : 'разделить по группам'}
       </button>
     </div>

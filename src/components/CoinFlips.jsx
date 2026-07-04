@@ -114,10 +114,10 @@ export default function CoinFlips() {
       </label>
 
       <div className="flex gap-2 mt-3">
-        <button onClick={() => { setRunning(false); flip(10) }} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+10 бросков</button>
-        <button onClick={() => { setRunning(false); flip(100) }} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+100 бросков</button>
+        <button onClick={() => { setRunning(false); flip(10) }} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">+10 бросков</button>
+        <button onClick={() => { setRunning(false); flip(100) }} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">+100 бросков</button>
         <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? '⏸ стоп' : '▶ автопрогон'}</button>
-        <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
     </div>
   )

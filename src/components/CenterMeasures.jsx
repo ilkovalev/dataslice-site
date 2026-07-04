@@ -191,19 +191,19 @@ export default function CenterMeasures({ highlight, unit = '', initial }) {
       <div className="flex gap-2 mt-4">
         <button
           onClick={() => setPoints((p) => [...p, Math.round(30 + Math.random() * 40)])}
-          className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5"
+          className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5"
         >
           + добавить точку
         </button>
         <button
           onClick={() => setPoints((p) => (p.length > 2 ? p.slice(0, -1) : p))}
-          className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5"
+          className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5"
         >
           − убрать точку
         </button>
         <button
           onClick={() => setPoints([...base])}
-          className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5"
+          className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5"
         >
           сбросить
         </button>

@@ -61,7 +61,7 @@ export default function EstimatorSampler() {
       <div className="flex flex-wrap items-center gap-2 mb-3">
         <span className="text-xs text-gray-500">Оценка:</span>
         {STATS.map((s) => (
-          <button key={s.id} onClick={() => pick(s.id)} className={`text-xs px-2.5 py-1 rounded border ${stat === s.id ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{s.label}</button>
+          <button key={s.id} onClick={() => pick(s.id)} className={`text-xs px-2.5 py-1 rounded-md border ${stat === s.id ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{s.label}</button>
         ))}
       </div>
 
@@ -89,9 +89,9 @@ export default function EstimatorSampler() {
         <input type="range" min="2" max="60" step="1" value={n} onChange={(e) => { setN(Number(e.target.value)); reset() }} className="w-full accent-accent" />
       </label>
       <div className="flex flex-wrap gap-2 mt-3">
-        <button onClick={() => drawN(1)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">взять выборку</button>
-        <button onClick={animate} className="text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10">▶ насыпать</button>
-        <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={() => drawN(1)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">взять выборку</button>
+        <button onClick={animate} className="text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">▶ насыпать</button>
+        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
       <p className="text-xs text-gray-500 mt-2">Какую бы оценку вы ни выбрали — она своя у каждой выборки, то есть сама случайна. Её разброс падает с ростом n. Это и есть выборочное распределение — объект, на котором держатся ЦПТ, интервалы и проверка гипотез.</p>
     </div>

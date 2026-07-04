@@ -97,8 +97,8 @@ export default function Histogram({ unit = '', data: initial, bins: initialBins 
       </label>
 
       <div className="flex gap-2 mt-3">
-        <button onClick={() => setData((d) => [...d, 90])} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+ добавить директора</button>
-        <button onClick={() => setData([...base])} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={() => setData((d) => [...d, 90])} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">+ добавить директора</button>
+        <button onClick={() => setData([...base])} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
     </div>
   )

@@ -132,10 +132,10 @@ export default function Bootstrap() {
       <div className="mt-2 text-xs text-gray-500">Алгоритм: 1) тянем n значений из выборки с возвратом (зелёные точки сверху) · 2) считаем их среднее (зелёная точка) · 3) оно падает в нижнее распределение · повторяем N раз.</div>
 
       <div className="flex flex-wrap gap-2 mt-3">
-        <button onClick={step} className="text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10">1 ресэмпл (шаг)</button>
-        <button onClick={() => many(200)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">ресэмпл 200</button>
-        <button onClick={animate} className="text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10">▶ насыпать</button>
-        <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={step} className="text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">1 ресэмпл (шаг)</button>
+        <button onClick={() => many(200)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">ресэмпл 200</button>
+        <button onClick={animate} className="text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">▶ насыпать</button>
+        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
     </div>
   )

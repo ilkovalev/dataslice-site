@@ -104,7 +104,7 @@ export default function RegressionMetrics() {
 
       <div className="flex items-center justify-between mt-3">
         <p className="text-xs text-gray-500">Перетаскивайте точки и следите за метриками. RMSE всегда ≥ MAE и реагирует на выброс резче.</p>
-        <button onClick={toggleOutlier} className="shrink-0 text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">
+        <button onClick={toggleOutlier} className="shrink-0 text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">
           {hasOutlier ? 'убрать выброс' : 'добавить выброс'}
         </button>
       </div>

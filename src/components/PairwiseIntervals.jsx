@@ -48,7 +48,7 @@ export default function PairwiseIntervals() {
         })}
       </svg>
 
-      <button onClick={() => setTukey((t) => !t)} className="text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10">
+      <button onClick={() => setTukey((t) => !t)} className="text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">
         {tukey ? 'поправка Тьюки: ВКЛ (честно)' : 'поправка Тьюки: ВЫКЛ (наивно)'}
       </button>
 

@@ -109,13 +109,13 @@ export default function ConfidenceIntervals() {
       <div className="flex flex-wrap items-center gap-2 mt-3">
         <span className="text-xs text-gray-500">Уровень:</span>
         {[90, 95, 99].map((l) => (
-          <button key={l} onClick={() => changeLevel(l)} className={`text-xs px-2 py-1 rounded border ${level === l ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{l}%</button>
+          <button key={l} onClick={() => changeLevel(l)} className={`text-xs px-2 py-1 rounded-md border ${level === l ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{l}%</button>
         ))}
         <span className="w-2" />
-        <button onClick={() => draw(1)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">взять выборку</button>
-        <button onClick={() => draw(20)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">взять 20</button>
+        <button onClick={() => draw(1)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">взять выборку</button>
+        <button onClick={() => draw(20)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">взять 20</button>
         <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? '⏸ стоп' : '▶ автопрогон'}</button>
-        <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
     </div>
   )

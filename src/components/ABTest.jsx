@@ -101,7 +101,7 @@ export default function ABTest() {
       </div>
 
       <div className="flex flex-wrap items-center gap-2 mt-3">
-        <button onClick={runOnce} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">перезапустить эксперимент</button>
+        <button onClick={runOnce} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">перезапустить эксперимент</button>
         <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? '⏸ стоп' : '▶ серия экспериментов'}</button>
         {tally.total > 0 && (
           <span className="text-sm text-gray-700">

@@ -69,7 +69,7 @@ export default function MannWhitney() {
       </label>
 
       <div className="flex items-center gap-3 mt-3">
-        <button onClick={() => setOutlier((o) => !o)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">
+        <button onClick={() => setOutlier((o) => !o)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">
           {outlier ? 'убрать выброс' : 'добавить выброс в A'}
         </button>
         <span className="text-xs text-gray-500">Выброс почти не двигает U: ранг гигантского значения всё равно «последний». Этим МУ устойчив там, где t-тест шатается.</span>

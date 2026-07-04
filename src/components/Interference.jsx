@@ -54,7 +54,7 @@ export default function Interference() {
         <span className={contaminated > 4 ? 'text-[#dc4d4d]' : 'text-green-600'}>заражённых связей (A↔B): {contaminated} из {EDGES.length}</span>
       </div>
 
-      <button onClick={() => setCluster((c) => !c)} className="mt-3 text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10">
+      <button onClick={() => setCluster((c) => !c)} className="mt-3 text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">
         {cluster ? '← сплит по пользователям' : 'кластерная рандомизация'}
       </button>
 

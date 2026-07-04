@@ -47,7 +47,7 @@ export default function MetricRoles() {
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <div className="flex flex-wrap gap-2 mb-3">
         {Object.entries(SCEN).map(([k, v]) => (
-          <button key={k} onClick={() => setS(k)} className={`text-xs px-2.5 py-1 rounded border ${s === k ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{v.label}</button>
+          <button key={k} onClick={() => setS(k)} className={`text-xs px-2.5 py-1 rounded-md border ${s === k ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{v.label}</button>
         ))}
       </div>
 

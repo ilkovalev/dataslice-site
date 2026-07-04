@@ -46,7 +46,7 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
 
   return (
     <article className="max-w-7xl">
-      <h2 className="text-left text-2xl font-semibold mb-3">{lesson.title}</h2>
+      <h2 className="text-left text-2xl md:text-3xl font-bold tracking-tight mb-3">{lesson.title}</h2>
       {lesson.intro && <p className="text-gray-700 leading-relaxed mb-6 max-w-[68ch]">{gloss(lesson.intro)}</p>}
 
       <div className={Widget ? 'grid md:grid-cols-3 gap-8 items-start' : ''}>
@@ -57,7 +57,7 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
                 <button
                   onClick={() => setResetKey((k) => k + 1)}
                   title="Вернуть график к исходному состоянию"
-                  className="text-xs px-2 py-0.5 rounded border border-black/10 text-gray-500 hover:bg-black/5"
+                  className="text-xs px-2 py-0.5 rounded-md border border-black/10 text-gray-500 hover:bg-black/5"
                 >
                   ↺ сбросить график
                 </button>
@@ -90,7 +90,7 @@ export default function BeatsLesson({ lesson, onComplete, onNext }) {
                 {!revealed && (
                   <button
                     onClick={() => setRevealed(true)}
-                    className="mt-2 text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10"
+                    className="mt-2 text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10"
                   >
                     Показать ответ
                   </button>

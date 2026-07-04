@@ -49,7 +49,7 @@ export default function CausalDiagram() {
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <div className="flex flex-wrap gap-2 mb-3">
         {Object.entries(STRUCT).map(([k, v]) => (
-          <button key={k} onClick={() => setS(k)} className={`text-xs px-2.5 py-1 rounded border ${s === k ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{v.label.split(' (')[0]}</button>
+          <button key={k} onClick={() => setS(k)} className={`text-xs px-2.5 py-1 rounded-md border ${s === k ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{v.label.split(' (')[0]}</button>
         ))}
       </div>
 
@@ -77,7 +77,7 @@ export default function CausalDiagram() {
         </div>
       </div>
 
-      <button onClick={() => setCtrl((c) => !c)} className="mt-3 text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10">
+      <button onClick={() => setCtrl((c) => !c)} className="mt-3 text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">
         {ctrl ? 'не контролировать Z' : 'контролировать Z'}
       </button>
       <p className="text-xs text-gray-500 mt-2">Один и тот же приём (контроль Z) в разных структурах даёт противоположный результат: для конфаундера — спасает, для коллайдера — портит, для медиатора — убивает эффект. Поэтому «контролировать всё подряд» — ошибка.</p>

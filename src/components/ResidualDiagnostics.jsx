@@ -42,7 +42,7 @@ export default function ResidualDiagnostics() {
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <div className="flex flex-wrap gap-2 mb-3">
         {Object.entries(MODES).map(([k, v]) => (
-          <button key={k} onClick={() => setMode(k)} className={`text-xs px-2.5 py-1 rounded border ${mode === k ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{v.label}</button>
+          <button key={k} onClick={() => setMode(k)} className={`text-xs px-2.5 py-1 rounded-md border ${mode === k ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{v.label}</button>
         ))}
       </div>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full max-w-md mx-auto h-auto select-none">

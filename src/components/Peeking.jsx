@@ -128,8 +128,8 @@ export default function Peeking({ sequential = false }) {
       </svg>
 
       <div className="flex flex-wrap gap-2 mt-2">
-        <button onClick={() => toggle(false)} className={`text-xs px-2.5 py-1 rounded border ${!effect ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>эффекта нет (A/A)</button>
-        <button onClick={() => toggle(true)} className={`text-xs px-2.5 py-1 rounded border ${effect ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>эффект есть</button>
+        <button onClick={() => toggle(false)} className={`text-xs px-2.5 py-1 rounded-md border ${!effect ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>эффекта нет (A/A)</button>
+        <button onClick={() => toggle(true)} className={`text-xs px-2.5 py-1 rounded-md border ${effect ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>эффект есть</button>
       </div>
 
       {traj && <div className={`mt-2 text-sm ${traj.everBelow && !traj.hasEffect ? 'text-[#f87171]' : 'text-gray-600'}`}>
@@ -139,10 +139,10 @@ export default function Peeking({ sequential = false }) {
       </div>}
 
       <div className="flex gap-2 mt-3">
-        <button onClick={() => run(1)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+1 тест (одна траектория)</button>
+        <button onClick={() => run(1)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">+1 тест (одна траектория)</button>
         <button onClick={() => run(50)} className="text-xs px-3 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">+50 тестов</button>
         <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? '⏸ стоп' : '▶ автопрогон'}</button>
-        <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
 
       {/* итоговая статистика по многим тестам — ради этого и жмут «+50» */}

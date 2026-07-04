@@ -64,7 +64,7 @@ export default function SurvivorshipBias() {
           : <>Военные хотели усилить там, где пробоин больше всего, — на крыльях и хвосте. Где на самом деле нужна броня?</>}
       </div>
 
-      <button onClick={() => setShowArmor((s) => !s)} className="mt-3 text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">
+      <button onClick={() => setShowArmor((s) => !s)} className="mt-3 text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">
         {showArmor ? 'скрыть ответ' : 'показать, куда нужна броня'}
       </button>
     </div>

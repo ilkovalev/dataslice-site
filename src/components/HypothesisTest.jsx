@@ -104,8 +104,8 @@ export default function HypothesisTest() {
 
       <div className="flex flex-wrap items-center gap-2 mt-3">
         <span className="text-xs text-gray-600 mr-1">Вид теста:</span>
-        <button onClick={() => setTwoSided(false)} className={`text-xs px-2.5 py-1 rounded border ${!twoSided ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>односторонний</button>
-        <button onClick={() => setTwoSided(true)} className={`text-xs px-2.5 py-1 rounded border ${twoSided ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>двусторонний</button>
+        <button onClick={() => setTwoSided(false)} className={`text-xs px-2.5 py-1 rounded-md border ${!twoSided ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>односторонний</button>
+        <button onClick={() => setTwoSided(true)} className={`text-xs px-2.5 py-1 rounded-md border ${twoSided ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>двусторонний</button>
         <button onClick={nFor80} className="text-xs px-3 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10 whitespace-nowrap sm:ml-auto">↳ подобрать n для мощности 80%</button>
       </div>
 

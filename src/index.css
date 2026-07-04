@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Golos Text (ParaType, OFL) — вариативный 400–700, самохостинг,
+   swap чтобы текст не мигал невидимым. Кириллица + латиница. */
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/golos-cyrillic.woff2') format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/golos-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212, U+FEFF, U+FFFD;
+}
+
 :root {
   color-scheme: light;
 }
@@ -10,15 +29,41 @@ body {
   margin: 0;
   background: #FFF8EF;
   color: #20242e;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: 'Golos Text', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Видимый фокус с клавиатуры — единое кольцо в акцентном цвете. */
+:focus-visible {
+  outline: 2px solid #0a6c97;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Тактильный отклик: любая кнопка «нажимается» физически. */
+button:active {
+  transform: scale(0.98);
 }
 
 /* Плавные переходы в виджетах (полиш в духе Seeing Theory).
    Геометрию анимируем только у столбиков (rect) — точки (circle)
-   таскают мышью, transition на них дал бы лаг за курсором. */
-svg circle, svg path, svg line, svg text {
-  transition: opacity 0.25s ease, fill 0.25s ease, stroke 0.25s ease;
+   таскают мышью, transition на них дал бы лаг за курсором.
+   Всё — только при отсутствии prefers-reduced-motion. */
+@media (prefers-reduced-motion: no-preference) {
+  svg circle, svg path, svg line, svg text {
+    transition: opacity 0.25s ease, fill 0.25s ease, stroke 0.25s ease;
+  }
+  svg rect {
+    transition: opacity 0.25s ease, fill 0.25s ease, height 0.2s ease, y 0.2s ease;
+  }
+  button {
+    transition-property: color, background-color, border-color, opacity, transform, box-shadow;
+    transition-duration: 0.15s;
+  }
 }
-svg rect {
-  transition: opacity 0.25s ease, fill 0.25s ease, height 0.2s ease, y 0.2s ease;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

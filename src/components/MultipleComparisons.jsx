@@ -73,9 +73,9 @@ export default function MultipleComparisons() {
       {/* выбор поправки */}
       <div className="flex flex-wrap items-center gap-2 mb-3">
         <span className="text-xs text-gray-600 mr-1">Поправка:</span>
-        <button onClick={() => setMode('none')} className={`text-xs px-2.5 py-1 rounded border ${mode === 'none' ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>без поправки</button>
-        <button onClick={() => setMode('bonf')} className={`text-xs px-2.5 py-1 rounded border ${mode === 'bonf' ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>Бонферрони (FWER)</button>
-        <button onClick={() => setMode('bh')} className={`text-xs px-2.5 py-1 rounded border ${mode === 'bh' ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>Бенджамини–Хохберг (FDR)</button>
+        <button onClick={() => setMode('none')} className={`text-xs px-2.5 py-1 rounded-md border ${mode === 'none' ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>без поправки</button>
+        <button onClick={() => setMode('bonf')} className={`text-xs px-2.5 py-1 rounded-md border ${mode === 'bonf' ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>Бонферрони (FWER)</button>
+        <button onClick={() => setMode('bh')} className={`text-xs px-2.5 py-1 rounded-md border ${mode === 'bh' ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>Бенджамини–Хохберг (FDR)</button>
       </div>
 
       <div className="grid md:grid-cols-2 gap-5 items-start">
@@ -151,7 +151,7 @@ export default function MultipleComparisons() {
 
       <div className="flex gap-2 mt-3">
         <button onClick={run} className="text-xs px-3 py-1 rounded-md bg-cyanink text-white hover:opacity-90">запустить тесты</button>
-        <button onClick={() => setTests([])} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={() => setTests([])} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
       </div>
 
       <p className="text-xs text-gray-500 mt-3">Без поправки «значимо» проходят и настоящие эффекты, и ~5% пустых (красные). Бонферрони (FWER) опускает порог до α/m — ложные почти исчезают, но вместе с ними гаснут и настоящие находки (много оранжевых «пропущено»). Бенджамини–Хохберг (FDR) держит не «ноль ошибок», а долю ложных среди найденного: порог — точка, где лесенкой i·α/m перестаёт накрывать отсортированные p, — обычно ловит больше настоящих эффектов при контролируемой доле ложных.</p>

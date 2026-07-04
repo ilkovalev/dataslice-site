@@ -47,7 +47,7 @@ export default function OutlierActions() {
 
       <div className="flex flex-wrap gap-2 mt-2">
         {Object.entries(ACTIONS).map(([k, v]) => (
-          <button key={k} onClick={() => setAct(k)} className={`text-xs px-2.5 py-1 rounded border ${act === k ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{v.label}</button>
+          <button key={k} onClick={() => setAct(k)} className={`text-xs px-2.5 py-1 rounded-md border ${act === k ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{v.label}</button>
         ))}
       </div>
       <div className="mt-2 text-sm text-gray-700">{ACTIONS[act].note}</div>

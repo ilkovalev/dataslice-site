@@ -113,8 +113,8 @@ export default function DistributionExplorer({ only, allow }) {
           </select>
         )}
         <div className="flex gap-1 shrink-0">
-          <button onClick={() => setMode('pdf')} className={`text-xs px-2 py-1 rounded border ${mode === 'pdf' ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{dist.kind === 'discrete' ? 'PMF' : 'PDF'}</button>
-          <button onClick={() => setMode('cdf')} className={`text-xs px-2 py-1 rounded border ${mode === 'cdf' ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>CDF</button>
+          <button onClick={() => setMode('pdf')} className={`text-xs px-2 py-1 rounded-md border ${mode === 'pdf' ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{dist.kind === 'discrete' ? 'PMF' : 'PDF'}</button>
+          <button onClick={() => setMode('cdf')} className={`text-xs px-2 py-1 rounded-md border ${mode === 'cdf' ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>CDF</button>
         </div>
       </div>
 
@@ -185,11 +185,11 @@ export default function DistributionExplorer({ only, allow }) {
       </div>
 
       <div className="flex flex-wrap items-center gap-2 mt-3">
-        <button onClick={() => drawN(30)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">+30 выборок</button>
-        <button onClick={animate} className="text-xs px-2.5 py-1 rounded border border-accent/40 text-cyanink hover:bg-accent/10">▶ насыпать</button>
-        <button onClick={reset} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={() => drawN(30)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">+30 выборок</button>
+        <button onClick={animate} className="text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">▶ насыпать</button>
+        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
         {distId === 'normal' && mode === 'pdf' && (
-          <button onClick={() => setShowBands((s) => !s)} className="text-xs px-2.5 py-1 rounded border border-black/15 text-gray-700 hover:bg-black/5">
+          <button onClick={() => setShowBands((s) => !s)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">
             {showBands ? 'скрыть правило трёх сигм' : 'правило трёх сигм'}
           </button>
         )}

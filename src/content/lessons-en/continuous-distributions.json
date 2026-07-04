@@ -1,0 +1,80 @@
+{
+  "id": "continuous-distributions",
+  "module": 3,
+  "title": "Continuous distributions: uniform, exponential, power law",
+  "tier": 1,
+  "intro": "The bell is not the only shape of continuous data. Waiting times, money, file sizes, session durations are built differently. Let's cover three more important shapes and learn the telltale signs of each in real data. \"Pour\" a sample — the histogram settles onto the density.",
+  "widget": "distribution",
+  "widgetProps": {
+    "allow": [
+      "uniform",
+      "exponential",
+      "normal",
+      "lognormal",
+      "pareto",
+      "z"
+    ]
+  },
+  "beats": [
+    {
+      "text": "The list at the top offers the continuous shapes. Start with the uniform distribution (selected by default): every value in the range is equally likely, the density is a flat \"shelf\". It is the model of complete ignorance: a random arrival within an hour, a random number generator, \"somewhere between a and b, that's all we know\". Drag the bounds a and b."
+    },
+    {
+      "text": "How to read the chart and the PDF / CDF buttons at the top right. For continuous quantities the probability of any exact value is zero (an exact \"3.0000…\" never occurs), so instead of probabilities we draw DENSITY. The PDF button (density): the curve's height is NOT a probability; the probability of landing in an interval = the area under the curve over that interval, and the total area equals 1. The CDF button (cumulative probability): the height at x is the probability of a value ≤ x; the line climbs smoothly from 0 to 1. The yellow histogram after \"pour\" is a real sample settling onto the density as points accumulate."
+    },
+    {
+      "text": "Pick \"Exponential\" — it is the time between events: how long until the next call, failure, customer.",
+      "predict": "Raise λ. What happens to the shape — and what does that mean for waiting time?",
+      "reveal": "The larger λ (events more frequent), the steeper the drop and the shorter the typical wait. The exponential has the famous \"memoryless\" property: if the bus has not come for 10 minutes, the distribution of the remaining wait is the same as at the start. It pairs with Poisson: if event counts per interval are Poisson, the times between them are exponential."
+    },
+    {
+      "text": "Pick \"Pareto (power law)\" — the shape an analyst must recognize (the 80/20 rule). A few objects deliver almost all the effect: 20% of customers — 80% of revenue, a few cities — most of the population, rare giant orders.",
+      "predict": "Vary α (the tail shape). With a small α the tail is fatter — what does that mean for the mean?",
+      "reveal": "A fat tail means rare huge values dominate: the mean becomes unstable and deceptive, dragged up by single \"giants\". On such data you lean on the median and percentiles, and the mean is nearly meaningless."
+    },
+    {
+      "text": "The list also has the normal and its reference version — the \"standard normal (z)\" with μ=0, σ=1. That is what any value is reduced to via the z-score (x−μ)/σ, and what the z-test is computed on. Compare: the normal slides and stretches with μ and σ, while the z-distribution never moves — it is the \"ruler\" marked in sigmas."
+    },
+    {
+      "text": "How to recognize shapes in data? A flat shelf with no clear center → uniform. A sharp start with a smooth \"waiting-time\" decay → exponential. A symmetric bell → normal (in standardized units, z). A long right tail of rare large values (money, durations) → log-normal or power law. The shape dictates which measures and methods you may use — so recognize it BEFORE the analysis."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Uniform",
+      "formula": "f(x)=1/(b−a)",
+      "text": "all values in [a, b] equally likely. The model of \"complete ignorance\"."
+    },
+    {
+      "term": "Exponential",
+      "formula": "f(x)=λe⁻λx",
+      "text": "the time between rare events. The \"memoryless\" property. Pairs with Poisson."
+    },
+    {
+      "term": "Power law (Pareto)",
+      "formula": "f(x)∝ x⁻(α+1)",
+      "text": "a heavy tail, the 80/20 rule. The mean is unstable; lean on the median."
+    },
+    {
+      "term": "Heavy tail",
+      "text": "rare but huge values contribute disproportionately — they break the mean and the \"±2σ rule\"."
+    },
+    {
+      "term": "PDF (density)",
+      "text": "for continuous data: the curve's height is not a probability; an interval's probability = the area under the curve over it. Total area = 1."
+    },
+    {
+      "term": "CDF",
+      "text": "the distribution function (cumulative probability): the value at x = the probability of a result ≤ x. Climbs from 0 to 1."
+    }
+  ],
+  "practice": [
+    "Shape recognition is the first practical skill. Spotted a long right tail in revenue or response time? The mean will lie — take the median and percentiles (p95, p99). A direct continuation of the skew lesson.",
+    "Exponential and Poisson are the backbone of queueing and load models: knowing the arrival intensity you can estimate both the average wait and the overload probability. And the uniform underpins simulations and A/A checks, where \"honest\" randomness is needed."
+  ],
+  "realLife": [
+    "Time to equipment failure, between server requests, between customer arrivals — classic exponential quantities on which SLAs and capacity plans are built.",
+    "Power laws are everywhere in \"social\" data: city sizes, incomes, product popularity, follower counts. Everywhere a handful of giants and a long tail of small fry — and everywhere the mean misleads."
+  ],
+  "nextLabel": "Many of these shapes have a long tail — why is it so treacherous? → Skewed data"
+}

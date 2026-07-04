@@ -1,0 +1,54 @@
+{
+  "id": "conditional-bayes",
+  "module": 2,
+  "title": "Conditional probability and rare events",
+  "tier": 1,
+  "intro": "Randomness does not only deceive on small samples. There is a trickier trap: even a very accurate test for a rare disease produces a flood of false alarms. Let's see why — this is conditional probability.",
+  "widget": "bayes-grid",
+  "beats": [
+    {
+      "text": "Take a disease that affects 1 person in 100, and a test that is 90% accurate. The test comes back positive for some people. The bar shows everyone whose test fired: teal — actually sick, yellow — healthy people with a false alarm."
+    },
+    {
+      "text": "The key question: if your test is positive — what is the probability you are actually sick?",
+      "predict": "The test is 90% accurate. So the probability of being sick given a positive test is also about 90%?",
+      "reveal": "No — only about 8%! The sick are few (10 in 1000) and the healthy are many (990), and even a 10% error rate on the huge healthy group yields ~99 false alarms — far more than the 9 real cases. The rarity of the disease outweighs the accuracy of the test."
+    },
+    {
+      "text": "Drag the \"disease prevalence\" slider. The rarer the disease, the more the false alarms drown out the real cases. Make the disease common — and a positive test is now almost always right. Same test, different meaning of the result."
+    },
+    {
+      "text": "That is the essence of conditional probability: \"the probability of being sick given a positive test\" is not the same as \"the probability of a positive test given the disease\". They get confused constantly. Bayes' theorem connects them, and the key to the answer is the base rate — how rare the event is."
+    },
+    {
+      "text": "First the notation itself, or the formula looks scary. P(…) means \"the probability of …\". The vertical bar \"|\" reads \"given\". So P(sick | test +) is \"the probability of being sick GIVEN a positive test\". It is not the same as P(test + | sick) — the reverse: the probability of a positive test in someone who is already sick. Bayes' theorem is just a careful way to compute the same picture: P(sick | test +) = true alarms / all alarms. In our numbers that is 9 true out of (9 + 99) ≈ 8%. Under the chart sits the formula with live numbers: drag \"prevalence\" and \"accuracy\" and watch the result change. No magic — we divide the teal part of the bar by the whole bar."
+    },
+    {
+      "text": "The same logic works outside medicine. Fraud detection: fraud is rare (say 0.2% of transactions) and the detector is \"95% accurate\". On a million honest transactions, 5% errors means 50,000 false blocks against a handful of real ones. That is why a bank does not block on a single alarm but asks for confirmation: the cost of a false alarm (blocking an honest customer) is high too."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Conditional probability",
+      "text": "the probability of an event given that another is known. P(sick | test +) is not the same as P(test + | sick)."
+    },
+    {
+      "term": "Base rate (prior)",
+      "text": "how common the event is in general, before any test. Rarity drastically changes what a positive result means."
+    },
+    {
+      "term": "Bayes’ theorem",
+      "formula": "P(A|B) = P(A)·P(B|A) / P(B)",
+      "text": "how to update the probability of A after observing B, accounting for both the test's accuracy and the base rate P(A)."
+    }
+  ],
+  "practice": [
+    "This trap is real in medicine: when screening for rare diseases, most positive results turn out false, so the first test is followed by a confirmatory, more precise one.",
+    "The same effect drives fraud and spam filters: if fraud is rare, even a good detector will bury you in false alarms unless the base rate is taken into account."
+  ],
+  "realLife": [
+    "Breathalyzers, lie detectors, \"suspicious person\" recognition in crowds — all suffer from this: with a rare event and good accuracy, the absolute number of false alarms is huge.",
+    "A competent conclusion therefore always weighs not only \"how accurate is the test\" but also \"how rare is the event itself\"."
+  ],
+  "nextLabel": "Data is numbers produced by chance. What is a random variable? → Expectation and variance"
+}

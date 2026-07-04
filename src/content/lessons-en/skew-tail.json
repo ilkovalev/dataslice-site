@@ -1,0 +1,62 @@
+{
+  "id": "skew-tail",
+  "module": 3,
+  "title": "Skewed data and the long tail",
+  "tier": 1,
+  "intro": "The bell is symmetric. But plenty of real data is lopsided: most values are small, with a long tail of rare large ones stretching right. Remember the salaries with the director from part one — that is exactly this case. Drag the skewness slider and watch the mean, median and mode drift apart.",
+  "widget": "skewness",
+  "beats": [
+    {
+      "text": "Skewness is asymmetry: one tail is longer than the other. Push the slider right — a long tail stretches right (right skew); left — the opposite. On a symmetric distribution (slider centered) the mean, median and mode coincide. As soon as a tail appears, they drift apart."
+    },
+    {
+      "text": "The main practical effect of skew: it breaks the mean.",
+      "predict": "Push the slider to a strong right skew. Which of the three lines travels farthest toward the tail — the mode, the median or the mean?",
+      "reveal": "The mean. It weighs the size of every value, so the long tail drags it hardest. The mode stays at the peak, the median in the middle, and the mean rides off into the tail. Hence a rule of thumb: the order \"mode → median → mean\" shows the direction of skew, and the distance between them its strength."
+    },
+    {
+      "text": "The most common right skew in real data is the log-normal distribution: a hump on the left, a long right tail of rare large values. Incomes, prices, session durations are built this way. The mean is inflated by the tail — exactly what we saw with the director's salary.",
+      "widget": {
+        "name": "distribution",
+        "props": {
+          "only": "lognormal"
+        }
+      }
+    },
+    {
+      "text": "Reshape the log-normal and \"pour\" a sample: the heavier the tail, the farther the mean runs from the median and the more deceptive it gets. On such data it is better to speak percentiles: \"half fit within 0.5 s (the median), but the worst 5% (p95) take over 3 seconds\" honestly describes both the typical case and the tail.",
+      "widget": {
+        "name": "distribution",
+        "props": {
+          "only": "lognormal"
+        }
+      }
+    },
+    {
+      "text": "Recognizing skew matters practically: on such data you cannot blindly apply the \"±2σ rule\" or lean on the mean. Use the median and percentiles, and often log the data — the long tail straightens into a symmetric bell, and the usual methods work again."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Skewness",
+      "text": "asymmetry of a distribution: one tail longer than the other."
+    },
+    {
+      "term": "Long tail",
+      "text": "rare but very large (or small) values stretching far from the hump."
+    },
+    {
+      "term": "Log-normal",
+      "text": "a common skewed shape: the log of the data is normally distributed. Typical for incomes, prices, durations."
+    }
+  ],
+  "practice": [
+    "Incomes, housing prices, session durations, city sizes — almost always right-skewed. Their mean is inflated by the tail, and the median is more honest.",
+    "You must recognize the shape before the analysis: skew changes which measures and methods are even allowed."
+  ],
+  "realLife": [
+    "Service response time is a classic long tail: almost all requests are fast, but rare slow ones pull the mean up. That is why engineers watch the median and the tail percentiles (95th, 99th), not the mean.",
+    "Wealth in society works the same way: the mean fortune is far larger than the median because of a few very rich people."
+  ],
+  "nextLabel": "How to recognize the shape in your own data? → Which distribution your data has"
+}

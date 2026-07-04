@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useAutoRun, autoRunClass } from '../lib/useAutoRun.js'
+import { useAutoRun, autoRunClass, autoRunLabel } from '../lib/useAutoRun.js'
 
 // Закон больших чисел: доля орлов сходится к вероятности p по мере бросков.
 const W = 640
@@ -7,7 +7,8 @@ const H = 260
 const PAD = 40
 const CAP = 2500 // авто-стоп, чтобы история не росла бесконечно
 
-export default function CoinFlips() {
+export default function CoinFlips({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [p, setP] = useState(0.5)
   const [hist, setHist] = useState([]) // доля орлов после каждого броска
   const [heads, setHeads] = useState(0)
@@ -78,14 +79,14 @@ export default function CoinFlips() {
             </g>
           ))}
           <line x1={PAD} y1={sy(p)} x2={W - PAD} y2={sy(p)} stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="5 4" />
-          <text x={W - PAD} y={sy(p) - 5} fill="#fbbf24" fontSize="10" textAnchor="end">вероятность p = {p.toFixed(2)}</text>
+          <text x={W - PAD} y={sy(p) - 5} fill="#fbbf24" fontSize="10" textAnchor="end">{en ? 'probability p = ' : 'вероятность p = '}{p.toFixed(2)}</text>
           {hist.length > 1 && <path d={d} fill="none" stroke="#2ab8eb" strokeWidth="2" />}
-          <text x={PAD} y={14} fill="#6b7280" fontSize="10">бегущая доля орлов →</text>
+          <text x={PAD} y={14} fill="#6b7280" fontSize="10">{en ? 'running share of heads →' : 'бегущая доля орлов →'}</text>
         </svg>
 
         {/* частотная гистограмма исходов */}
         <svg viewBox={`0 0 ${HW} ${HH}`} className="w-full max-w-[320px] h-auto select-none">
-          <text x={HW / 2} y={12} fill="#6b7280" fontSize="10" textAnchor="middle">частоты исходов</text>
+          <text x={HW / 2} y={12} fill="#6b7280" fontSize="10" textAnchor="middle">{en ? 'outcome frequencies' : 'частоты исходов'}</text>
           <line x1={HPAD} y1={byBase} x2={HW - HPAD} y2={byBase} stroke="#d6cebf" strokeWidth="1.5" />
           {/* целевые доли p и 1−p */}
           {[[bx[0], p], [bx[1], 1 - p]].map(([x, t], i) => (
@@ -93,31 +94,31 @@ export default function CoinFlips() {
           ))}
           <rect x={bx[0] - 22} y={byBase - bh(prop)} width="44" height={bh(prop)} fill="#2ab8eb" opacity="0.85" rx="2" />
           <rect x={bx[1] - 22} y={byBase - bh(tailsProp)} width="44" height={bh(tailsProp)} fill="#9ca3af" opacity="0.7" rx="2" />
-          <text x={bx[0]} y={byBase + 14} fill="#2ab8eb" fontSize="11" textAnchor="middle">орёл {n ? (prop * 100).toFixed(0) + '%' : ''}</text>
-          <text x={bx[1]} y={byBase + 14} fill="#6b7280" fontSize="11" textAnchor="middle">решка {n ? (tailsProp * 100).toFixed(0) + '%' : ''}</text>
+          <text x={bx[0]} y={byBase + 14} fill="#2ab8eb" fontSize="11" textAnchor="middle">{en ? 'heads ' : 'орёл '}{n ? (prop * 100).toFixed(0) + '%' : ''}</text>
+          <text x={bx[1]} y={byBase + 14} fill="#6b7280" fontSize="11" textAnchor="middle">{en ? 'tails ' : 'решка '}{n ? (tailsProp * 100).toFixed(0) + '%' : ''}</text>
         </svg>
       </div>
 
       <div className="flex flex-wrap gap-4 mt-1 text-sm text-gray-700">
-        <span>Бросков: {n}</span>
-        <span>Орлов: {heads}</span>
-        <span className="text-[#2ab8eb]">Доля орлов: {n ? prop.toFixed(3) : '—'}</span>
-        <span className="text-[#d9a300]">пунктир — цели p и 1−p</span>
+        <span>{en ? 'Flips' : 'Бросков'}: {n}</span>
+        <span>{en ? 'Heads' : 'Орлов'}: {heads}</span>
+        <span className="text-[#2ab8eb]">{en ? 'Share of heads' : 'Доля орлов'}: {n ? prop.toFixed(3) : '—'}</span>
+        <span className="text-[#d9a300]">{en ? 'dashes are the targets p and 1−p' : 'пунктир — цели p и 1−p'}</span>
       </div>
 
       <label className="block mt-4 text-sm">
         <div className="flex justify-between text-gray-700 mb-1">
-          <span>Вероятность орла p</span>
+          <span>{en ? 'Probability of heads p' : 'Вероятность орла p'}</span>
           <span className="tabular-nums text-cyanink">{p.toFixed(2)}</span>
         </div>
         <input type="range" min="0.05" max="0.95" step="0.05" value={p} onChange={(e) => { setP(Number(e.target.value)); reset() }} className="w-full accent-accent" />
       </label>
 
       <div className="flex gap-2 mt-3">
-        <button onClick={() => { setRunning(false); flip(10) }} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">+10 бросков</button>
-        <button onClick={() => { setRunning(false); flip(100) }} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">+100 бросков</button>
-        <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? '⏸ стоп' : '▶ автопрогон'}</button>
-        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={() => { setRunning(false); flip(10) }} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{en ? '+10 flips' : '+10 бросков'}</button>
+        <button onClick={() => { setRunning(false); flip(100) }} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{en ? '+100 flips' : '+100 бросков'}</button>
+        <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{autoRunLabel(running, locale)}</button>
+        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">{en ? 'reset' : 'сбросить'}</button>
       </div>
     </div>
   )

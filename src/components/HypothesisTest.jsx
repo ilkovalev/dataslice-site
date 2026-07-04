@@ -37,7 +37,8 @@ function ndtri(p) {
 }
 const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x))
 
-export default function HypothesisTest() {
+export default function HypothesisTest({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [alpha, setAlpha] = useState(0.05)
   const [twoSided, setTwoSided] = useState(false)
   const [n, setN] = useState(36)
@@ -87,43 +88,43 @@ export default function HypothesisTest() {
         <path d={curve(delta)} fill="none" stroke="#2ab8eb" strokeWidth="2" />
         <line x1={sx(crit)} y1={PAD - 6} x2={sx(crit)} y2={BASE} stroke="#2a2f3a" strokeWidth="1.5" strokeDasharray="4 3" />
         {twoSided && <line x1={sx(-crit)} y1={PAD - 6} x2={sx(-crit)} y2={BASE} stroke="#2a2f3a" strokeWidth="1.5" strokeDasharray="4 3" />}
-        <text x={sx(0)} y={PAD - 8} fill="#6b7280" fontSize="10" textAnchor="middle">H0: эффекта нет</text>
-        <text x={sx(delta)} y={PAD - 8} fill="#2ab8eb" fontSize="10" textAnchor="middle">H1: истинный эффект = +{Math.round(delta)} ₽</text>
-        <text x={sx(crit)} y={BASE + 14} fill="#2a2f3a" fontSize="10" textAnchor="middle">критич. значение</text>
+        <text x={sx(0)} y={PAD - 8} fill="#6b7280" fontSize="10" textAnchor="middle">{en ? 'H0: no effect' : 'H0: эффекта нет'}</text>
+        <text x={sx(delta)} y={PAD - 8} fill="#2ab8eb" fontSize="10" textAnchor="middle">{en ? 'H1: true effect = +' : 'H1: истинный эффект = +'}{Math.round(delta)} ₽</text>
+        <text x={sx(crit)} y={BASE + 14} fill="#2a2f3a" fontSize="10" textAnchor="middle">{en ? 'critical value' : 'критич. значение'}</text>
         <text x={sx((crit + DMAX) / 2)} y={BASE - 6} fill="#c69214" fontSize="9" textAnchor="middle">α</text>
         <text x={sx((crit + delta) / 2)} y={BASE - 6} fill="#dc4d4d" fontSize="9" textAnchor="middle">β</text>
       </svg>
 
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm">
-        <span className="text-gray-700">критич. значение = {twoSided ? '±' : ''}{crit.toFixed(0)} ₽ (расчётное)</span>
-        <span className="text-[#d9a300]">α (ложное срабатывание): {(alpha * 100).toFixed(0)}%</span>
-        <span className="text-[#f87171]">β (пропуск): {(beta * 100).toFixed(1)}%</span>
-        <span className="text-[#2ab8eb]">Мощность (1−β): {(power * 100).toFixed(1)}%</span>
+        <span className="text-gray-700">{en ? 'critical value = ' : 'критич. значение = '}{twoSided ? '±' : ''}{crit.toFixed(0)} ₽ {en ? '(computed)' : '(расчётное)'}</span>
+        <span className="text-[#d9a300]">α {en ? '(false alarm)' : '(ложное срабатывание)'}: {(alpha * 100).toFixed(0)}%</span>
+        <span className="text-[#f87171]">β {en ? '(miss)' : '(пропуск)'}: {(beta * 100).toFixed(1)}%</span>
+        <span className="text-[#2ab8eb]">{en ? 'Power' : 'Мощность'} (1−β): {(power * 100).toFixed(1)}%</span>
       </div>
-      <p className="text-xs text-gray-500 mt-1">Оба колокола — выборочные распределения оценки (разницы средних), они <b>неподвижны</b>: серый H0 всегда центрирован на 0, синий H1 — на истинном эффекте (+{Math.round(delta)} ₽). Двигается только <b>порог</b>: критическое значение зависит лишь от H0 и α (crit = z·SE, SE = σ/√n), а не от эффекта. Меняя α, вы двигаете порог и видите баланс двух ошибок: жёлтая площадь — α (ошибка 1 рода), красная — β (пропуск эффекта). n и σ меняют только ширину колоколов. Сколько нужно наблюдений под нужный эффект — в следующем уроке про размер выборки.</p>
+      <p className="text-xs text-gray-500 mt-1">{en ? <>Both bells are sampling distributions of the estimate (the difference of means), and they are <b>motionless</b>: gray H0 is always centered at 0, blue H1 at the true effect (+{Math.round(delta)} ₽). Only the <b>threshold</b> moves: the critical value depends solely on H0 and α (crit = z·SE, SE = σ/√n), not on the effect. Changing α moves the threshold and shows the balance of the two errors: the yellow area is α (Type I), the red one β (a missed effect). n and σ only change the bells\u2019 width. How many observations a given effect needs — next lesson, on sample size.</> : <>Оба колокола — выборочные распределения оценки (разницы средних), они <b>неподвижны</b>: серый H0 всегда центрирован на 0, синий H1 — на истинном эффекте (+{Math.round(delta)} ₽). Двигается только <b>порог</b>: критическое значение зависит лишь от H0 и α (crit = z·SE, SE = σ/√n), а не от эффекта. Меняя α, вы двигаете порог и видите баланс двух ошибок: жёлтая площадь — α (ошибка 1 рода), красная — β (пропуск эффекта). n и σ меняют только ширину колоколов. Сколько нужно наблюдений под нужный эффект — в следующем уроке про размер выборки.</>}</p>
 
       <div className="flex flex-wrap items-center gap-2 mt-3">
-        <span className="text-xs text-gray-600 mr-1">Вид теста:</span>
-        <button onClick={() => setTwoSided(false)} className={`text-xs px-2.5 py-1 rounded-md border ${!twoSided ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>односторонний</button>
-        <button onClick={() => setTwoSided(true)} className={`text-xs px-2.5 py-1 rounded-md border ${twoSided ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>двусторонний</button>
-        <button onClick={nFor80} className="text-xs px-3 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10 whitespace-nowrap sm:ml-auto">↳ подобрать n для мощности 80%</button>
+        <span className="text-xs text-gray-600 mr-1">{en ? 'Test type:' : 'Вид теста:'}</span>
+        <button onClick={() => setTwoSided(false)} className={`text-xs px-2.5 py-1 rounded-md border ${!twoSided ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{en ? 'one-sided' : 'односторонний'}</button>
+        <button onClick={() => setTwoSided(true)} className={`text-xs px-2.5 py-1 rounded-md border ${twoSided ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{en ? 'two-sided' : 'двусторонний'}</button>
+        <button onClick={nFor80} className="text-xs px-3 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10 whitespace-nowrap sm:ml-auto">{en ? '↳ find n for 80% power' : '↳ подобрать n для мощности 80%'}</button>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-x-5 gap-y-3 mt-3 text-sm">
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Уровень значимости α</span><span className="tabular-nums text-cyanink">{(alpha * 100).toFixed(0)}%</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Significance level α' : 'Уровень значимости α'}</span><span className="tabular-nums text-cyanink">{(alpha * 100).toFixed(0)}%</span></div>
           <input type="range" min="0.01" max="0.2" step="0.01" value={alpha} onChange={(e) => setAlpha(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Размер выборки n</span><span className="tabular-nums text-cyanink">{n}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Sample size n' : 'Размер выборки n'}</span><span className="tabular-nums text-cyanink">{n}</span></div>
           <input type="range" min="4" max="500" step="1" value={n} onChange={(e) => setN(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>σ — стандартное отклонение метрики</span><span className="tabular-nums text-cyanink">{sd} ₽</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'σ — the metric’s standard deviation' : 'σ — стандартное отклонение метрики'}</span><span className="tabular-nums text-cyanink">{sd} ₽</span></div>
           <input type="range" min="60" max="320" step="10" value={sd} onChange={(e) => setSd(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">Метрика — средний чек, {MU} ₽; истинный эффект фиксирован (+{Math.round(delta)} ₽), колокола не двигаются. α задаёт критическое значение (выше α — порог ближе к нулю, α растёт, а β падает — вот он, баланс двух ошибок). Мощность (1−β) поднимают НЕ порогом, а размером выборки n или меньшим σ — они сужают колокола, не сдвигая их центры; кнопка подбирает n под мощность 80%. Двусторонний тест ловит отклонение в любую сторону, поэтому при той же α его порог дальше от нуля.</p>
+      <p className="text-xs text-gray-500 mt-2">{en ? <>The metric is the average receipt, {MU} ₽; the true effect is fixed (+{Math.round(delta)} ₽), the bells never move. α sets the critical value (higher α — the threshold moves toward zero, α grows and β falls — there is the two-error balance). Power (1−β) is raised NOT by the threshold but by sample size n or smaller σ — they narrow the bells without moving their centers; the button finds n for 80% power. A two-sided test catches deviation either way, so at the same α its threshold sits farther from zero.</> : <>Метрика — средний чек, {MU} ₽; истинный эффект фиксирован (+{Math.round(delta)} ₽), колокола не двигаются. α задаёт критическое значение (выше α — порог ближе к нулю, α растёт, а β падает — вот он, баланс двух ошибок). Мощность (1−β) поднимают НЕ порогом, а размером выборки n или меньшим σ — они сужают колокола, не сдвигая их центры; кнопка подбирает n под мощность 80%. Двусторонний тест ловит отклонение в любую сторону, поэтому при той же α его порог дальше от нуля.</>}</p>
     </div>
   )
 }

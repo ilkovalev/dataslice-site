@@ -20,7 +20,8 @@ const cdf = (z) => 0.5 * (1 + erf(z / Math.SQRT2))
 function randn() { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v) }
 const mean = (a) => a.reduce((x, y) => x + y, 0) / a.length
 
-export default function TTest() {
+export default function TTest({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [diff, setDiff] = useState(10)
   const [n, setN] = useState(20)
   const [tick, setTick] = useState(0)
@@ -58,20 +59,20 @@ export default function TTest() {
       </svg>
 
       <div className={`mt-1 text-sm ${sig ? 'text-[#2ab8eb]' : 'text-gray-600'}`}>
-        Разница средних: {(obs.mB - obs.mA).toFixed(1)} · t = {obs.t.toFixed(2)} · p = {obs.p.toFixed(3)} — {sig ? 'разница значима' : 'не отличить от случайности'}
+        {en ? 'Difference of means' : 'Разница средних'}: {(obs.mB - obs.mA).toFixed(1)} · t = {obs.t.toFixed(2)} · p = {obs.p.toFixed(3)} — {sig ? (en ? 'the difference is significant' : 'разница значима') : (en ? 'indistinguishable from chance' : 'не отличить от случайности')}
       </div>
 
       <div className="grid sm:grid-cols-2 gap-3 mt-4 text-sm">
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Истинная разница средних</span><span className="text-cyanink">{diff}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'True difference of means' : 'Истинная разница средних'}</span><span className="text-cyanink">{diff}</span></div>
           <input type="range" min="0" max="25" step="1" value={diff} onChange={(e) => setDiff(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Размер групп n</span><span className="text-cyanink">{n}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Group size n' : 'Размер групп n'}</span><span className="text-cyanink">{n}</span></div>
           <input type="range" min="5" max="120" step="1" value={n} onChange={(e) => setN(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <button onClick={() => setTick((t) => t + 1)} className="mt-3 text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">пересобрать выборку</button>
+      <button onClick={() => setTick((t) => t + 1)} className="mt-3 text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{en ? 'resample' : 'пересобрать выборку'}</button>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useAutoRun, autoRunClass } from '../lib/useAutoRun.js'
+import { useAutoRun, autoRunClass, autoRunLabel } from '../lib/useAutoRun.js'
 
 // Доверительные интервалы: каждая выборка даёт свой интервал; доля интервалов,
 // накрывающих истину, ≈ уровню доверия. Истину можно перетащить мышью (как в
@@ -19,7 +19,8 @@ function randn() {
   return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v)
 }
 
-export default function ConfidenceIntervals() {
+export default function ConfidenceIntervals({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [items, setItems] = useState([]) // {lo,hi,covers}
   const [level, setLevel] = useState(95)
   const [truth, setTruth] = useState(50)
@@ -81,7 +82,7 @@ export default function ConfidenceIntervals() {
       >
         <line x1={sx(truth)} y1={PAD - 6} x2={sx(truth)} y2={H - PAD} stroke="#2a2f3a" strokeWidth="1.5" strokeDasharray="4 3" />
         <circle cx={sx(truth)} cy={PAD - 6} r="6" fill="#2a2f3a" opacity={drag ? 0.9 : 0.55} />
-        <text x={sx(truth)} y={PAD - 16} fill="#2a2f3a" fontSize="10" textAnchor="middle">истинное значение ⟷ (перетащите)</text>
+        <text x={sx(truth)} y={PAD - 16} fill="#2a2f3a" fontSize="10" textAnchor="middle">{en ? 'true value ⟷ (drag it)' : 'истинное значение ⟷ (перетащите)'}</text>
         {shown.map((it, i) => {
           const y = PAD + i * rowH + rowH / 2
           const c = it.covers ? '#2ab8eb' : '#f87171'
@@ -95,27 +96,27 @@ export default function ConfidenceIntervals() {
       </svg>
 
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm">
-        <span className="text-[#2ab8eb]">▬ синий — интервал накрыл истину: {covered}</span>
-        <span className="text-[#f87171]">▬ красный — НЕ накрыл: {missed}</span>
-        <span className="text-gray-700">накрыли {items.length ? ((covered / items.length) * 100).toFixed(0) : '—'}% <span className="text-gray-500">(ожидается ≈ {level}%)</span></span>
+        <span className="text-[#2ab8eb]">▬ {en ? 'blue — interval covered the truth' : 'синий — интервал накрыл истину'}: {covered}</span>
+        <span className="text-[#f87171]">▬ {en ? 'red — MISSED it' : 'красный — НЕ накрыл'}: {missed}</span>
+        <span className="text-gray-700">{en ? 'covered ' : 'накрыли '}{items.length ? ((covered / items.length) * 100).toFixed(0) : '—'}% <span className="text-gray-500">({en ? 'expected' : 'ожидается'} ≈ {level}%)</span></span>
       </div>
 
       <div className="mt-3 rounded-lg border border-black/10 bg-ink px-3 py-2 text-sm">
         <div className="font-mono text-gray-800">CI = x̄ ± z·SE = x̄ ± {z}·(σ/√n)</div>
-        <div className="font-mono text-gray-700 mt-1">для доли (A/B): p̂ ± {z}·√( p̂(1−p̂)/n )</div>
-        <div className="text-xs text-gray-500 mt-1">z зависит от уровня доверия: 90% → 1.645, 95% → 1.96, 99% → 2.576. Выше уровень — шире интервал.</div>
+        <div className="font-mono text-gray-700 mt-1">{en ? 'for a share (A/B): ' : 'для доли (A/B): '}p̂ ± {z}·√( p̂(1−p̂)/n )</div>
+        <div className="text-xs text-gray-500 mt-1">{en ? 'z depends on the confidence level: 90% → 1.645, 95% → 1.96, 99% → 2.576. Higher level — wider interval.' : 'z зависит от уровня доверия: 90% → 1.645, 95% → 1.96, 99% → 2.576. Выше уровень — шире интервал.'}</div>
       </div>
 
       <div className="flex flex-wrap items-center gap-2 mt-3">
-        <span className="text-xs text-gray-500">Уровень:</span>
+        <span className="text-xs text-gray-500">{en ? 'Level:' : 'Уровень:'}</span>
         {[90, 95, 99].map((l) => (
           <button key={l} onClick={() => changeLevel(l)} className={`text-xs px-2 py-1 rounded-md border ${level === l ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{l}%</button>
         ))}
         <span className="w-2" />
-        <button onClick={() => draw(1)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">взять выборку</button>
-        <button onClick={() => draw(20)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">взять 20</button>
-        <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? '⏸ стоп' : '▶ автопрогон'}</button>
-        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={() => draw(1)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{en ? 'take a sample' : 'взять выборку'}</button>
+        <button onClick={() => draw(20)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{en ? 'take 20' : 'взять 20'}</button>
+        <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{autoRunLabel(running, locale)}</button>
+        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">{en ? 'reset' : 'сбросить'}</button>
       </div>
     </div>
   )

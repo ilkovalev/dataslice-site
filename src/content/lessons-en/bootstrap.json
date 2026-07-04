@@ -1,0 +1,67 @@
+{
+  "id": "bootstrap",
+  "module": 4,
+  "title": "The bootstrap: an interval without formulas",
+  "tier": 1,
+  "intro": "We built the confidence interval leaning on formulas and normality. But what if the data is odd and no suitable formula is at hand? There is an ingeniously simple trick — the bootstrap: resample the sample from itself.",
+  "widget": "bootstrap",
+  "beats": [
+    {
+      "text": "On top is our only sample of 15 values (right-skewed). The bootstrap works in steps: 1) draw the same number of values from it randomly WITH REPLACEMENT (one value may appear several times, another not at all), 2) compute their mean, 3) drop that mean into the bottom distribution. Press \"1 resample (step)\" — green points of the drawn values pour in on top, their green mean appears, and via the diagonal link it \"falls\" into the bottom histogram."
+    },
+    {
+      "text": "Resampling a sample from itself sounds pointless.",
+      "predict": "Press \"auto-run\". The source sample is skewed — what shape will the bottom distribution of means take?",
+      "reveal": "A bell! Out of a skewed sample the bootstrap means line up in a symmetric bell around the original mean (the same CLT). Essentially the bootstrap RECREATES that very sampling distribution of the estimate — not by formula but by reshuffling data. 95% of these means lie between the yellow lines — and that is a confidence interval straight from the data."
+    },
+    {
+      "text": "It is important to see the link to the CLT — the bootstrap is not a separate magic trick but its practical twin. In the CLT lesson we imagined drawing MANY new samples from the world and collecting the mean's sampling distribution. In reality there are no new samples — there is one. The bootstrap replaces \"new samples from the world\" with \"pseudo-samples from your own sample\". So the bottom bell is the same object, the estimate's sampling distribution: it tends to normal by the CLT, and its width is that same standard error σ/√n. Only the method differs: the CLT gives it by formula, the bootstrap by reshuffling."
+    },
+    {
+      "text": "That is the bootstrap's power: it builds an interval for ANYTHING — the median, a correlation, the 95th percentile, any complex metric — just by reshuffling data. No need to know a standard-error formula or assume normality."
+    },
+    {
+      "text": "How to turn the cloud into an interval? Just trim the tails: cut the 2.5% smallest bootstrap means on the left and the 2.5% largest on the right — between them lies 95% (the percentile interval, the yellow lines). No standard-error formulas, no normality assumptions: the interval is read straight off the distribution."
+    },
+    {
+      "text": "But the bootstrap has an honest limit. It shows the estimate's scatter due to sampling randomness — and nothing else. If the sample itself is tiny or biased (say, you surveyed only active users), the bootstrap will neatly compute the uncertainty of that bad data but will not fix it. Garbage in — confidently quantified garbage out."
+    },
+    {
+      "text": "The idea is beautifully simple: your sample is the best available model of the whole population. By resampling from it you simulate \"what other samples would have given\" — and see the estimate's scatter with your own eyes."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Bootstrap",
+      "text": "estimating uncertainty by repeatedly recomposing the sample from itself."
+    },
+    {
+      "term": "Resampling with replacement",
+      "text": "draw n values from the sample, returning each drawn value — values may repeat."
+    },
+    {
+      "term": "Percentile interval",
+      "text": "a confidence interval as the 2.5th and 97.5th percentiles of the bootstrap distribution."
+    }
+  ],
+  "practice": [
+    "The bootstrap is the workhorse when formulas are missing or data is non-normal: a confidence interval for median revenue, for conversion at small counts, for any custom dashboard metric.",
+    "The same principle underlies many machine-learning methods (bagging, random forests): train models on resampled datasets and average."
+  ],
+  "realLife": [
+    "An analyst needs to know how reliable the median call duration is — the formulas for the median are unwieldy, while the bootstrap gives an interval in a couple of lines of code.",
+    "In science the bootstrap saves the day when the distribution is unknown: instead of dubious assumptions, the data \"tells its own story\" about its variability.",
+    "The name comes from \"pulling yourself up by your bootstraps\" (Baron Munchausen pulled himself by the hair): Bradley Efron proposed exactly that in 1979 — the sample pulls the estimate of its own uncertainty out of itself, with no new data."
+  ],
+  "assumptions": [
+    "The bootstrap recomposes what is already in the sample: if 30 observations failed to catch the distribution's tail, it will not appear in 10,000 pseudo-samples either. On small n the intervals come out too narrow — optimistic.",
+    "The classic bootstrap requires independent observations: time series and clusters need special variants (block, cluster bootstrap). And for extreme statistics — the maximum, the minimum, rare quantiles — it is unreliable in principle."
+  ],
+  "nextLabel": "We have estimates and intervals — how to decide whether a difference is real? → Hypothesis testing",
+  "related": [
+    {
+      "id": "confidence-intervals",
+      "label": "Confidence intervals"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "id": "confidence-intervals",
+  "module": 4,
+  "title": "Confidence intervals",
+  "tier": 1,
+  "intro": "A single sample mean is a point estimate, and it is almost surely slightly off. It is more honest to state not a point but a range in which the true value plausibly lies. That is a confidence interval. But what exactly does \"95%\" mean?",
+  "widget": "confidence-intervals",
+  "beats": [
+    {
+      "text": "The white dashed line is the true value (unknown to us in real life). Take a sample: it yields a mean and an interval around it. Press \"take a sample\" a few times — each segment is the interval from one sample."
+    },
+    {
+      "text": "The intervals differ, because samples are random. Color shows the outcome: a blue interval covered the true value, a red one missed. The legend under the chart keeps score: how many covered, how many did not.",
+      "predict": "If you collect many samples, what share of their intervals will cover the true value?",
+      "reveal": "About 95% (for a 95% interval). Press \"take 20\" a few times: red (missing) ones are roughly 1 in 20, the rest blue. The counter confirms ≈ 95%. Switch the level to 90% or 99% — both the coverage share and the interval width change."
+    },
+    {
+      "text": "Here is the precise meaning of \"95% confidence\": not \"the true value is inside this interval with probability 95%\", but \"if the experiment were repeated many times, 95% of the constructed intervals would cover the truth\". A specific interval either covered it or did not — we just do not know which."
+    },
+    {
+      "text": "Where does the interval's width come from? Under the chart is the formula: CI = x̄ ± z·SE, where SE = σ/√n and z sets the confidence level (95% → z = 1.96). So the interval is \"point ± margin\", where the margin shrinks with less data spread and more sample. For a share (A/B conversion) the same idea: p̂ ± z·√(p̂(1−p̂)/n) — that is the \"±2%\" in A/B reports."
+    },
+    {
+      "text": "The larger the sample, the narrower the intervals (recall the bell of means tightening). A narrow interval — a precise estimate; a wide one — big uncertainty. A result without an interval is half the truth: \"conversion 12%\" and \"12% ± 1%\" versus \"12% ± 9%\" are completely different grounds for a decision, though the point is the same."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Point estimate",
+      "text": "a single number — e.g. the sample mean. Almost always slightly off the truth."
+    },
+    {
+      "term": "Confidence interval",
+      "text": "a range around the estimate built so that, over repeated experiments, a set share of intervals (e.g. 95%) covers the true value."
+    },
+    {
+      "term": "Confidence level",
+      "text": "that very share (95%, 99%): how often the method produces a covering interval over the long run."
+    }
+  ],
+  "practice": [
+    "That is why reports say not \"conversion 12%\" but \"12% ± 2%\": the interval honestly shows how confident we are. Two estimates with overlapping intervals are too early to tell apart — exactly what we saw in A/B.",
+    "And remember: a wide interval is not an error but a signal that \"data is scarce\". Want it narrower — collect more observations."
+  ],
+  "realLife": [
+    "Confidence intervals stand behind the \"margin of error\" in poll coverage (\"45% ± 3%\"), behind forecast ranges and error bars on dashboard charts.",
+    "It is the same thing everywhere: don't pretend the estimate is exact — show its uncertainty honestly."
+  ],
+  "assumptions": [
+    "The formula CI = x̄ ± z·SE relies on the normality of the sampling distribution (the CLT) and a sample-based estimate of σ; for small n use the t-distribution instead of z (slightly wider). For a share you need enough successes and failures.",
+    "The interval captures only RANDOM error. Systematic bias (an unrepresentative sample) is invisible to it — you can get a narrow but wrong interval around a biased estimate."
+  ],
+  "nextLabel": "What if the data is weird and there is no formula? An interval by reshuffling → The bootstrap",
+  "related": [
+    {
+      "id": "bootstrap",
+      "label": "Bootstrap: an interval without formulas"
+    },
+    {
+      "id": "ci-vs-pvalue",
+      "label": "Interval vs p-value"
+    }
+  ]
+}

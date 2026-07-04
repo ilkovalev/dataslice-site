@@ -22,7 +22,8 @@ const phi = (x) => Math.exp(-0.5 * x * x) / Math.sqrt(2 * Math.PI)
 const Phi = (x) => 0.5 * (1 + erf(x / Math.SQRT2))
 const skewPdf = (x, a) => 2 * phi(x) * Phi(a * x)
 
-export default function SkewnessExplorer() {
+export default function SkewnessExplorer({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [alpha, setAlpha] = useState(4)
   const sx = (x) => PAD + ((x - XMIN) / (XMAX - XMIN)) * (W - 2 * PAD)
 
@@ -56,7 +57,7 @@ export default function SkewnessExplorer() {
   const sy = (y) => BASE - (y / (yMax * 1.05)) * (BASE - TOP)
   const path = d.map((p, i) => `${i === 0 ? 'M' : 'L'}${sx(p.x).toFixed(1)},${sy(p.y).toFixed(1)}`).join(' ')
   const fill = `${path} L${sx(XMAX)},${BASE} L${sx(XMIN)},${BASE} Z`
-  const dir = alpha > 0.3 ? 'вправо' : alpha < -0.3 ? 'влево' : 'симметрично'
+  const dir = alpha > 0.3 ? (en ? 'right' : 'вправо') : alpha < -0.3 ? (en ? 'left' : 'влево') : (en ? 'symmetric' : 'симметрично')
 
   return (
     <div className="rounded-xl border border-black/10 bg-panel p-5">
@@ -66,20 +67,20 @@ export default function SkewnessExplorer() {
         <line x1={PAD} y1={BASE} x2={W - PAD} y2={BASE} stroke="#d6cebf" strokeWidth="1.5" />
         {/* мода / медиана / среднее */}
         <line x1={sx(mode)} y1={TOP} x2={sx(mode)} y2={BASE} stroke="#6b7280" strokeWidth="1" strokeDasharray="3 3" />
-        <text x={sx(mode)} y={TOP - 4} fill="#6b7280" fontSize="10" textAnchor="middle">мода</text>
+        <text x={sx(mode)} y={TOP - 4} fill="#6b7280" fontSize="10" textAnchor="middle">{en ? 'mode' : 'мода'}</text>
         <line x1={sx(median)} y1={TOP} x2={sx(median)} y2={BASE} stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4 3" />
-        <text x={sx(median)} y={BASE + 14} fill="#d9a300" fontSize="10" textAnchor="middle">медиана</text>
+        <text x={sx(median)} y={BASE + 14} fill="#d9a300" fontSize="10" textAnchor="middle">{en ? 'median' : 'медиана'}</text>
         <line x1={sx(mean)} y1={TOP} x2={sx(mean)} y2={BASE} stroke="#16a34a" strokeWidth="1.5" />
-        <text x={sx(mean)} y={BASE + 26} fill="#16a34a" fontSize="10" textAnchor="middle">среднее</text>
+        <text x={sx(mean)} y={BASE + 26} fill="#16a34a" fontSize="10" textAnchor="middle">{en ? 'mean' : 'среднее'}</text>
       </svg>
 
       <div className="text-sm text-gray-700 mt-1">
-        Хвост тянется <span className="text-cyanink font-medium">{dir}</span>. Среднее = {mean.toFixed(2)}, медиана = {median.toFixed(2)}, мода = {mode.toFixed(2)}.
-        {Math.abs(alpha) > 0.3 && <> Порядок «мода → медиана → среднее» указывает направление скоса.</>}
+        {en ? 'The tail stretches' : 'Хвост тянется'} <span className="text-cyanink font-medium">{dir}</span>. {en ? 'Mean' : 'Среднее'} = {mean.toFixed(2)}, {en ? 'median' : 'медиана'} = {median.toFixed(2)}, {en ? 'mode' : 'мода'} = {mode.toFixed(2)}.
+        {Math.abs(alpha) > 0.3 && <> {en ? 'The order "mode → median → mean" points in the direction of the skew.' : 'Порядок «мода → медиана → среднее» указывает направление скоса.'}</>}
       </div>
 
       <label className="block mt-4 text-sm">
-        <div className="flex justify-between text-gray-700 mb-1"><span>Скошенность (α): влево ← симметрия → вправо</span><span className="tabular-nums text-cyanink">{alpha}</span></div>
+        <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Skewness (α): left ← symmetric → right' : 'Скошенность (α): влево ← симметрия → вправо'}</span><span className="tabular-nums text-cyanink">{alpha}</span></div>
         <input type="range" min="-8" max="8" step="1" value={alpha} onChange={(e) => setAlpha(Number(e.target.value))} className="w-full accent-accent" />
       </label>
     </div>

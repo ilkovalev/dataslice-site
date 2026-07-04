@@ -1,0 +1,62 @@
+{
+  "id": "sampling-statistic",
+  "module": 4,
+  "title": "An estimate is a random variable (the key idea of inference)",
+  "tier": 1,
+  "intro": "This may be the most important lesson of the whole course — keep it in mind through all the following ones. All we have is a sample, and from it we ESTIMATE something: a mean, a share, a difference. The key insight: any such estimate is itself a random variable. Take another sample — you get another number. And this \"wandering\" has its own distribution, on which all of statistical inference rests.",
+  "widget": "estimator-sampler",
+  "beats": [
+    {
+      "text": "Let's separate two things that are easy to confuse. The truth (the estimand) is a number about the whole population: the true mean μ, the true share p. It is single and fixed, but unknown to us. The estimate (the estimator) is what we compute from a sample: x̄, p̂. It is known to us, but changes from sample to sample. The yellow line is the truth (one); the teal histogram below is how the estimate dances."
+    },
+    {
+      "text": "Press \"auto-run\": the estimate's distribution over many samples piles up below.",
+      "predict": "Switch the statistic from \"mean\" to \"median\" and to \"share\". Will the estimate have a distribution in every case?",
+      "reveal": "Yes — every estimate has its own sampling distribution. The mean is random, the median is random, the share is random. That is the whole idea: we estimate a fixed truth with a random number, and the question is always the same — how far can this number wander."
+    },
+    {
+      "text": "Notice two things about this distribution. First, it is centered on the truth (a good estimate does not lie on average). Second, its width IS the estimate's uncertainty. Increase n: the estimate's distribution tightens around the truth. More data — less wandering — a more precise estimate."
+    },
+    {
+      "text": "Why know this in advance? Because nearly all of the remaining course is about this one distribution under different names. Its shape is described by the central limit theorem (next). Its width — by the standard error. The range around the estimate — the confidence interval. The two curves in hypothesis testing — the same thing for a difference. The bootstrap cloud — the same thing, obtained by reshuffling."
+    },
+    {
+      "text": "So whenever you meet another \"bell\" in the coming lessons, ask yourself: the distribution of WHICH ESTIMATE is drawn here, and over which samples? Keep \"an estimate is a random variable\" in mind, and the rest of statistics assembles from one idea instead of a dozen unrelated tricks."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Estimand",
+      "text": "the true quantity about the whole population (μ, p). Fixed but unknown."
+    },
+    {
+      "term": "Estimator",
+      "text": "what we compute from the sample (x̄, p̂). Known but random — changes from sample to sample."
+    },
+    {
+      "term": "Sampling distribution",
+      "text": "the estimate's distribution over all possible samples. Its center is the truth; its width is the estimate's uncertainty."
+    },
+    {
+      "term": "Unbiasedness",
+      "text": "the property of an estimate being equal to the truth on average (the sampling distribution is centered on the estimand)."
+    }
+  ],
+  "practice": [
+    "This frame instantly changes how you read any number. \"Conversion is 12%\" is not the truth but one realization of a random estimate; the right question is \"how wide is its sampling distribution?\". Intervals and significance testing grow naturally from here.",
+    "And this is also why sample size matters so much: it directly squeezes the estimate's sampling distribution, i.e. reduces its random wandering around the truth."
+  ],
+  "realLife": [
+    "Polls, ratings, quality measurements, product metrics — everywhere you hold only a sample-based estimate. A professional automatically keeps its sampling distribution in mind and never confuses \"the number we got\" with \"the truth\".",
+    "That is why serious reports show not a bare point but an estimate with an interval — an honest admission that it is a random variable, not a verdict."
+  ],
+  "deepDive": [
+    "Формально оценка — это функция от случайной выборки, поэтому она сама случайная величина. У неё есть математическое ожидание (куда она целится в среднем) и дисперсия (как сильно гуляет). Несмещённость — это «ожидание оценки = оцениваемое»; эффективность — «при той же выборке дисперсия меньше».",
+    "Дальше мы увидим, что для среднего это распределение имеет ширину σ/√n и стремится к нормальному (ЦПТ) — но сама идея «оценка случайна и имеет распределение» верна для любой статистики, даже когда формулы нет (тогда выручает бутстреп)."
+  ],
+  "assumptions": [
+    "The formula SE = σ/√n assumes independent observations. If rows are clustered (several visits by one person, cities, ad campaigns), the effective n is smaller than the row count — the real error is larger than the formula says.",
+    "The standard error describes only random scatter. Systematic error — an unrepresentative sample, a biased measurement — is not cured by √n: as n grows you converge ever more confidently to the wrong answer."
+  ],
+  "nextLabel": "What shape does this distribution take for the mean? → The central limit theorem"
+}

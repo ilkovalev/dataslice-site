@@ -1,0 +1,54 @@
+{
+  "id": "identify-distribution",
+  "module": 3,
+  "title": "How to tell which distribution your data has",
+  "tier": 1,
+  "intro": "We covered a family of distributions. But in real work nobody labels the data \"this is log-normal\". You have to recognize the shape yourself — it decides which measures and methods are even allowed. Let's assemble a practical checklist for \"reading\" a distribution.",
+  "widget": "distribution",
+  "beats": [
+    {
+      "text": "Step one — always draw a histogram (and a box plot). One glance answers the essentials: one hump or several? Symmetric or tailed? Any outliers? Train your eye right here: switch shapes in the widget's list (uniform, normal, exponential, log-normal, power law) and press \"pour\" each time — the yellow histogram of a real sample settles onto the theoretical curve, and each shape's silhouette sticks in memory."
+    },
+    {
+      "text": "The shape checklist. A flat \"shelf\" with no clear center → uniform. A symmetric bell → normal. A long right tail of rare large values (money, time) → log-normal or power law. A sharp start and \"waiting-time\" decay → exponential. Integer count values → discrete (binomial/Poisson)."
+    },
+    {
+      "text": "Two humps (bimodality) are a separate important signal.",
+      "predict": "A revenue histogram has two peaks. What does that most often mean?",
+      "reveal": "That you mixed two different groups (say, consumers and businesses, new and old users). Bimodality is almost always a hint to slice the data by segment. The mean and the median of such a mixture are deceptive — a relative of Simpson's paradox."
+    },
+    {
+      "text": "Quick numeric checks. Mean and median far apart → skew (mean to the right → right tail). Variance roughly equal to the mean in count data → looks like Poisson. For a stricter \"normality\" check, look at a Q-Q plot: if the data points fall on a straight line against normal quantiles, the shape is close to a bell; bends at the ends betray heavy tails."
+    },
+    {
+      "text": "Why it all matters: the shape dictates the tools. A bell → the mean, σ, the ±2σ rule and the t-test are fine. A heavy tail → only the median and percentiles, and the data often gets logged to restore symmetry. Counts → binomial/Poisson models. Recognizing the shape is the first practical step of ANY analysis, before any models."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Bimodality",
+      "text": "two humps in a distribution — almost always a sign of a mixture of two different groups; a cue to slice the data."
+    },
+    {
+      "term": "Q-Q plot",
+      "text": "comparing the data's quantiles with a reference (normal): a straight line — shapes match; bends at the ends — heavy tails."
+    },
+    {
+      "term": "Poisson signature",
+      "text": "in count data, variance ≈ mean — a hint that this is a stream of rare events."
+    },
+    {
+      "term": "Log transform",
+      "text": "the logarithm compresses a long right tail; if a bell emerges afterward, the original was log-normal."
+    }
+  ],
+  "practice": [
+    "An analyst's reflex: opened a new column — drew a histogram and a box plot, and only then computed anything. It catches skew, outliers, bimodality and tells you whether the mean can be trusted at all.",
+    "You rarely need the distribution's exact name; what matters is answering three questions — is it symmetric, is the tail heavy, is it one group. The answers drive the choice of measures (mean vs median) and tests (t-test vs non-parametrics)."
+  ],
+  "realLife": [
+    "Service response time almost always has a heavy tail — which is why engineers go straight to percentiles, not the mean. Recognized the shape → picked the right metric.",
+    "Bimodal distributions are everywhere in product data: \"time to purchase\" is often two-humped (impulse vs deliberate buys), and analyzing them as one whole is a mistake."
+  ],
+  "nextLabel": "How to judge the whole world from a sample? → From sample to world"
+}

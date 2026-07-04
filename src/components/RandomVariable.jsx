@@ -11,7 +11,9 @@ const BASE = H - PAD
 const TOP = 24
 const VALUES = [1, 2, 3, 4, 5]
 
-export default function RandomVariable() {
+export default function RandomVariable({ locale = 'ru' }) {
+  const en = locale === 'en'
+
   const [w, setW] = useState([1, 2, 4, 2, 1]) // веса → вероятности
   const [sum, setSum] = useState(false)
 
@@ -55,14 +57,14 @@ export default function RandomVariable() {
       </svg>
 
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm">
-        <span className="text-[#16a34a]">E[X] = {ex.toFixed(2)} (точка баланса)</span>
+        <span className="text-[#16a34a]">E[X] = {ex.toFixed(2)} {en ? '(balance point)' : '(точка баланса)'}</span>
         <span className="text-[#2ab8eb]">Var[X] = {varx.toFixed(2)}</span>
         <span className="text-gray-500">σ = {Math.sqrt(varx).toFixed(2)}</span>
       </div>
 
       {!sum && (
         <div className="mt-3">
-          <div className="text-xs text-gray-500 mb-1">Вероятности исходов (двигайте веса):</div>
+          <div className="text-xs text-gray-500 mb-1">{en ? 'Outcome probabilities (drag the weights):' : 'Вероятности исходов (двигайте веса):'}</div>
           <div className="grid grid-cols-5 gap-2">
             {VALUES.map((v, i) => (
               <label key={v} className="text-xs">
@@ -76,11 +78,11 @@ export default function RandomVariable() {
 
       <div className="flex items-center gap-3 mt-3">
         <button onClick={() => setSum((s) => !s)} className="text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">
-          {sum ? '← одна величина X' : 'показать сумму двух независимых X+X'}
+          {sum ? (en ? '← single variable X' : '← одна величина X') : (en ? 'show the sum of two independent X+X' : 'показать сумму двух независимых X+X')}
         </button>
-        {sum && <span className="text-xs text-gray-500">E удвоилось ({(2 * EX).toFixed(2)}), Var удвоилась ({(2 * VarX).toFixed(2)}), форма ближе к колоколу.</span>}
+        {sum && <span className="text-xs text-gray-500">{en ? <>E doubled ({(2 * EX).toFixed(2)}), Var doubled ({(2 * VarX).toFixed(2)}), the shape is closer to a bell.</> : <>E удвоилось ({(2 * EX).toFixed(2)}), Var удвоилась ({(2 * VarX).toFixed(2)}), форма ближе к колоколу.</>}</span>}
       </div>
-      <p className="text-xs text-gray-500 mt-2">E[X] — «центр тяжести» значений с весами-вероятностями. Var[X] = E[(X−E[X])²] — средний квадрат отклонения. У суммы НЕЗАВИСИМЫХ величин и E, и Var складываются — это и даёт σ/√n у среднего и колокол в ЦПТ.</p>
+      <p className="text-xs text-gray-500 mt-2">{en ? 'E[X] is the "center of gravity" of the values weighted by probability. Var[X] = E[(X−E[X])²] is the mean squared deviation. For a sum of INDEPENDENT variables both E and Var add up — which yields σ/√n for the mean and the bell of the CLT.' : 'E[X] — «центр тяжести» значений с весами-вероятностями. Var[X] = E[(X−E[X])²] — средний квадрат отклонения. У суммы НЕЗАВИСИМЫХ величин и E, и Var складываются — это и даёт σ/√n у среднего и колокол в ЦПТ.'}</p>
     </div>
   )
 }

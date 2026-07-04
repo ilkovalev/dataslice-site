@@ -1,0 +1,73 @@
+{
+  "id": "normal-distribution",
+  "module": 3,
+  "title": "The normal distribution (the bell curve)",
+  "tier": 1,
+  "intro": "A random variable has a distribution — and distributions come in canonical shapes. One shows up so often it earned a name: the normal distribution, or \"the bell\". Let's see how it works and why it appears everywhere.",
+  "widget": "distribution",
+  "widgetProps": {
+    "only": "normal"
+  },
+  "beats": [
+    {
+      "text": "Before you is the normal distribution curve. Horizontal axis — the value; vertical — how often it occurs. Most values crowd near the middle, and they thin out toward the edges. Hence the bell shape."
+    },
+    {
+      "text": "The bell has only two knobs.",
+      "predict": "Move μ, then σ. Which one slides the bell sideways, and which changes its width?",
+      "reveal": "μ is the center (the mean): it slides the bell along the axis. σ is the spread (the standard deviation): it makes the bell wider and lower. The same two numbers from part one fully define the bell."
+    },
+    {
+      "text": "The normal distribution has the handy three-sigma rule. Press \"show the three-sigma rule\": about 68% of all values lie within ±1σ of the center, about 95% within ±2σ, and nearly all, 99.7%, within ±3σ. These shares do not depend on the particular μ and σ — every bell is built this way. So knowing just two numbers (center μ and spread σ) you can immediately say how typical or rare any value is."
+    },
+    {
+      "text": "Hence a convenient measure of \"unusualness\" — the z-score: how many σ a value sits from the center, z = (x − μ) / σ. z = 0 — dead center, z = 2 — two sigmas above (only ~2.5% of values are), z = 3 — the edge, clearly rare.",
+      "predict": "Men's height: μ = 178 cm, σ = 7 cm. How unusual is someone who is 192 cm tall?",
+      "reveal": "z = (192 − 178) / 7 = 2. That is +2σ: taller than roughly 97–98% of people. The same trick converts any value into \"how rare is this\" regardless of units — height, test scores, part tolerances are all scored the same way."
+    },
+    {
+      "text": "Why is the bell so common? When a quantity is the sum of many small independent random influences, they partially cancel out and the result clusters near the middle. Human height, measurement errors, part deviations on an assembly line all work this way. Not a coincidence but a consequence of a deep fact we will reach in the sampling module (the central limit theorem)."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "μ (mean)",
+      "text": "the center of the bell — where it stands on the axis."
+    },
+    {
+      "term": "σ (standard deviation)",
+      "text": "the width of the bell — how widely the values fan out."
+    },
+    {
+      "term": "Three-sigma rule",
+      "text": "for the normal distribution: ≈68% of values lie within ±1σ of the center, ≈95% within ±2σ, 99.7% within ±3σ. The shares do not depend on the specific μ and σ."
+    },
+    {
+      "term": "z-score",
+      "formula": "z = (x − μ) / σ",
+      "text": "how many standard deviations a value sits from the center. Converts any quantity to a \"how rare is this\" scale."
+    },
+    {
+      "term": "PDF (density)",
+      "text": "the PDF button: the bell's height is not a probability; the probability of an interval = the area under the curve over it. Total area = 1."
+    },
+    {
+      "term": "CDF",
+      "text": "the CDF button: cumulative probability — the height at x is the share of values ≤ x. For the bell it is a smooth S-shaped line from 0 to 1."
+    }
+  ],
+  "practice": [
+    "Knowing only μ and σ you can answer questions like \"what share of people are taller than 190 cm\" or \"how unusual is this result\" — without having the data itself.",
+    "Many techniques rest on normality: 3σ quality control, group comparisons, \"norm\" estimates. That is why recognizing the bell by shape matters."
+  ],
+  "realLife": [
+    "Adult height fits the bell almost perfectly. Medical norms are built the same way: values near the middle count as \"normal\", and deviation is measured in σ.",
+    "Manufacturing too: a part beyond ±3σ is flagged as defective — the famous \"three-sigma rule\".",
+    "The bell became fashionable in the 19th century thanks to Adolphe Quetelet: he noticed that the heights and weights of thousands of soldiers fall onto the normal curve and invented the concept of the \"average man\" — and, along the way, the body-mass index we still use."
+  ],
+  "assumptions": [
+    "The 68-95-99.7 rule works only if the data really is close to normal. Real quantities are often skewed (incomes, session times, receipts) — the shares inside σ-intervals differ there, and an \"outlier beyond 3σ\" may be an ordinary tail value.",
+    "Normality tends to appear in sample MEANS (that is how the CLT works), not in raw data. Before applying the rule to individual observations, check the shape on a histogram."
+  ],
+  "nextLabel": "But the bell is not the only shape. Count data first → Discrete distributions"
+}

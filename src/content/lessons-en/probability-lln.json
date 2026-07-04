@@ -1,0 +1,59 @@
+{
+  "id": "probability-lln",
+  "module": 2,
+  "title": "Randomness and the law of large numbers",
+  "tier": 1,
+  "intro": "Data almost always contains randomness. Before drawing conclusions from it, you need to see how chance behaves. Let's start with the simplest random event — a coin flip.",
+  "widget": "coin-flips",
+  "beats": [
+    {
+      "text": "A coin lands heads or tails — you cannot call it in advance. But the event has a probability: a fair coin comes up heads half the time on average, p = 0.5 (the yellow dashed line). On the left, the running share of heads as flips accumulate; on the right, a frequency histogram of outcomes with target dashes at p and 1−p. Press \"+10 flips\"."
+    },
+    {
+      "text": "After 10 flips the share of heads is almost never exactly 50%.",
+      "predict": "What happens to the share of heads if you keep flipping — hundreds, thousands of times?",
+      "reveal": "The share levels out and crawls toward 0.5. That is the law of large numbers: the more trials, the closer the observed share gets to the true probability. Press \"+100 flips\" a few times and watch the line."
+    },
+    {
+      "text": "The key observation: over a few flips the share jumps around and can lie badly — even 80% heads in a row. Over large numbers it stabilizes. That is why a small sample deceives and a large one can be trusted."
+    },
+    {
+      "text": "Move the probability p, say to 0.30 (a biased coin). Now the share converges not to 0.5 but to 0.30. Probability IS the number the share tends to over the long run.",
+      "predict": "Five tails in a row. Is a tails-heavy coin now \"due\" for heads to even things out?",
+      "reveal": "No — the coin has no memory, and the next flip is still 50/50. That is the gambler's fallacy: people expect randomness to \"correct itself\" in the next few flips. In reality the share evens out not because misses get compensated, but because new flips dissolve the old imbalance in a large count."
+    },
+    {
+      "text": "Convergence is slow: to cut the typical wobble of the share in half you need four times more flips (the spread falls as 1/√n). So going from 100 observations to 400 stabilizes the estimate noticeably, while 100 → 110 barely does. We will meet this √n again when we measure how precise a sample estimate is."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Probability",
+      "formula": "P(A) ∈ [0, 1]",
+      "text": "the share of cases in which the event happens over a very long run. 0 — never, 1 — always."
+    },
+    {
+      "term": "Trial",
+      "text": "one random observation — for example, one coin flip."
+    },
+    {
+      "term": "Law of large numbers",
+      "formula": "доля → p при n → ∞",
+      "text": "as trials accumulate, the observed share approaches the true probability."
+    },
+    {
+      "term": "Convergence speed",
+      "formula": "разброс доли ∝ 1/√n",
+      "text": "to cut the typical error of a share in half, you need four times more observations."
+    }
+  ],
+  "practice": [
+    "That is why \"we have 50% conversion\" based on five visitors means nothing — too few trials, the share is still bouncing. On five thousand — now you can believe it.",
+    "Sample size is not a formality but a condition of reliability: it is what turns random noise into a stable estimate."
+  ],
+  "realLife": [
+    "Casinos and insurers live off the law of large numbers: a single game or claim can lose money, but over a million events the total is predictable and stable.",
+    "Polls too: the more respondents, the closer the measured share is to what all people actually think."
+  ],
+  "nextLabel": "Randomness deceives in subtler ways too: rare events and conditional probability → Conditional probability"
+}

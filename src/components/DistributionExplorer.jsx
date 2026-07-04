@@ -14,7 +14,8 @@ const syCdf = (y) => BASE - y * (BASE - TOP)
 
 // `only` — запереть движок на одном распределении (без дропдауна).
 // `allow` — ограничить дропдаун списком id (показать только нужные распределения).
-export default function DistributionExplorer({ only, allow }) {
+export default function DistributionExplorer({ only, allow, locale = 'ru' }) {
+  const en = locale === 'en'
   const [distId, setDistId] = useState(only ?? allow?.[0] ?? 'normal')
   const dist = distributions[distId]
   const [params, setParams] = useState(() =>
@@ -106,10 +107,10 @@ export default function DistributionExplorer({ only, allow }) {
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <div className="flex items-center justify-between gap-4 mb-3">
         {only ? (
-          <span className="text-sm font-medium text-gray-900">{dist.title}</span>
+          <span className="text-sm font-medium text-gray-900">{en ? (dist.titleEn ?? dist.title) : dist.title}</span>
         ) : (
           <select value={distId} onChange={(e) => selectDist(e.target.value)} className="min-w-0 flex-1 bg-ink border border-black/15 rounded-md px-3 py-1.5 text-sm">
-            {(allow ? allow.map((id) => distributions[id]) : distributionList).map((dd) => <option key={dd.id} value={dd.id}>{dd.title}</option>)}
+            {(allow ? allow.map((id) => distributions[id]) : distributionList).map((dd) => <option key={dd.id} value={dd.id}>{en ? (dd.titleEn ?? dd.title) : dd.title}</option>)}
           </select>
         )}
         <div className="flex gap-1 shrink-0">
@@ -120,10 +121,10 @@ export default function DistributionExplorer({ only, allow }) {
 
       <p className="text-xs text-gray-500 mb-2 -mt-1">
         {mode === 'cdf'
-          ? 'CDF — накопленная вероятность: высота в точке x = доля значений, которые ≤ x. Линия растёт от 0 до 1.'
+          ? (en ? 'CDF — cumulative probability: the height at x = the share of values ≤ x. The line climbs from 0 to 1.' : 'CDF — накопленная вероятность: высота в точке x = доля значений, которые ≤ x. Линия растёт от 0 до 1.')
           : dist.kind === 'discrete'
-            ? 'PMF — функция вероятности: высота столбика = вероятность получить ровно это значение. Сумма всех столбиков = 1.'
-            : 'PDF — плотность: сама высота это не вероятность; вероятность попасть в интервал = площадь под кривой на нём. Вся площадь = 1.'}
+            ? (en ? 'PMF — probability mass: bar height = the probability of exactly that value. Bars sum to 1.' : 'PMF — функция вероятности: высота столбика = вероятность получить ровно это значение. Сумма всех столбиков = 1.')
+            : (en ? 'PDF — density: the height itself is not a probability; the probability of an interval = the area under the curve over it. Total area = 1.' : 'PDF — плотность: сама высота это не вероятность; вероятность попасть в интервал = площадь под кривой на нём. Вся площадь = 1.')}
       </p>
 
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none">
@@ -174,23 +175,23 @@ export default function DistributionExplorer({ only, allow }) {
         {mode === 'pdf' && sampleMean != null && sx(sampleMean) >= PAD && sx(sampleMean) <= W - PAD && (
           <line x1={sx(sampleMean)} y1={TOP} x2={sx(sampleMean)} y2={BASE} stroke="#16a34a" strokeWidth="1.5" />
         )}
-        <text x={W - PAD} y={BASE + 22} fill="#9a907c" fontSize="11" textAnchor="end">{mode === 'cdf' ? 'значение → (накопленная вероятность)' : 'значение →'}</text>
+        <text x={W - PAD} y={BASE + 22} fill="#9a907c" fontSize="11" textAnchor="end">{mode === 'cdf' ? (en ? 'value → (cumulative probability)' : 'значение → (накопленная вероятность)') : (en ? 'value →' : 'значение →')}</text>
       </svg>
 
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-xs">
-        <span className="text-[#2ab8eb]">▏ теория ({mode === 'cdf' ? 'CDF' : dist.kind === 'discrete' ? 'PMF' : 'PDF'})</span>
-        {mode === 'pdf' && <span className="text-[#d9a300]">▮ выборка (гистограмма)</span>}
-        {sampleMean != null && mode === 'pdf' && <span className="text-[#16a34a]">▏ среднее выборки = {sampleMean.toFixed(2)}</span>}
-        <span className="text-gray-500">Среднее ≈ {Number.isFinite(meanVal) ? meanVal.toFixed(2) : '∞'} · набрано значений: {samples.length}</span>
+        <span className="text-[#2ab8eb]">▏ {en ? 'theory' : 'теория'} ({mode === 'cdf' ? 'CDF' : dist.kind === 'discrete' ? 'PMF' : 'PDF'})</span>
+        {mode === 'pdf' && <span className="text-[#d9a300]">▮ {en ? 'sample (histogram)' : 'выборка (гистограмма)'}</span>}
+        {sampleMean != null && mode === 'pdf' && <span className="text-[#16a34a]">▏ {en ? 'sample mean' : 'среднее выборки'} = {sampleMean.toFixed(2)}</span>}
+        <span className="text-gray-500">{en ? 'Mean' : 'Среднее'} ≈ {Number.isFinite(meanVal) ? meanVal.toFixed(2) : '∞'} · {en ? 'values drawn' : 'набрано значений'}: {samples.length}</span>
       </div>
 
       <div className="flex flex-wrap items-center gap-2 mt-3">
-        <button onClick={() => drawN(30)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">+30 выборок</button>
-        <button onClick={animate} className="text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">▶ насыпать</button>
-        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={() => drawN(30)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{en ? '+30 draws' : '+30 выборок'}</button>
+        <button onClick={animate} className="text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">{en ? '▶ pour' : '▶ насыпать'}</button>
+        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">{en ? 'reset' : 'сбросить'}</button>
         {distId === 'normal' && mode === 'pdf' && (
           <button onClick={() => setShowBands((s) => !s)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">
-            {showBands ? 'скрыть правило трёх сигм' : 'правило трёх сигм'}
+            {showBands ? (en ? 'hide the three-sigma rule' : 'скрыть правило трёх сигм') : (en ? 'three-sigma rule' : 'правило трёх сигм')}
           </button>
         )}
       </div>
@@ -199,7 +200,7 @@ export default function DistributionExplorer({ only, allow }) {
         {dist.params.map((p) => (
           <label key={p.key} className="text-sm">
             <div className="flex justify-between text-gray-700 mb-1">
-              <span>{p.label}</span>
+              <span>{en ? (p.labelEn ?? p.label) : p.label}</span>
               <span className="tabular-nums text-cyanink">{params[p.key]}</span>
             </div>
             <input type="range" min={p.min} max={p.max} step={p.step} value={params[p.key]} onChange={(e) => setParam(p.key, Number(e.target.value))} className="w-full accent-accent" />
@@ -207,7 +208,7 @@ export default function DistributionExplorer({ only, allow }) {
         ))}
       </div>
 
-      <p className="mt-3 text-sm text-gray-600">{dist.note} <span className="text-gray-500">Нажмите «насыпать» — гистограмма реальной выборки приближается к теоретической {dist.kind === 'discrete' ? 'PMF' : 'плотности'}.</span></p>
+      <p className="mt-3 text-sm text-gray-600">{en ? (dist.noteEn ?? dist.note) : dist.note} <span className="text-gray-500">{en ? <>Press "pour" — the real sample\'s histogram approaches the theoretical {dist.kind === 'discrete' ? 'PMF' : 'density'}.</> : <>Нажмите «насыпать» — гистограмма реальной выборки приближается к теоретической {dist.kind === 'discrete' ? 'PMF' : 'плотности'}.</>}</span></p>
     </div>
   )
 }

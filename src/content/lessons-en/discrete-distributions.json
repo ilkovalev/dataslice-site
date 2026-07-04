@@ -1,0 +1,70 @@
+{
+  "id": "discrete-distributions",
+  "module": 3,
+  "title": "Discrete distributions: Bernoulli, binomial, Poisson",
+  "tier": 1,
+  "intro": "The normal distribution describes measured quantities — height, weight, time. But a huge share of an analyst's data is COUNTS: clicked or not, how many purchases, how many errors per hour. Count data has its own distributions. Let's cover the main three — and where each shows up. Press \"pour\": a real sample's histogram settles onto the theoretical PMF.",
+  "widget": "distribution",
+  "widgetProps": {
+    "allow": [
+      "bernoulli",
+      "binomial",
+      "poisson"
+    ]
+  },
+  "beats": [
+    {
+      "text": "The list at the top of the widget offers three discrete distributions. Start with the simplest yes/no experiment: clicked / did not, bought / did not, heads / tails. That is the Bernoulli distribution (selected by default): just two bars whose heights are p and 1−p. Drag p — the weight flows between \"yes\" and \"no\". This is the brick almost everything else is built from."
+    },
+    {
+      "text": "How to read the chart and the two buttons at the top right. Horizontal axis — the possible values (integers), vertical — probability. The PMF button (probability mass function) shows bars: each bar's height is the probability of getting EXACTLY that value, and the bars sum to 1. The CDF button (cumulative probability) shows something else: the height at a point is the probability of getting a value LESS THAN OR EQUAL to it; the line climbs in steps from 0 to 1. The yellow histogram (after \"pour\") is no longer theory but a real sample: as the draws grow it settles onto the theoretical PMF."
+    },
+    {
+      "text": "Pick \"Binomial\" from the list. Repeat a Bernoulli experiment n times and count the successes — that is the binomial distribution. How many of 10 emails get opened? How many of 100 visitors buy?",
+      "predict": "Set n = 10, p = 0.5. Where will the peak be — and what happens to the shape if you raise n to 20?",
+      "reveal": "The peak sits at n·p (with p = 0.5 and n = 10, around 5 successes). As n grows, the binomial looks more and more like a bell — an early hint of the central limit theorem. Conversion in an A/B test is exactly a binomial story: n visitors, each with chance p to buy."
+    },
+    {
+      "text": "Now pick \"Poisson\". It describes the number of rare events per interval: calls to a call center per hour, server failures per day, orders per minute. It has one parameter λ — the average number of events per interval, which is simultaneously its variance.",
+      "predict": "Raise λ. What happens to the shape and where does the peak go?",
+      "reveal": "The peak moves right toward λ, and the shape turns from skewed (small λ) to nearly symmetric (large λ). Poisson is the workhorse for event streams: load, incoming tickets, defects per batch."
+    },
+    {
+      "text": "How to choose? One yes/no experiment → Bernoulli. A fixed number of experiments, counting successes → binomial. A stream of rare events per interval of time/area → Poisson. All three are about COUNTS, so the values are integers, and the bars are probabilities of specific numbers (PMF), not a smooth density."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Bernoulli",
+      "formula": "P(1)=p, P(0)=1−p",
+      "text": "one experiment with two outcomes. The parameter is the success probability p."
+    },
+    {
+      "term": "Binomial",
+      "formula": "P(k)=C(n,k)·pᵏ(1−p)ⁿ⁻ᵏ",
+      "text": "the number of successes in n independent Bernoulli trials. Mean n·p."
+    },
+    {
+      "term": "Poisson",
+      "formula": "P(k)=λᵏe⁻λ / k!",
+      "text": "the number of rare events per interval. Mean = variance = λ."
+    },
+    {
+      "term": "PMF",
+      "text": "probability mass function (for discrete data): bar height = probability of exactly that integer value. All bars sum to 1."
+    },
+    {
+      "term": "CDF",
+      "text": "the distribution function (cumulative probability): the value at x = the probability of a result ≤ x. Climbs from 0 to 1."
+    }
+  ],
+  "practice": [
+    "For an analyst this is not an abstraction but a daily tool. Conversion (bought / did not) is Bernoulli per user and binomial per group; that is why confidence intervals for A/B conversion are computed under the binomial model.",
+    "Poisson describes load and streams: how many requests per second, how many support tickets per day, how many defects per batch. Knowing λ you can estimate the chance of overload and plan capacity."
+  ],
+  "realLife": [
+    "Insurers and call centers plan resources with Poisson: the average number of events is known, and the distribution prices the \"peak days\".",
+    "Quality control counts defects per batch (Poisson/binomial) and decides when to sound the alarm. And any \"share\"-type metric is binomial at heart."
+  ],
+  "nextLabel": "What about continuous quantities — time, money, sizes? → Continuous distributions"
+}

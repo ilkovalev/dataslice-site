@@ -1,0 +1,82 @@
+{
+  "id": "stat-criteria",
+  "module": 5,
+  "title": "Statistical tests: which one to pick",
+  "tier": 1,
+  "intro": "Hypothesis testing is the general idea. But to turn \"a difference in the data\" into a number for \"how likely is this by chance\" (a p-value) you need a specific instrument — a statistical test. There are several, and the choice depends on what the metric is and what its data looks like. Let's cover an analyst's three working tests and when each applies.",
+  "widget": "criterion-picker",
+  "beats": [
+    {
+      "text": "First, a distinction people constantly blur. An A/B test is a METHOD of running an experiment: split users honestly and compare. A statistical test (t-test, z-test, etc.) is the mathematical INSTRUMENT that, inside the A/B, computes whether the difference is significant. The test is applied inside the A/B, not instead of it — different levels, not synonyms. On the right is a picker-trainer: we will return to it, but first the three tests."
+    },
+    {
+      "text": "Test one — the t-test: compares the MEANS of two groups (time on site, average receipt, revenue per user). It takes the difference of means and divides by the standard error: t = (x̄_A − x̄_B) / SE. Large |t| → small p → the difference is unlikely to be chance.",
+      "predict": "Set a small n and a small difference, press \"resample\" a few times. Can you confidently say the groups differ?",
+      "reveal": "No — with small n and noisy data the difference of means dances from run to run, and the t-test honestly reports a large p. The t-test's conditions: data roughly normal OR the sample large enough (then the CLT kicks in), and the metric is a mean.",
+      "widget": {
+        "name": "t-test"
+      }
+    },
+    {
+      "text": "Test two — the z-test for proportions: when the metric is a CONVERSION (bought / did not), two shares are compared. The difference of shares is standardized into z and checked against the tails of the standard normal. It is the main A/B test for conversion.",
+      "predict": "Conversions of 10% and 12%. Set a small n, then a large one. When does the difference become significant?",
+      "reveal": "Only at large n. The same 2 pp difference is insignificant at n = 200 (|z| small, p large) and confidently significant at n = 15,000. The z-test's conditions: a share metric and large samples (several hundred observations and up).",
+      "widget": {
+        "name": "z-test"
+      }
+    },
+    {
+      "text": "Test three — Mann–Whitney: non-parametric. It works not with the values but with their RANKS (who stands where), so it needs no normality and shrugs off outliers. Its intuition is the \"probability of superiority\" P(A > B): how often a random object from A exceeds a random one from B.",
+      "predict": "Add one giant outlier to group A. Which moves more — the mean (and the t-test with it) or Mann–Whitney's rank-based U?",
+      "reveal": "The mean jumps and the t-test wobbles, while U barely moves: the giant value's rank is \"last\" anyway, there is nowhere to add more. But careful: U's robustness is not a free lunch. Mann–Whitney compares DISTRIBUTIONS (who tends to be larger), not means. If the business cares about the mean (revenue), the right move is not to change the question but to treat the tail — winsorize (cap at p1/p99), log, or drop clear errors — and run t on the mean. Reach for Mann–Whitney when the distribution shift itself is what matters.",
+      "widget": {
+        "name": "mann-whitney"
+      }
+    },
+    {
+      "text": "Pull the difference into one picture — the point is WHAT each test works with. The t-test takes the VALUES themselves and compares their means (time, receipt, revenue) — it needs rough normality or large n. The z-test takes BINARY yes/no outcomes and compares conversion shares — it needs large samples. Mann–Whitney throws away the values and keeps only the PLACES (ranks), comparing those — hence no normality needed and no fear of outliers. The skeleton is the same for all (H0/H1, p-value, significance threshold) — what differs is what serves as the statistic and the conditions for it to be valid."
+    },
+    {
+      "text": "How to choose — now practice on the widget to the right. Step 1: pick the metric type (normal means / conversion share / skewed with outliers) — you will see the data and the reference distribution of the statistic. Step 2: pick a test and get the breakdown. The rule: means and normality (or large n) → t-test; share/conversion → z-test for proportions (or χ²); skew with outliers → treat the tail first (winsorize / log / drop clear errors) and run t on the mean, with Mann–Whitney only when the distribution shift matters rather than the mean. The test is chosen to fit the metric BEFORE the experiment, not after peeking at the result."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Statistical test",
+      "text": "the instrument that turns an observed difference into a p-value. Applied inside a method (e.g. an A/B)."
+    },
+    {
+      "term": "t-test",
+      "formula": "t = (x̄_A − x̄_B) / SE",
+      "text": "comparison of means. Conditions: normality or a large sample."
+    },
+    {
+      "term": "z-test for proportions",
+      "formula": "z = (p̂_A − p̂_B) / SE",
+      "text": "comparison of conversions on large samples. The main A/B test for shares."
+    },
+    {
+      "term": "Mann–Whitney (U)",
+      "text": "a non-parametric rank test: needs no normality, robust to outliers. Estimates P(A > B)."
+    },
+    {
+      "term": "Parametric vs non-parametric",
+      "text": "the former leans on the distribution's shape (normality), the latter does not, working with ranks."
+    }
+  ],
+  "decision": "Choosing the test is deciding which assumptions you trust: doubt the data's shape — take the non-parametric one and consciously pay with power.",
+  "practice": [
+    "In practice the choice of test is part of the experiment design. Conversion → z-test (shares). Average receipt or time → t-test, but carefully: these metrics are skewed, and with outliers you first treat the tail (winsorizing, log, dropping clear errors) and apply t to the mean; Mann–Whitney is reserved for when the distribution shift matters, not the mean. Picking the test after looking at the data is a way to rig the result, so it is fixed in advance.",
+    "All tests share one skeleton: H0/H1, Type I and II errors, p-value and significance threshold. Only the statistic's formula and applicability conditions change. Understand the skeleton — and a new test (χ², ANOVA and beyond) is easy to pick up."
+  ],
+  "realLife": [
+    "Product analytics almost always reduces the choice to two branches: a share metric (conversion, retention flag) → z-test/χ²; a mean metric (revenue, time) → t-test, or non-parametrics under heavy tails.",
+    "Medicine and science pick tests by the same rules: normal measurements — the t-test, ordinal scales and small samples — rank tests. A wrongly chosen test yields a wrong p — and a wrong decision.",
+    "The t-test has a brewery pedigree: William Gosset invented it at Guinness to compare barley varieties on tiny samples. The company allowed him to publish only under a pen name — Student. Hence \"Student's t-test\"."
+  ],
+  "assumptions": [
+    "t-test: needs approximate normality or large n; sensitive to outliers and heavy tails. z-test for shares: large samples (enough successes and failures in each group). Mann–Whitney: independent observations; compares distribution shift, not the means themselves.",
+    "Common to all: independent observations and a test chosen in advance. Picking the test after seeing the data (\"p is smaller with this one\") inflates false alarms."
+  ],
+  "nextLabel": "Significance is not the whole story. Estimation vs testing → The interval versus the p-value"
+}

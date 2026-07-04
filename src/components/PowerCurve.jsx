@@ -33,7 +33,8 @@ function ndtri(p) {
   const q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1)
 }
 
-export default function PowerCurve() {
+export default function PowerCurve({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [mde, setMde] = useState(3)      // MDE — минимальный эффект, % от среднего
   const [sigma, setSigma] = useState(200) // разброс данных σ, ₽
   const [n, setN] = useState(20)         // размер выборки на группу
@@ -99,18 +100,18 @@ export default function PowerCurve() {
         <path d={curvePts(diff)} fill="none" stroke="#2ab8eb" strokeWidth="2.5" />
         {/* порог */}
         <line x1={sxD(crit)} y1={TOP - 6} x2={sxD(crit)} y2={base} stroke="#2a2f3a" strokeWidth="1.3" strokeDasharray="4 3" />
-        <text x={sxD(crit)} y={TOP - 10} fill="#2a2f3a" fontSize="10" textAnchor="middle">критич. значение</text>
+        <text x={sxD(crit)} y={TOP - 10} fill="#2a2f3a" fontSize="10" textAnchor="middle">{en ? 'critical value' : 'критич. значение'}</text>
         {/* центры */}
         <text x={sxD(0)} y={base + 14} fill="#6b7280" fontSize="10" textAnchor="middle">0</text>
         <text x={sxD(diff)} y={base + 14} fill="#0d7fb0" fontSize="10" textAnchor="middle">MDE = +{Math.round(diff)} ₽ ({mde}%)</text>
-        <text x={PADX} y={base + 28} fill="#9a907c" fontSize="10" textAnchor="start">оценка разницы средних между группами, ₽ →</text>
+        <text x={PADX} y={base + 28} fill="#9a907c" fontSize="10" textAnchor="start">{en ? 'estimate of the between-group mean difference, ₽ →' : 'оценка разницы средних между группами, ₽ →'}</text>
       </svg>
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs mt-1 mb-1">
-        <span className="text-gray-500"><span className="inline-block w-3 h-0.5 align-middle bg-[#9ca3af]" /> H0: эффекта нет</span>
-        <span className="text-cyanink"><span className="inline-block w-3 h-0.5 align-middle bg-[#2ab8eb]" /> H1: эффект есть</span>
-        <span className="text-[#dc4d4d]">■ α — ложное срабатывание ({(alpha * 100).toFixed(0)}%)</span>
-        <span className="text-[#c69214]">■ β — пропуск эффекта ({((1 - curPower) * 100).toFixed(0)}%)</span>
-        <span className="text-cyanink">■ мощность = 1−β ({(curPower * 100).toFixed(0)}%)</span>
+        <span className="text-gray-500"><span className="inline-block w-3 h-0.5 align-middle bg-[#9ca3af]" /> {en ? 'H0: no effect' : 'H0: эффекта нет'}</span>
+        <span className="text-cyanink"><span className="inline-block w-3 h-0.5 align-middle bg-[#2ab8eb]" /> {en ? 'H1: the effect is real' : 'H1: эффект есть'}</span>
+        <span className="text-[#dc4d4d]">■ α — {en ? 'false alarm' : 'ложное срабатывание'} ({(alpha * 100).toFixed(0)}%)</span>
+        <span className="text-[#c69214]">■ β — {en ? 'missed effect' : 'пропуск эффекта'} ({((1 - curPower) * 100).toFixed(0)}%)</span>
+        <span className="text-cyanink">■ {en ? 'power' : 'мощность'} = 1−β ({(curPower * 100).toFixed(0)}%)</span>
       </div>
 
       {/* График 2: мощность от n */}
@@ -118,42 +119,42 @@ export default function PowerCurve() {
         <line x1={PADX} y1={HP - 34} x2={W - PADX} y2={HP - 34} stroke="#d6cebf" strokeWidth="1.5" />
         <line x1={PADX} y1={TOP} x2={PADX} y2={HP - 34} stroke="#d6cebf" strokeWidth="1.5" />
         <line x1={PADX} y1={sy(target)} x2={W - PADX} y2={sy(target)} stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="5 4" />
-        <text x={W - PADX} y={sy(target) - 5} fill="#c69214" fontSize="10" textAnchor="end">цель {(target * 100).toFixed(0)}%</text>
+        <text x={W - PADX} y={sy(target) - 5} fill="#c69214" fontSize="10" textAnchor="end">{en ? 'target ' : 'цель '}{(target * 100).toFixed(0)}%</text>
         <path d={dd} fill="none" stroke="#2ab8eb" strokeWidth="2" />
         {/* маркер текущего n */}
         <line x1={sx(Math.min(n, NMAX))} y1={TOP} x2={sx(Math.min(n, NMAX))} y2={HP - 34} stroke="#2a2f3a" strokeWidth="1" strokeDasharray="3 3" />
         <circle cx={sx(Math.min(n, NMAX))} cy={sy(curPower)} r="4" fill="#2ab8eb" />
         <text x={sx(Math.min(n, NMAX))} y={HP - 20} fill="#2a2f3a" fontSize="10" textAnchor="middle">n = {n}</text>
-        <text x={PADX} y={TOP - 12} fill="#6b7280" fontSize="10" textAnchor="start">мощность ↑</text>
-        <text x={W - PADX} y={HP - 8} fill="#6b7280" fontSize="10" textAnchor="end">размер выборки n →</text>
+        <text x={PADX} y={TOP - 12} fill="#6b7280" fontSize="10" textAnchor="start">{en ? 'power ↑' : 'мощность ↑'}</text>
+        <text x={W - PADX} y={HP - 8} fill="#6b7280" fontSize="10" textAnchor="end">{en ? 'sample size n →' : 'размер выборки n →'}</text>
       </svg>
 
       <div className="mt-1 text-sm">
-        При текущем n = {n} мощность <span className="text-cyanink font-semibold">{(curPower * 100).toFixed(0)}%</span>.{' '}
+        {en ? <>At the current n = {n} power is <span className="text-cyanink font-semibold">{(curPower * 100).toFixed(0)}%</span>.</> : <>При текущем n = {n} мощность <span className="text-cyanink font-semibold">{(curPower * 100).toFixed(0)}%</span>.</>}{' '}
         {needed
-          ? <>Для цели {(target * 100).toFixed(0)}% нужно <span className="text-cyanink font-semibold">n ≈ {needed}</span> на группу (стандартизованный эффект d = {d.toFixed(2)}).</>
-          : <span className="text-gray-600">Эффект слишком мал — {(target * 100).toFixed(0)}% не достигаются даже при n = {NMAX}.</span>}
+          ? en ? <>The {(target * 100).toFixed(0)}% target needs <span className="text-cyanink font-semibold">n ≈ {needed}</span> per group (standardized effect d = {d.toFixed(2)}).</> : <>Для цели {(target * 100).toFixed(0)}% нужно <span className="text-cyanink font-semibold">n ≈ {needed}</span> на группу (стандартизованный эффект d = {d.toFixed(2)}).</>
+          : en ? <span className="text-gray-600">The effect is too small — {(target * 100).toFixed(0)}% is unreachable even at n = {NMAX}.</span> : <span className="text-gray-600">Эффект слишком мал — {(target * 100).toFixed(0)}% не достигаются даже при n = {NMAX}.</span>}
       </div>
 
       <div className="grid sm:grid-cols-2 gap-x-4 gap-y-3 mt-4 text-sm">
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>MDE — минимальный эффект, %</span><span className="text-cyanink tabular-nums">{mde.toFixed(1)}% · +{Math.round(diff)} ₽</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'MDE — minimum effect, %' : 'MDE — минимальный эффект, %'}</span><span className="text-cyanink tabular-nums">{mde.toFixed(1)}% · +{Math.round(diff)} ₽</span></div>
           <input type="range" min="0.5" max="10" step="0.5" value={mde} onChange={(e) => setMde(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>σ — стандартное отклонение метрики</span><span className="text-cyanink tabular-nums">{sigma} ₽</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'σ — the metric’s standard deviation' : 'σ — стандартное отклонение метрики'}</span><span className="text-cyanink tabular-nums">{sigma} ₽</span></div>
           <input type="range" min="60" max="320" step="10" value={sigma} onChange={(e) => setSigma(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Размер выборки n</span><span className="text-cyanink">{n}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Sample size n' : 'Размер выборки n'}</span><span className="text-cyanink">{n}</span></div>
           <input type="range" min="5" max="300" step="5" value={n} onChange={(e) => setN(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Значимость α</span><span className="text-cyanink">{alpha.toFixed(2)}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Significance α' : 'Значимость α'}</span><span className="text-cyanink">{alpha.toFixed(2)}</span></div>
           <input type="range" min="0.01" max="0.1" step="0.01" value={alpha} onChange={(e) => setAlpha(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-3">Метрика — средний чек, {MU} ₽. Управляем не разницей средних напрямую (её задаёт бизнес-цель), а MDE — минимальным приростом в %, который хотим уверенно ловить; он и задаёт центр синей H1 (+{Math.round(diff)} ₽). Верхний график — два распределения оценки: серое при «эффекта нет» (H0), синее при «эффект есть» (H1). Порог делит ось на решения: красное справа от порога под H0 — α (приняли шум за эффект), жёлтое слева под H1 — β (проглядели реальный эффект). Меньше σ или больше n сужают колокола → β падает, мощность растёт. Нижний график собирает это в кривую «мощность от n»: под заданный MDE подбирают n, а не наоборот.</p>
+      <p className="text-xs text-gray-500 mt-3">{en ? <>The metric is the average receipt, {MU} ₽. We control not the mean difference directly (the business goal sets it) but the MDE — the minimum % lift we want to catch reliably; it sets the center of the blue H1 (+{Math.round(diff)} ₽). The top chart shows two distributions of the estimate: gray under "no effect" (H0), blue under "the effect is real" (H1). The threshold splits the axis into decisions: red right of the threshold under H0 is α (noise taken for effect), yellow left of it under H1 is β (a real effect overlooked). Smaller σ or bigger n narrow the bells → β falls, power grows. The bottom chart folds this into the power-vs-n curve: n is chosen to fit the MDE, not the other way around.</> : <>Метрика — средний чек, {MU} ₽. Управляем не разницей средних напрямую (её задаёт бизнес-цель), а MDE — минимальным приростом в %, который хотим уверенно ловить; он и задаёт центр синей H1 (+{Math.round(diff)} ₽). Верхний график — два распределения оценки: серое при «эффекта нет» (H0), синее при «эффект есть» (H1). Порог делит ось на решения: красное справа от порога под H0 — α (приняли шум за эффект), жёлтое слева под H1 — β (проглядели реальный эффект). Меньше σ или больше n сужают колокола → β падает, мощность растёт. Нижний график собирает это в кривую «мощность от n»: под заданный MDE подбирают n, а не наоборот.</>}</p>
     </div>
   )
 }

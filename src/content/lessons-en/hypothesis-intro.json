@@ -1,0 +1,48 @@
+{
+  "id": "hypothesis-intro",
+  "module": 5,
+  "title": "Why test hypotheses",
+  "tier": 1,
+  "intro": "You changed something — and the metric went up. But data is always noisy: it jumps from sample to sample even with no effect at all. The analyst's core question: is this a real signal or just the ripple of chance? Hypothesis testing is the formal way to answer it without fooling yourself.",
+  "beats": [
+    {
+      "text": "Compare two worlds. In one there is no effect: the difference you see is pure chance. In the other the effect is real. The trouble is that, because of noise, BOTH worlds can produce the same observed number. Looking at a single result you cannot be sure which world it came from — hence the need for a formal procedure rather than an eyeball call. (The interactive with the two overlapping worlds comes in the next lesson — here, just the idea.)"
+    },
+    {
+      "text": "So statistics adopts an honest procedure. First state the null hypothesis H0 — \"no effect, it's all chance\" — and the alternative H1 — \"the effect is real\". Then ask: how surprising is the observed result IF H0 is true? If such a result would be nearly impossible under \"no effect\" — H0 is rejected."
+    },
+    {
+      "text": "Why such roundabout logic — why not prove the effect directly? Because \"it happened by chance\" cannot be ruled out directly, but its likelihood can be measured. It is like a courtroom: the presumption is \"no effect\", and you need evidence strong enough to overturn it. That protects you from mistaking noise for a discovery."
+    },
+    {
+      "text": "Every such decision has a price — two kinds of errors, and you cannot zero out both at once: the harder you guard against one, the more often you commit the other. So hypothesis testing is not a gut yes/no but a managed trade-off of risks. The next lessons dissect it piece by piece, with interactives: Type I and II errors, the p-value, power."
+    },
+    {
+      "text": "One more thing: hypothesis testing is the foundation of evidence-based decisions in products, medicine, science. It is what separates \"it felt like it got better\" from \"we tested it and can stand on it\". The A/B test coming up next IS hypothesis testing applied to a product."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Null hypothesis (H0)",
+      "text": "\"no effect, the difference is chance\". The starting point one tries to refute."
+    },
+    {
+      "term": "Alternative hypothesis (H1)",
+      "text": "\"the effect is real\". Accepted only if H0 could be rejected."
+    },
+    {
+      "term": "Signal and noise",
+      "text": "signal — the real effect; noise — random fluctuations of the data. The test's job is to tell one from the other."
+    }
+  ],
+  "decision": "The default decision is to change nothing and treat the difference as chance. Hypothesis testing answers one question: is the data surprising enough to abandon that default and accept the change.",
+  "practice": [
+    "The practical meaning is simple: before celebrating a metric's growth, an analyst asks \"could this have happened by chance?\". If yes — the result does not count. That discipline separates an evidence-based decision from self-deception.",
+    "The reverse matters too: \"we found no effect\" is not the same as \"there is definitely no effect\". Maybe there just wasn't enough power to see it (the power lesson covers this). The test answers cautiously and honestly, not categorically."
+  ],
+  "realLife": [
+    "Drug regulators will not approve a medicine until it is shown the effect is not explained by chance. The same logic governs vaccine, materials and engineering validation.",
+    "In a product every change is a hypothesis: \"the new button will lift conversion\". Hypothesis testing turns that \"it seems\" into a measurable, reproducible decision."
+  ],
+  "nextLabel": "Let's open up the machinery: errors, p-value, power → Hypothesis testing: p-value and the two errors"
+}

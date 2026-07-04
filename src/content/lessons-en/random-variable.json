@@ -1,0 +1,65 @@
+{
+  "id": "random-variable",
+  "module": 2,
+  "title": "Random variables, expectation and variance",
+  "tier": 1,
+  "intro": "So far we talked about probabilities of events. But in data we usually care about NUMBERS: how many items, how much money, how long. A random variable is exactly that — \"a number that depends on chance\". It has two main descriptors: the expectation (where its center is) and the variance (how widely it wanders around that center). These two concepts are the foundation everything that follows is built on.",
+  "widget": "random-variable",
+  "beats": [
+    {
+      "text": "A random variable assigns a number to every random outcome. A die roll → the number shown; a user → how much they spent; a request → how many milliseconds the server took. Before you is a variable with five outcomes; bar height is the probability of each value. Drag the weights — the distribution changes."
+    },
+    {
+      "text": "The expectation E[X] is the average value of the variable if the experiment is repeated a great many times. It is computed simply: multiply each possible value by its probability and add up. For a die: E[X] = 1·⅙ + 2·⅙ + 3·⅙ + 4·⅙ + 5·⅙ + 6·⅙ = 3.5. It is the distribution's \"center of gravity\" (the green triangle under the chart is the balance point): not \"the most frequent\" and not even necessarily a possible value (a die never shows 3.5), but what the average over many repeats tends to — hello, law of large numbers."
+    },
+    {
+      "text": "The variance Var[X] = E[(X−E[X])²] is the average squared deviation from the expectation: how widely the variable is scattered. Its square root is σ, in original units. Push the weights to the edges — variance grows; pile them into one bar — it collapses to zero. These are exactly the \"center and spread\" from module one, only now for a random variable instead of a finished dataset."
+    },
+    {
+      "text": "Now the most important property. Press \"show the sum of two independent X+X\".",
+      "predict": "What happens to the expectation and variance of the sum of two independent identical variables — and to the shape?",
+      "reveal": "Both the expectation and the variance DOUBLE (for independent variables they add up), and the shape moves closer to a bell. That is the seed of two things at once: why the mean has spread σ/√n (add n variances, divide by n²) and why sums/averages tend to normal (the CLT)."
+    },
+    {
+      "text": "Remember the three bricks: a random variable (a number from chance), E[X] (the center), Var[X] (the spread) and the rule \"variances of independent variables add\". Everything downstream is built from them: the standard error, confidence intervals, hypothesis testing, ANOVA and variance-reduction methods — it is all about expectations and variances of estimates."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Random variable",
+      "text": "a number that takes one value or another depending on the random outcome."
+    },
+    {
+      "term": "Expectation E[X]",
+      "formula": "E[X] = Σ xᵢ·pᵢ",
+      "text": "the variable's average over a long series of repeats: multiply each value xᵢ by its probability pᵢ and sum. It is the center of the distribution."
+    },
+    {
+      "term": "Variance Var[X]",
+      "formula": "E[(X − E[X])²]",
+      "text": "the average squared deviation from the expectation; σ = √Var is the spread in original units."
+    },
+    {
+      "term": "Adding variances",
+      "formula": "Var(X+Y) = Var(X)+Var(Y) (независимые)",
+      "text": "the variances of independent variables add up. The foundation of σ/√n, the CLT and ANOVA."
+    },
+    {
+      "term": "Independence",
+      "text": "the outcome of one variable does not affect the distribution of the other. Without it, variance addition breaks."
+    }
+  ],
+  "practice": [
+    "Expectation and variance are an analyst's working language. \"How much will a user bring on average\" is E[X]. \"How unpredictable is revenue\" is σ. Sample-size, confidence-interval and power calculations are the arithmetic of estimator variances.",
+    "The variance-addition rule explains why averaging calms noise: add n independent observations, divide by n — the mean's variance comes out n times smaller than a single observation's. Hence the σ/√n that will chase us through the whole course."
+  ],
+  "realLife": [
+    "A stock portfolio: expected return is E[X], risk is σ. Diversification works precisely through variance addition: uncorrelated assets damp the total spread.",
+    "Reliability engineering and queueing: the expected number of events and its variance (Poisson) let you size capacity and price the risk of overload."
+  ],
+  "deepDive": [
+    "Откуда берётся σ/√n — точность среднего. Сложим n независимых наблюдений: их дисперсии складываются, поэтому у суммы дисперсия равна n·σ². Среднее — это та же сумма, но делённая на n. А при делении величины на константу c её дисперсия делится на c² (разброс сжимается сильнее самого значения). Значит дисперсия среднего = n·σ² / n² = σ²/n, а стандартное отклонение среднего (его называют стандартной ошибкой) = σ/√n. Вот почему чем больше выборка, тем точнее среднее — и почему точность растёт не как n, а как √n.",
+    "Важная асимметрия двух правил. Математическое ожидание линейно ВСЕГДА: E[aX + b] = a·E[X] + b, и E[X + Y] = E[X] + E[Y] даже для зависимых величин. А вот дисперсии складываются ТОЛЬКО у независимых величин. В общем случае Var(X + Y) = Var(X) + Var(Y) + 2·Cov(X, Y), где Cov(X, Y) — ковариация, мера их совместного отклонения. Именно эту ковариацию используют методы снижения дисперсии: подобрав вспомогательную величину, тесно связанную с метрикой, из дисперсии оценки вычитают лишний разброс."
+  ],
+  "nextLabel": "What shapes do random variables take? → Distributions and the bell curve"
+}

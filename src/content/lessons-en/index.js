@@ -1,12 +1,9 @@
-// Английские версии уроков. Ключ — тот же id, что в русском реестре.
-// Переводим батчами: урок появляется здесь — /en/stats/<id> становится английским,
-// остальные показывают русский оригинал с пометкой.
-import centerMeasures from './center-measures.json'
-import spread from './spread.json'
-import histogram from './histogram.json'
-import percentiles from './percentiles.json'
-import outliers from './outliers.json'
-
+// Английские версии уроков: авто-реестр — любой JSON в этой папке
+// автоматически попадает в /en (и в пререндер через glob по файлам).
+const modules = import.meta.glob('./*.json', { eager: true })
 export const lessonsEnById = Object.fromEntries(
-  [centerMeasures, spread, histogram, percentiles, outliers].map((l) => [l.id, l]),
+  Object.values(modules).map((m) => {
+    const l = m.default ?? m
+    return [l.id, l]
+  }),
 )

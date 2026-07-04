@@ -1,0 +1,94 @@
+{
+  "id": "hypothesis-test",
+  "module": 5,
+  "title": "Hypothesis testing: p-value and the two errors",
+  "tier": 1,
+  "intro": "You ran an experiment and saw a difference. Is it real — or just sampling luck? Hypothesis testing answers that question. And every answer carries two kinds of errors.",
+  "widget": "hypothesis-test",
+  "beats": [
+    {
+      "text": "Two curves — two possible worlds, and each is that same sampling distribution from the estimation lesson, only for the DIFFERENCE of means. The gray one (H0) stands at zero — no effect. The blue one (H1) — at the true effect (fixed here for clarity). Both bells are MOTIONLESS. Only the decision boundary moves — the critical value: it depends solely on H0 and α (crit = z·SE, where SE = σ/√n and z is the multiplier for your chosen α and test type), NOT on the effect. So as you change α you move the threshold and watch the two errors flow into each other: the yellow area is α (Type I error), the red one is β (a missed effect). The n and σ sliders only change the bells' width without moving their centers. Play with α to feel the balance. (How the required sample size is computed from the effect — next lesson; the p-value and \"our result\" — on a separate chart further on.)"
+    },
+    {
+      "text": "Choosing α has a price.",
+      "predict": "Increase α (say, from 5% to 15%) — the critical value slides toward zero, and declaring \"there is an effect\" becomes easier. What happens to the two errors?",
+      "reveal": "They pull in opposite directions. Larger α — the threshold moves toward zero, we catch real effects more often (fewer misses, β↓), but we also cry \"effect!\" more often where there is none (more false alarms — that IS α↑). There is no ideal α — only a trade-off. That is why the critical value is not eyeballed but set through α."
+    },
+    {
+      "text": "Let's name things. α (the yellow area) — a false alarm, Type I error: declaring an effect that does not exist. β (the red area) — a miss, Type II error: overlooking a real effect. Power (1−β) — the chance of catching a true effect. And the p-value (next step, separate chart) — how easily the observed result could arise in the \"gray\" world with no effect: a small p means chance is a poor explanation."
+    },
+    {
+      "text": "Now — what the p-value is, on its own chart. The gray bell is how the result would \"wander\" purely by chance IF there is no effect (H0). Suppose our experiment measured some result (the blue line). The p-value is the red tail area beyond it: the probability of getting a result this far from zero, or farther, when no effect exists.",
+      "predict": "Drag the observed result away from zero. What happens to the p-value?",
+      "reveal": "It falls: the farther the result from zero, the thinner the tails and the smaller the area. At exactly ±1.96 standard errors the tail area equals 0.05 — that is where the famous significance threshold comes from. Small p = \"such a result would be a rarity under H0\".",
+      "widget": {
+        "name": "p-value-explorer"
+      }
+    },
+    {
+      "text": "Equally important is what the p-value does NOT mean. It is not \"the probability that there is no effect\", nor \"the probability of an error\". p = 0.03 means only: IF there is no effect, a result like this appears in 3% of cases. And \"p < 0.05\" does not equal \"the effect matters\": on a huge sample even a negligible difference becomes statistically significant. Significance answers \"is it chance?\", not \"is it big?\" — the latter is judged separately, by effect size.",
+      "predict": "p came out at 0.2. Have we proven there is definitely no effect?",
+      "reveal": "No. A large p means \"the data does not contradict the absence of an effect\", not that the effect is absent — perhaps the sample is simply too small to see it. \"We found no difference\" and \"we proved there is none\" are very different things."
+    },
+    {
+      "text": "Now increase the sample size n.",
+      "predict": "What happens to the curves and the errors as data grows?",
+      "reveal": "The curves narrow and pull apart — the two worlds become distinguishable. Both errors fall, power rises. More data — a more confident decision. That is why sample size is planned in advance."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Null hypothesis (H0)",
+      "text": "the assumption \"no effect, the difference is chance\". The one you try to refute."
+    },
+    {
+      "term": "Critical value (threshold)",
+      "text": "the boundary on the statistic's axis: if the observed result crosses it, H0 is rejected. Set by the chosen significance level α. It is NOT the minimum effect (MDE) — that is a separate concept about the center of H1."
+    },
+    {
+      "term": "Type I error (α)",
+      "text": "a false alarm: declaring an effect that does not exist. The significance level is the allowed α (often 5%)."
+    },
+    {
+      "term": "Type II error (β) and power",
+      "text": "β — missing a real effect; power = 1−β — the probability of catching it."
+    },
+    {
+      "term": "p-value",
+      "text": "the probability of getting a result like this (or stronger) if there is actually no effect. Small p — hard to explain by chance."
+    }
+  ],
+  "decision": "Before the test, fix the default action (\"don't ship\") and the threshold α. The test changes the decision in one direction only: p-value below the threshold — ship. In every other case we stay with the default — which is not \"we proved there is no effect\".",
+  "practice": [
+    "Picture a drug trial. H0 — \"does not help\", H1 — \"helps\". A false alarm: approving a placebo. A miss: rejecting a working drug. The costs differ, so the threshold (significance level) is chosen deliberately, not \"5% by habit\".",
+    "And remember the law of large numbers: on a tiny sample any \"difference\" may be noise. A sufficient sample size is part of an honest test."
+  ],
+  "realLife": [
+    "The same two errors are everywhere: a medical test (declaring a healthy person sick, or a sick one healthy), a spam filter (a real letter in spam, or spam in the inbox), a court (convicting the innocent or releasing the guilty).",
+    "Nowhere can both errors be zeroed at once — you can only choose the balance according to each error's price.",
+    "The most famous threshold in history is particle physics' \"five sigma\": CERN announced the Higgs boson discovery only when the chance of such a signal arising randomly fell to roughly one in 3.5 million (p ≈ 3·10⁻⁷). Same logic as your A/B — just a different price for a false discovery."
+  ],
+  "deepDive": [
+    "Важная эпистемическая тонкость. На графике бирюзовая кривая H1 нарисована как известная — но в реальности истинный эффект нам НЕизвестен (иначе зачем тест). Мы фиксируем её положение как гипотезу — тот размер эффекта, который хотим уметь замечать (в планировании его называют MDE); под него и считают мощность и размер выборки в следующем уроке. Мы всегда живём только в одном мире (эффект либо есть, либо нет) и никогда не знаем, в каком, — мы лишь ограничиваем шансы ошибиться в каждую сторону.",
+    "Почему нельзя «доказать H1 напрямую». Мы не можем перечислить все способы, которыми эффект мог бы существовать, но можем точно посчитать, как ведёт себя мир БЕЗ эффекта (H0). Поэтому логика всегда от противного: показать, что наблюдаемое слишком невероятно для мира H0. Это асимметрия — как в суде: отвергаем презумпцию «невиновен» при сильных уликах, но «не отвергли» не значит «доказали невиновность»."
+  ],
+  "assumptions": [
+    "A p-value is honest for one pre-specified question. Many metrics, segments, or stopping the test \"once it looks significant\" turn 5% false alarms into tens of percent — see the lessons on multiple comparisons and peeking.",
+    "A small p does not mean a large or important effect: on a huge sample even +0.01% becomes significant. Look at the effect size and the confidence interval, not only the 0.05 threshold."
+  ],
+  "nextLabel": "How to compare two means in practice? → Statistical tests: which one to pick",
+  "related": [
+    {
+      "id": "power-sample-size",
+      "label": "Power and sample size"
+    },
+    {
+      "id": "multiple-comparisons",
+      "label": "Multiple comparisons"
+    },
+    {
+      "id": "peeking",
+      "label": "Peeking"
+    }
+  ]
+}

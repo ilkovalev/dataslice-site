@@ -20,7 +20,8 @@ const Phi = (z) => 0.5 * (1 + erf(z / Math.SQRT2))
 const BASE_A = [22, 28, 33, 38, 41, 45, 50, 56, 62, 70]
 const BASE_B = [18, 24, 30, 35, 40, 44, 49, 54, 60, 68]
 
-export default function MannWhitney() {
+export default function MannWhitney({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [shift, setShift] = useState(14)
   const [outlier, setOutlier] = useState(false)
 
@@ -54,25 +55,25 @@ export default function MannWhitney() {
         <text x={8} y={ROW_B + 4} fill="#6b7280" fontSize="11">B</text>
         {A.map((v, i) => <circle key={`a${i}`} cx={sx(v)} cy={ROW_A} r="5" fill="#2ab8eb" opacity="0.8" />)}
         {B.map((v, i) => <circle key={`b${i}`} cx={sx(v)} cy={ROW_B} r="5" fill="#6b7280" opacity="0.7" />)}
-        <text x={PAD} y={H - 8} fill="#9a907c" fontSize="10">значение (ранги важнее самих чисел) →</text>
+        <text x={PAD} y={H - 8} fill="#9a907c" fontSize="10">{en ? 'value (ranks matter more than the numbers) →' : 'значение (ранги важнее самих чисел) →'}</text>
       </svg>
 
       <div className="flex flex-wrap gap-4 mt-1 text-sm">
         <span className="text-[#2ab8eb]">P(A &gt; B) = {(ps * 100).toFixed(0)}%</span>
         <span className="text-gray-600">U = {U}</span>
-        <span className={sig ? 'text-green-600' : 'text-gray-600'}>p ≈ {p < 0.001 ? '<0.001' : p.toFixed(3)} {sig ? '→ значимо' : '→ не значимо'}</span>
+        <span className={sig ? 'text-green-600' : 'text-gray-600'}>p ≈ {p < 0.001 ? '<0.001' : p.toFixed(3)} {sig ? (en ? '→ significant' : '→ значимо') : (en ? '→ not significant' : '→ не значимо')}</span>
       </div>
 
       <label className="block mt-4 text-sm">
-        <div className="flex justify-between text-gray-700 mb-1"><span>Сдвиг группы A</span><span className="tabular-nums text-cyanink">+{shift}</span></div>
+        <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Shift of group A' : 'Сдвиг группы A'}</span><span className="tabular-nums text-cyanink">+{shift}</span></div>
         <input type="range" min="-10" max="30" step="1" value={shift} onChange={(e) => setShift(Number(e.target.value))} className="w-full accent-accent" />
       </label>
 
       <div className="flex items-center gap-3 mt-3">
         <button onClick={() => setOutlier((o) => !o)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">
-          {outlier ? 'убрать выброс' : 'добавить выброс в A'}
+          {outlier ? (en ? 'remove the outlier' : 'убрать выброс') : (en ? 'add an outlier to A' : 'добавить выброс в A')}
         </button>
-        <span className="text-xs text-gray-500">Выброс почти не двигает U: ранг гигантского значения всё равно «последний». Этим МУ устойчив там, где t-тест шатается.</span>
+        <span className="text-xs text-gray-500">{en ? 'An outlier barely moves U: the giant value’s rank is "last" anyway. That is why MW stays firm where the t-test wobbles.' : 'Выброс почти не двигает U: ранг гигантского значения всё равно «последний». Этим МУ устойчив там, где t-тест шатается.'}</span>
       </div>
     </div>
   )

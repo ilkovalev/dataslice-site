@@ -7,7 +7,9 @@ const OUT = [1, 2, 3, 4, 5, 6]
 const VW = 440
 const VH = 250
 
-export default function EventsProbability({ highlight }) {
+export default function EventsProbability({ highlight , locale = 'ru' }) {
+  const en = locale === 'en'
+
   const [a, setA] = useState([false, true, false, true, false, true]) // чётные
   const [b, setB] = useState([false, false, false, true, true, true]) // >3
 
@@ -39,13 +41,13 @@ export default function EventsProbability({ highlight }) {
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       {/* Как пользоваться */}
       <div className="rounded-lg border border-black/10 bg-ink/60 px-3 py-2 mb-3 text-xs text-gray-600 leading-snug">
-        <span className="text-gray-800 font-medium">Как пользоваться.</span> Внизу 6 клеток — это исходы броска кубика (1–6). Под каждой клеткой две кнопки: нажмите <span className="text-cyanink font-medium">A</span>, чтобы включить исход в событие A, и <span className="text-amber-600 font-medium">B</span> — в событие B. Диаграмма Венна сверху сразу показывает, куда попал каждый исход.
+        {en ? <><span className="text-gray-800 font-medium">How to use.</span> The 6 cells below are die-roll outcomes (1–6). Under each cell are two buttons: press <span className="text-cyanink font-medium">A</span> to include the outcome in event A, and <span className="text-amber-600 font-medium">B</span> for event B. The Venn diagram above shows where each outcome lands.</> : <><span className="text-gray-800 font-medium">Как пользоваться.</span> Внизу 6 клеток — это исходы броска кубика (1–6). Под каждой клеткой две кнопки: нажмите <span className="text-cyanink font-medium">A</span>, чтобы включить исход в событие A, и <span className="text-amber-600 font-medium">B</span> — в событие B. Диаграмма Венна сверху сразу показывает, куда попал каждый исход.</>}
       </div>
 
       {/* Диаграмма Венна */}
       <svg viewBox={`0 0 ${VW} ${VH}`} className="w-full h-auto select-none">
-        <text x={cxA - r + 6} y={26} fill="#0d7fb0" fontSize="12" fontWeight="700" textAnchor="middle">событие A</text>
-        <text x={cxB + r - 6} y={26} fill="#b8830a" fontSize="12" fontWeight="700" textAnchor="middle">событие B</text>
+        <text x={cxA - r + 6} y={26} fill="#0d7fb0" fontSize="12" fontWeight="700" textAnchor="middle">{en ? 'event A' : 'событие A'}</text>
+        <text x={cxB + r - 6} y={26} fill="#b8830a" fontSize="12" fontWeight="700" textAnchor="middle">{en ? 'event B' : 'событие B'}</text>
         <circle cx={cxA} cy={cy} r={r} fill="#2ab8eb" fillOpacity="0.16" stroke="#2ab8eb" strokeWidth={showCompl ? 2.5 : 1.5} strokeDasharray={showCompl ? '5 3' : ''} />
         <circle cx={cxB} cy={cy} r={r} fill="#fbbf24" fillOpacity="0.18" stroke="#d99a06" strokeWidth="1.5" />
         {/* числа по областям */}
@@ -56,19 +58,19 @@ export default function EventsProbability({ highlight }) {
             <text key={`${reg}-${v}`} x={start + j * 26} y={cyc + 6} fill={colorOf[reg]} fontSize="18" fontWeight="700" textAnchor="middle">{v}</text>
           ))
         })}
-        {placed.none && <text x={centroids.none[0]} y={centroids.none[1] + 22} fill="#9ca3af" fontSize="10" textAnchor="middle">ни A, ни B</text>}
+        {placed.none && <text x={centroids.none[0]} y={centroids.none[1] + 22} fill="#9ca3af" fontSize="10" textAnchor="middle">{en ? 'neither A nor B' : 'ни A, ни B'}</text>}
       </svg>
 
       {/* Легенда */}
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs mb-3">
-        <span className="text-cyanink">● только A</span>
-        <span className="text-[#b8830a]">● только B</span>
-        <span className="text-green-600">● A и B (пересечение)</span>
-        <span className="text-gray-400">● ни то, ни другое</span>
+        <span className="text-cyanink">● {en ? 'only A' : 'только A'}</span>
+        <span className="text-[#b8830a]">● {en ? 'only B' : 'только B'}</span>
+        <span className="text-green-600">● {en ? 'A and B (intersection)' : 'A и B (пересечение)'}</span>
+        <span className="text-gray-400">● {en ? 'neither' : 'ни то, ни другое'}</span>
       </div>
 
       {/* Кубик с переключателями A/B */}
-      <div className="text-xs text-gray-500 mb-1.5">Исходы кубика — нажимайте кнопки A / B под каждым:</div>
+      <div className="text-xs text-gray-500 mb-1.5">{en ? 'Die outcomes — press the A / B buttons under each:' : 'Исходы кубика — нажимайте кнопки A / B под каждым:'}</div>
       <div className="grid grid-cols-6 gap-2">
         {OUT.map((v, i) => (
           <div key={v} className="text-center">
@@ -95,14 +97,14 @@ export default function EventsProbability({ highlight }) {
       {/* Формула — фокус задаётся битом */}
       <div className="mt-3 rounded-lg border border-black/10 bg-ink px-3 py-2 text-sm space-y-1">
         {showCompl && (
-          <div className="font-mono text-gray-700">P(не A) = 1 − P(A) = 1 − {pA.toFixed(2)} = {(1 - pA).toFixed(2)} <span className="text-gray-500">(клетки с пунктиром)</span></div>
+          <div className="font-mono text-gray-700">P(не A) = 1 − P(A) = 1 − {pA.toFixed(2)} = {(1 - pA).toFixed(2)} <span className="text-gray-500">{en ? '(dash-outlined cells)' : '(клетки с пунктиром)'}</span></div>
         )}
         <div className="font-mono text-gray-700">P(A∪B) = P(A) + P(B) − P(A∩B) = {pA.toFixed(2)} + {pB.toFixed(2)} − {pInter.toFixed(2)} = {pUnion.toFixed(2)}</div>
         {showIndep && (
-          <div className="font-mono text-gray-700">P(A∩B) = {pInter.toFixed(2)} {indep ? '=' : '≠'} P(A)·P(B) = {(pA * pB).toFixed(2)} → <span className={indep ? 'text-green-600' : 'text-[#dc4d4d]'}>{indep ? 'независимы' : 'зависимы'}</span></div>
+          <div className="font-mono text-gray-700">P(A∩B) = {pInter.toFixed(2)} {indep ? '=' : '≠'} P(A)·P(B) = {(pA * pB).toFixed(2)} → <span className={indep ? 'text-green-600' : 'text-[#dc4d4d]'}>{indep ? (en ? 'independent' : 'независимы') : (en ? 'dependent' : 'зависимы')}</span></div>
         )}
       </div>
-      <p className="text-xs text-gray-500 mt-2">Кликайте A/B под исходами, чтобы менять события — диаграмма и числа пересчитываются вживую. На Венне: левый серп — только A, правый — только B, линза посередине — пересечение (A и B), снаружи — исходы вне обоих событий.</p>
+      <p className="text-xs text-gray-500 mt-2">{en ? 'Click A/B under the outcomes to change the events — the diagram and numbers recompute live. On the Venn: the left crescent is only-A, the right only-B, the middle lens is the intersection (A and B), outside are outcomes in neither event.' : 'Кликайте A/B под исходами, чтобы менять события — диаграмма и числа пересчитываются вживую. На Венне: левый серп — только A, правый — только B, линза посередине — пересечение (A и B), снаружи — исходы вне обоих событий.'}</p>
     </div>
   )
 }

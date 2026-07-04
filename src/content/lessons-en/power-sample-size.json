@@ -1,0 +1,73 @@
+{
+  "id": "power-sample-size",
+  "module": 5,
+  "title": "Sample size and power",
+  "tier": 1,
+  "intro": "The previous lesson showed: more data, fewer errors. But how much exactly? You do not guess this — you compute it in advance. Otherwise you risk running an experiment physically incapable of noticing the effect.",
+  "widget": "power-curve",
+  "beats": [
+    {
+      "text": "First, where power comes from at all. The top chart shows two distributions of our estimate of the between-group difference. The gray bell on the left — the world with NO effect (H0): the difference is zero on average, but the estimate wanders around zero due to chance. The blue bell on the right — the world with a real effect (H1): the estimate wanders around the true difference. Horizontal axis — what difference we might measure."
+    },
+    {
+      "text": "The black dashed line is the critical value (the statistic's threshold): to its right we declare \"effect found\". Both errors are now visible at once. The red zone — the slice of the GRAY bell right of the threshold: no effect, yet we \"found\" one (a false alarm, α). The yellow zone — the slice of the BLUE bell left of the threshold: the effect exists, yet we overlooked it (a miss, β). The blue zone to the right is power itself: the share of cases where we caught the real effect (1 − β).",
+      "predict": "Slide the σ (spread) slider to the left, toward small. What happens to the yellow β zone?",
+      "reveal": "It shrinks. Smaller σ → narrower bells that barely overlap → almost no misses, power grows. Growing n does the same: the standard error σ/√n falls and the bells tighten."
+    },
+    {
+      "text": "The bottom chart folds this into one curve: the test's power — the probability of catching a real effect — as a function of sample size n. The yellow 80% line is the typical target: we want to catch the effect at least 80% of the time. The blue dot is the power at the current n (the same situation as the top chart). You can see at which n the curve reaches the target."
+    },
+    {
+      "text": "Effect size decides how much data you need.",
+      "predict": "Slide \"effect size\" toward small. What happens to the required sample size?",
+      "reveal": "It shoots up. A big, obvious effect is caught on a modest sample. But to reliably tell apart a tiny difference (say 50% vs 51%) you need thousands of observations. A small effect is expensive to test."
+    },
+    {
+      "text": "Hence the main planning takeaway: sample size is computed BEFORE the experiment, based on the minimum effect you care to notice. Launching a test \"for whatever traffic we get\" is a gamble: the data may fall short and a real effect simply drowns in noise."
+    },
+    {
+      "text": "In numbers. Conversion is 10% now; we want to reliably catch a lift to 11% (a 1 pp effect) at 80% power and α = 5%. A sample-size calculator returns on the order of 14–15 thousand users per variant. Want to catch 10%→12% (double the effect) — several times fewer people suffice. This is not \"extra, just in case\" but the minimum below which the test is blind."
+    },
+    {
+      "text": "A test's ability to notice small effects is called sensitivity. Turn the sliders: sensitivity rises when the effect is bigger, the sample larger — and when the data spread σ is SMALLER. The standardized effect is d = difference / σ: cut σ and you raise d without touching the difference itself.",
+      "predict": "If we could halve the metric's σ, changing nothing else — would the effect be caught faster?",
+      "reveal": "Yes, dramatically: smaller σ → larger d → several times fewer users for the same power. That is exactly why a whole class of tricks exists — variance-reduction methods that raise a test's sensitivity without growing the sample. Next lesson."
+    },
+    {
+      "text": "Power, effect size, significance level α and n are linked: fix any three — the fourth is determined. So \"not enough sample\" is not a detail but a doomed-in-advance experiment. And the opposite extreme: on a giant sample even a business-useless effect turns significant — then you look not at p but at whether the effect itself is large and worth shipping."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Power",
+      "text": "the probability of detecting an effect if it really exists (1 minus the probability of a miss)."
+    },
+    {
+      "term": "Effect size",
+      "text": "how large a difference we want to notice. A small effect demands a large sample."
+    },
+    {
+      "term": "Sample planning",
+      "text": "computing the required n in advance so the test has the strength to notice the effect that matters."
+    },
+    {
+      "term": "Sensitivity",
+      "formula": "d = разница / σ",
+      "text": "a test's ability to notice small effects. Grows with effect size and sample, falls with the spread σ."
+    }
+  ],
+  "decision": "Sample size is a decision made before launch. Starting an underpowered test means agreeing in advance to miss the effect and waste the traffic.",
+  "practice": [
+    "Before launching an A/B, product analysts compute the sample size: \"to notice a 1-percentage-point conversion lift with 80% power we need this many users per variant\". Without that calculation the test easily turns out meaningless.",
+    "And conversely: on a huge sample even a negligible, business-useless difference becomes statistically significant. So you check not only significance but the effect size."
+  ],
+  "realLife": [
+    "Clinical trials size their patient counts exactly this way — undersampling means a working drug may be rejected merely for lack of data.",
+    "Sociologists size polls for the required precision; engineers size the number of load-test runs. Everywhere the data budget is computed first and collected second."
+  ],
+  "assumptions": [
+    "A sample-size calculation is only as honest as the expected-effect estimate behind it. That estimate is usually optimistic; the real effect is smaller — and the \"properly sized\" test ends up underpowered.",
+    "The metric's variance is taken from history, and it drifts: season, traffic mix, promotions. Build in a margin and recompute on fresh data — last quarter's σ can betray you."
+  ],
+  "nextLabel": "How to raise sensitivity without growing the sample? → Variance-reduction methods"
+}

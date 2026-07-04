@@ -1,0 +1,75 @@
+{
+  "id": "clt",
+  "module": 4,
+  "title": "From sample to world: the central limit theorem",
+  "tier": 1,
+  "intro": "In the previous lesson we learned: an estimate (say, a mean) is a random variable with its own sampling distribution. Now we learn the SHAPE of that distribution for the mean — a surprisingly simple fact on which all further inference rests.",
+  "widget": "sampling-distribution",
+  "beats": [
+    {
+      "text": "Before you are three panels. Top — the population: skewed, e.g. service response time (many fast requests, rare very slow ones). Middle — one random sample from it: its points and the green line, the sample mean x̄. Bottom — the distribution of those means, accumulating. Press \"take a sample\" and notice: x̄ almost never equals the true mean — it misses slightly (the deviation is shown on the right)."
+    },
+    {
+      "text": "The population itself is crooked and skewed, and individual x̄ values jump around the truth.",
+      "predict": "Press \"auto-run\": many sample means will pile up in the bottom panel. What shape will their distribution take — also skewed?",
+      "reveal": "No — a bell! Even with skewed data, the sample means line up in a symmetric bell around the true mean. That is the central limit theorem. A single x̄ misses, but the cloud of all x̄ values is predictable and symmetric."
+    },
+    {
+      "text": "Now increase the sample size n. The bell of the means grows narrower: the more observations in each sample, the more precise its mean and the tighter the means huddle around the true value."
+    },
+    {
+      "text": "The width of this bell of means even has a number. It is called the standard error and equals σ/√n: the spread of the data itself divided by the square root of the sample size. This is where the √n from the law-of-large-numbers lesson came from: quadruple the sample — the mean's error halves.",
+      "predict": "To make the estimate of the mean twice as precise, by how much must the sample grow?",
+      "reveal": "Four times, not two: precision grows like √n. That is why the first few hundred observations buy a huge gain in precision, while each further step costs more — the \"law of diminishing returns\" of sample size."
+    },
+    {
+      "text": "That is why sampling works: the mean of a random sample is a good, predictable estimate of the mean of everyone. We even know the shape of its error (normal) and its width (σ/√n). Nearly all statistical inference stands on this — the confidence intervals and hypothesis tests of the next modules grow exactly from here."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Population",
+      "text": "all the objects we want to conclude about (e.g. all users)."
+    },
+    {
+      "term": "Sample",
+      "text": "a randomly selected part of the population that we actually observe."
+    },
+    {
+      "term": "Central limit theorem (CLT)",
+      "text": "the distribution of the means of random samples tends to normal (a bell) — even if the data itself is not normal."
+    },
+    {
+      "term": "Standard error",
+      "formula": "σ / √n",
+      "text": "the width of the distribution of sample means: how far a sample mean typically strays from the truth. Falls like √n."
+    }
+  ],
+  "practice": [
+    "It is thanks to the CLT that polling 1,500 people yields a reliable estimate of a whole country's mood — no need to ask everyone. A random sample's mean is predictably close to the truth.",
+    "And the larger the sample, the narrower the error bell, i.e. the more precise the estimate — which is why sample size is always center stage."
+  ],
+  "realLife": [
+    "Quality control checks the mean of 30 parts, not the whole batch. Ratings and indexes average samples. All of it works because means behave predictably.",
+    "A/B tests compare the means of two user groups — and lean on exactly this fact about the behavior of means."
+  ],
+  "assumptions": [
+    "The CLT needs independent observations and finite variance. With ultra-heavy tails (a power law with α ≤ 2) the variance is infinite — no bell forms, and the mean does not stabilize even for large n.",
+    "With strong skew and small n the mean's distribution has not yet turned normal — you need a bigger sample. Dependent or clustered data (one user contributing many observations) effectively shrinks the real n."
+  ],
+  "deepDive": [
+    "Почему именно колокол? Среднее — это сумма n независимых вкладов, делённая на n. Каждое наблюдение тянет среднее то вверх, то вниз; при сложении эти случайные отклонения частично гасят друг друга, и крайние комбинации (все наблюдения разом большие) астрономически редки — поэтому результат кучкуется у центра симметрично. Удивительно то, что форма исходных данных при этом почти не важна: складывая много независимых вкладов, мы всегда приходим к нормальной форме.",
+    "Откуда √n: дисперсии независимых складываются (из прошлого урока), поэтому Var(суммы) = n·σ², а деление на n уменьшает дисперсию в n² раз → Var(среднего) = σ²/n, и σ(среднего) = σ/√n. Корень — прямое следствие того, что складываются именно дисперсии (квадраты), а не сами разбросы."
+  ],
+  "nextLabel": "One mean is not enough. How to show an estimate's uncertainty honestly? → Confidence intervals",
+  "related": [
+    {
+      "id": "sampling-statistic",
+      "label": "An estimate is a random variable"
+    },
+    {
+      "id": "confidence-intervals",
+      "label": "Confidence intervals"
+    }
+  ]
+}

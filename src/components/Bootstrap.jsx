@@ -18,7 +18,8 @@ const BBASE = 328
 // скошенная вправо выборка из 15 значений
 const SAMPLE = [12, 15, 18, 20, 22, 24, 26, 29, 33, 38, 44, 52, 63, 78, 96]
 
-export default function Bootstrap() {
+export default function Bootstrap({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [means, setMeans] = useState([])
   const [picked, setPicked] = useState(null) // последний ресэмпл (значения)
   const timer = useRef(null)
@@ -82,7 +83,7 @@ export default function Bootstrap() {
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none">
         {/* ВЕРХ: гистограмма исходной выборки */}
-        <text x={PAD} y={18} fill="#6b7280" fontSize="10">исходная выборка (скошена вправо) — тянем из неё n значений с возвратом</text>
+        <text x={PAD} y={18} fill="#6b7280" fontSize="10">{en ? 'the original sample (right-skewed) — we draw n values from it with replacement' : 'исходная выборка (скошена вправо) — тянем из неё n значений с возвратом'}</text>
         {tCounts.map((c, k) => {
           const h = (c / tMaxC) * (TBASE - TTOP)
           const x0 = ax(tMin + k * tBinW), x1 = ax(tMin + (k + 1) * tBinW)
@@ -95,20 +96,20 @@ export default function Bootstrap() {
           ))
         ))}
         <line x1={ax(origMean)} y1={TTOP - 4} x2={ax(origMean)} y2={TBASE} stroke="#6b7280" strokeWidth="1.3" strokeDasharray="4 3" />
-        <text x={ax(origMean)} y={TTOP - 8} fill="#6b7280" fontSize="10" textAnchor="middle">среднее выборки {origMean.toFixed(1)}</text>
+        <text x={ax(origMean)} y={TTOP - 8} fill="#6b7280" fontSize="10" textAnchor="middle">{en ? 'sample mean ' : 'среднее выборки '}{origMean.toFixed(1)}</text>
         <line x1={PAD} y1={TBASE} x2={W - PAD} y2={TBASE} stroke="#d6cebf" strokeWidth="1.2" />
 
         {/* среднее ресэмпла + «падение» вниз */}
         {pickedMean != null && (
           <g>
             <circle cx={ax(pickedMean)} cy={TBASE - 2} r="4.5" fill="#16a34a" />
-            <text x={PAD} y={TBASE + 16} fill="#16a34a" fontSize="10">среднее этого ресэмпла = {pickedMean.toFixed(1)} — падает вниз ↓</text>
+            <text x={PAD} y={TBASE + 16} fill="#16a34a" fontSize="10">{en ? 'this resample’s mean = ' : 'среднее этого ресэмпла = '}{pickedMean.toFixed(1)}{en ? ' — drops below ↓' : ' — падает вниз ↓'}</text>
             <line x1={ax(pickedMean)} y1={TBASE + 2} x2={cx(pickedMean)} y2={BTOP - 4} stroke="#16a34a" strokeWidth="1" strokeDasharray="3 3" opacity="0.6" />
           </g>
         )}
 
         {/* НИЗ: распределение бутстреп-средних */}
-        <text x={PAD} y={BTOP - 6} fill="#6b7280" fontSize="10">распределение средних многих ресэмплов → колокол</text>
+        <text x={PAD} y={BTOP - 6} fill="#6b7280" fontSize="10">{en ? 'distribution of many resamples’ means → a bell' : 'распределение средних многих ресэмплов → колокол'}</text>
         {counts.map((c, k) => {
           const h = (c / maxC) * (BBASE - BTOP - 6)
           const x0 = cx(dMin + k * binW), x1 = cx(dMin + (k + 1) * binW)
@@ -120,22 +121,22 @@ export default function Bootstrap() {
       </svg>
 
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm">
-        <span className="text-gray-700">Ресэмплов: {means.length}</span>
-        {ci && <span className="text-[#d9a300]">95% бутстреп-интервал: {ci[0].toFixed(1)} – {ci[1].toFixed(1)}</span>}
+        <span className="text-gray-700">{en ? 'Resamples' : 'Ресэмплов'}: {means.length}</span>
+        {ci && <span className="text-[#d9a300]">{en ? '95% bootstrap interval' : '95% бутстреп-интервал'}: {ci[0].toFixed(1)} – {ci[1].toFixed(1)}</span>}
       </div>
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-xs">
-        <span className="text-[#16a34a]">● значения ресэмпла / последнее среднее</span>
-        <span className="text-[#2ab8eb]">▮ накопленные средние</span>
-        <span className="text-[#d9a300]">▮ границы 95%</span>
+        <span className="text-[#16a34a]">● {en ? 'resample values / latest mean' : 'значения ресэмпла / последнее среднее'}</span>
+        <span className="text-[#2ab8eb]">▮ {en ? 'accumulated means' : 'накопленные средние'}</span>
+        <span className="text-[#d9a300]">▮ {en ? '95% bounds' : 'границы 95%'}</span>
       </div>
 
-      <div className="mt-2 text-xs text-gray-500">Алгоритм: 1) тянем n значений из выборки с возвратом (зелёные точки сверху) · 2) считаем их среднее (зелёная точка) · 3) оно падает в нижнее распределение · повторяем N раз.</div>
+      <div className="mt-2 text-xs text-gray-500">{en ? 'The algorithm: 1) draw n values from the sample with replacement (green dots above) · 2) compute their mean (the green dot) · 3) it drops into the bottom distribution · repeat N times.' : 'Алгоритм: 1) тянем n значений из выборки с возвратом (зелёные точки сверху) · 2) считаем их среднее (зелёная точка) · 3) оно падает в нижнее распределение · повторяем N раз.'}</div>
 
       <div className="flex flex-wrap gap-2 mt-3">
-        <button onClick={step} className="text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">1 ресэмпл (шаг)</button>
-        <button onClick={() => many(200)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">ресэмпл 200</button>
-        <button onClick={animate} className="text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">▶ насыпать</button>
-        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">сбросить</button>
+        <button onClick={step} className="text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">{en ? '1 resample (step)' : '1 ресэмпл (шаг)'}</button>
+        <button onClick={() => many(200)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{en ? 'resample 200' : 'ресэмпл 200'}</button>
+        <button onClick={animate} className="text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">{en ? '▶ pour' : '▶ насыпать'}</button>
+        <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">{en ? 'reset' : 'сбросить'}</button>
       </div>
     </div>
   )

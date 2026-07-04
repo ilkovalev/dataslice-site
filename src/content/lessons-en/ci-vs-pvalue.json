@@ -1,0 +1,55 @@
+{
+  "id": "ci-vs-pvalue",
+  "module": 5,
+  "title": "Confidence interval versus p-value",
+  "tier": 1,
+  "intro": "The p-value answers \"is the difference chance?\", while the confidence interval answers \"how big is it and how sure are we?\". They are two sides of one coin: estimation and testing. Understand their link — and you stop worshipping \"p < 0.05\" and start reading results like a grown-up analyst.",
+  "widget": "ci-vs-p",
+  "beats": [
+    {
+      "text": "There is an exact connection between them. The chart shows the effect estimate with its confidence interval relative to zero. Drag the effect and the sample size: at exactly the moment the interval stops covering zero, p drops below 0.05. \"p < 0.05\" and \"the interval excludes zero\" are the same statement said two ways."
+    },
+    {
+      "text": "But the interval says MORE than the p-value.",
+      "predict": "Two tests both gave p = 0.04. The first has an effect interval of [0.1%, 0.3%], the second [0.1%, 40%]. Are these equally useful results?",
+      "reveal": "No! Both are \"significant\", but the first says \"the effect is small and precisely measured\", the second \"the effect could be tiny or huge, we know almost nothing\". The p-value hides that; the interval shows both magnitude and precision. That is why reporting the interval is more honest."
+    },
+    {
+      "text": "The interval cures two diseases of the p-value. First: \"significant\" ≠ \"important\". A narrow interval around a negligible effect is statistically significant yet useless for the business; the interval shows it instantly. Second: \"not significant\" ≠ \"no effect\". A wide interval covering zero says \"data is scarce\", not \"there is no difference\"."
+    },
+    {
+      "text": "Hence modern practice (and many journals' requirements): report not a bare p but the ESTIMATE WITH ITS INTERVAL: \"B lifted conversion by 1.8% (95% CI: 0.3%–3.3%)\". You immediately see: the effect is significant (zero not covered), its plausible size, and the uncertainty. That is thinking in terms of estimation rather than the ritual of significance."
+    },
+    {
+      "text": "The link to the course's backbone: both the p-value and the confidence interval grow out of one object — the estimate's sampling distribution. The p-value measures where zero sits on it; the interval traces its plausible width around the estimate. Not two methods but two views of one picture."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Estimation vs testing",
+      "text": "estimation answers \"how much and how precisely\" (the interval); testing answers \"is it chance\" (the p-value). Linked through one sampling distribution."
+    },
+    {
+      "term": "CI–test link",
+      "text": "a 95% interval excludes zero ⟺ the two-sided test is significant at 5%."
+    },
+    {
+      "term": "Significant ≠ important",
+      "text": "a statistically significant effect can be negligible in size; look at the interval / effect size."
+    },
+    {
+      "term": "Not significant ≠ no effect",
+      "text": "a wide interval around zero means insufficient data, not proven absence of an effect."
+    }
+  ],
+  "decision": "If the decision depends on \"how much to invest\", decide by the interval, not by \"significant/not\": the interval shows both the best and the worst plausible outcome.",
+  "practice": [
+    "The habit of reporting results as intervals, not just p, immediately raises decision quality: you see direction, size and confidence. \"A 1.8% lift (CI 0.3–3.3%)\" is grounds for a decision; \"p = 0.04\" is not.",
+    "It also dissolves the cult of 0.05: instead of \"significant / not significant\" the team discusses what effect is plausible and whether it is worth shipping. Especially vital on large samples, where almost everything becomes significant."
+  ],
+  "realLife": [
+    "Medicine long ago switched to confidence intervals for effect sizes: \"a 20% risk reduction (95% CI: 5–33%)\" is more informative than \"p < 0.05\".",
+    "In a product, the interval around an A/B effect feeds the rollout decision directly: if even the interval's lower bound pays for the costs — ship; if the interval is wide and touches zero — collect more data."
+  ],
+  "nextLabel": "How much data does it take for a narrow interval and a powerful test? → Sample size"
+}

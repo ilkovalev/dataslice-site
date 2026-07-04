@@ -20,3 +20,9 @@ export function autoRunClass(running) {
     ? 'text-xs px-2.5 py-1 rounded-md bg-cyanink text-white hover:opacity-90'
     : 'text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10'
 }
+
+// Подпись кнопки-тумблера в текущей локали.
+export function autoRunLabel(running, locale = 'ru') {
+  if (locale === 'en') return running ? '⏸ stop' : '▶ auto-run'
+  return running ? '⏸ стоп' : '▶ автопрогон'
+}

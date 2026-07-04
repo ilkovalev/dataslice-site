@@ -20,7 +20,8 @@ const cdf = (z) => 0.5 * (1 + erf(z / Math.SQRT2))
 const pdf = (x) => Math.exp(-0.5 * x * x) / Math.sqrt(2 * Math.PI)
 const PEAK = pdf(0)
 
-export default function PValueExplorer() {
+export default function PValueExplorer({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [obs, setObs] = useState(2.2) // наблюдаемый результат в стандартных ошибках от 0
 
   const sx = (x) => PAD + ((x - XLO) / (XHI - XLO)) * (W - 2 * PAD)
@@ -56,24 +57,24 @@ export default function PValueExplorer() {
         <text x={sx(1.96)} y={BASE + 16} fill="#c69214" fontSize="9" textAnchor="middle">±1.96 · p=0.05</text>
         {/* наблюдаемый результат */}
         {[-a, a].map((v, i) => <line key={i} x1={sx(v)} y1={TOP} x2={sx(v)} y2={BASE} stroke="#2ab8eb" strokeWidth="2" />)}
-        <text x={sx(a)} y={TOP - 8} fill="#0d7fb0" fontSize="10" textAnchor="middle">наш результат: {obs.toFixed(2)} SE</text>
-        <text x={sx(0)} y={TOP + 4} fill="#6b7280" fontSize="10" textAnchor="middle">H0: эффекта нет</text>
-        <text x={PAD} y={H - 8} fill="#9a907c" fontSize="10" textAnchor="start">результат в стандартных ошибках от нуля →</text>
+        <text x={sx(a)} y={TOP - 8} fill="#0d7fb0" fontSize="10" textAnchor="middle">{en ? 'our result: ' : 'наш результат: '}{obs.toFixed(2)} SE</text>
+        <text x={sx(0)} y={TOP + 4} fill="#6b7280" fontSize="10" textAnchor="middle">{en ? 'H0: no effect' : 'H0: эффекта нет'}</text>
+        <text x={PAD} y={H - 8} fill="#9a907c" fontSize="10" textAnchor="start">{en ? 'result in standard errors from zero →' : 'результат в стандартных ошибках от нуля →'}</text>
       </svg>
 
       <div className="mt-1 text-sm">
         <span className="text-[#dc4d4d] font-semibold">p-value = {p < 0.001 ? '<0.001' : p.toFixed(3)}</span>{' '}
-        — это красная площадь: вероятность получить результат настолько же или более далёкий от нуля, ЕСЛИ эффекта нет.{' '}
+        {en ? ' is the red area: the probability of a result this far from zero, or farther, IF there is no effect.' : ' — это красная площадь: вероятность получить результат настолько же или более далёкий от нуля, ЕСЛИ эффекта нет.'}{' '}
         {sig
-          ? <span className="text-green-600">p &lt; 0.05 → такой результат при «эффекта нет» маловероятен, отвергаем H0.</span>
-          : <span className="text-gray-600">p ≥ 0.05 → случайностью объяснить легко, H0 не отвергаем.</span>}
+          ? <span className="text-green-600">{en ? 'p < 0.05 → such a result is unlikely under "no effect", we reject H0.' : 'p < 0.05 → такой результат при «эффекта нет» маловероятен, отвергаем H0.'}</span>
+          : <span className="text-gray-600">{en ? 'p ≥ 0.05 → easily explained by chance, H0 stands.' : 'p ≥ 0.05 → случайностью объяснить легко, H0 не отвергаем.'}</span>}
       </div>
 
       <label className="block mt-4 text-sm">
-        <div className="flex justify-between text-gray-700 mb-1"><span>Наблюдаемый результат (в стандартных ошибках)</span><span className="text-cyanink">{obs.toFixed(2)}</span></div>
+        <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Observed result (in standard errors)' : 'Наблюдаемый результат (в стандартных ошибках)'}</span><span className="text-cyanink">{obs.toFixed(2)}</span></div>
         <input type="range" min="0" max="3.5" step="0.05" value={obs} onChange={(e) => setObs(Number(e.target.value))} className="w-full accent-accent" />
       </label>
-      <p className="text-xs text-gray-500 mt-2">Синие линии — «наш результат»: то, что мы реально намерили в эксперименте (разница групп), выраженная в стандартных ошибках от нуля (например, 2.0 SE = результат на 2 стандартные ошибки выше нуля). Серый колокол — как «гулял» бы результат чисто от случайности, если эффекта нет (H0). Двигайте наш результат: красные хвосты за ним — это p-value. Чем дальше результат от нуля, тем тоньше хвосты и меньше p. На отметке ±1.96 площадь хвостов ровно 0.05 — отсюда и знаменитый порог. Важно: p — это НЕ «вероятность, что H0 верна», а «насколько такие данные обычны при H0».</p>
+      <p className="text-xs text-gray-500 mt-2">{en ? 'The blue lines are "our result": what we actually measured in the experiment (the group difference), expressed in standard errors from zero (e.g. 2.0 SE = a result two standard errors above zero). The gray bell is how the result would wander from pure chance if there is no effect (H0). Drag our result: the red tails beyond it are the p-value. The farther from zero, the thinner the tails and the smaller p. At ±1.96 the tail area is exactly 0.05 — hence the famous threshold. Important: p is NOT "the probability that H0 is true" but "how ordinary such data is under H0".' : 'Синие линии — «наш результат»: то, что мы реально намерили в эксперименте (разница групп), выраженная в стандартных ошибках от нуля (например, 2.0 SE = результат на 2 стандартные ошибки выше нуля). Серый колокол — как «гулял» бы результат чисто от случайности, если эффекта нет (H0). Двигайте наш результат: красные хвосты за ним — это p-value. Чем дальше результат от нуля, тем тоньше хвосты и меньше p. На отметке ±1.96 площадь хвостов ровно 0.05 — отсюда и знаменитый порог. Важно: p — это НЕ «вероятность, что H0 верна», а «насколько такие данные обычны при H0».'}</p>
     </div>
   )
 }

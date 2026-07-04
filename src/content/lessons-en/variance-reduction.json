@@ -1,0 +1,67 @@
+{
+  "id": "variance-reduction",
+  "module": 5,
+  "title": "Variance-reduction methods",
+  "tier": 1,
+  "intro": "A test's sensitivity falls with the data spread σ. The most expensive fix is recruiting more users. There is a smarter one: strip the metric of its \"extraneous\" spread without touching the effect itself. These are variance-reduction methods — how product teams speed up A/B tests severalfold. Drag the correlation slider and watch the metric's distribution tighten.",
+  "widget": "variance-reduction",
+  "beats": [
+    {
+      "text": "The idea in plain terms. Part of a metric's spread is predictable in advance. An active user spent a lot before the experiment too; an inactive one — little. This \"innate\" between-people difference inflates the metric's variance yet has nothing to do with our effect. Subtract it, and a cleaner signal remains."
+    },
+    {
+      "text": "That is how CUPED works — the best-known method. Take a covariate: the user's behavior BEFORE the experiment (e.g. the same metric over the previous period). It correlates with the in-test metric. Adjust: Y' = Y − θ·(X − X̄), where X is the covariate. The covariate-predictable part leaves the metric.",
+      "predict": "Raise the correlation ρ between the covariate and the metric. What happens to the adjusted metric's variance?",
+      "reveal": "It falls — by exactly ρ². At ρ = 0.7, 49% of the variance is gone: the right bell becomes nearly half the width of the left. Less variance → higher sensitivity → fewer users needed for the same effect."
+    },
+    {
+      "text": "How profitable is it? A ρ² variance cut is equivalent to multiplying the sample by 1/(1−ρ²). At ρ = 0.7 that is like doubling the audience — for free, just by using data you already had. That is why CUPED is near-mandatory in mature A/B platforms."
+    },
+    {
+      "text": "CUPED is not the only trick. Switch the widget to \"Stratification\". Different idea, same goal. Users are split into homogeneous strata (country, platform, tenure), the effect is computed WITHIN each stratum and averaged with weights: Var_strat = Σ wₖ·σ²ₖ. The BETWEEN-stratum part of total variance disappears — the part explained by mere stratum membership.",
+      "predict": "Increase Δ — how strongly the strata differ from one another. What happens to the share of variance removed?",
+      "reveal": "It grows: the larger the between-stratum spread (σ²_between), the bigger its share of total variance — and the more the within-stratum comparison removes. The within-stratum noise (the blue bell) stays untouched. If the strata are indistinguishable (Δ→0), there is nothing to stratify — no gain. Covariate control and regression adjustment generalize the same idea to several predictors at once."
+    },
+    {
+      "text": "An important honesty note: these methods reduce VARIANCE without biasing the effect estimate. The covariate must come strictly from the PRE-experiment period — otherwise you may accidentally \"subtract\" the effect itself and get a distorted result. Done right, it is a pure sensitivity gain with no loss of validity."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Variance reduction",
+      "text": "techniques that strip predictable spread from the metric to raise the test's sensitivity without growing the sample."
+    },
+    {
+      "term": "CUPED",
+      "formula": "Y' = Y − θ·(X − X̄)",
+      "text": "subtracting from the metric the part predicted by covariate X (pre-experiment behavior). Variance falls by ρ²."
+    },
+    {
+      "term": "Covariate",
+      "text": "a variable correlated with the metric but independent of the experiment (taken from BEFORE its start)."
+    },
+    {
+      "term": "Stratification",
+      "formula": "Var_страт = Σ wₖ·σ²ₖ",
+      "text": "comparison within homogeneous strata (country, platform): the between-stratum share σ²_between / σ²_total leaves the variance."
+    }
+  ],
+  "deepDive": [
+    "The CUPED algorithm, step by step. 1) Take covariate X from the PRE-experiment period — usually the same metric over the 1–2 weeks before the test. 2) Across all users estimate θ = Cov(X, Y) / Var(X) (the regression coefficient of Y on X). 3) For every user compute the adjusted metric Y' = Y − θ·(X − X̄), where X̄ is the covariate's overall mean. 4) Then run the ordinary test (a t-test on the difference of means) on Y' instead of Y. 5) Var(Y') is (1−ρ²) times Var(Y), where ρ = corr(X, Y); the effect estimate is not biased because X does not depend on the group.",
+    "The stratification algorithm, step by step. 1) Before the experiment pick a stratification variable correlated with the metric and independent of the test (country, platform, device type, pre-experiment activity — a continuous covariate gets cut into quantile bins). 2) WITHIN each stratum k compute the between-variant difference of means Δ̂ₖ and its variance. 3) Assemble the overall effect as the weighted average Δ̂ = Σ wₖ·Δ̂ₖ with weights wₖ equal to stratum shares (post-stratification). 4) The variance of this estimate contains only WITHIN-stratum spread — the between-stratum part is gone. 5) A practical subtlety: don't overdo the number of strata (each needs enough data); over-stratifying is as harmful as ignoring it."
+  ],
+  "decision": "Little traffic — the default is \"wait for a long test\". CUPED and stratification change the equation: the same conclusion faster, or a smaller detectable effect in the same time.",
+  "practice": [
+    "In large products CUPED is on by default in the A/B platform: the covariate is the same metric over the 1–2 weeks before the test. It typically cuts the required sample or test duration by 30–50% — an enormous saving of time and traffic.",
+    "The method needs pre-experiment data and a stable audience. For new users (who have no \"before\") it does not work — there teams use other predictors or skip the adjustment."
+  ],
+  "realLife": [
+    "Netflix, Microsoft, Booking and others have published how variance reduction accelerates their experiments: the same conclusions from less traffic, hence more tests per unit of time.",
+    "The same principle reaches beyond A/B: in any comparison, controlling for known factors (covariates) sharpens the estimate. It is the bridge to regression, whose core idea is \"hold everything else equal\"."
+  ],
+  "assumptions": [
+    "CUPED needs a covariate from the PRE-experiment period that correlates with the metric; for new users (no \"before\") it does not work. The covariate must not depend on the experiment itself — otherwise you may accidentally \"subtract\" the effect.",
+    "Variance reduction cuts random noise but does not cure bias: on unrepresentative data you get a confidently computed — yet still biased — result."
+  ],
+  "nextLabel": "Now let's assemble it all into an honest experiment → Evidential strength and A/B"
+}

@@ -1,7 +1,6 @@
-// Яндекс.Метрика: тонкая обёртка. Пока METRIKA_ID = 0, всё выключено (no-op) —
-// цели уже расставлены по продукту, счётчик включается одной константой.
-// TODO: создать счётчик на metrika.yandex.ru (без вебвизора) и вписать ID.
-const METRIKA_ID = 0
+// Яндекс.Метрика: тонкая обёртка вокруг счётчика владельца.
+// METRIKA_ID = 0 выключает всё (no-op) — удобно для локальной разработки.
+const METRIKA_ID = 110382395
 
 export function initAnalytics() {
   if (!METRIKA_ID || typeof window === 'undefined') return
@@ -11,15 +10,23 @@ export function initAnalytics() {
       ;(window.ym.a = window.ym.a || []).push(args)
     }
   window.ym.l = Date.now()
-  const s = document.createElement('script')
-  s.async = true
-  s.src = 'https://mc.yandex.ru/metrika/tag.js'
-  document.head.appendChild(s)
+  const src = `https://mc.yandex.ru/metrika/tag.js?id=${METRIKA_ID}`
+  if (![...document.scripts].some((s) => s.src === src)) {
+    const s = document.createElement('script')
+    s.async = true
+    s.src = src
+    document.head.appendChild(s)
+  }
+  // Параметры — как в официальном сниппете счётчика владельца.
   window.ym(METRIKA_ID, 'init', {
+    ssr: true,
+    webvisor: true,
     clickmap: true,
-    trackLinks: true,
+    ecommerce: 'dataLayer',
+    referrer: document.referrer,
+    url: location.href,
     accurateTrackBounce: true,
-    webvisor: false,
+    trackLinks: true,
   })
 }
 

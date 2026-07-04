@@ -65,6 +65,9 @@ try {
   await waitServer()
   const browser = await chromium.launch()
   const page = await browser.newPage()
+  // Не стреляем в Яндекс.Метрику при пререндере: 60 страниц на каждую сборку
+  // засоряли бы статистику фейковыми визитами.
+  await page.route('**://mc.yandex.*/**', (r) => r.abort())
   let n = 0
   for (const r of routes) {
     await page.goto(`http://localhost:${PORT}${r.url}`, { waitUntil: 'networkidle' })

@@ -1,0 +1,59 @@
+{
+  "id": "naive-bayes",
+  "module": 10,
+  "title": "Naive Bayes as a classifier",
+  "tier": 1,
+  "intro": "Bayes' theorem can be turned into a working classifier. Naive Bayes has been filtering spam for decades and is still strong as a fast baseline. It directly applies everything we know about conditional probability and the base rate.",
+  "widget": "naive-bayes",
+  "beats": [
+    {
+      "text": "The task: an email with words — spam or not? Bayes flips the question. We want P(spam | words), but what is measurable is the reverse: P(words | spam) — how often these words appear in spam. Bayes' theorem links them through the base rate P(spam) — how frequent spam is at all."
+    },
+    {
+      "text": "Why \"naive\"? Because it makes a simplifying assumption: the words in an email are independent of each other given the class.",
+      "predict": "In reality \"prize\" and \"winnings\" occur together. Does this simplification hurt the classifier badly?",
+      "reveal": "The assumption is almost always false (words correlate), yet in practice the classifier works surprisingly well. Independence lets you simply MULTIPLY the per-word probabilities instead of the intractable accounting of all combinations — hence the speed and simplicity. The exact probabilities are biased, but the DECISION (spam/not) is more often right."
+    },
+    {
+      "text": "The base rate decides as much as the words — this is straight from our conditional probability lesson. Toggle the words and move the \"prior share of spam\": if spam is rare, even strong \"spam words\" do not make the email spam for sure — the rarity of the class pulls the final probability down. Naive Bayes accounts for this automatically through the starting odds P(spam)."
+    },
+    {
+      "text": "How it trains: from labeled emails it computes P(word | spam) and P(word | not spam) — simple shares. A new email: multiply the probabilities of its words in each class, multiply by the base rate, compare. Technically logarithms are used (summing is more stable than multiplying tiny numbers) plus smoothing for words unseen in training."
+    },
+    {
+      "text": "Why it is still loved: lightning-fast, works on huge vocabularies, needs little data, updates easily. As a baseline in text classification it is often surprisingly good — and it vividly shows that Bayes is not just theory but working models."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Naive Bayes",
+      "text": "a classifier built on Bayes' theorem with the assumption of feature independence given the class."
+    },
+    {
+      "term": "Independence assumption",
+      "text": "features (words) are treated as independent within a class — almost always false, but convenient and it often works."
+    },
+    {
+      "term": "Feature likelihood",
+      "formula": "P(word | class)",
+      "text": "how often a feature occurs in a given class; estimated as shares from the training data."
+    },
+    {
+      "term": "Smoothing",
+      "text": "a small addition to the counts so a word unseen in training does not zero out the whole product."
+    }
+  ],
+  "practice": [
+    "Naive Bayes is an excellent baseline for text (spam, sentiment, topics): fast, cheap, needs little data. It is a sensible starting point before reaching for heavy models.",
+    "Its weakness is exactly the correlated features: it estimates probabilities with bias (often overconfident), so as a SOURCE of probabilities it is worse than as a DECISION-making classifier. If you need calibrated probabilities — calibrate them separately."
+  ],
+  "realLife": [
+    "Classic spam filters (Bayesian filtering) are the direct application: the \"spam\" probability is updated by the email's words. The same trick works for simple classification of reviews and news by topic.",
+    "In medicine and diagnostics, the same \"update the base rate with observations\" logic underlies probabilistic screening rules."
+  ],
+  "assumptions": [
+    "The \"naivety\" is the assumption that features are independent within a class. When features duplicate each other (email length and word count), the classifier counts one piece of evidence twice and becomes overconfident: its \"probabilities\" cannot be read literally.",
+    "A word never seen in a class during training gives zero probability and zeroes out the whole product — you need smoothing (Laplace correction). And predictions depend on base rates: under a new class balance they drift."
+  ],
+  "nextLabel": "What if there are several groups to compare? → Analysis of variance"
+}

@@ -1,0 +1,63 @@
+{
+  "id": "bayesian-inference",
+  "module": 10,
+  "title": "Bayesian inference: updating beliefs with data",
+  "tier": 1,
+  "intro": "Everything so far was the frequentist approach: the true value is considered fixed, and we ask \"how surprising is the data if the hypothesis is true\". The Bayesian approach looks differently: our knowledge of a quantity is a distribution of confidence, which the data UPDATES. Move the prior belief and the data — watch the posterior get born.",
+  "widget": "prior-posterior",
+  "beats": [
+    {
+      "text": "The gray curve is the prior distribution: what we believe about the share θ (say, a conversion rate) BEFORE the experiment. It is not one number but a whole distribution of plausibility over values. Put the prior mean where you expect the conversion, and set the \"prior strength\" to how confident you are."
+    },
+    {
+      "text": "Now add data. The yellow dashed curve is the likelihood: what the data ALONE says (k successes out of n); its peak sits exactly at the observed share k/n. The teal one is the posterior: the final belief AFTER the data. Bayes' main formula is simple: posterior ∝ prior × likelihood — the result comes from MULTIPLYING the gray and yellow curves at each point θ, which is why the center of the blue one always lies BETWEEN the prior's center and the share in the data (you can see it in the formula line under the chart).",
+      "predict": "Set a weak prior and add a lot of data (larger n). Which will influence the posterior more — the prior belief or the data?",
+      "reveal": "The data. At large n the posterior barely depends on the prior — it sharpens around the share observed in the data. But at small n the prior belief pulls the result noticeably toward itself. Data \"overrides\" preconceptions as it accumulates."
+    },
+    {
+      "text": "That is the beauty: Bayesian inference formally combines prior experience with new data. Little data — we lean mostly on a reasonable prior (not on a random blip from 5 observations). Lots of data — it dominates. A natural defense against hasty conclusions on tiny samples."
+    },
+    {
+      "text": "Why is this convenient in practice? The posterior distribution answers questions in plain language directly: \"the probability that the conversion is above 12% is 0.9\" or \"the probability that variant B beats A is 96%\". A frequentist p-value cannot say that — it is about the \"surprisingness of the data\", not the probability of the hypothesis."
+    },
+    {
+      "text": "That is why Bayesian A/B is gaining popularity: it gives the intuitive \"probability that B is better\" and \"expected loss of the choice\", and behaves more gracefully under peeking. It is not \"better\" or \"worse\" than frequentist — it is a different language. An analyst benefits from both: frequentist is the industry standard, Bayesian is a flexible tool for small data and clear communication."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Prior",
+      "text": "the distribution of confidence about a quantity BEFORE seeing the data — past experience or a neutral assumption."
+    },
+    {
+      "term": "Likelihood",
+      "text": "how probable the observed data is at each possible value of the quantity."
+    },
+    {
+      "term": "Posterior",
+      "formula": "posterior ∝ prior × likelihood",
+      "text": "the updated belief after the data. This is what conclusions and decisions are based on."
+    },
+    {
+      "term": "Bayes vs frequentist",
+      "text": "frequentist: the quantity is fixed, the data is random. Bayes: the data is fixed, the uncertainty is expressed as a distribution over the quantity."
+    }
+  ],
+  "practice": [
+    "The Bayesian approach works naturally with small data: instead of \"too little to judge\" it honestly shows a wide posterior — large uncertainty that narrows as observations accumulate.",
+    "In product A/B tests, Bayesian metrics (\"probability that B beats A\", \"expected loss\") are clearer to the business than a p-value. But the prior must be chosen thoughtfully: a strong biased prior with little data can drag the conclusion."
+  ],
+  "realLife": [
+    "Spam filters are historically Bayesian: the prior probability of spam is updated by the email's words (naive Bayes). The same mechanism drives medical diagnostics, where the disease base rate is updated by a test result (we saw this in the conditional probability lesson).",
+    "Recommender and search systems, A/B platforms, demand forecasts increasingly use Bayesian updating: it elegantly merges accumulated experience with new data in real time."
+  ],
+  "deepDive": [
+    "The \"sharpening\" mechanism. The posterior at each point θ is the product of the prior and the likelihood: posterior(θ) ∝ prior(θ)·L(data|θ). With many observations the likelihood L is a product of each observation's probabilities, so it peaks sharply near the θ that best explains the data. Multiplying a narrow likelihood by a wide prior gives a narrow posterior at that peak — that is why data \"wins\" and narrows the belief.",
+    "Why little data → the posterior stays near the prior: at small n the likelihood is still flat (the data rules out little), and the prior sets the shape. As n grows, the likelihood gets ever sharper and suppresses the prior — hence \"data overrides preconceptions\". Conjugate priors (Beta for shares, as in the widget) are convenient because the posterior stays in the same family — so the update reduces to a simple recalculation of the parameters."
+  ],
+  "assumptions": [
+    "With little data the posterior almost entirely echoes the prior — the conclusion is exactly as honest as the prior. Check the sensitivity: does the answer change much under another reasonable prior?",
+    "\"The probability that the effect exists\" is a probability GIVEN your premises: the noise model and the prior. A crooked model or dependent data breaks Bayesian inference just as mercilessly as frequentist."
+  ],
+  "nextLabel": "Bayes in action: the probability that B beats A → Bayesian A/B"
+}

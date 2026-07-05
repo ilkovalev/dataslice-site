@@ -1,0 +1,58 @@
+{
+  "id": "bayesian-ab",
+  "module": 10,
+  "title": "Bayesian A/B: the probability that B beats A",
+  "tier": 1,
+  "intro": "A frequentist A/B answers evasively: \"p = 0.04, we reject H0\". The business wants it simple: \"what is the probability that B is better than A, and how much do we lose if we're wrong?\". The Bayesian approach answers these questions directly. Move the prior and the data — the posterior updates.",
+  "widget": "bayesian-ab",
+  "beats": [
+    {
+      "text": "The idea is the same as in the previous lesson, but for two variants. For conversion A and conversion B we build a posterior distribution each (from the prior + observed data). Now we have not two points, but two distributions of plausible conversion values."
+    },
+    {
+      "text": "From two posteriors you can compute what a p-value cannot give.",
+      "predict": "Which is more useful for the business to hear: \"p = 0.04\" or \"the probability that B beats A is 96%\"?",
+      "reveal": "The second — and that is exactly what Bayes delivers: P(B > A) is computed as the share of cases where a random value from B's posterior exceeds one from A's. A direct, human answer to \"should we ship B\", without the roundabout logic of rejecting a null hypothesis."
+    },
+    {
+      "text": "The second practical measure — expected loss: if we pick B and A turns out to be right, how much we lose on average. The decision is made when the expected loss of the choice falls below the \"we can live with this\" threshold. It translates statistics straight into the language of risk and money."
+    },
+    {
+      "text": "A bonus for A/B practice: the Bayesian approach is gentler about peeking. The posterior is always the current state of knowledge, and you may look at it as you go (though naive stopping at P(B>A)>95% still slightly inflates errors — honest implementations account for that). Plus, on small data a wide posterior itself honestly says \"too early to decide\"."
+    },
+    {
+      "text": "It is not a \"replacement\" for frequentist, but a different language. Frequentist — the industry standard and strict Type I error control; Bayesian — the intuitive \"probability of being better\" and \"expected loss\", handy for decisions and communication. Mature teams often compute both."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Per-variant posterior",
+      "text": "the distribution of plausible metric values of a variant after the data (prior + likelihood)."
+    },
+    {
+      "term": "P(B > A)",
+      "text": "the probability that variant B is better than A; computed from the two posterior distributions."
+    },
+    {
+      "term": "Expected loss",
+      "text": "the average loss from choosing a variant if it turns out worse; a stopping and decision criterion."
+    },
+    {
+      "term": "Bayesian vs frequentist A/B",
+      "text": "the first gives \"probability of being better\" and \"risk\"; the second — Type I error control and the p-value."
+    }
+  ],
+  "practice": [
+    "Bayesian A/B shines in business communication: \"B is better with probability 96%, the expected loss of choosing B is 0.1%\" is clear without statistical training and leads straight to a decision.",
+    "But the prior must be chosen honestly: a strong biased prior with little data will drag the conclusion. In practice weak (uninformative) priors are used so the data decides."
+  ],
+  "realLife": [
+    "Many A/B platforms offer a Bayesian mode precisely for the interpretable \"probability to win\" and \"expected loss\" — it reduces arguments about interpreting p-values.",
+    "A close relative is multi-armed bandits: there, the variants' posterior distributions are used to route more traffic to the better variant as the test runs."
+  ],
+  "assumptions": [
+    "\"The probability that B is better\" inherits the prior: with a weak prior on small data it easily shows 90%+ on pure noise. Fix the prior in advance rather than tuning it toward the desired result.",
+    "Bayesian A/B is gentler about peeking but not immune: constantly stopping at \"95% better\" still biases conclusions. And this probability says nothing about HOW MUCH better — look at the expected effect and the loss."
+  ],
+  "nextLabel": "Bayes can classify too → Naive Bayes"
+}

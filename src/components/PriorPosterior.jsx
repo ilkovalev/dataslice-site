@@ -27,7 +27,8 @@ function betaPdf(x, a, b) {
   return Math.exp(logp)
 }
 
-export default function PriorPosterior() {
+export default function PriorPosterior({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [m, setM] = useState(0.5) // априорное среднее (вера до данных)
   const [s, setS] = useState(8) // сила априори (сколько «виртуальных» наблюдений)
   const [k, setK] = useState(34) // успехи в данных
@@ -66,41 +67,45 @@ export default function PriorPosterior() {
         <path d={`${line('po')}`} fill="none" stroke="#2ab8eb" strokeWidth="2.5" />
         <line x1={sx(priorMean)} y1={TOP} x2={sx(priorMean)} y2={BASE} stroke="#9ca3af" strokeWidth="1" strokeDasharray="3 3" />
         <line x1={sx(postMean)} y1={TOP} x2={sx(postMean)} y2={BASE} stroke="#2ab8eb" strokeWidth="1" strokeDasharray="3 3" />
-        <text x={sx(priorMean)} y={TOP - 2} fill="#9ca3af" fontSize="9" textAnchor="middle">априори {priorMean.toFixed(2)}</text>
-        <text x={sx(postMean)} y={TOP + 9} fill="#0d7fb0" fontSize="9" textAnchor="middle">итог {postMean.toFixed(2)}</text>
+        <text x={sx(priorMean)} y={TOP - 2} fill="#9ca3af" fontSize="9" textAnchor="middle">{en ? 'prior' : 'априори'} {priorMean.toFixed(2)}</text>
+        <text x={sx(postMean)} y={TOP + 9} fill="#0d7fb0" fontSize="9" textAnchor="middle">{en ? 'result' : 'итог'} {postMean.toFixed(2)}</text>
         <text x={sx(0)} y={BASE + 16} fill="#9a907c" fontSize="10">0</text>
-        <text x={sx(1)} y={BASE + 16} fill="#9a907c" fontSize="10" textAnchor="end">1 · θ (истинная доля/конверсия)</text>
+        <text x={sx(1)} y={BASE + 16} fill="#9a907c" fontSize="10" textAnchor="end">{en ? '1 · θ (true share/conversion)' : '1 · θ (истинная доля/конверсия)'}</text>
       </svg>
 
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-xs">
-        <span className="text-[#9ca3af]">▏ априори (мнение до данных), центр {priorMean.toFixed(2)}</span>
-        <span className="text-[#d99a06]">▏ правдоподобие (только данные {k}/{n} = {dataProp.toFixed(2)})</span>
-        <span className="text-[#2ab8eb]">▏ апостериори (итог), центр {postMean.toFixed(2)}</span>
+        <span className="text-[#9ca3af]">▏ {en ? 'prior (belief before the data), center' : 'априори (мнение до данных), центр'} {priorMean.toFixed(2)}</span>
+        <span className="text-[#d99a06]">▏ {en ? `likelihood (the data alone ${k}/${n} = ${dataProp.toFixed(2)})` : `правдоподобие (только данные ${k}/${n} = ${dataProp.toFixed(2)})`}</span>
+        <span className="text-[#2ab8eb]">▏ {en ? 'posterior (the result), center' : 'апостериори (итог), центр'} {postMean.toFixed(2)}</span>
       </div>
 
       <div className="mt-2 rounded-lg border border-black/10 bg-ink px-3 py-2 text-xs font-mono text-gray-700">
-        апостериори(θ) ∝ априори(θ) × правдоподобие(данные | θ){'  →  '}центр итога {postMean.toFixed(2)} лежит между {priorMean.toFixed(2)} (априори) и {dataProp.toFixed(2)} (данные)
+        {en
+          ? <>posterior(θ) ∝ prior(θ) × likelihood(data | θ){'  →  '}the result’s center {postMean.toFixed(2)} lies between {priorMean.toFixed(2)} (prior) and {dataProp.toFixed(2)} (data)</>
+          : <>апостериори(θ) ∝ априори(θ) × правдоподобие(данные | θ){'  →  '}центр итога {postMean.toFixed(2)} лежит между {priorMean.toFixed(2)} (априори) и {dataProp.toFixed(2)} (данные)</>}
       </div>
 
       <div className="grid sm:grid-cols-2 gap-x-5 gap-y-3 mt-4 text-sm">
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Априорное мнение (среднее θ)</span><span className="text-cyanink">{m.toFixed(2)}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Prior belief (mean θ)' : 'Априорное мнение (среднее θ)'}</span><span className="text-cyanink">{m.toFixed(2)}</span></div>
           <input type="range" min="0.05" max="0.95" step="0.05" value={m} onChange={(e) => setM(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Сила априори (уверенность)</span><span className="text-cyanink">{s}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Prior strength (confidence)' : 'Сила априори (уверенность)'}</span><span className="text-cyanink">{s}</span></div>
           <input type="range" min="2" max="60" step="1" value={s} onChange={(e) => setS(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Данные: успехов k</span><span className="text-cyanink">{k}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Data: successes k' : 'Данные: успехов k'}</span><span className="text-cyanink">{k}</span></div>
           <input type="range" min="0" max={n} step="1" value={k} onChange={(e) => setK(Math.min(n, Number(e.target.value)))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Данные: всего n</span><span className="text-cyanink">{n}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Data: total n' : 'Данные: всего n'}</span><span className="text-cyanink">{n}</span></div>
           <input type="range" min="0" max="400" step="5" value={n} onChange={(e) => { const v = Number(e.target.value); setN(v); if (k > v) setK(v) }} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">θ — это неизвестная истинная доля (например, конверсия кнопки). Серая кривая — во что вы верите ДО данных (априори); её центр задаёт «Априорное мнение», а ширину — «Сила априори» (больше сила → уже и увереннее). Жёлтая пунктирная — что говорят ОДНИ данные (k успехов из n): её пик стоит на доле k/n. Синяя — итог (апостериори): он получается перемножением серой и жёлтой и всегда лежит МЕЖДУ ними. Двигайте ползунки: при малых данных итог тянется к априори, при больших n жёлтая кривая становится узкой и перетягивает итог на себя — данные «перебивают» исходное мнение.</p>
+      <p className="text-xs text-gray-500 mt-2">{en
+        ? 'θ is the unknown true share (say, a button’s conversion). The gray curve is what you believe BEFORE the data (the prior); its center is set by "Prior belief" and its width by "Prior strength" (more strength → narrower and more confident). The yellow dashed one is what the data ALONE says (k successes out of n): its peak sits at the share k/n. The blue one is the result (the posterior): it comes from multiplying the gray and the yellow and always lies BETWEEN them. Move the sliders: with little data the result leans toward the prior; at large n the yellow curve gets narrow and pulls the result toward itself — the data "overrides" the initial belief.'
+        : 'θ — это неизвестная истинная доля (например, конверсия кнопки). Серая кривая — во что вы верите ДО данных (априори); её центр задаёт «Априорное мнение», а ширину — «Сила априори» (больше сила → уже и увереннее). Жёлтая пунктирная — что говорят ОДНИ данные (k успехов из n): её пик стоит на доле k/n. Синяя — итог (апостериори): он получается перемножением серой и жёлтой и всегда лежит МЕЖДУ ними. Двигайте ползунки: при малых данных итог тянется к априори, при больших n жёлтая кривая становится узкой и перетягивает итог на себя — данные «перебивают» исходное мнение.'}</p>
     </div>
   )
 }

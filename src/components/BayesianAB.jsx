@@ -19,7 +19,8 @@ function gammaln(x) {
 }
 const betaPdf = (x, a, b) => (x <= 0 || x >= 1 ? 0 : Math.exp((a - 1) * Math.log(x) + (b - 1) * Math.log(1 - x) - (gammaln(a) + gammaln(b) - gammaln(a + b))))
 
-export default function BayesianAB() {
+export default function BayesianAB({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [n, setN] = useState(800)
   const [cA, setCA] = useState(0.10)
   const [cB, setCB] = useState(0.12)
@@ -57,30 +58,32 @@ export default function BayesianAB() {
         <path d={path(fB)} fill="none" stroke="#2ab8eb" strokeWidth="2.5" />
         <text x={sx(cA)} y={TOP + 4} fill="#6b7280" fontSize="10" textAnchor="middle">A</text>
         <text x={sx(cB)} y={TOP + 4} fill="#2ab8eb" fontSize="10" textAnchor="middle">B</text>
-        <text x={W - PAD} y={BASE + 16} fill="#9a907c" fontSize="10" textAnchor="end">конверсия →</text>
+        <text x={W - PAD} y={BASE + 16} fill="#9a907c" fontSize="10" textAnchor="end">{en ? 'conversion →' : 'конверсия →'}</text>
       </svg>
 
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm">
-        <span className="text-[#9ca3af]">▏ апостериорное A</span>
-        <span className="text-[#2ab8eb]">▏ апостериорное B</span>
+        <span className="text-[#9ca3af]">▏ {en ? 'posterior of A' : 'апостериорное A'}</span>
+        <span className="text-[#2ab8eb]">▏ {en ? 'posterior of B' : 'апостериорное B'}</span>
         <span className="text-gray-900 font-medium">P(B &gt; A) = {(pBwin * 100).toFixed(1)}%</span>
       </div>
 
       <div className="grid sm:grid-cols-3 gap-3 mt-4 text-sm">
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Конверсия A</span><span className="text-cyanink">{(cA * 100).toFixed(0)}%</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Conversion A' : 'Конверсия A'}</span><span className="text-cyanink">{(cA * 100).toFixed(0)}%</span></div>
           <input type="range" min="0.02" max="0.3" step="0.005" value={cA} onChange={(e) => setCA(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Конверсия B</span><span className="text-cyanink">{(cB * 100).toFixed(0)}%</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Conversion B' : 'Конверсия B'}</span><span className="text-cyanink">{(cB * 100).toFixed(0)}%</span></div>
           <input type="range" min="0.02" max="0.3" step="0.005" value={cB} onChange={(e) => setCB(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>n на группу</span><span className="text-cyanink">{n}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'n per group' : 'n на группу'}</span><span className="text-cyanink">{n}</span></div>
           <input type="range" min="100" max="5000" step="100" value={n} onChange={(e) => setN(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">Два распределения — это правдоподобные значения конверсии A и B после данных. P(B&gt;A) — доля случаев, где случайное значение из B больше, чем из A. Больше n — оба распределения уже, и ответ увереннее. Прямой ответ «стоит ли катить B», без p-value.</p>
+      <p className="text-xs text-gray-500 mt-2">{en
+        ? 'The two distributions are the plausible conversion values of A and B after the data. P(B>A) is the share of cases where a random value from B exceeds one from A. Larger n — both distributions get narrower and the answer more confident. A direct answer to "should we ship B", without a p-value.'
+        : 'Два распределения — это правдоподобные значения конверсии A и B после данных. P(B>A) — доля случаев, где случайное значение из B больше, чем из A. Больше n — оба распределения уже, и ответ увереннее. Прямой ответ «стоит ли катить B», без p-value.'}</p>
     </div>
   )
 }

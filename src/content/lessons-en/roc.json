@@ -1,0 +1,73 @@
+{
+  "id": "roc",
+  "module": 8,
+  "title": "The ROC curve and AUC",
+  "tier": 1,
+  "intro": "In the previous lesson we moved the threshold and saw precision and recall trade off. But there are infinitely many thresholds, and tying yourself to one is unappealing. The ROC curve shows the classifier's behavior at all thresholds at once, and AUC rolls its quality into a single number. Move the threshold and the class separability — the curve and the point respond live.",
+  "widget": "roc",
+  "beats": [
+    {
+      "text": "The curve is built like this: sweep all thresholds from the strictest to the most lenient, and for each compute two shares from the confusion matrix — FPR (the false positive rate, horizontal) and TPR (the share of spam caught, vertical). Each threshold gives one point; connected, they form the ROC curve. The yellow dot is the current threshold; drag the slider and watch it ride along the curve."
+    },
+    {
+      "text": "The ends of the curve reveal its meaning.",
+      "predict": "Move the threshold to the most lenient (marking almost everything as spam). Where does the dot land, and what does that mean?",
+      "reveal": "The top right corner: caught all the spam (TPR 100%) but drowned everything in false alarms (FPR 100%). The strictest threshold is the bottom left corner: no false alarms, no spam caught either. A good classifier hugs the top LEFT corner — catches a lot, errs little."
+    },
+    {
+      "text": "The gray diagonal is random guessing (a coin flip): TPR always equals FPR, no use at all. The higher the curve rises above the diagonal, the better the model tells the classes apart. The area under the curve (filled in teal) is the AUC."
+    },
+    {
+      "text": "Raise the \"class separability\".",
+      "predict": "The classes became easier to tell apart. What happens to the curve and the AUC number?",
+      "reveal": "The curve bows toward the top left corner and the filled area under it grows — AUC increases. AUC = 1.0 — a perfect model (the curve passes through the corner), AUC = 0.5 — the curve lies on the diagonal, the model is no better than a coin."
+    },
+    {
+      "text": "AUC has a beautiful meaning: it is the probability that a randomly taken spam object gets a higher score than a randomly taken regular email. So AUC measures how well the model RANKS — puts the target class higher by score, regardless of where you later draw the threshold."
+    },
+    {
+      "text": "Where does the odd name come from? ROC — receiver operating characteristic. It was born in WWII radar: radar operators had to tell an airplane from noise by the receiver's signal while turning the sensitivity knob. TPR — \"caught a real airplane\", FPR — \"mistook clutter for an airplane\". The same curve described the receiver's sensitivity trade-off — hence the name."
+    },
+    {
+      "text": "Why it matters in practice: ROC shows quality at ALL thresholds at once and does not depend on which threshold you eventually pick. Comparing two models, you take the one whose curve is higher (larger AUC) — and the operating threshold is tuned separately, to the cost of errors from the previous lesson."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "ROC curve",
+      "text": "the plot of TPR against FPR across all thresholds. Shows all of the classifier's trade-offs at once."
+    },
+    {
+      "term": "TPR and FPR",
+      "text": "TPR — the share of the target class caught (recall); FPR — the share of false alarms among the \"clean\" ones."
+    },
+    {
+      "term": "AUC",
+      "formula": "area under the ROC",
+      "text": "1.0 — ideal, 0.5 — chance. Equals the probability that a positive gets a higher score than a negative."
+    },
+    {
+      "term": "Receiver Operating Characteristic",
+      "text": "the historical name from radar: the characteristic of a receiver telling signal from noise."
+    }
+  ],
+  "practice": [
+    "AUC is the standard metric for comparing classifiers: models in credit scoring, medicine and anti-fraud are chosen by it. Conveniently, AUC depends neither on the threshold nor on how rare the class is — so it is more honest than the \"share of correct answers\", which deceives under imbalance.",
+    "But AUC is about ranking overall, not about a specific decision. Having chosen a model by AUC, you still set the operating point (the threshold) separately: by what costs more — a miss or a false alarm. On heavily imbalanced tasks you additionally look at the PR curve (precision against recall)."
+  ],
+  "realLife": [
+    "From radar, ROC migrated to medicine (how well a test separates the sick from the healthy) and from there to all of machine learning: disease detectors, anti-fraud, recommender systems, credit models.",
+    "When a paper or a dashboard says \"AUC 0.87\", read it as: take a random \"positive\" and a random \"negative\" — in 87% of cases the model scores the first one higher. A handy common language for classifier quality."
+  ],
+  "nextLabel": "What if the target class is very rare? → Class imbalance",
+  "related": [
+    {
+      "id": "class-imbalance",
+      "label": "Class imbalance"
+    },
+    {
+      "id": "confusion-matrix",
+      "label": "The confusion matrix"
+    }
+  ]
+}

@@ -14,7 +14,8 @@ const MAX = 100
 const C0 = [[18, 30], [26, 18], [30, 44], [38, 28], [22, 52], [44, 38], [34, 60], [50, 22], [16, 40], [42, 54]]
 const C1 = [[62, 70], [70, 54], [76, 78], [58, 62], [84, 66], [66, 84], [80, 46], [54, 78], [88, 74], [72, 38]]
 
-export default function FeatureClassifier() {
+export default function FeatureClassifier({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [angle, setAngle] = useState(-30) // градусы наклона линии
   const [offset, setOffset] = useState(50) // сдвиг по вертикали
 
@@ -55,30 +56,32 @@ export default function FeatureClassifier() {
         </g>
         <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="#d6cebf" strokeWidth="1.5" />
         <line x1={PAD} y1={PAD} x2={PAD} y2={H - PAD} stroke="#d6cebf" strokeWidth="1.5" />
-        <text x={W - PAD} y={H - PAD + 20} fill="#9a907c" fontSize="11" textAnchor="end">фича 1: доля ссылок →</text>
-        <text x={PAD - 6} y={PAD - 12} fill="#9a907c" fontSize="11">фича 2: «срочно/деньги»</text>
+        <text x={W - PAD} y={H - PAD + 20} fill="#9a907c" fontSize="11" textAnchor="end">{en ? 'feature 1: share of links →' : 'фича 1: доля ссылок →'}</text>
+        <text x={PAD - 6} y={PAD - 12} fill="#9a907c" fontSize="11">{en ? 'feature 2: "urgent/money"' : 'фича 2: «срочно/деньги»'}</text>
         {dots0}
         {dots1}
       </svg>
 
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm">
-        <span className="text-[#2ab8eb]">● спам</span>
-        <span className="text-gray-500">● не спам</span>
-        <span className="text-[#f87171]">○ ошибка</span>
-        <span className="ml-auto text-gray-700">Ошибок: <span className="tabular-nums font-medium">{errors}</span> из {total}</span>
+        <span className="text-[#2ab8eb]">● {en ? 'spam' : 'спам'}</span>
+        <span className="text-gray-500">● {en ? 'not spam' : 'не спам'}</span>
+        <span className="text-[#f87171]">○ {en ? 'error' : 'ошибка'}</span>
+        <span className="ml-auto text-gray-700">{en ? 'Errors:' : 'Ошибок:'} <span className="tabular-nums font-medium">{errors}</span> {en ? 'of' : 'из'} {total}</span>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-3 mt-4">
         <label className="block text-sm">
-          <div className="flex justify-between text-gray-700 mb-1"><span>Наклон линии</span><span className="tabular-nums text-cyanink">{angle}°</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Line slope' : 'Наклон линии'}</span><span className="tabular-nums text-cyanink">{angle}°</span></div>
           <input type="range" min="-80" max="80" value={angle} onChange={(e) => setAngle(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label className="block text-sm">
-          <div className="flex justify-between text-gray-700 mb-1"><span>Сдвиг</span><span className="tabular-nums text-cyanink">{offset}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Shift' : 'Сдвиг'}</span><span className="tabular-nums text-cyanink">{offset}</span></div>
           <input type="range" min="20" max="80" value={offset} onChange={(e) => setOffset(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">Подберите наклон и сдвиг так, чтобы линия разделила классы с наименьшим числом ошибок. Это и делает классификатор — ищет гиперплоскость в пространстве признаков.</p>
+      <p className="text-xs text-gray-500 mt-2">{en
+        ? 'Tune the slope and the shift so the line separates the classes with the fewest errors. That is what a classifier does — searches for a hyperplane in feature space.'
+        : 'Подберите наклон и сдвиг так, чтобы линия разделила классы с наименьшим числом ошибок. Это и делает классификатор — ищет гиперплоскость в пространстве признаков.'}</p>
     </div>
   )
 }

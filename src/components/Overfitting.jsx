@@ -49,7 +49,8 @@ function polyfit(points, deg) {
 const evalp = (c, x) => { const t = xs(x); let s = 0; for (let i = c.length - 1; i >= 0; i--) s = s * t + c[i]; return s }
 const mse = (c, pts) => pts.reduce((a, [x, y]) => a + (y - evalp(c, x)) ** 2, 0) / pts.length
 
-export default function Overfitting() {
+export default function Overfitting({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [deg, setDeg] = useState(8)
   const c = polyfit(TRAIN, deg)
   const sx = (x) => PAD + (x / 100) * (W - 2 * PAD)
@@ -70,16 +71,16 @@ export default function Overfitting() {
       </svg>
 
       <div className="flex flex-wrap gap-4 mt-1 text-sm">
-        <span className="text-gray-700">⚪ обучение</span>
-        <span className="text-[#fbbf24]">🟡 новые данные (тест)</span>
+        <span className="text-gray-700">⚪ {en ? 'training' : 'обучение'}</span>
+        <span className="text-[#fbbf24]">🟡 {en ? 'new data (test)' : 'новые данные (тест)'}</span>
       </div>
       <div className="flex flex-wrap gap-4 mt-1 text-sm">
-        <span className="text-[#2ab8eb]">Ошибка на обучении: {eTrain.toFixed(0)}</span>
-        <span className="text-[#fbbf24]">Ошибка на новых данных: {eTest.toFixed(0)}</span>
+        <span className="text-[#2ab8eb]">{en ? 'Training error:' : 'Ошибка на обучении:'} {eTrain.toFixed(0)}</span>
+        <span className="text-[#fbbf24]">{en ? 'Error on new data:' : 'Ошибка на новых данных:'} {eTest.toFixed(0)}</span>
       </div>
 
       <label className="block mt-4 text-sm">
-        <div className="flex justify-between text-gray-700 mb-1"><span>Сложность модели (степень полинома)</span><span className="tabular-nums text-cyanink">{deg}</span></div>
+        <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Model complexity (polynomial degree)' : 'Сложность модели (степень полинома)'}</span><span className="tabular-nums text-cyanink">{deg}</span></div>
         <input type="range" min="1" max="9" step="1" value={deg} onChange={(e) => setDeg(Number(e.target.value))} className="w-full accent-accent" />
       </label>
     </div>

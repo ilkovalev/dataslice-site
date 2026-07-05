@@ -1,0 +1,50 @@
+{
+  "id": "overfitting",
+  "module": 8,
+  "title": "Overfitting and honest validation (train/test)",
+  "tier": 1,
+  "intro": "A model can be made arbitrarily complex and forced to pass perfectly through every training point. But that is not the goal: the model must work on NEW data it has never seen. Here hides the main trap of machine learning — and the reason all the metrics (AUC, RMSE) must be measured the right way.",
+  "widget": "overfitting",
+  "beats": [
+    {
+      "text": "The white points are the data the model learns on. The teal curve is the model itself. The yellow points are new data the model has not seen. The slider sets the model's complexity (the curve's flexibility)."
+    },
+    {
+      "text": "The temptation is to make the model more complex.",
+      "predict": "Raise the complexity to the maximum. The curve will pass through nearly every white point. What happens to the error on the new (yellow) data?",
+      "reveal": "The training error drops almost to zero, while the error on new data GROWS. An overly flexible curve wiggles, fitting every random quirk of the training points, and misses the new ones. That is overfitting: the model memorized the noise instead of the pattern."
+    },
+    {
+      "text": "But an overly simple model is bad too: a straight line (degree 1) is underfit — it misses even the real shape. The truth is in the middle: flexible enough to catch the pattern, but not so flexible as to memorize the noise. The error on new data is U-shaped in complexity — it has an optimum."
+    },
+    {
+      "text": "That is why the data is split: the model learns on the training part, and is honestly checked on a separate held-out (test) part. Quality is judged ONLY by the error on data the model has not seen. A low training error by itself means nothing — anything can be memorized."
+    },
+    {
+      "text": "One held-out chunk is a lottery: you get lucky or unlucky with the split. So cross-validation is more reliable: the data is split into k parts, each takes a turn as the test set while the model trains on the rest — and the k estimates are averaged. That gives a stable estimate of quality on new data, independent of one lucky/unlucky split."
+    }
+  ],
+  "definitions": [
+    { "term": "Overfitting", "text": "the model memorized the random noise of the training data and performs poorly on new data." },
+    { "term": "Underfitting", "text": "the model is too simple and misses even the real pattern." },
+    { "term": "Train / test", "text": "the data split: the model learns on the training part; quality is honestly checked on the test part." },
+    { "term": "Cross-validation", "text": "a k-fold split: each part takes a turn as the test set, the estimates are averaged — a stable quality estimate." }
+  ],
+  "practice": [
+    "Splitting into train and test (and more reliably — cross-validation) is basic machine learning hygiene. All the metrics from the previous lessons (AUC, precision/recall, RMSE) are meaningful only on held-out data. A model praised for accuracy on its training data can be useless in production.",
+    "This continues the thread about sample size and honesty: a pretty result on the same data the model was tuned on easily turns out to be self-deception — memorized noise."
+  ],
+  "realLife": [
+    "Overfitting explains why a \"genius\" trading strategy that perfectly describes the past loses money on the future — it memorized history's accidents.",
+    "And why a model trained on one city or one camera starts failing in new conditions: it adapted to particulars, not to the essence."
+  ],
+  "assumptions": [
+    "The honesty of train/test rests on the test taking NO part in training or tuning. Data leakage (test bleeding into training, or a feature \"from the future\") paints a pretty but fake estimate — there is a separate lesson on this in the traps module.",
+    "The split must respect the structure: for time series the test comes LATER than the training (you cannot learn on the future); for groups (one user — many rows) split by group, otherwise the estimate is inflated."
+  ],
+  "deepDive": [
+    "Under the hood is the bias-variance trade-off. A simple model has high bias (systematically off) but low variance (stable across samples). A complex one — low bias but high variance (wiggles from sample to sample). The error on new data ≈ bias² + variance + irreducible noise, and the minimum is in the middle of the complexity range.",
+    "Overfitting is fought not only with train/test: regularization (a penalty for complexity), more data, a simpler model, early stopping. All of them shift the bias-variance balance toward the optimum."
+  ],
+  "nextLabel": "Before the wrap-up — the traps that trip even the experienced → Data traps"
+}

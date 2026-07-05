@@ -1,0 +1,46 @@
+{
+  "id": "class-imbalance",
+  "module": 8,
+  "title": "Class imbalance: when ROC deceives",
+  "tier": 1,
+  "intro": "Fraud — 0.2% of transactions. A disease — 1% of patients. When the target class is rare, the usual metrics start lying, and ROC/AUC look deceptively good. Let's see how to evaluate a classifier honestly on a rare class. Shrink the rare class share and change the separability — watch the PR curve and the AUC.",
+  "widget": "pr-curve",
+  "beats": [
+    {
+      "text": "First, recall the accuracy trap under imbalance: if fraud is 0.2%, the model \"everything is honest\" is right 99.8% of the time — accuracy is nearly perfect and the usefulness is zero (not a single fraudster caught). On a rare class accuracy is meaningless — we saw this in the confusion matrix."
+    },
+    {
+      "text": "But ROC/AUC also flatter under heavy imbalance.",
+      "predict": "Why can AUC be high (0.95) while in practice almost everyone marked \"fraudster\" is honest?",
+      "reveal": "Because FPR is computed against the HUGE mass of honest users: even FPR = 2% with 99.8% honest gives an avalanche of false alarms, far outnumbering the handful of real fraudsters. ROC doesn't feel this (it is about shares within classes), while precision collapses. AUC is high, yet the system is unusable."
+    },
+    {
+      "text": "That is why on a rare class you look at the PR curve — precision against recall (it is in front of you). Shrink the \"rare class share\" — the curve sags, and precision at recall 80% drops, even though ROC-AUC barely moves. PR is more honest than ROC precisely because precision feels the rarity of the class."
+    },
+    {
+      "text": "F1 helps roll it into one number — the harmonic mean of precision and recall: it is high only when BOTH are high. The harmonic (not the ordinary) mean punishes skew hard: recall 100% at precision 2% gives F1 ≈ 4%, not 51%. When the cost of a miss and a false alarm differ, Fβ is used, tilted the needed way."
+    },
+    {
+      "text": "What to do about the imbalance itself: tune the threshold to the cost of the error (rather than leaving 0.5), weight the classes during training, sometimes re-sample (down/up-sampling). But the metric is chosen FOR the task: for a rare important class — precision/recall/PR-AUC, not accuracy and not bare ROC-AUC."
+    }
+  ],
+  "definitions": [
+    { "term": "Class imbalance", "text": "one class is far rarer than the other (fraud, disease, churn) — the usual metrics get distorted." },
+    { "term": "PR curve", "text": "precision against recall across thresholds; on a rare class more honest than ROC, since precision feels the rarity." },
+    { "term": "F1", "formula": "2·P·R / (P+R)", "text": "the harmonic mean of precision and recall: high only when both metrics are high." },
+    { "term": "Weighting / re-sampling", "text": "remedies for imbalance: class weights during training, down/up-sampling of the rare class." }
+  ],
+  "practice": [
+    "The first question in classification: how rare is the class? If rare and important (fraud, disease) — set accuracy and bare ROC-AUC aside and look at precision/recall, PR-AUC, F1, tuning the threshold to the cost of a miss vs a false alarm.",
+    "A high AUC under heavy imbalance is a reason not to celebrate but to check precision at the operating threshold: it often turns out that 95% of the alerts are false and the system is drowning."
+  ],
+  "realLife": [
+    "Anti-fraud and medical screening are the classic imbalance: real cases are a handful, so everything revolves around precision/recall and the cost of errors, not around overall accuracy.",
+    "Moderation and spam: with a rare violation it is vital not to bury users under false blocks — that is direct control of precision at the required recall."
+  ],
+  "assumptions": [
+    "Accuracy and ROC-AUC are informative on balanced classes; under heavy imbalance they systematically flatter — you need PR metrics.",
+    "Re-sampling and weights change the base rate, so the \"probabilities\" the model outputs afterwards are biased and need calibration if they are read as real probabilities."
+  ],
+  "nextLabel": "A strong model on old data ≠ a good one on new data → Overfitting"
+}

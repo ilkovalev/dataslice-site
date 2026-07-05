@@ -1,0 +1,49 @@
+{
+  "id": "classification",
+  "module": 8,
+  "title": "Classification: how a machine assigns an object to a class",
+  "tier": 1,
+  "intro": "Regression predicts a number. But often you need to predict a category: spam or not spam, sick or healthy, will the customer churn or stay. That is classification. Before counting errors, let's understand the principle itself — how a machine decides which class an object belongs to at all. Move the sliders and watch the line divide the classes.",
+  "widget": "feature-classifier",
+  "beats": [
+    {
+      "text": "To a model, any object is a set of numeric features. An email is described by, say, two features: the share of links in the text (horizontal) and how many words like \"urgent\", \"money\", \"prize\" it contains (vertical). Each point is one email. Teal — spam, gray — regular: you can see the spam is shifted up and to the right."
+    },
+    {
+      "text": "A classifier draws a boundary between the classes — a separating line. Everything on one side it calls spam, on the other — regular mail. This boundary is called a hyperplane.",
+      "predict": "Turn the \"slope\" and \"shift\" knobs. Can you place the line so that no errors (points circled in red) remain at all?",
+      "reveal": "Almost, but not perfectly: the classes overlap slightly, and some emails will always end up on the wrong side. The model's job is to find the boundary with the fewest errors. Finding that line IS what \"training\" a classifier means."
+    },
+    {
+      "text": "Why \"hyperplane\" and not just \"line\"? There are almost always more than two features — dozens and hundreds. In a two-feature space the boundary is a line, in three — a plane, and in a hundred dimensions — a hyperplane. You cannot draw it, but the idea is exactly the same: a surface dividing the feature space into classes."
+    },
+    {
+      "text": "An important subtlety: a model almost never answers a hard \"yes/no\". It outputs a score — how much the object resembles the class (roughly, how far it is from the boundary and on which side). Look at the same task in one dimension: horizontally — the \"looks like spam\" score; spam is on average further right, regular emails further left, but they overlap.",
+      "widget": { "name": "classifier" }
+    },
+    {
+      "text": "To turn the score into a decision, you set a threshold: everything to the right gets marked as spam. The threshold is our choice, not a property of the model.",
+      "predict": "Move the threshold to the right (marking spam more strictly). What happens to the two troubles — real emails landing in \"Spam\" and spam breaking into the inbox?",
+      "reveal": "A strict threshold → we almost never send real emails to spam, but let some spam into the inbox. A lenient threshold — the reverse. These are the same Type I and Type II errors from the hypotheses lesson, just in a new outfit. Where to put the threshold depends on which error costs more.",
+      "widget": { "name": "classifier" }
+    },
+    {
+      "text": "So a classifier has two parts: the model, which turns features into a score (and draws the boundary), and the threshold, which turns the score into a decision. Quality cannot be captured in one number — the outcomes must be laid out properly. That is what comes next: the confusion matrix and the metrics."
+    }
+  ],
+  "definitions": [
+    { "term": "Classification", "text": "predicting a category (a class), not a number: spam / not spam, sick / healthy, churn / stay." },
+    { "term": "Feature", "text": "one measurable property of an object as a number. The model draws its conclusions from the set of features." },
+    { "term": "Hyperplane", "text": "the separating surface in feature space: a line in 2D, a plane in 3D, a hyperplane in many dimensions." },
+    { "term": "Score and threshold", "text": "the score — how much the object resembles the class; the threshold — the score cutoff above which the object is assigned to the class. The threshold is tuned to the task." }
+  ],
+  "practice": [
+    "Picking good features is half the battle. For an email it is the share of links and the \"spam words\"; for customer churn — recency of the last purchase, visit frequency, average order value; for anti-fraud — amount, time, geography of the transaction. A model is exactly as strong as the features it was given are informative.",
+    "The threshold is a separate knob, turned after training, to match the cost of errors. The same model with different thresholds behaves as a \"cautious\" or a \"picky\" filter."
+  ],
+  "realLife": [
+    "Classifiers are everywhere: spam filters, bank anti-fraud, medical diagnostics, credit scoring, content moderation, \"will buy / won't buy\" recommendations. Everywhere the object is described by features, and the model draws a boundary.",
+    "Modern neural networks are more intricate than a linear boundary, but the principle holds: features in, class scores out, and the decision comes from a threshold."
+  ],
+  "nextLabel": "How to lay out all the outcomes and measure errors honestly? → The confusion matrix"
+}

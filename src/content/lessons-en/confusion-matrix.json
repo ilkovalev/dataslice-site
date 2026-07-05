@@ -1,0 +1,71 @@
+{
+  "id": "confusion-matrix",
+  "module": 8,
+  "title": "The confusion matrix: precision, recall and the accuracy trap",
+  "tier": 1,
+  "intro": "A classifier has four possible outcomes, and collapsing them into one \"share of correct answers\" is dangerous. To measure quality honestly, the outcomes are laid out in a confusion matrix, and metrics are computed from it to fit the specific task. Move the threshold and the class separability — all the numbers recompute.",
+  "widget": "classifier",
+  "beats": [
+    {
+      "text": "Every prediction lands in one of four cells. TP (true positive) — caught spam. TN (true negative) — correctly let a regular email through. FP (false positive) — wrongly marked a real email as spam. FN (false negative) — missed spam into the inbox. These four numbers ARE the confusion matrix."
+    },
+    {
+      "text": "Metrics are computed from the matrix, and the first two are the key ones. Precision: of everything marked as spam, what share really is spam — TP / (TP + FP). Recall: of all the real spam, what share was caught — TP / (TP + FN).",
+      "predict": "Move the threshold left (marking spam more generously). What happens to precision and recall?",
+      "reveal": "Recall grows (we catch more spam) while precision falls (we snag real emails along with the spam). Moving the threshold, you always trade one for the other — you cannot raise both at once, only pick a balance."
+    },
+    {
+      "text": "The same numbers also go by their \"medical\" names. TPR (true positive rate) IS recall: the share of the target class caught. FPR (false positive rate) is the share of false alarms among the \"clean\" ones: FP / (FP + TN). Remember the TPR/FPR pair — the ROC curve grows out of it in the next lesson."
+    },
+    {
+      "text": "Now raise the \"class separability\".",
+      "predict": "The classes overlap less. What happens to precision and recall simultaneously?",
+      "reveal": "Both grow. When the classes separate well, one good threshold is enough to catch nearly all the spam and barely touch the real mail. The precision/recall trade-off never disappears, but it softens — a good model pushes both metrics up."
+    },
+    {
+      "text": "The main trap is accuracy, the share of correct answers (TP + TN) / total. On balanced classes it is reasonable, but on a rare class it deceives brutally. If spam is only 1%, the model \"nothing is spam\" is right 99% of the time — accuracy is huge, recall is zero, usefulness is zero. That is why on rare classes you watch precision and recall, not overall accuracy."
+    },
+    {
+      "text": "Which metric to choose is dictated by the cost of the error. Losing an important email hurts → protect precision (threshold higher). Missing a fraudulent transaction or a disease is dangerous → sacrifice precision for recall (threshold lower). There is no universal answer: first decide what costs more — a false alarm or a miss — and tune the threshold to that."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Confusion matrix",
+      "text": "the 2×2 table of outcomes: TP, FP, FN, TN — correctly/incorrectly caught and missed objects of each class."
+    },
+    {
+      "term": "Precision",
+      "formula": "TP / (TP + FP)",
+      "text": "of those marked as the class — what share is correct. Falls when we snag extras."
+    },
+    {
+      "term": "Recall = TPR",
+      "formula": "TP / (TP + FN)",
+      "text": "of the whole target class — what share was caught. Falls when we miss."
+    },
+    {
+      "term": "FPR (false positive rate)",
+      "formula": "FP / (FP + TN)",
+      "text": "what share of \"clean\" objects we wrongly marked as the class."
+    },
+    {
+      "term": "Accuracy",
+      "formula": "(TP + TN) / total",
+      "text": "the share of correct answers. Deceptive on imbalanced classes."
+    }
+  ],
+  "practice": [
+    "The first thing done with a trained model is building the confusion matrix and looking at precision/recall, not a single accuracy. Especially if the class of interest is rare: fraud, disease, churn. There, high accuracy means almost nothing.",
+    "When one number is needed to compare models, F1 is used — the harmonic mean of precision and recall: it is high only when both metrics are high. But even F1 is chosen deliberately, remembering that precision and recall answer different questions."
+  ],
+  "realLife": [
+    "Medical screening is tuned for high recall: better to re-check a healthy person than to miss a sick one. That is why a sensitive first test is followed by a precise confirmatory one — it recovers the precision.",
+    "A spam filter, by contrast, protects precision: the user cares more about not losing a real email than about occasionally seeing spam in the inbox. The same confusion matrix, but opposite priorities — and the threshold sits in different places."
+  ],
+  "assumptions": [
+    "The matrix is computed at a specific threshold: move it — and precision and recall change. Comparing models \"at the default threshold of 0.5\" is incorrect, especially on imbalanced classes.",
+    "Precision depends on the share of the positive class in the stream: move the model to where fraud is half as frequent — precision drops by itself, with no degradation of the model. Recall does not depend on the base rate."
+  ],
+  "nextLabel": "How to judge a classifier at all thresholds at once? → The ROC curve and AUC"
+}

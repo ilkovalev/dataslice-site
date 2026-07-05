@@ -42,8 +42,10 @@ function buildData() {
 }
 
 const STEPS = ['Данные', 'Выбросы', 'Сегменты', 'A/B-итог', 'CATE', 'Вывод']
+const STEPS_EN = ['Data', 'Outliers', 'Segments', 'A/B result', 'CATE', 'Conclusion']
 
-export default function DataCaseStudy() {
+export default function DataCaseStudy({ locale = 'ru' }) {
+  const en = locale === 'en'
   const data = useMemo(buildData, [])
   const [step, setStep] = useState(0)
 
@@ -84,9 +86,9 @@ export default function DataCaseStudy() {
         {counts.map((c, k) => { const h = (c / mc) * (H - 2 * PAD); return c ? <rect key={k} x={sx(k * bw) + 1} y={H - PAD - h} width={(W - 2 * PAD) / BINS - 1} height={h} fill="#2ab8eb" opacity="0.8" /> : null })}
         <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="#d6cebf" />
         <line x1={sx(median)} y1={PAD - 6} x2={sx(median)} y2={H - PAD} stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4 3" />
-        <text x={sx(median)} y={PAD - 8} fill="#d9a300" fontSize="10" textAnchor="middle">медиана {median}</text>
+        <text x={sx(median)} y={PAD - 8} fill="#d9a300" fontSize="10" textAnchor="middle">{en ? 'median' : 'медиана'} {median}</text>
         {sx(mean) < W - PAD && <line x1={sx(mean)} y1={PAD - 6} x2={sx(mean)} y2={H - PAD} stroke="#16a34a" strokeWidth="1.5" />}
-        {sx(mean) < W - PAD && <text x={sx(mean)} y={H - PAD + 14} fill="#16a34a" fontSize="10" textAnchor="middle">среднее {mean.toFixed(0)}</text>}
+        {sx(mean) < W - PAD && <text x={sx(mean)} y={H - PAD + 14} fill="#16a34a" fontSize="10" textAnchor="middle">{en ? 'mean' : 'среднее'} {mean.toFixed(0)}</text>}
         {highlightOutliers && <line x1={sx(p95)} y1={PAD} x2={sx(p95)} y2={H - PAD} stroke="#dc4d4d" strokeWidth="1" strokeDasharray="3 3" />}
         {highlightOutliers && <text x={sx(p95)} y={PAD + 10} fill="#dc4d4d" fontSize="10">p95 = {p95}</text>}
       </svg>
@@ -115,7 +117,19 @@ export default function DataCaseStudy() {
   }
 
   const pct = (v) => (v * 100).toFixed(1) + '%'
-  const body = [
+  const body = en ? [
+    { chart: <Hist />, text: `2400 users, revenue per user. The distribution is right-skewed: the mean (${mean.toFixed(0)}) is noticeably above the median (${median}). Takeaway: the typical user is more honestly described by the median than by the mean.` },
+    { chart: <Hist highlightOutliers />, text: `Over the full range you can see rare outliers (a tail up to ${maxRev}). These are real large purchases, not errors. Decision: don't remove them, but for the "typical" value look at the median and p95 (${p95}), and use the mean cautiously.` },
+    { chart: <Bars items={[{ label: 'mobile', v: byDev('mobile') }, { label: 'desktop', v: byDev('desktop'), c: '#16a34a' }]} fmt={pct} />, text: `Conversion depends heavily on the device: higher on desktop than on mobile. This is an important segment — if the A/B groups are accidentally imbalanced by device, the comparison is distorted. Here randomization equalized them.` },
+    { chart: <Bars items={[{ label: 'A', v: cA, ci: ciHalf }, { label: 'B', v: cB, ci: ciHalf, c: '#16a34a' }]} fmt={pct} ci />, text: `A/B result (ATE): conversion A = ${pct(cA)}, B = ${pct(cB)}. Difference ${pct(cB - cA)}, z = ${z.toFixed(2)}, p = ${pval < 0.001 ? '<0.001' : pval.toFixed(3)}. ${pval < 0.05 ? 'Significant, and the intervals barely overlap.' : 'Not significant — the intervals overlap.'} But the average effect is not the whole truth.` },
+    { chart: <Bars items={[
+      { label: 'mob·A', v: conv(data.filter((d) => d.device === 'mobile' && d.group === 'A')), c: '#9ca3af' },
+      { label: 'mob·B', v: conv(data.filter((d) => d.device === 'mobile' && d.group === 'B')), c: '#16a34a' },
+      { label: 'desk·A', v: conv(data.filter((d) => d.device === 'desktop' && d.group === 'A')), c: '#9ca3af' },
+      { label: 'desk·B', v: conv(data.filter((d) => d.device === 'desktop' && d.group === 'B')), c: '#dc4d4d' },
+    ]} fmt={pct} />, text: `CATE by segment: on mobile B is above A (a lift of ${(cate('mobile') * 100).toFixed(1)} pp), while on desktop B is BELOW A (${(cate('desktop') * 100).toFixed(1)} pp). The effect points in opposite directions — the average ATE hides it! Decision: roll B out only on mobile, keep A on desktop.` },
+    { chart: null, text: `Analysis summary: 1) skewed data → median/percentiles; 2) outliers are real → don't remove; 3) the key segment is the device; 4) the ATE is significant, but 5) the CATE shows an opposite-direction effect — the decision is by segment. One dataset — almost the whole course: distributions, outliers, segments, A/B, ATE/CATE, causality.` },
+  ] : [
     { chart: <Hist />, text: `2400 пользователей, выручка на пользователя. Распределение скошено вправо: среднее (${mean.toFixed(0)}) заметно выше медианы (${median}). Вывод: типичного пользователя честнее описывать медианой, а не средним.` },
     { chart: <Hist highlightOutliers />, text: `На полном диапазоне видны редкие выбросы (хвост до ${maxRev}). Это реальные крупные покупки, не ошибки. Решение: не удалять, но для «типичного» значения смотреть медиану и p95 (${p95}), а среднее использовать осторожно.` },
     { chart: <Bars items={[{ label: 'mobile', v: byDev('mobile') }, { label: 'desktop', v: byDev('desktop'), c: '#16a34a' }]} fmt={pct} />, text: `Конверсия сильно зависит от устройства: на desktop выше, чем на mobile. Это важный сегмент — если группы A/B случайно разбалансированы по устройству, сравнение исказится. Здесь рандомизация их уравняла.` },
@@ -132,15 +146,15 @@ export default function DataCaseStudy() {
   return (
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <div className="flex flex-wrap gap-1.5 mb-3">
-        {STEPS.map((s, i) => (
+        {(en ? STEPS_EN : STEPS).map((s, i) => (
           <button key={s} onClick={() => setStep(i)} className={`text-xs px-2.5 py-1 rounded-md border ${step === i ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{i + 1}. {s}</button>
         ))}
       </div>
       {body[step].chart}
       <p className="text-sm text-gray-700 mt-2 leading-relaxed">{body[step].text}</p>
       <div className="flex gap-2 mt-3">
-        <button disabled={step === 0} onClick={() => setStep(step - 1)} className="text-sm px-3 py-1.5 rounded-md border border-black/15 text-gray-700 disabled:opacity-30 hover:bg-black/5">Назад</button>
-        {step < STEPS.length - 1 && <button onClick={() => setStep(step + 1)} className="text-sm px-3 py-1.5 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">Дальше</button>}
+        <button disabled={step === 0} onClick={() => setStep(step - 1)} className="text-sm px-3 py-1.5 rounded-md border border-black/15 text-gray-700 disabled:opacity-30 hover:bg-black/5">{en ? 'Back' : 'Назад'}</button>
+        {step < STEPS.length - 1 && <button onClick={() => setStep(step + 1)} className="text-sm px-3 py-1.5 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">{en ? 'Next' : 'Дальше'}</button>}
       </div>
     </div>
   )

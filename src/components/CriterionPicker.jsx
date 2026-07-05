@@ -98,7 +98,7 @@ export default function CriterionPicker({ locale = 'ru' }) {
 
       {/* распределение метрики */}
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none">
-        {data.type === 'bars' ? <Bars pA={data.pA} pB={data.pB} /> : <Dots A={data.A} B={data.B} />}
+        {data.type === 'bars' ? <Bars pA={data.pA} pB={data.pB} en={en} /> : <Dots A={data.A} B={data.B} en={en} />}
       </svg>
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs mt-1 mb-3">
         <span className="text-gray-500"><span className="inline-block w-2.5 h-2.5 rounded-full align-middle bg-[#9ca3af]" /> {en ? 'group A' : 'группа A'}</span>
@@ -198,7 +198,7 @@ function RefDist({ crit }) {
   )
 }
 
-function Dots({ A, B }) {
+function Dots({ A, B, en }) {
   const all = [...A, ...B]
   const lo = Math.min(...all), hi = Math.max(...all)
   const sx = (x) => PAD + ((x - lo) / (hi - lo || 1)) * (W - 2 * PAD)
@@ -219,7 +219,7 @@ function Dots({ A, B }) {
   )
 }
 
-function Bars({ pA, pB }) {
+function Bars({ pA, pB, en }) {
   const xmax = 0.2
   const sx = (p) => PAD + (p / xmax) * (W - 2 * PAD)
   const Bar = (p, y, color, label) => (

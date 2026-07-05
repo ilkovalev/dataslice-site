@@ -1,0 +1,41 @@
+{
+  "id": "capstone-project",
+  "module": 12,
+  "title": "Capstone: analyzing a real dataset end to end",
+  "tier": 1,
+  "intro": "Time to put it all together. Before you is one dataset — 2400 users with revenue, device, A/B group and whether they purchased. We'll walk it through the whole analyst's path: from the first glance to an honest decision. The widget is step-by-step: click through stages 1–6 and watch each tool of the course come into play.",
+  "widget": "data-case-study",
+  "beats": [
+    {
+      "text": "Steps 1–2 in the widget — getting to know the data. The first thing an analyst does: look at the distribution, not compute the mean blindly. Revenue is skewed, the mean is above the median → we describe it with the median. The outliers are real (large purchases) → we don't remove them, but use the mean cautiously. This is the \"Descriptive\" and \"Distributions\" modules in action."
+    },
+    {
+      "text": "Step 3 — segments. Conversion depends heavily on the device. Before comparing A and B, it is important to understand the structure of the data: a device-imbalanced split would distort the conclusion (hello confounders and Simpson). Randomization equalized the groups — which is why the comparison can be trusted."
+    },
+    {
+      "text": "Step 4 — the A/B itself (ATE).",
+      "predict": "The widget shows the difference in conversions and an interval. Is it enough to see \"B above A\" to roll B out to everyone?",
+      "reveal": "No. First we check significance and the interval (do they overlap?) — this is the \"Hypothesis testing\" and \"Confidence intervals\" modules. But even a significant average effect (ATE) is not a verdict: it averages over different people."
+    },
+    {
+      "text": "Step 5 — CATE by segment. This is where the main thing surfaces: on mobile B helps, on desktop it hurts. The average ATE hid it. The honest decision is not \"roll B out to everyone\" but \"roll B out on mobile, keep A on desktop\". This is the modules on segments, ATE/CATE and causality."
+    },
+    {
+      "text": "Step 6 — the conclusion. Note: one dataset required almost the whole course — distributions, the median and percentiles, outliers, segments, A/B, significance and intervals, ATE/CATE. That is what real work looks like: not \"apply a method\" but lead the data through the entire chain of reasoning and arrive at a decision with honest caveats."
+    }
+  ],
+  "definitions": [
+    { "term": "The analysis cycle", "text": "question → inspect and clean the data → exploration (distributions, segments) → method (test/model) → validation and interpretation → a decision with caveats." },
+    { "term": "Exploratory analysis (EDA)", "text": "the first stage: distributions, outliers, segments — before any tests or models. It determines which methods are even appropriate." },
+    { "term": "A decision with caveats", "text": "a conclusion that honestly states the uncertainty, assumptions and limits of applicability, not a bare number." }
+  ],
+  "practice": [
+    "The analyst's main skill is not knowing the formulas but leading the data through the whole cycle: look at the shape, clean it, slice by segment, choose an appropriate method, check the assumptions and state an honest conclusion. Any single method is useless in isolation from this chain.",
+    "Take your own data (expenses, game stats, a work dataset) and walk the same route: distribution → outliers → segments → relationship/comparison → conclusion. Understanding sticks when the sliders and steps are on your own questions to real numbers."
+  ],
+  "realLife": [
+    "This is how the daily work of a product and data analyst is built: 80% of the time is inspecting, cleaning and exploring the data, and only then the method. Skipping EDA is the most common cause of wrong conclusions.",
+    "And this is how strong write-ups are built too: not \"I know the t-test\", but \"here is how I led the data from question to decision, what I checked and where I honestly flagged the uncertainty\"."
+  ],
+  "nextLabel": "Congratulations — that's the whole path! Next → the second part of the site: metric hierarchies"
+}

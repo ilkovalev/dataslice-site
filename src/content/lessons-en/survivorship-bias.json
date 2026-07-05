@@ -1,0 +1,37 @@
+{
+  "id": "survivorship-bias",
+  "module": 9,
+  "title": "Survivorship bias",
+  "tier": 1,
+  "intro": "The most insidious kind of bias is when the data you do NOT see matters more than the data you have. The classic example — WWII airplanes.",
+  "widget": "survivorship",
+  "beats": [
+    {
+      "text": "The military studied planes that returned from missions to decide where to add armor. The white dots are bullet holes. Sounds logical to reinforce where there are most of them — the wings and the tail?"
+    },
+    {
+      "text": "Here hides the trap.",
+      "predict": "Where should the armor actually go — where there are many holes, or where there are none?",
+      "reveal": "Where there are NO holes. Press \"show where armor is needed\". Planes hit in the engine and the cockpit simply did not make it back to base — which is why the returning planes' data has no such holes. It is exactly these \"empty\" spots that need reinforcing."
+    },
+    {
+      "text": "This is survivorship bias: we look only at the \"survivors\" — returned planes, successful startups, investors who got rich — and draw conclusions from them, forgetting the \"fallen\", who are not in the data at all."
+    },
+    {
+      "text": "The cure is to always ask: who or what is missing from my data? Who didn't make it to the survey, didn't return, didn't survive, quit silently? Very often the answer lives exactly there, in the invisible part."
+    }
+  ],
+  "definitions": [
+    { "term": "Survivorship bias", "text": "concluding from those who \"lived\" into the data while ignoring those who dropped out of it." },
+    { "term": "Selection bias", "text": "the more general case: the sample is unrepresentative because not everyone makes it in." }
+  ],
+  "practice": [
+    "\"College dropouts become billionaires\" is textbook survivorship bias. For every Zuckerberg there are thousands of dropouts with no success, and they are simply absent from that sample.",
+    "The same in product work: you survey the remaining users and hear everything is fine — while the key churn data sits with those who left silently and never made it to the survey."
+  ],
+  "realLife": [
+    "\"How to succeed\" books dissect companies that survived — that is why they get written about. Those that did the same and went broke never made the sample.",
+    "Investors see the returns of funds that still exist; the ones closed at a loss quietly vanish from the statistics, and the average return looks better than reality."
+  ],
+  "nextLabel": "The overall trend can lie in the opposite direction → Simpson's paradox"
+}

@@ -1,0 +1,57 @@
+{
+  "id": "simpson-paradox",
+  "module": 9,
+  "title": "Simpson's paradox",
+  "tier": 1,
+  "intro": "The next trap hides in the relationships between quantities themselves. Sometimes the trend visible in the data as a whole flips completely once you split it into groups. This is Simpson's paradox — it wrecks naive conclusions and regularly catches even seasoned analysts.",
+  "widget": "simpson-paradox",
+  "beats": [
+    {
+      "text": "Before you is a cloud of points — say, employee tenure horizontally, salary vertically. Across all the points the line goes down: as if more tenure meant a lower salary. A strange conclusion."
+    },
+    {
+      "text": "But the points actually come from two different departments.",
+      "predict": "Press \"split by group\". Do you think the downward relationship will survive within each department?",
+      "reveal": "No — within each group the relationship is upward: more tenure, higher salary, as expected. The overall downward trend was a mirage: it arose because the groups sit in different places, not from a real relationship."
+    },
+    {
+      "text": "What happened: one department is paid more overall at lower tenure, the other the opposite. Mixing them produced a false overall trend. A hidden third variable (the department) flips the picture."
+    },
+    {
+      "text": "The moral: before trusting an overall relationship, ask — are there important groups the data should be split by? An aggregate can lie in the opposite direction. This is a relative of \"correlation is not causation\"."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Simpson's paradox",
+      "text": "a relationship visible in the pooled data disappears or flips sign when split into groups."
+    },
+    {
+      "term": "Hidden variable",
+      "text": "an unaccounted factor (here — the department) that creates the false overall trend."
+    },
+    {
+      "term": "Aggregation",
+      "text": "pooling groups into one pile. Convenient, but can distort or flip a relationship."
+    }
+  ],
+  "practice": [
+    "The classic real example: a drug helped less overall, but better in every patient subgroup (mild and severe cases). The severe cases simply got it more often and dragged the overall result down.",
+    "That is why analysts almost reflexively slice data by key segments: device, region, age. The same chart \"overall\" and \"by segment\" can tell opposite stories."
+  ],
+  "realLife": [
+    "The paradox has been caught in university admissions, hospital comparisons, ad effectiveness by channel. Everywhere the \"average over everyone\" misled until the data was split by group.",
+    "The lesson is simple: aggregates are convenient but dangerous. Always keep in mind which groups they are mixing."
+  ],
+  "nextLabel": "Did it \"help\" — or just regress to the mean? → Regression to the mean",
+  "related": [
+    {
+      "id": "causality",
+      "label": "Causality and confounders"
+    },
+    {
+      "id": "segments-cate",
+      "label": "Segments and CATE"
+    }
+  ]
+}

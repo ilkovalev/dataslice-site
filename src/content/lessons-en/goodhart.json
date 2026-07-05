@@ -1,0 +1,59 @@
+{
+  "id": "goodhart",
+  "module": 9,
+  "title": "Goodhart's law: the metric as a target",
+  "tier": 1,
+  "intro": "The last trap is about the metrics themselves. As soon as a metric is made a target, people start gaming it, and it stops reflecting what it was introduced for.",
+  "widget": "goodhart",
+  "beats": [
+    {
+      "text": "A call center decided to push the \"calls per hour\" metric. Move the pressure on the metric. At first both the metric and the real value (the quality of the conversation with the customer) grow together — all is well."
+    },
+    {
+      "text": "Now press harder.",
+      "predict": "What happens to the real value if you push the metric ever harder?",
+      "reveal": "It collapses. Operators start dumping calls faster just to pump the counter: the metric grows while customers fume. A metric that became a target stops being a good metric."
+    },
+    {
+      "text": "This is Goodhart's law. Pay for lines of code → get bloated code. Measure success by closed tickets → tickets get split. Chase watch time alone → the algorithm slides into addictive junk (remember the counter-metrics from the hierarchies?)."
+    },
+    {
+      "text": "Why it happens almost always: a metric is only a simplified shadow of the real goal. While no one leans on it, the shadow moves with the goal. But as soon as the shadow earns bonuses or punishment, moving the shadow itself becomes the profitable play — by the shortest path, bypassing the real goal. \"Cutting the corner\" on a metric is almost always easier than honestly improving what it is supposed to reflect."
+    },
+    {
+      "text": "The cure — counter-metrics (guardrails): next to the target metric you always keep quality constraints. Pushing calls per hour — add a customer satisfaction counter-metric; pushing development speed — watch the number of bugs in production. Any sane dashboard is paired: a growth metric plus a quality metric that must not dip."
+    },
+    {
+      "text": "This is exactly why in the metric hierarchies (the second part of the site) the bottom level is always counter-metrics. They exist precisely because of Goodhart's law. The practical rule: when setting any goal, ask in advance \"how can it be gamed to the detriment of the business?\" — and add an indicator that will catch it. Never optimize a single number blindly."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Goodhart's law",
+      "text": "when a measure becomes a target, it ceases to be a good measure — people start gaming it."
+    },
+    {
+      "term": "Gaming the metric",
+      "text": "formally improving the indicator to the detriment of the real goal it was introduced for."
+    },
+    {
+      "term": "Counter-metrics (guardrails)",
+      "text": "quality constraints next to the target metric that catch gaming and degradation."
+    }
+  ],
+  "practice": [
+    "When setting goals (OKRs, KPIs), experienced teams always ask: \"how can this goal be gamed to the detriment of the business?\" — and add a counter-metric that will catch it.",
+    "This is a direct bridge to the second part of the site: in every metric hierarchy the bottom level is guardrails. They exist precisely because of Goodhart's law."
+  ],
+  "realLife": [
+    "Schools that drill for the test instead of knowledge; hospitals turning away severe patients to improve mortality statistics; social networks burning out their audience for momentary engagement.",
+    "Everywhere the same: one indicator got optimized — and the system it was supposed to measure broke."
+  ],
+  "nextLabel": "Next — a different view of inference: updating beliefs with data → Bayesian inference",
+  "related": [
+    {
+      "id": "experiment-metrics",
+      "label": "Experiment metrics"
+    }
+  ]
+}

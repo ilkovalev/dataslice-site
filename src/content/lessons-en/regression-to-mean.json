@@ -1,0 +1,43 @@
+{
+  "id": "regression-to-mean",
+  "module": 9,
+  "title": "Regression to the mean",
+  "tier": 1,
+  "intro": "The worst stores improved after a \"performance review\". The best employees did more modestly after a bonus. It looks like the intervention worked — but often it is an illusion, pure statistics. Its name is regression to the mean, and it fools even the experienced. Move the \"share of luck\" and watch the extremes roll back.",
+  "widget": "regression-to-mean",
+  "beats": [
+    {
+      "text": "Take any result that mixes skill and chance (sales, grades, KPIs). Each point is the same object measured TWICE: horizontally the first result (test 1), vertically the repeat (test 2). The gray diagonal means \"the repeat exactly equals the first time\": if the result were pure skill, every point would lie on it. The top 20% by test 1 are highlighted in yellow, and the red arrow shows where that group landed on the repeat."
+    },
+    {
+      "text": "Look where those top performers landed on test 2.",
+      "predict": "Will their average result on the repeat be just as high, higher, or lower?",
+      "reveal": "Lower — closer to the mean, even though nothing was done to them. The reason: getting into the top took skill AND luck. The skill stays, but the luck comes out differently next time — so an extreme result on average \"rolls back\" toward the center. Same with the worst: on the repeat they improve on average all by themselves."
+    },
+    {
+      "text": "Increase the \"share of luck\" with the slider.",
+      "predict": "The more randomness in the result, the stronger or the weaker the roll-back to the mean?",
+      "reveal": "Stronger. If the result is pure skill (luck 0), there is no roll-back — the points lie on the diagonal. The more noise, the farther the extremes roll back. Regression to the mean is a direct consequence of the measurement having a random component."
+    },
+    {
+      "text": "Here is where it deceives. We always intervene at the EXTREME: scold the worst, praise the best, treat the sickest, optimize the worst stores. But the extremes would have drifted toward the mean anyway. So the \"after\" almost always looks like \"it helped\" — even when the effect is zero."
+    },
+    {
+      "text": "The cure is the same as for all false conclusions: a control group. If those who were NOT touched (but were also at the extreme) rolled back just the same — then it was regression to the mean, not the intervention. Without a control, \"before/after\" on an extreme group systematically credits chance with an effect."
+    }
+  ],
+  "definitions": [
+    { "term": "Regression to the mean", "text": "extreme values are on average closer to the mean when re-measured — because of the random component of the result." },
+    { "term": "Skill + luck", "text": "result = a stable part (skill) + a random one (luck). It is the luck that rolls back, so the extremes \"return\"." },
+    { "term": "Selection on the extreme", "text": "intervening on the very worst/best — where the regression-to-the-mean effect is largest and easiest to mistake for a result." }
+  ],
+  "practice": [
+    "This is one of the most common reasons for false faith in \"working\" measures. \"The laggards took a training — they caught up\", \"we fined the worst branch — it shaped up\": without a control group you are measuring regression to the mean, not the measure's effect.",
+    "The practical reflex: if a measure was applied to an extreme group and judged by \"before/after\" — be suspicious. You need a control or randomization (the evidence pyramid and A/B again)."
+  ],
+  "realLife": [
+    "The \"Sports Illustrated cover jinx\" and the \"rookie of the year curse\": those who hit a peak then perform more modestly — not because of a jinx, but because luck helped throw them onto the peak.",
+    "In medicine, patients come in at their worst (the extreme) and then improve on their own — so without a control group any \"treatment\" looks effective. Hence the necessity of RCTs."
+  ],
+  "nextLabel": "Is the model \"too good\"? Maybe it peeked at the answer → Data leakage"
+}

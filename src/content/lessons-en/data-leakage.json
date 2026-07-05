@@ -1,0 +1,46 @@
+{
+  "id": "data-leakage",
+  "module": 9,
+  "title": "Data leakage",
+  "tier": 1,
+  "intro": "The most insidious trap of machine learning — the model shines on the test set and falls apart in production. Often the culprit is leakage: information that will not exist at the real moment of prediction accidentally seeped into training. The model \"peeked at the answer\" — and fooled everyone, including its authors.",
+  "widget": "data-leakage",
+  "beats": [
+    {
+      "text": "Leakage is when a feature or part of the test set carries information from the \"future\" or from the answer itself. The model learns on it, the test metrics soar — but in reality that feature does not exist at prediction time, and quality collapses. It is not overfitting per se: even a model honest in its complexity will lie if the data \"leaked\"."
+    },
+    {
+      "text": "The classic example — a feature from the future.",
+      "predict": "Flip the \"feature from the future\" toggle (like \"account closure date\" when predicting churn). What happens to the metric on the test set and in production?",
+      "reveal": "The test soars to near perfection while production (green) does NOT move — it is the real one. The \"closure date\" directly gives away that the client left, but at real prediction time it does not exist yet: it appears AFTER the churn. The model learned the answer, not the cause. The \"test ≫ production\" gap IS the signature of leakage."
+    },
+    {
+      "text": "The second frequent leak — preprocessing BEFORE the train/test split. If you normalize, fill missing values or select features on all the data AT ONCE, the test \"peeks\" into training through the shared statistics. The right way: split first, then fit all the preparation on train only and apply it to test."
+    },
+    {
+      "text": "The third — leakage through groups and time. One user landed in both train and test; the data was shuffled randomly even though it is temporal (learning on the future, testing on the past). The cure: split by group (a user goes entirely into one part) and by time (the test strictly later than the training)."
+    },
+    {
+      "text": "How to catch leakage: a suspiciously high metric (\"too good to be true\"), one feature with gigantic importance, a quality collapse in production. The main question for every feature: \"will it be available at the real moment of prediction — and doesn't it contain the answer itself?\""
+    }
+  ],
+  "definitions": [
+    { "term": "Data leakage", "text": "information unavailable at the real moment of prediction (from the future or from the answer) gets into training." },
+    { "term": "Feature from the future", "text": "a variable that becomes known only AFTER the event being predicted." },
+    { "term": "Preprocessing leakage", "text": "normalization/imputation/feature selection on all the data before the split — the test peeks into train." },
+    { "term": "Group/time leakage", "text": "the same object in train and test, or random shuffling of temporal data instead of a chronological split." }
+  ],
+  "practice": [
+    "Prevention is pipeline discipline: split first, then all preparation on train only (fit on train, transform on test). Features are checked for \"availability in time\": can they be computed strictly before the moment of the forecast.",
+    "Suspiciously high quality is a reason not to celebrate but to hunt for leakage. \"Too good\" in ML almost always means a validation error, not a genius model."
+  ],
+  "realLife": [
+    "Famous failures of competitions and startups: the model showed AUC 0.99 on the test and flopped in the field — because an identifier or a field indirectly encoding the answer had seeped into the data.",
+    "Medical models \"predicted\" disease from the technical labels of the scan (the oncology center's machine name), not from the scan itself — classic leakage through an extraneous feature."
+  ],
+  "assumptions": [
+    "Train/test and cross-validation give an honest estimate ONLY if no training information seeped into the test. Under leakage, even formally correct validation lies.",
+    "For temporal and grouped data, ordinary random splitting is itself a leak — you need time-based/group-based validation schemes."
+  ],
+  "nextLabel": "The last trap is about the metrics themselves → Goodhart's law"
+}

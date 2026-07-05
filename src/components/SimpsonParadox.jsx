@@ -23,7 +23,8 @@ function ols(pts) {
   return { slope, intercept: my - slope * mx }
 }
 
-export default function SimpsonParadox() {
+export default function SimpsonParadox({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [grouped, setGrouped] = useState(false)
   const sx = (x) => PAD + (x / 100) * (W - 2 * PAD)
   const sy = (y) => H - PAD - (y / 100) * (H - 2 * PAD)
@@ -56,10 +57,12 @@ export default function SimpsonParadox() {
       </svg>
 
       <div className="mt-2 text-sm text-gray-600">
-        {grouped ? 'Внутри каждой группы связь восходящая (положительная).' : 'В целом по всем точкам связь нисходящая (отрицательная).'}
+        {grouped
+          ? (en ? 'Within each group the relationship is upward (positive).' : 'Внутри каждой группы связь восходящая (положительная).')
+          : (en ? 'Across all the points the relationship is downward (negative).' : 'В целом по всем точкам связь нисходящая (отрицательная).')}
       </div>
       <button onClick={() => setGrouped((g) => !g)} className="mt-3 text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">
-        {grouped ? 'показать все точки вместе' : 'разделить по группам'}
+        {grouped ? (en ? 'show all points together' : 'показать все точки вместе') : (en ? 'split by group' : 'разделить по группам')}
       </button>
     </div>
   )

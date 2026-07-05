@@ -15,11 +15,12 @@ const HOLES = [
 ]
 // смертельные зоны (куда реально нужна броня) — у вернувшихся тут пусто
 const ARMOR = [
-  { cx: 240, cy: 150, r: 26, label: 'двигатели' },
-  { cx: 240, cy: 80, r: 20, label: 'кабина' },
+  { cx: 240, cy: 150, r: 26, label: 'двигатели', labelEn: 'engines' },
+  { cx: 240, cy: 80, r: 20, label: 'кабина', labelEn: 'cockpit' },
 ]
 
-export default function SurvivorshipBias() {
+export default function SurvivorshipBias({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [showArmor, setShowArmor] = useState(false)
   return (
     <div className="rounded-xl border border-black/10 bg-panel p-5">
@@ -43,7 +44,7 @@ export default function SurvivorshipBias() {
         {showArmor && ARMOR.map((a, i) => (
           <g key={i}>
             <circle cx={a.cx} cy={a.cy} r={a.r} fill="#f87171" opacity="0.18" stroke="#f87171" strokeWidth="1.5" strokeDasharray="4 3" />
-            <text x={a.cx} y={a.cy + a.r + 14} fill="#dc4d4d" fontSize="11" textAnchor="middle">{a.label}</text>
+            <text x={a.cx} y={a.cy + a.r + 14} fill="#dc4d4d" fontSize="11" textAnchor="middle">{en ? a.labelEn : a.label}</text>
           </g>
         ))}
 
@@ -54,18 +55,22 @@ export default function SurvivorshipBias() {
       </svg>
 
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-sm">
-        <span className="text-gray-700">● пробоины вернувшихся</span>
-        {showArmor && <span className="text-[#dc4d4d]">⬡ куда ставить броню</span>}
+        <span className="text-gray-700">● {en ? 'bullet holes of the returned' : 'пробоины вернувшихся'}</span>
+        {showArmor && <span className="text-[#dc4d4d]">⬡ {en ? 'where the armor goes' : 'куда ставить броню'}</span>}
       </div>
 
       <div className="mt-2 text-sm text-gray-600">
         {showArmor
-          ? <>Броню — в двигатели и кабину. У вернувшихся там пробоин НЕТ не потому, что туда не попадали, а потому, что попавшие туда самолёты не вернулись. Данные «выживших» подсказывают ровно наоборот.</>
-          : <>Военные хотели усилить там, где пробоин больше всего, — на крыльях и хвосте. Где на самом деле нужна броня?</>}
+          ? (en
+            ? <>Armor goes to the engines and the cockpit. The returned planes have NO holes there not because nothing hit them, but because the planes hit there never came back. The “survivors’” data points exactly the wrong way.</>
+            : <>Броню — в двигатели и кабину. У вернувшихся там пробоин НЕТ не потому, что туда не попадали, а потому, что попавшие туда самолёты не вернулись. Данные «выживших» подсказывают ровно наоборот.</>)
+          : (en
+            ? <>The military wanted to reinforce where there were most holes — the wings and the tail. Where is the armor actually needed?</>
+            : <>Военные хотели усилить там, где пробоин больше всего, — на крыльях и хвосте. Где на самом деле нужна броня?</>)}
       </div>
 
       <button onClick={() => setShowArmor((s) => !s)} className="mt-3 text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">
-        {showArmor ? 'скрыть ответ' : 'показать, куда нужна броня'}
+        {showArmor ? (en ? 'hide the answer' : 'скрыть ответ') : (en ? 'show where armor is needed' : 'показать, куда нужна броня')}
       </button>
     </div>
   )

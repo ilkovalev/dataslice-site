@@ -1,0 +1,63 @@
+{
+  "id": "segments-cate",
+  "module": 6,
+  "title": "Segments and heterogeneous effects (ATE and CATE)",
+  "tier": 1,
+  "intro": "An A/B test of a new menu item gives the verdict: \"B beats A by 2%\". But the average result can hide that newcomers loved the novelty while regulars were put off by it. An effect is rarely the same for everyone. Let's unpack what exactly an experiment measures and why you should look at segments.",
+  "widget": "multiple-regression",
+  "beats": [
+    {
+      "text": "What an A/B test estimates is called the ATE — the Average Treatment Effect: how much better B is than A on average across all users. It is the honest headline number of the experiment. But \"on average\" means averaging over very different people."
+    },
+    {
+      "text": "Why can't we measure the effect for a single person? That is the fundamental problem of causal inference: the same user cannot see both A and B at once. We observe only one of their two outcomes, so the INDIVIDUAL effect is unobservable — and we are forced to estimate the AVERAGE over groups. Randomization makes the groups comparable, and the difference of means becomes an honest estimate of the ATE."
+    },
+    {
+      "text": "Now the key part: the effect within a segment is the CATE (Conditional ATE) — the effect conditional on \"who this is\". Toggle \"control for z\" on the widget: you can see that the relationship (here, the effect) differs across groups.",
+      "predict": "The ATE over everyone is +2%. Could the effect still be −3% in one segment?",
+      "reveal": "Yes! An average of +2% can be composed of, say, +6% for newcomers and −3% for long-time users. That is effect heterogeneity: the ATE is an average over a mixed population, and it can hide exactly what matters most — who got worse off."
+    },
+    {
+      "text": "That is why after an A/B test people look at the CATE across key segments: platform, tenure, country, plan. If the effect differs sharply, the decision may be \"roll out only where it's positive\". But careful: this is the same multiple-comparisons trap — sift through 20 segments and you will easily find a random \"effect\"."
+    },
+    {
+      "text": "The rule of safe segment analysis: choose the segments to check IN ADVANCE (from a hypothesis, not by combing the data after the fact), apply a multiplicity correction, and confirm the finding on fresh data. Segments are also exactly where Simpson's paradox is most dangerous: the overall result and the per-group results can contradict each other."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "ATE (average effect)",
+      "text": "Average Treatment Effect — the average difference in outcomes between variants across everyone; this is what an A/B test estimates.",
+      "simple": "the effect averaged over everyone."
+    },
+    {
+      "term": "CATE (conditional effect)",
+      "text": "Conditional ATE — the effect within a segment (conditional on attributes). Reveals heterogeneity.",
+      "simple": "the effect for a specific segment."
+    },
+    {
+      "term": "Individual effect (ITE)",
+      "text": "the effect for a single unit; unobservable — you can never see both outcomes at once (the fundamental problem of causal inference).",
+      "simple": "the effect for one person — never directly observable."
+    },
+    {
+      "term": "Effect heterogeneity",
+      "text": "the effect differs across segments; the average (ATE) can hide segments with the opposite sign.",
+      "simple": "the average can hide it: some were helped, others were hurt."
+    }
+  ],
+  "decision": "The average effect answers \"roll out to everyone?\"; the CATE answers \"roll out to whom?\": a targeted rollout can save a feature that failed the overall test.",
+  "practice": [
+    "A competent A/B readout does not stop at the ATE: analysts check the CATE across pre-specified segments so as not to ship a change that is positive on average but hurts an important group. Sometimes the best decision is to roll out only to the segment where the effect is positive.",
+    "But segment analysis is a multiple-comparisons minefield: dozens of cuts will almost surely produce a random \"significant\" segment. So segments are hypothesized in advance, the threshold is corrected, and findings are re-verified."
+  ],
+  "realLife": [
+    "A new feature often delights newcomers and annoys experienced users (it breaks a habit). The ATE can be near zero while the CATE by tenure differs sharply; the decision is made on the segments.",
+    "Price and promo changes almost always have heterogeneous effects across countries and platforms — which is why rollouts are often done by segment rather than \"to everyone at once\"."
+  ],
+  "assumptions": [
+    "The ATE estimate is honest under true randomization and independence; a segment CATE inherits the same requirements plus a sufficient size for each segment (in small slices the estimate is very noisy).",
+    "Segments found by combing the data after the fact are almost certainly false. Without pre-specified hypotheses and a multiplicity correction, segment analysis breeds phantom effects."
+  ],
+  "nextLabel": "Many variants and segments? Beware of false wins → Multiple comparisons in A/B"
+}

@@ -31,7 +31,8 @@ function runExperiment(rateA, rateB, n) {
   return { A: sample(rateA), B: sample(rateB) }
 }
 
-export default function ABTest() {
+export default function ABTest({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [rateA, setRateA] = useState(0.1)
   const [rateB, setRateB] = useState(0.12)
   const [n, setN] = useState(500)
@@ -81,33 +82,35 @@ export default function ABTest() {
       </svg>
 
       <div className={`mt-1 text-sm ${overlap ? 'text-gray-600' : 'text-[#2ab8eb]'}`}>
-        {overlap ? 'Интервалы перекрываются — разницу пока нельзя отличить от случайности.' : 'Интервалы разошлись — разница похожа на реальную.'}
-        <span className="text-gray-400 text-xs ml-2">жёлтая засечка — истинная конверсия</span>
+        {overlap
+          ? (en ? 'The intervals overlap — the difference cannot yet be told from chance.' : 'Интервалы перекрываются — разницу пока нельзя отличить от случайности.')
+          : (en ? 'The intervals have pulled apart — the difference looks real.' : 'Интервалы разошлись — разница похожа на реальную.')}
+        <span className="text-gray-400 text-xs ml-2">{en ? 'yellow tick — the true conversion' : 'жёлтая засечка — истинная конверсия'}</span>
       </div>
 
       <div className="grid sm:grid-cols-3 gap-3 mt-4 text-sm">
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Истинная конверсия A</span><span className="text-cyanink">{(rateA * 100).toFixed(0)}%</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'True conversion A' : 'Истинная конверсия A'}</span><span className="text-cyanink">{(rateA * 100).toFixed(0)}%</span></div>
           <input type="range" min="0.02" max="0.22" step="0.01" value={rateA} onChange={(e) => setRateA(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Истинная конверсия B</span><span className="text-cyanink">{(rateB * 100).toFixed(0)}%</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'True conversion B' : 'Истинная конверсия B'}</span><span className="text-cyanink">{(rateB * 100).toFixed(0)}%</span></div>
           <input type="range" min="0.02" max="0.22" step="0.01" value={rateB} onChange={(e) => setRateB(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Размер групп n</span><span className="text-cyanink">{n}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Group size n' : 'Размер групп n'}</span><span className="text-cyanink">{n}</span></div>
           <input type="range" min="50" max="5000" step="50" value={n} onChange={(e) => setN(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
 
       <div className="flex flex-wrap items-center gap-2 mt-3">
-        <button onClick={runOnce} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">перезапустить эксперимент</button>
-        <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? '⏸ стоп' : '▶ серия экспериментов'}</button>
+        <button onClick={runOnce} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{en ? 'rerun the experiment' : 'перезапустить эксперимент'}</button>
+        <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? (en ? '⏸ stop' : '⏸ стоп') : (en ? '▶ run a series' : '▶ серия экспериментов')}</button>
         {tally.total > 0 && (
           <span className="text-sm text-gray-700">
-            интервалы разошлись в <b className="text-cyanink">{tally.sep}</b> из {tally.total} прогонов
+            {en ? 'intervals separated in' : 'интервалы разошлись в'} <b className="text-cyanink">{tally.sep}</b> {en ? `of ${tally.total} runs` : `из ${tally.total} прогонов`}
             ({((tally.sep / tally.total) * 100).toFixed(0)}%)
-            {rateA === rateB && <span className="text-[#f87171] text-xs ml-1">— истинной разницы нет, это ложные срабатывания</span>}
+            {rateA === rateB && <span className="text-[#f87171] text-xs ml-1">{en ? '— there is no true difference, these are false positives' : '— истинной разницы нет, это ложные срабатывания'}</span>}
           </span>
         )}
       </div>

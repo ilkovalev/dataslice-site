@@ -1,0 +1,66 @@
+{
+  "id": "network-effects",
+  "module": 6,
+  "title": "Network effects: when A/B breaks",
+  "tier": 1,
+  "intro": "The pizzeria tests a \"bring a friend — you both get a discount\" promo on a random half of its users. But friends are shared: the test group invites the control group, and the \"clean\" comparison falls apart. A regular A/B test rests on a quiet assumption: my landing in group B does not affect a user in group A. In social networks, marketplaces and delivery it collapses — and the naive group comparison gives a biased answer.",
+  "widget": "interference",
+  "beats": [
+    {
+      "text": "The hidden assumption of A/B is called SUTVA: each user's outcome depends only on THEIR variant, not on what others got. User-level randomization is honest only when people don't interact. Often that is true — and then regular A/B works."
+    },
+    {
+      "text": "But picture a social network: half get the new feed (B), half don't (A).",
+      "predict": "A user in B starts posting more, and their friends in group A see it. What happens to the \"cleanliness\" of the comparison?",
+      "reveal": "The control gets contaminated by the test's effect: A also changes behavior because of B. The groups stop being independent, and the difference between them understates (or distorts) the true effect. This is interference between units — the classic failure of A/B in networks."
+    },
+    {
+      "text": "Where it bites hardest: social networks (friends in different groups), marketplaces and delivery (shared sellers/couriers — if B takes more couriers, A is left without them), messengers (two-way communication), any two-sided market with a shared pool of resources."
+    },
+    {
+      "text": "The cure is to change the unit of randomization so the interaction stays INSIDE a group. Press \"cluster randomization\" on the chart: almost no red (contaminated) A↔B links remain. That is the trick — split not people but whole communities/cities. Geo experiments: an entire region in one arm. Switchback: the whole market is switched between A and B over time. That way interference doesn't \"leak\" between arms."
+    },
+    {
+      "text": "And how do you tell that SUTVA is actually violated, rather than just fear it? The most practical way — look at the bottom chart: estimate the effect two ways and compare. Under interference, the naive estimate (user split) and the clean one (cluster/geo) diverge noticeably: with a user split the effect leaks into the control and the estimate is understated. Toggle the design on the chart — in user-split mode the gap is large (a red flag), with cluster randomization it nearly disappears. A large gap between designs is the indicator of a SUTVA violation. In practice, a budget geo or cluster check is run alongside the main test for exactly this."
+    },
+    {
+      "text": "The core skill: before launch, ask \"can my users influence each other?\". If yes — a regular user-level A/B will give a biased result, and you need a network/cluster design. This is one of the most common places where an otherwise competent experiment fails silently."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "SUTVA",
+      "text": "the assumption that a user's outcome depends only on their own variant, not on others' variants. The foundation of regular A/B.",
+      "simple": "the assumption: my test variant doesn't affect your behavior."
+    },
+    {
+      "term": "Interference",
+      "text": "a SUTVA violation: groups influence each other (social networks, shared resources), and the comparison is biased.",
+      "simple": "the groups \"leak\" into each other — the effect gets mixed."
+    },
+    {
+      "term": "Cluster randomization",
+      "text": "split not people but groups (communities, cities), so the interaction stays inside an arm.",
+      "simple": "split whole cities or groups, not people."
+    },
+    {
+      "term": "Switchback",
+      "text": "switch the whole market between A and B over time — a design for markets with a shared pool of resources.",
+      "simple": "switch the whole product back and forth over time."
+    }
+  ],
+  "decision": "If users influence each other, a regular A/B will give a biased answer. The design decision — clusters or switchback — is made before launch.",
+  "practice": [
+    "Before an A/B on a platform where users interact, think about the unit of randomization right away: people, clusters, geo or time. Getting this wrong means a pretty but wrong result that falls apart at rollout.",
+    "The telltale of interference is shared resources or communication between users. A marketplace with a shared courier pool almost always calls for a geo or switchback experiment, not a user split."
+  ],
+  "realLife": [
+    "Social networks test viral mechanics by clusters (by community) — otherwise the effect \"leaks\" through friendship ties into the control.",
+    "Delivery and ride-hailing services use switchback and geo experiments: if the test takes couriers away from the control, a regular user split will show a false result."
+  ],
+  "assumptions": [
+    "Cluster and geo designs are more honest under interference, but costlier: the effective sample size is the number of clusters, not people, so you need many clusters for power.",
+    "Switchback assumes the effect shows up quickly and there is no strong carryover between periods; with long delayed effects it is biased too."
+  ],
+  "nextLabel": "A test is also easy to ruin by peeking → Peeking"
+}

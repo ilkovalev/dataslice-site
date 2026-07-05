@@ -1,0 +1,55 @@
+{
+  "id": "experiment-metrics",
+  "module": 6,
+  "title": "Experiment metrics: primary, proxy, guardrail",
+  "tier": 1,
+  "intro": "The pizzeria launched a \"second pizza −50%\" promo: orders grew — and the margin? Half of A/B failures are not in the statistics but in WHAT was measured. One metric almost never describes an effect honestly: something grew while something else quietly sagged. So an experiment's design includes not one metric but a coordinated set with distinct roles.",
+  "widget": "metric-roles",
+  "beats": [
+    {
+      "text": "The primary metric (OEC) — one, directly reflecting the hypothesis and the goal. Changing the checkout button → the primary metric is \"conversion to order\". The decision is made on it, and the sample size is computed for it. If there are several primary metrics pulling in different directions, the decision becomes arbitrary."
+    },
+    {
+      "text": "A proxy metric is needed when the real goal takes too long or fires too rarely to measure.",
+      "predict": "You want to grow annual LTV, but the test runs 2 weeks. Can you measure LTV directly?",
+      "reveal": "No — annual LTV cannot be observed in 2 weeks. You take a proxy: an early signal correlated with the goal (first-week orders, activation). A proxy speeds the test up but is dangerous: the \"proxy grew, the goal did not\" scenario shows it — add-to-carts soared while conversion stood still (hello, Goodhart's law). So the proxy→goal link is validated in advance."
+    },
+    {
+      "text": "Guardrail metrics — what must NOT be sacrificed for the primary. Switch to the \"win at a guardrail's expense\" scenario: the primary grew, but unsubscribes and refunds flared red — you cannot ship. Guardrails catch such \"wins at a cost\": a test does not count as a success if a guardrail crosses its boundary."
+    },
+    {
+      "text": "Informational metrics — for understanding, not for the decision. They explain WHY the result changed (where in the funnel, in which segment), but no success is declared on them. Otherwise you slide into metric-shopping and catch random \"significance\" (multiple comparisons)."
+    },
+    {
+      "text": "The upshot: the metric set is fixed BEFORE launch — one primary (+ a proxy if needed), several guardrails, the rest informational. It guards against two evils at once: the \"win that actually did harm\", and retrofitting the conclusion to a convenient metric after the fact."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Primary metric (OEC)",
+      "text": "the one metric directly reflecting the goal and hypothesis; decisions and sample sizing hang on it."
+    },
+    {
+      "term": "Proxy metric",
+      "text": "an early observable signal correlated with a slow/rare goal; speeds the test but requires validating the link to the goal."
+    },
+    {
+      "term": "Guardrail",
+      "text": "a quality metric that must not sink for the primary's sake: speed, unsubscribes, errors, refunds."
+    },
+    {
+      "term": "Informational metric",
+      "text": "for explaining the result, not for the decision; keeps false \"significances\" from multiplying."
+    }
+  ],
+  "decision": "Choosing the primary metric is itself the decision: what you are willing to degrade and what you are not. Without guardrails a \"win\" can silently be paid for with churn.",
+  "practice": [
+    "Good design always starts with \"on which ONE metric will we decide, and which metrics will we not allow to sink\". Without guardrails it is easy to ship a change that lifted clicks but cut revenue or burned retention.",
+    "Proxy metrics are a powerful accelerator and the main source of self-deception: the team happily moves the proxy while the real goal stands still. So the proxy→goal link is checked on historical data, not taken on faith."
+  ],
+  "realLife": [
+    "Large products keep a set of standard guardrails (load speed, crashes, complaints, unsubscribes) checked automatically in EVERY experiment, whatever its topic.",
+    "Search and feed products are especially careful with proxies: \"time in app\" is easily inflated with addictive junk, so long-term retention always sits beside it as a guardrail."
+  ],
+  "nextLabel": "The effect is not the same for everyone → Segments, ATE and CATE"
+}

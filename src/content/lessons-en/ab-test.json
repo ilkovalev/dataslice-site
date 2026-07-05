@@ -1,0 +1,82 @@
+{
+  "id": "ab-test",
+  "module": 6,
+  "title": "The A/B test: checking a change honestly",
+  "tier": 1,
+  "intro": "On the pizzeria's site you changed the \"Order\" button, and conversion grew from 10% to 12%. Is it the button's doing — or just lucky visitors? An A/B test answers honestly: show variant A to one random half of users, variant B to the other, and compare.",
+  "widget": "ab-test",
+  "beats": [
+    {
+      "text": "Two groups of users, split in half at random. Each has its own conversion — the share who completed the target action. The dot is the observed conversion; the segment around it is the confidence interval: where the true conversion plausibly falls given randomness."
+    },
+    {
+      "text": "Sample size decides everything.",
+      "predict": "Set a small group size n. What happens to the intervals, and can you confidently say B beats A?",
+      "reveal": "At small n the intervals are wide and overlap — the difference cannot be told from chance even if it is real. Press \"rerun the experiment\" a few times: the result dances from run to run."
+    },
+    {
+      "text": "Now increase n.",
+      "predict": "What happens to the intervals with a large sample?",
+      "reveal": "The intervals tighten. If a true difference exists, the segments pull apart and stop overlapping — now you can say \"B really is better\". More data — less uncertainty."
+    },
+    {
+      "text": "Why split at random at all? So the groups differ ONLY in the variant. Show B in the morning and A in the evening, or B to new users and A to old ones — and the difference is created by the time of day or the mix of people, not the button. Randomization on average equalizes all other factors, visible and unthought-of alike. That is what makes A/B an honest comparison, unlike \"it was so before — it is so after\"."
+    },
+    {
+      "text": "Now set A's and B's conversions equal and press \"rerun\". Sometimes B still looks better — pure chance. That is why one number without an interval and a sufficient sample cannot be trusted: this is exactly how false wins are born (hello, Type I error from the previous lesson)."
+    },
+    {
+      "text": "A few practical traps on top of the statistics. The novelty effect: everything new gets clicked out of curiosity in the first days — so tests run longer than a day. Metric substitution: clicks grew but purchases fell — watch the primary goal, not the convenient number. And segments: the effect may exist only for newcomers or only in one country — a per-segment cut often matters more than the overall total."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "A/B test",
+      "text": "comparing two variants on randomly split groups of users."
+    },
+    {
+      "term": "Randomization",
+      "text": "random assignment to groups — so the groups differ only in the variant, not in composition."
+    },
+    {
+      "term": "Conversion",
+      "text": "the share of users who completed the target action (a purchase, click, sign-up)."
+    },
+    {
+      "term": "Confidence interval",
+      "text": "the range where the true value plausibly lies given sampling randomness."
+    }
+  ],
+  "decision": "A/B is needed exactly when the cost of an error exceeds the cost of the test. Shipping without a test is also a decision — just one that bets on intuition.",
+  "practice": [
+    "A competent test: the required sample size is computed before launch (so there is enough power to catch the effect), no hourly peeking at results, no stopping at the first pretty number.",
+    "Decisions are made from intervals and significance, not bare points — otherwise a random spike easily passes for a win."
+  ],
+  "realLife": [
+    "A/B tests are the product standard: button color and copy, email subject, price, feed ranking. Everywhere variants are compared on live users, not on intuition.",
+    "In medicine these are randomized controlled trials — the gold standard of evidence. Agronomy compares field treatments the same way. One principle: split at random and compare honestly."
+  ],
+  "assumptions": [
+    "A/B is honest under true random assignment, no overlap with other tests, and independent users. Network effects (social apps, marketplaces, delivery) break independence: groups influence each other, and the naive comparison lies.",
+    "You need the metric, sample size and duration fixed in advance. Peeking, stopping at the first \"significance\" and choosing the metric after the fact devalue the result."
+  ],
+  "deepDive": [
+    "What A/B measures has a name: the average treatment effect, ATE — the average difference in outcome between \"saw B\" and \"saw A\" across all users. The difference of group means IS the ATE estimate, and randomization is what makes that estimate honest.",
+    "Why AVERAGE and not per-person: one user cannot see both A and B at once, so the individual effect is unobservable (the fundamental problem of causal inference). The effect within a segment is the CATE; more on it — and on how ATE hides heterogeneity — in the segments lesson."
+  ],
+  "nextLabel": "What exactly to measure in a test? → Experiment metrics",
+  "related": [
+    {
+      "id": "power-sample-size",
+      "label": "Power and sample size"
+    },
+    {
+      "id": "experiment-metrics",
+      "label": "Experiment metrics"
+    },
+    {
+      "id": "peeking",
+      "label": "Peeking"
+    }
+  ]
+}

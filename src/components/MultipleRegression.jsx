@@ -25,7 +25,8 @@ function slope(pts) {
   return { b1: sxx ? sxy / sxx : 0, b0: my - (sxx ? sxy / sxx : 0) * mx, mx, my }
 }
 
-export default function MultipleRegression() {
+export default function MultipleRegression({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [control, setControl] = useState(false)
   const [trueEff, setTrueEff] = useState(0.2)
   const [confound, setConfound] = useState(1)
@@ -68,25 +69,27 @@ export default function MultipleRegression() {
         <span className="text-[#9ca3af]">● z = 0</span>
         <span className="text-[#2ab8eb]">● z = 1</span>
         {!control
-          ? <span className="text-[#dc4d4d]">общий наклон (без контроля): {pooled.b1.toFixed(2)}</span>
-          : <span className="text-gray-700">наклон внутри групп: {g0.b1.toFixed(2)} и {g1.b1.toFixed(2)} (истинный эффект ≈ {trueEff.toFixed(2)})</span>}
+          ? <span className="text-[#dc4d4d]">{en ? 'pooled slope (no control):' : 'общий наклон (без контроля):'} {pooled.b1.toFixed(2)}</span>
+          : <span className="text-gray-700">{en ? 'within-group slopes:' : 'наклон внутри групп:'} {g0.b1.toFixed(2)} {en ? 'and' : 'и'} {g1.b1.toFixed(2)} ({en ? 'true effect' : 'истинный эффект'} ≈ {trueEff.toFixed(2)})</span>}
       </div>
 
       <button onClick={() => setControl((c) => !c)} className="mt-3 text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">
-        {control ? '← убрать контроль z (общая линия)' : 'контролировать z (линии внутри групп)'}
+        {control ? (en ? '← drop the control for z (pooled line)' : '← убрать контроль z (общая линия)') : (en ? 'control for z (within-group lines)' : 'контролировать z (линии внутри групп)')}
       </button>
 
       <div className="grid sm:grid-cols-2 gap-3 mt-4 text-sm">
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Истинный эффект x на y</span><span className="text-cyanink">{trueEff.toFixed(2)}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'True effect of x on y' : 'Истинный эффект x на y'}</span><span className="text-cyanink">{trueEff.toFixed(2)}</span></div>
           <input type="range" min="0" max="0.6" step="0.05" value={trueEff} onChange={(e) => setTrueEff(Number(e.target.value))} className="w-full accent-accent" />
         </label>
         <label>
-          <div className="flex justify-between text-gray-700 mb-1"><span>Сила конфаундера z</span><span className="text-cyanink">{confound.toFixed(1)}</span></div>
+          <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Confounder z strength' : 'Сила конфаундера z'}</span><span className="text-cyanink">{confound.toFixed(1)}</span></div>
           <input type="range" min="0" max="2" step="0.1" value={confound} onChange={(e) => setConfound(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">Поставьте истинный эффект = 0 и силу конфаундера побольше: общая красная линия покажет «связь», которой нет. Контроль z (линии внутри групп) её убирает. Это и делает множественная регрессия — оценивает эффект x, удерживая z постоянным.</p>
+      <p className="text-xs text-gray-500 mt-2">{en
+        ? 'Set the true effect to 0 and crank up the confounder strength: the pooled red line will show a "relationship" that isn’t there. Controlling for z (within-group lines) removes it. That is what multiple regression does — estimates the effect of x while holding z constant.'
+        : 'Поставьте истинный эффект = 0 и силу конфаундера побольше: общая красная линия покажет «связь», которой нет. Контроль z (линии внутри групп) её убирает. Это и делает множественная регрессия — оценивает эффект x, удерживая z постоянным.'}</p>
     </div>
   )
 }

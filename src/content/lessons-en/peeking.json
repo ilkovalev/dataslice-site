@@ -1,0 +1,64 @@
+{
+  "id": "peeking",
+  "module": 6,
+  "title": "Peeking: how to ruin an honest test",
+  "tier": 1,
+  "intro": "The test of the new \"Order\" button is on its third day, and the p-value has already blinked below 0.05. Stop and celebrate? An A/B test is honest only if you play by the rules, and the most common mistake is peeking at the result and stopping the test the moment you see \"significant\". We'll show why this breaks everything — using an A/A test, where there is provably no difference.",
+  "widget": "peeking",
+  "beats": [
+    {
+      "text": "We launch an A/A test: both variants are actually identical, there is no real difference. The top line is one experiment's p-value day by day as the sample accumulates; below you can see it growing toward the size fixed in the design. The yellow line is the 0.05 threshold, the black dashes mark the planned end day. Press \"run 1 experiment\"."
+    },
+    {
+      "text": "There is no difference between the variants.",
+      "predict": "Can the p-value dip below 0.05 even once if no real effect exists?",
+      "reveal": "Yes — and it does constantly! The p-value wanders at random, and over a long test it will almost surely dive under 0.05 at least once. Stopping at that moment and shouting \"victory\" means passing off pure noise as a result."
+    },
+    {
+      "text": "One trajectory is one test — chance. To see the PATTERN, run many tests with the \"+50\" button: a pale \"cloud\" of trajectories builds up on the chart, and the stats show the share of tests where p dipped under 0.05 at least once BEFORE the planned day. It is far above the honest 5%. Every extra look during the test adds a chance to randomly see \"significance\" — peeking inflates the Type I error severalfold."
+    },
+    {
+      "text": "Why peeking is so insidious: every unplanned check is one more attempt to randomly see \"significance\". Ten checks over the course of a test are almost like ten separate tests, and the chance of erring at least once accumulates. In essence it is a relative of multiple comparisons from the traps module — only the checks run not in breadth (many metrics) but in time (many moments)."
+    },
+    {
+      "text": "The rule: fix the sample size and the test duration in advance, and make the decision once — at the end. If you want to legitimately monitor a test as it runs, that is what sequential methods are for (group sequential, always-valid p-values): they price in the repeated checks up front and let you stop early honestly. Without such methods, \"I'll stop as soon as it's significant\" is a straight road to self-deception."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Peeking",
+      "text": "repeatedly checking the result during a test and stopping at the first \"significant\".",
+      "simple": "stopping the test at the first \"significance\" is a sure way to buy noise."
+    },
+    {
+      "term": "A/A test",
+      "text": "a test of two identical variants. Any \"difference\" in it is pure chance — handy for validating the methodology.",
+      "simple": "an empty test: shows how often the system cries \"effect!\" for nothing."
+    },
+    {
+      "term": "Sequential test",
+      "text": "a method that allows honest peeking: it accounts for the repeated checks in advance and does not inflate false hits.",
+      "simple": "an honest way to watch mid-test — with a price paid for every look."
+    }
+  ],
+  "decision": "The default is to wait for the planned end of the test. Every early stop \"on significance\" raises the chance of buying noise instead of an effect.",
+  "practice": [
+    "Product teams fix the test duration and don't touch it early. \"Let's switch it off, it's already significant on day three\" is the classic way to ship something that doesn't actually work.",
+    "This follows directly from the sample size lesson: a test must be run to its planned size, not stopped at the first convenient spike."
+  ],
+  "realLife": [
+    "In science this has a name — p-hacking: data and analysis choices are shuffled until p < 0.05 pops out. This is why a share of headline results later fails to replicate.",
+    "The same temptation lives in trading and marketing: test enough \"strategies\" and one will randomly look great on the past — and crumble on the future."
+  ],
+  "nextLabel": "So is there a way to peek honestly? → Sequential tests",
+  "related": [
+    {
+      "id": "sequential-tests",
+      "label": "Sequential tests"
+    },
+    {
+      "id": "multiple-comparisons",
+      "label": "Multiple comparisons"
+    }
+  ]
+}

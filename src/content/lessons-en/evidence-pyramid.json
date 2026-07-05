@@ -1,0 +1,51 @@
+{
+  "id": "evidence-pyramid",
+  "module": 6,
+  "title": "Evidential strength: why A/B at all",
+  "tier": 1,
+  "intro": "\"We updated the menu on the pizzeria's site and orders grew\" — is that proof? Yes and no: it all depends on HOW the observation was obtained. Evidence has a hierarchy of strength. Before dissecting A/B mechanics, let's see why it sits at the top of this pyramid. Click through the levels.",
+  "widget": "evidence-pyramid",
+  "beats": [
+    {
+      "text": "Not all arguments are equal. At the pyramid's bottom are the weakest: an opinion, a single case, a testimonial (\"feels better to me\"). They bend easily to biases and survivorship. The higher the level, the more reliable the conclusion and the harder it is to explain away by chance or a third cause."
+    },
+    {
+      "text": "A bit higher — observation and correlation: you spotted a relationship in the data but intervened in nothing.",
+      "predict": "Conversion is higher among mobile-app users. So the app increases conversion?",
+      "reveal": "Not necessarily. Perhaps the most loyal customers install the app — and they would have bought anyway. That is a hidden third cause: correlation does not prove that one thing causes another. Which is why observation is a weak level of evidence."
+    },
+    {
+      "text": "Higher still — the before/after quasi-experiment: you changed something for everyone and compared the periods. Better, but dangerous: between \"before\" and \"after\" the season, the trend and other releases changed too. Growth is easily credited to your change when something else is to blame. No control group — no clean comparison."
+    },
+    {
+      "text": "At the top of the applied pyramid — the A/B test. Its power is randomization: users are split into groups AT RANDOM, so the groups are on average identical in every factor — visible ones and ones you never thought of. Only the change differs. That is what A/B is for: it alone grants the right to say the change CAUSED the effect, rather than merely coincided."
+    },
+    {
+      "text": "And the very top — the meta-analysis: a synthesis of many independent A/Bs. One test can lie by chance (hello, Type I error), but a dozen agreeing results are almost certainly the truth. The practical takeaway: trust conclusions exactly as much as the level they were obtained on."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Evidential strength",
+      "text": "how reliably a piece of evidence establishes a causal link rather than a coincidence."
+    },
+    {
+      "term": "Randomization",
+      "text": "random assignment to groups; it equalizes all other factors and thereby licenses causal conclusions."
+    },
+    {
+      "term": "Quasi-experiment",
+      "text": "a comparison without randomization (before/after, different regions). Weaker than A/B: the effect can be confused with extraneous changes."
+    }
+  ],
+  "decision": "The level of evidence determines which decisions it can carry: observations are fine for hypotheses, big bets demand an experiment.",
+  "practice": [
+    "The practical skill is asking of any conclusion: \"which level of the pyramid produced it?\". \"The manager is sure\" — the bottom. \"There is a correlation in the data\" — a bit higher. \"We did before/after\" — higher still. \"We ran an honest A/B\" — the top. It instantly calibrates trust in the decision.",
+    "A/B is expensive: it needs traffic, time, infrastructure. So it is reserved for important and contested decisions, while obvious trifles ship without it. But when the cost of error is high — only a randomized experiment gives a reliable answer."
+  ],
+  "realLife": [
+    "Medicine has the same pyramid: expert opinion at the bottom, randomized controlled trials and their meta-analyses at the top. A drug will not be approved on observations — an RCT, the direct analog of A/B, is required.",
+    "In products, loud failures are often born at the pyramid's bottom: \"it's obviously better this way\" — shipped without a test — the metric sank. A/B exists precisely to check such \"obvious\" things."
+  ],
+  "nextLabel": "How does an honest A/B work inside? → The A/B test: checking a change honestly"
+}

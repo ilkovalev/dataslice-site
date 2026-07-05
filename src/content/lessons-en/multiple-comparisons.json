@@ -1,0 +1,87 @@
+{
+  "id": "multiple-comparisons",
+  "module": 6,
+  "title": "Multiple comparisons in A/B",
+  "tier": 1,
+  "intro": "We have learned to measure the effect overall (ATE) and by segment (CATE). But as soon as an experiment has many variants, metrics or segments — the pizzeria dashboard's twenty metrics, ten cities — a new trap appears: testing many hypotheses at once makes it easy to catch random \"significance\". Let's see why, and how to handle it.",
+  "widget": "multiple-comparisons",
+  "beats": [
+    {
+      "text": "Each square is a separate hypothesis test. There is no real effect in any of them (these are deliberately empty tests). The significance threshold is 5%. Press \"run the tests\"."
+    },
+    {
+      "text": "There is no effect anywhere.",
+      "predict": "How many squares will still light up \"significant\" out of 20 tests?",
+      "reveal": "About one. At a 5% threshold, one test in twenty passes by chance. The more hypotheses you check, the more false \"discoveries\". Increase the number of tests — the red squares grow proportionally."
+    },
+    {
+      "text": "This is the multiple comparisons problem, and in A/B testing it is everywhere: a test with 5 variants instead of two, a dozen metrics at once, a result split across 20 segments (country, platform, tenure…). \"Finding at least something significant\" by combing through many cuts is very easy — but it will be pure noise. That is how false \"winning\" variants and pretty-but-empty \"segment insights\" are born."
+    },
+    {
+      "text": "The cure is a correction for the number of tests. Switch to \"Bonferroni\": the threshold is divided by the number of tests (0.05 / m), and the random hits almost vanish. This is FWER control (family-wise error rate) — the probability of at least one false discovery in the whole family of tests. You pay with a stricter criterion for the right to test many hypotheses at once."
+    },
+    {
+      "text": "Now raise the \"how many truly work\" slider to a few and compare the corrections. Bonferroni's downside shows: it is so strict that along with the false hits it kills real findings too (lots of orange \"missed\"). When there are very many hypotheses, instead of controlling FWER you control FDR (false discovery rate) — the Benjamini–Hochberg correction.",
+      "predict": "Which is the more honest demand when you run thousands of tests: that there be NOT A SINGLE false hit, or that false hits be a small FRACTION of the findings?",
+      "reveal": "The second. FWER (Bonferroni) bounds the probability of at least one error — with thousands of tests that nearly zeroes out sensitivity. FDR (Benjamini–Hochberg) bounds the expected share of false hits among the \"found\" (say, ≤5%): a couple of errors per hundred discoveries is acceptable, and you get far more real findings. On the chart, BH is the point where the staircase i·α/m stops covering the sorted p-values."
+    },
+    {
+      "text": "But the most reliable defense is simpler than any formula: re-check the finding on new data that took no part in the search. A random hit will almost surely fail to repeat on fresh data, while a real effect will repeat. That is why serious conclusions are confirmed on a held-out sample, not on the one where they were \"found\"."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Multiple comparisons",
+      "text": "testing many hypotheses at once; false hits accumulate.",
+      "simple": "the more questions you ask the data, the more random \"yes\" answers."
+    },
+    {
+      "term": "FWER",
+      "formula": "P(at least 1 false) ≤ α",
+      "text": "family-wise error rate — the probability of at least one false discovery in the whole family of tests. Controlled by Bonferroni.",
+      "simple": "the chance of at least one false discovery across the whole batch of tests."
+    },
+    {
+      "term": "Bonferroni correction",
+      "formula": "threshold = α / m",
+      "text": "divide 0.05 by the number of tests m — keeps FWER ≤ α. Simple and strict; kills some real findings too.",
+      "simple": "divide the threshold by the number of tests: crude but reliable."
+    },
+    {
+      "term": "FDR",
+      "formula": "E[false / found] ≤ q",
+      "text": "false discovery rate — the expected share of false hits among the \"found\". Softer than FWER, better for thousands of hypotheses.",
+      "simple": "allow a known share of false hits among the findings — and find more."
+    },
+    {
+      "term": "Benjamini–Hochberg",
+      "formula": "p(k) ≤ k·α/m",
+      "text": "a step-up FDR control procedure: sort the p-values, find the largest rank k with p(k) ≤ k·α/m, reject all hypotheses up to it.",
+      "simple": "the working procedure that controls that share."
+    },
+    {
+      "term": "False discovery",
+      "text": "a \"significant\" result actually produced by chance.",
+      "simple": "an \"effect\" that will never repeat."
+    }
+  ],
+  "deepDive": [
+    "The Bonferroni algorithm (FWER control). 1) Set the overall acceptable risk α (usually 0.05). 2) Divide it by the number of tests: threshold = α / m. 3) Reject H0 in the tests where p < α/m. 4) Then the probability of at least one false discovery in the whole family is ≤ α. Pros — simplicity and a hard guarantee; cons — with large m the threshold is tiny and power (the chance of catching real effects) drops sharply. A relative is Holm's method: the same idea, but stepwise and slightly more powerful.",
+    "The Benjamini–Hochberg algorithm (FDR control). 1) Collect all m p-values and sort them in ascending order: p(1) ≤ p(2) ≤ … ≤ p(m). 2) Set the acceptable share of false hits q (say, 0.05). 3) Going from the end, find the largest rank k with p(k) ≤ (k/m)·q. 4) Reject H0 for all hypotheses with ranks 1…k (including those whose p exceeds their individual bound but sit \"under\" the found k). 5) Then the expected share of false hits among the rejected is ≤ q. In practice: BH is the standard wherever hypotheses are many (genes, features, dozens of metrics and segments), because it finds noticeably more real effects than Bonferroni at the price of a small controlled share of errors."
+  ],
+  "decision": "Before a batch of tests, decide what is worse: missing a finding (then control FDR) or catching a false one (then FWER/Bonferroni). The threshold is chosen before seeing the data.",
+  "practice": [
+    "A dashboard with 50 metrics: some metric is almost always \"significantly\" different between segments. Don't rush to celebrate — that is expected noise. Analysts either correct the threshold or re-check the finding on new data.",
+    "This is a direct continuation of the peeking lesson: both repeated checks over time and checking many metrics at once inflate false wins."
+  ],
+  "realLife": [
+    "In genetics, thousands of genes are compared against a disease — without correction, false associations are guaranteed to surface, so very strict thresholds are used there.",
+    "In analytics this is \"data diving\": combing through cuts and metrics until a pretty result pops out for the slide deck. Pretty — but unreproducible.",
+    "The classic of the genre is the \"dead salmon\": researchers put a dead fish in an MRI scanner, ran the standard analysis over thousands of voxels without corrections — and \"found\" brain activity. The work won an Ig Nobel Prize and became an eternal monument to multiple comparisons."
+  ],
+  "assumptions": [
+    "Bonferroni is built for the worst case — independent tests. When metrics are strongly correlated (revenue and average order value), the correction becomes overly strict and cuts power; then FDR control procedures (Benjamini–Hochberg) are more honest.",
+    "Corrections only cure the declared comparisons. A \"significant\" segment found by combing the data cannot be saved by a correction over the list — such a result is re-tested on fresh data."
+  ],
+  "nextLabel": "Now let's assemble it all into an honest step-by-step process → The A/B process step by step"
+}

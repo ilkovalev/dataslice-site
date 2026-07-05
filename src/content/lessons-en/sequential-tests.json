@@ -1,0 +1,63 @@
+{
+  "id": "sequential-tests",
+  "module": 6,
+  "title": "Sequential tests: how to peek honestly",
+  "tier": 1,
+  "intro": "In the previous lesson we saw that peeking at a regular A/B and stopping at the first \"significant\" inflates false wins. But the business wants to stop tests earlier. There is an honest way — sequential methods, which price in the cost of repeated checks up front.",
+  "widget": "sequential-test",
+  "beats": [
+    {
+      "text": "The main idea — this is the same day-by-day p-value chart as in the peeking lesson, except the stopping boundary is now honest. Choose \"naive 0.05 threshold\", the \"no effect (A/A)\" scenario, and run \"+50 tests\": the lines keep diving under the flat threshold — the share of false stops is far beyond 5% (that is the peeking from the previous lesson). Now switch to \"sequential boundary (α-spending)\": under the same A/A, the share returns to an honest ~5%, because the threshold is strict early in the test and relaxes only toward the planned day. That is the trick: the cost of repeated checks is budgeted in advance. Pocock and O'Brien–Fleming are specific families of such boundaries."
+    },
+    {
+      "text": "The naive rule — \"fix the duration and look once at the end\" — works, but slowly: a good effect has to be waited out to the end even if it shows early. You want to stop earlier — but honestly.",
+      "predict": "Can you allow many checks and still hold the overall false-positive risk at 5%?",
+      "reveal": "Yes — if you \"distribute\" the error budget across the checks in advance. That is exactly what sequential methods do: each interim check uses a stricter threshold, so the total Type I error stays at 5%. You pay in strictness for the right to look often."
+    },
+    {
+      "text": "Two working families. Group sequential (O'Brien–Fleming, Pocock boundaries): planned interim \"cuts\" with tightened thresholds and the option to stop early — born in clinical trials. Always-valid p-values / mSPRT: special p-values and intervals you may look at ANY moment, as many times as you like."
+    },
+    {
+      "text": "Why the business cares: you can stop a clear win or a clear failure earlier without burning traffic, and without fooling yourself. The price is a somewhat larger required sample in the worst case and heavier math. That is why these methods are built into mature A/B platforms rather than computed by hand."
+    },
+    {
+      "text": "The takeaway: \"no peeking\" is about the REGULAR fixed-horizon test. If you need in-flight monitoring, don't eyeball a lower threshold — take a method built for it. The tool must match how you actually make the decision."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Sequential test",
+      "text": "a method that allows repeated in-flight checks while controlling the overall Type I error.",
+      "simple": "a design in which interim looks are permitted in advance."
+    },
+    {
+      "term": "Group sequential",
+      "text": "planned interim cuts with tightened thresholds (O'Brien–Fleming, Pocock) and an early-stop option.",
+      "simple": "several planned stopping points, each with its own error budget."
+    },
+    {
+      "term": "Always-valid p-value",
+      "text": "a p-value/interval you may look at any moment, any number of times, without inflating the error.",
+      "simple": "a p-value you can trust whenever you look."
+    },
+    {
+      "term": "Error budget (alpha spending)",
+      "text": "distributing the allowed Type I error across several checks so the total stays at 5%.",
+      "simple": "5% error is a budget: spend a piece on each check."
+    }
+  ],
+  "decision": "If you want to watch mid-test, choose a sequential design before the start. Changing the stopping rules mid-test is not allowed.",
+  "practice": [
+    "If the team needs to monitor a test and stop early, that is not a reason to break the statistics — it is a reason to switch on the sequential mode in the A/B platform. Then an early stop is honest, not self-deception.",
+    "Without such methods the rule is simple and hard: fix the sample size and the duration in advance, decide once at the end. Any \"let's switch it off, it's already significant on day three\" in a fixed-horizon test inflates false wins."
+  ],
+  "realLife": [
+    "Clinical trials have used group sequential designs for decades: interim analyses make it ethical to stop a trial when a drug clearly works or clearly harms.",
+    "Modern product A/B platforms (including at major tech companies) offer always-valid statistics precisely so product managers can peek at the dashboard honestly."
+  ],
+  "assumptions": [
+    "The speed gain is not free: in the worst case sequential methods require no smaller — and sometimes a larger — maximum sample; the saving is on average, not guaranteed.",
+    "You must use a method built for the purpose. Taking a regular fixed-horizon p-value and checking it daily is not a \"sequential test\" — it is exactly the peeking."
+  ],
+  "nextLabel": "What if variables are related and you want to predict one from another? → Relationships and regression"
+}

@@ -1,0 +1,70 @@
+{
+  "id": "ab-process",
+  "module": 6,
+  "title": "The A/B process step by step: from hypothesis to rollout",
+  "tier": 1,
+  "intro": "The pizzeria's hypothesis: \"a new banner on the homepage will lift orders\". An A/B test is not \"switch it on and watch the number\". It is a five-stage process, and most failures happen not in the statistics but in skipped design and validation steps. Click the stages — each unfolds its key questions and typical mistakes.",
+  "widget": "ab-process",
+  "beats": [
+    {
+      "text": "Stage 1 — the business framing, before any statistics. What problem are we solving? What is the product hypothesis? By how much and where should the primary metric move, and does it pay off (the break-even point)? What are the risks and constraints? Without a clear success criterion and an action plan the test is pointless: nobody knows what counts as a win."
+    },
+    {
+      "text": "Stage 2 — the design, the meatiest part.",
+      "predict": "Which matters more to pin down BEFORE launch: which metrics we watch, or what the result turned out to be?",
+      "reveal": "The metrics — strictly before. At design time you fix: the primary metric for the hypothesis, proxies, guardrails (that must not sink) and informational ones. Also here — the split (segment, balancing, no overlap with other tests), the statistics (test, MDE, α, β, sample size, duration) and the corrections (novelty, peeking, seasonality, outliers, multiple comparisons).",
+      "widget": {
+        "name": "ab-process"
+      }
+    },
+    {
+      "text": "Stage 2 ends with validations: the test statistic is dry-run on historical data (simulated A/A tests), and the change itself is built and QA-ed. That is insurance: if the metric differs \"significantly\" even when nothing distinguishes the groups, the methodology is broken — and it gets fixed BEFORE launch, not after.",
+      "widget": {
+        "name": "ab-process"
+      }
+    },
+    {
+      "text": "Stage 3 — the run. Here you watch the test's health: is logging correct, is there SRM (a sample-ratio mismatch — expecting 50/50 but seeing 55/45 is a split-bug flag), is there user leakage between groups, any oddities in the dynamics. And the main rule from the peeking lesson: do not stop the test before its planned end.",
+      "widget": {
+        "name": "ab-process"
+      }
+    },
+    {
+      "text": "Stages 4 and 5 — results and wrap-up. Identify the statistically significant changes, answer the original hypothesis, cross-check against other tests, state conclusions crisply and — mandatorily — the concrete actions. Then execute: roll out or roll back, record the result in the knowledge base, file a task to remove the experiment code, and verify that after rollout the metrics behave as promised.",
+      "widget": {
+        "name": "ab-process"
+      }
+    },
+    {
+      "text": "The takeaway: statistics is only part of stage 2. Most A/B failures are organizational: a vague hypothesis, metrics invented after the fact, a test stopped early, a result never shipped. A strong analyst is strong not only in p-values but in the discipline of the whole process."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Guardrail metrics",
+      "text": "protective metrics that must not sink for the primary's sake (speed, errors, unsubscribes). Fixed at design time."
+    },
+    {
+      "term": "MDE",
+      "text": "the minimum effect the test must be able to notice. It sets the required sample size."
+    },
+    {
+      "term": "SRM (Sample Ratio Mismatch)",
+      "text": "the actual group ratio diverging from the expected one — a frequent sign of a split or logging bug."
+    },
+    {
+      "term": "A/A check",
+      "text": "running the methodology on two identical groups: \"significance\" there means the test statistic is broken."
+    }
+  ],
+  "decision": "The process pins the decisions BEFORE the data: the metric, the MDE, the duration. Anything decided after peeking at results is no longer a decision — it is a rationalization.",
+  "practice": [
+    "Mature teams treat A/B as a checklist: stages in order, and no launch until the design is closed. It is not bureaucracy — every skipped item turns into either an invalid result or an unshipped conclusion.",
+    "Special attention to stage 2: metrics, sample size and the statistical test are fixed in writing BEFORE launch. That guards against bending the analysis toward the desired result (p-hacking) and makes the experiment reproducible."
+  ],
+  "realLife": [
+    "Big product companies run an \"experimentation culture\" with a platform and design reviews: peers check the hypothesis, metrics and sample calculation before the start. It sharply cuts the share of useless and faulty tests.",
+    "Clinical trials are built just as strictly: the protocol (the design's analog) is registered in advance, metrics and sample size are fixed, stopping follows the rules. The cost of error is high — so process beats intuition."
+  ],
+  "nextLabel": "What if users influence each other? → Network effects"
+}

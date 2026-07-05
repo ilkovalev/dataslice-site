@@ -1,0 +1,51 @@
+{
+  "id": "anova",
+  "module": 11,
+  "title": "Analysis of variance (ANOVA): comparing many groups",
+  "tier": 1,
+  "intro": "The t-test and z-test compare TWO groups. But A/B tests often have several variants (A/B/C/D), and life has many categories: conversion by country, revenue by plan. Comparing them pairwise is dangerous, and that is what analysis of variance — ANOVA — is for. Move the sliders and watch the ratio of spreads, F.",
+  "widget": "anova",
+  "beats": [
+    {
+      "text": "Why can't you just run a t-test for every pair? That is the multiple comparisons trap: with 4 groups there are already 6 pairs, and the chance of randomly catching \"significance\" rises sharply. ANOVA asks one overall question — \"is there any difference between any of the groups at all?\" — with a single test, without inflating the error."
+    },
+    {
+      "text": "ANOVA's idea is to compare two kinds of spread. The spread BETWEEN groups: how far the group means have drifted from the overall mean. The spread WITHIN groups: how much the points jitter around their own group mean. Their ratio is the F statistic = (between) / (within).",
+      "predict": "Pull the group means apart with the \"between-group spread\" slider. What happens to F?",
+      "reveal": "F grows: the between-group spread now exceeds the within-group noise — the signal overrides the noise. A large F means the groups differ more than they wobble internally, and the difference is unlikely to be chance."
+    },
+    {
+      "text": "Now add noise with the \"within-group spread\" slider.",
+      "predict": "The group means stay put, but the points inside scatter more. What happens to F?",
+      "reveal": "F drops: against loud internal noise, the same differences of means no longer look reliable. It is the same logic as the t-test (signal/noise), just generalized to any number of groups."
+    },
+    {
+      "text": "If ANOVA says \"there is a difference\", post-hoc comparisons follow (e.g. Tukey's), with a multiplicity correction — to figure out WHICH groups differ. So ANOVA is a \"gate at the entrance\": first check whether there is any signal at all, and only then hunt for where it is."
+    },
+    {
+      "text": "When to use ANOVA versus going straight to corrected t-tests? If the question is general — \"does anything differ among the groups\" — ANOVA answers it with one test and the most power; take it when there are many groups and no particular pairs are singled out in advance. If from the start you care about specific pairs (say, \"control against each variant\"), pairwise t-tests with a multiplicity correction will do — preferably Tukey's (built exactly for all pairs) or Bonferroni for a few pre-specified comparisons: they hold the overall error risk by themselves. A common scheme is ANOVA as the gate, then corrected pairs. What you absolutely must not do is run bare t-tests over all pairs with no correction — that IS multiple comparisons, inflating false findings."
+    },
+    {
+      "text": "And the link to what you already know. ANOVA is essentially a regression on a categorical feature (the group), and the \"between/within\" comparison is a relative of R² from regression: what share of the spread is explained by group membership. The circle closes: hypothesis testing, regression and analysis of variance are facets of one idea — \"signal against noise\"."
+    }
+  ],
+  "definitions": [
+    { "term": "ANOVA", "text": "a test for differences in means across several groups at once with a single criterion, without pairwise sweeps." },
+    { "term": "Between-group spread", "text": "how far the group means deviate from the overall mean — the \"signal\"." },
+    { "term": "Within-group spread", "text": "how much the observations wobble inside their own group — the \"noise\"." },
+    { "term": "F statistic", "formula": "F = spread between / spread within", "text": "large F → the differences between groups override the internal noise." }
+  ],
+  "practice": [
+    "ANOVA is the right tool for A/B/C/D tests and for comparing a metric across many segments. First one test — \"is there any difference at all\" — then corrected pairwise comparisons. It disciplines the analysis and guards against the false discoveries from the multiple comparisons lesson.",
+    "If the data within groups is heavily skewed or has outliers, ANOVA (like the t-test) has nonparametric analogues (Kruskal–Wallis) — the same idea on ranks. As always, the data dictates the choice."
+  ],
+  "realLife": [
+    "Agronomy, where ANOVA was born: compare crop yields under several fertilizers at once. Today — comparing several interface versions, pricing plans, regions, models.",
+    "In analytics, ANOVA and its regression form appear wherever you need to know whether a categorical factor (group, channel, segment) explains differences in a metric — and by how much."
+  ],
+  "assumptions": [
+    "Classical ANOVA assumes roughly normal residuals, similar spread across groups (homoscedasticity) and independent observations. With heavy tails or outliers, take the rank analogue — the Kruskal–Wallis test.",
+    "ANOVA answers \"is there a difference anywhere\", not \"between which groups exactly\". For that you need post-hoc comparisons (e.g. Tukey's) with a multiplicity correction."
+  ],
+  "nextLabel": "There is a difference — but between which groups? → After ANOVA"
+}

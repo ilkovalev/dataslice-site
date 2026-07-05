@@ -1,0 +1,46 @@
+{
+  "id": "two-way-anova",
+  "module": 11,
+  "title": "Two-way ANOVA and interactions",
+  "tier": 1,
+  "intro": "One-way ANOVA compares groups by ONE factor. But in life factors come several at a time: the plan and the channel; the drug and the age. Two-way ANOVA takes them apart together — and catches the most interesting thing: the interaction, when the effect of one factor depends on the other.",
+  "widget": "interaction-plot",
+  "beats": [
+    {
+      "text": "The idea is the same — compare the spread explained by the factors with the noise spread inside. But now there are two factors: A — the button design (control/test, the X axis), B — the platform (two lines: mobile and desktop). ANOVA decomposes the spread into A's contribution, B's contribution, their interaction and the residual noise — with an F for each. On the chart you can see it by the slope and the parallelism of the lines."
+    },
+    {
+      "text": "The key new concept is the interaction.",
+      "predict": "Set the \"interaction\" slider to 0, then increase it. What happens to the two lines?",
+      "reveal": "At zero the lines are parallel — the test's effect is the same on mobile and desktop (no interaction). As it grows they diverge and may cross: on mobile the test helps, on desktop it hurts. That IS the interaction — factor A's effect depends on B's level. The average effect here is deceptive (remember ATE/CATE and Simpson): an interaction is the statistical name of a heterogeneous effect."
+    },
+    {
+      "text": "How to read the result: three tests. The main effect of A (averaged over B), the main effect of B (averaged over A), and the A×B interaction. If the interaction is significant, the main effects are interpreted with care: saying \"the design helps\" is meaningless — you must say \"helps on iOS, hurts on Android\"."
+    },
+    {
+      "text": "The link to what you know. Two-way ANOVA is again a special case of regression: y on two categorical factors plus their product (the interaction term). And the \"interaction\" here is exactly the CATE/heterogeneity from A/B testing, just in variance packaging."
+    },
+    {
+      "text": "Why an analyst cares: real decisions are almost always multi-factor, and the interactions are the most valuable part. They are what says \"who exactly the change suits\", not \"does it work on average\". Averaging over an interaction is a frequent way to make a harmful decision."
+    }
+  ],
+  "definitions": [
+    { "term": "Two-way ANOVA", "text": "analysis of two factors at once: their main effects and the interaction." },
+    { "term": "Main effect", "text": "the effect of one factor averaged over the levels of the other." },
+    { "term": "Interaction (A×B)", "text": "one factor's effect depends on the other's level; the statistical name of a heterogeneous effect." },
+    { "term": "Link to regression", "text": "two-way ANOVA = a regression on two categorical factors and their product." }
+  ],
+  "practice": [
+    "With several factors, don't run a pile of separate tests — two-way ANOVA (or a regression with an interaction) takes them apart jointly and honestly catches where the effect depends on the conditions.",
+    "A significant interaction is a stop sign for the phrase \"helps on average\": from there the decision is made by subgroup, not by the overall mean. A direct bridge to segment analysis in A/B."
+  ],
+  "realLife": [
+    "Agronomy (ANOVA's birthplace): the yield depends on the cultivar, the fertilizer, and their combination — the interaction shows which cultivar suits which fertilizer.",
+    "Product and medicine: a feature's/drug's effect often depends on the segment/patient. The interaction IS the \"who exactly it suits\" — the most important part of the conclusion."
+  ],
+  "assumptions": [
+    "Same as one-way: roughly normal residuals, similar spread in the cells, independence. Plus you need enough observations in EVERY cell (combination of levels), otherwise the interaction is estimated very noisily.",
+    "Many factors and levels → many comparisons → the multiplicity risk again; a significant interaction is best confirmed on new data."
+  ],
+  "nextLabel": "Let's put it all together on a real dataset → The capstone"
+}

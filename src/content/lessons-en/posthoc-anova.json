@@ -1,0 +1,46 @@
+{
+  "id": "posthoc-anova",
+  "module": 11,
+  "title": "After ANOVA: which groups actually differ",
+  "tier": 1,
+  "intro": "ANOVA only says \"there is a difference somewhere\". But the business needs \"WHICH group is better\". The naive answer — run t-tests for all pairs — leads straight into the multiple comparisons trap. That is why special post-hoc procedures follow ANOVA.",
+  "widget": "pairwise-intervals",
+  "beats": [
+    {
+      "text": "ANOVA said \"there is a difference somewhere\". But between WHICH of the three groups? The chart shows confidence intervals of the pairwise differences (A−B, A−C, B−C). The rule is simple: if an interval does not cover zero (green) — the difference is significant; if it covers it (gray) — it is not. Move the between-group and within-group spreads — the intervals respond."
+    },
+    {
+      "text": "The temptation is to compare all pairs with t-tests.",
+      "predict": "With 4 groups that is 6 pairs. If each is tested at the 5% level, what happens to the chance of at least one false finding?",
+      "reveal": "It jumps to about 1 − 0.95⁶ ≈ 26% — every fourth \"analysis\" catches a nonexistent difference. This is exactly the multiple comparisons trap: the more pairs, the more random \"wins\". That is why uncorrected pairwise t-tests after ANOVA are a mistake."
+    },
+    {
+      "text": "The solution — post-hoc procedures with a multiplicity correction. The most famous is Tukey's test (HSD): it compares all pairs while holding the OVERALL false-positive risk at 5%, automatically tightening the threshold to the number of comparisons. Switch the \"Tukey correction\" toggle off on the chart: the intervals narrow and more pairs become \"significant\" — that is precisely the inflation of false findings under naive pairwise tests. Simpler corrections exist too (Bonferroni divides α by the number of pairs)."
+    },
+    {
+      "text": "The logic is two-step: first ANOVA as the \"gate\" (is there any difference at all), and only if it is significant — the post-hoc (where exactly). This preserves power: we don't run a pile of corrected comparisons until we're sure the signal exists. A/B/C/D tests with several variants work the same way."
+    },
+    {
+      "text": "The link to the course: this is a direct continuation of the multiple comparisons lesson, in the context of comparing groups. And a bridge to regression: ANOVA with a post-hoc is equivalent to a regression on a categorical feature with pairwise contrasts — the same \"signal against noise\" idea under different names."
+    }
+  ],
+  "definitions": [
+    { "term": "Post-hoc", "text": "comparisons after a significant ANOVA to find out which groups actually differ." },
+    { "term": "Tukey's test (HSD)", "text": "a post-hoc procedure for all pairs that holds the overall false-positive risk at the chosen level." },
+    { "term": "Family-wise error (FWER)", "text": "the probability of at least one false finding among all comparisons; this is what the corrections control." },
+    { "term": "Two-step logic", "text": "first ANOVA (is there a difference), then the post-hoc (where exactly) — preserves power." }
+  ],
+  "practice": [
+    "The proper multi-group analysis: ANOVA → if significant → a corrected post-hoc (Tukey). That way you neither drown in pairwise tests nor miss which group truly stands out.",
+    "The same in A/B/C/D tests: first check whether the variants differ at all, then corrected comparisons against the control. Otherwise, with many variants the \"winner\" is often just chance."
+  ],
+  "realLife": [
+    "Agronomy and medicine are the birthplace of post-hocs: compare several fertilizers or doses and figure out which one is actually better without harvesting false differences.",
+    "Product work: comparing several landing page versions or pricing grids — ANOVA/regression at the gate, then corrected pairwise comparisons to pick the variant."
+  ],
+  "assumptions": [
+    "Post-hocs inherit ANOVA's assumptions (roughly normal residuals, similar group spread, independence). When violated — nonparametric analogues (Kruskal–Wallis + Dunn).",
+    "Controlling the family-wise error reduces the power of each individual comparison: the honest price for the right to test many pairs at once."
+  ],
+  "nextLabel": "What if there are several factors and they interact? → Two-way ANOVA"
+}

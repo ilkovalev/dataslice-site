@@ -7,10 +7,10 @@ const W = 300
 const H = 250
 const PAD = 30
 const SETS = {
-  linear: { label: 'Линейная', pts: [[1, 2.2], [2, 2.6], [3, 3.4], [4, 3.7], [5, 4.6], [6, 4.9], [7, 5.8], [8, 6.1], [9, 6.9], [10, 7.4]] },
-  curve: { label: 'Кривая (парабола)', pts: [[1, 2], [2, 5], [3, 7.5], [4, 9], [5, 9.8], [6, 9.8], [7, 9], [8, 7.5], [9, 5], [10, 2]] },
-  outlierMakes: { label: 'Связь из одного выброса', pts: [[1, 5], [1.5, 4.7], [2, 5.3], [2.3, 4.9], [1.8, 5.1], [2.2, 4.8], [1.6, 5.2], [2.4, 5.0], [2, 4.6], [10, 10]] },
-  outlierHides: { label: 'Выброс прячет связь', pts: [[1, 1.5], [2, 2.5], [3, 3.2], [4, 4.3], [5, 4.9], [6, 6.0], [7, 6.8], [8, 8.1], [9, 9.0], [4.6, 34]] },
+  linear: { label: 'Линейная', labelEn: 'Linear', pts: [[1, 2.2], [2, 2.6], [3, 3.4], [4, 3.7], [5, 4.6], [6, 4.9], [7, 5.8], [8, 6.1], [9, 6.9], [10, 7.4]] },
+  curve: { label: 'Кривая (парабола)', labelEn: 'Curved (parabola)', pts: [[1, 2], [2, 5], [3, 7.5], [4, 9], [5, 9.8], [6, 9.8], [7, 9], [8, 7.5], [9, 5], [10, 2]] },
+  outlierMakes: { label: 'Связь из одного выброса', labelEn: 'A relationship from one outlier', pts: [[1, 5], [1.5, 4.7], [2, 5.3], [2.3, 4.9], [1.8, 5.1], [2.2, 4.8], [1.6, 5.2], [2.4, 5.0], [2, 4.6], [10, 10]] },
+  outlierHides: { label: 'Выброс прячет связь', labelEn: 'An outlier hides the relationship', pts: [[1, 1.5], [2, 2.5], [3, 3.2], [4, 4.3], [5, 4.9], [6, 6.0], [7, 6.8], [8, 8.1], [9, 9.0], [4.6, 34]] },
 }
 
 function stats(pts) {
@@ -52,7 +52,8 @@ function Scatter({ pts, mx, my, signColor, title }) {
   )
 }
 
-export default function CorrelationShapes() {
+export default function CorrelationShapes({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [k, setK] = useState('linear')
   const set = SETS[k]
   const pts = set.pts
@@ -67,31 +68,33 @@ export default function CorrelationShapes() {
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <div className="flex flex-wrap gap-2 mb-3">
         {Object.entries(SETS).map(([key, v]) => (
-          <button key={key} onClick={() => setK(key)} className={`text-xs px-2.5 py-1 rounded-md border ${k === key ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{v.label}</button>
+          <button key={key} onClick={() => setK(key)} className={`text-xs px-2.5 py-1 rounded-md border ${k === key ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{en ? v.labelEn : v.label}</button>
         ))}
       </div>
 
       <div className="grid sm:grid-cols-2 gap-3">
-        <Scatter pts={pts} mx={mx} my={my} signColor title="по значениям (Пирсон)" />
-        <Scatter pts={rankPts} mx={rs.mx} my={rs.my} title="по рангам / местам (Спирмен)" />
+        <Scatter pts={pts} mx={mx} my={my} signColor title={en ? 'by values (Pearson)' : 'по значениям (Пирсон)'} />
+        <Scatter pts={rankPts} mx={rs.mx} my={rs.my} title={en ? 'by ranks / places (Spearman)' : 'по рангам / местам (Спирмен)'} />
       </div>
 
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs mt-1 mb-2">
-        <span className="text-cyanink">● тянут связь вверх: (x−x̄)(y−ȳ) &gt; 0</span>
-        <span className="text-[#dc4d4d]">● тянут вниз: (x−x̄)(y−ȳ) &lt; 0</span>
+        <span className="text-cyanink">● {en ? 'pull the relationship up:' : 'тянут связь вверх:'} (x−x̄)(y−ȳ) &gt; 0</span>
+        <span className="text-[#dc4d4d]">● {en ? 'pull it down:' : 'тянут вниз:'} (x−x̄)(y−ȳ) &lt; 0</span>
       </div>
 
       <div className="flex flex-wrap gap-4 text-sm">
-        <span className="text-[#2ab8eb]">Пирсон r = {r.toFixed(2)}</span>
-        <span className="text-gray-700">Спирмен ρ = {rho.toFixed(2)}</span>
+        <span className="text-[#2ab8eb]">{en ? 'Pearson' : 'Пирсон'} r = {r.toFixed(2)}</span>
+        <span className="text-gray-700">{en ? 'Spearman' : 'Спирмен'} ρ = {rho.toFixed(2)}</span>
       </div>
 
       <div className="mt-3 rounded-lg border border-black/10 bg-ink px-3 py-2 text-sm space-y-1">
-        <div className="font-mono text-gray-700 text-xs">Пирсон: r = Σ(x−x̄)(y−ȳ) / √( Σ(x−x̄)²·Σ(y−ȳ)² )</div>
-        <div className="font-mono text-gray-700 text-xs">Спирмен: ρ = тот же Пирсон, но по рангам rₓ, r_y (а не по значениям)</div>
+        <div className="font-mono text-gray-700 text-xs">{en ? 'Pearson' : 'Пирсон'}: r = Σ(x−x̄)(y−ȳ) / √( Σ(x−x̄)²·Σ(y−ȳ)² )</div>
+        <div className="font-mono text-gray-700 text-xs">{en ? 'Spearman: ρ = the same Pearson, but on ranks rₓ, r_y (not values)' : 'Спирмен: ρ = тот же Пирсон, но по рангам rₓ, r_y (а не по значениям)'}</div>
       </div>
 
-      <p className="text-xs text-gray-500 mt-2">Пирсон складывает «прямоугольники» (x−x̄)(y−ȳ): синие (обе координаты по одну сторону от среднего) тянут r вверх, красные — вниз; сумму нормируют на разброс. Спирмен делает то же, но сначала заменяет значения их РАНГАМИ (местами) — поэтому он ловит любую монотонную связь и устойчив к выбросам: на «Выброс прячет связь» Пирсон проваливается к нулю, а Спирмен по рангам остаётся высоким.</p>
+      <p className="text-xs text-gray-500 mt-2">{en
+        ? 'Pearson sums the "rectangles" (x−x̄)(y−ȳ): blue ones (both coordinates on the same side of the mean) pull r up, red ones pull it down; the sum is normalized by the spread. Spearman does the same but first replaces the values with their RANKS (places) — so it catches any monotonic relationship and is robust to outliers: on "An outlier hides the relationship", Pearson collapses to zero while Spearman on ranks stays high.'
+        : 'Пирсон складывает «прямоугольники» (x−x̄)(y−ȳ): синие (обе координаты по одну сторону от среднего) тянут r вверх, красные — вниз; сумму нормируют на разброс. Спирмен делает то же, но сначала заменяет значения их РАНГАМИ (местами) — поэтому он ловит любую монотонную связь и устойчив к выбросам: на «Выброс прячет связь» Пирсон проваливается к нулю, а Спирмен по рангам остаётся высоким.'}</p>
     </div>
   )
 }

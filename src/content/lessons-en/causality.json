@@ -1,0 +1,50 @@
+{
+  "id": "causality",
+  "module": 7,
+  "title": "Causality: confounders and colliders",
+  "tier": 1,
+  "intro": "\"Correlation ≠ causation\" is the slogan everyone repeats. But what do you DO with it? When does controlling for a variable save the conclusion, and when does it ruin it? Let's work through the three basic causal structures on three nodes X, Y, Z. This turns the slogan into a working skill.",
+  "widget": "causal-diagram",
+  "beats": [
+    {
+      "text": "The first structure — the confounder: Z affects both X and Y. Then a relationship appears between X and Y even though X does not affect Y. Heat (Z) raises both ice cream sales (X) and drownings (Y). Without controlling for Z, a spurious relationship is visible.",
+      "predict": "Press \"control for Z\" with the \"confounder\" structure. What happens to the spurious X–Y relationship?",
+      "reveal": "It disappears — and rightly so. Comparing days with the same heat (fixing Z), we see that ice cream and drownings are unrelated. Controlling for a confounder is the main weapon against spurious correlations (this is what multiple regression does)."
+    },
+    {
+      "text": "The second structure — the collider: X and Y both affect Z (a shared CONSEQUENCE, not cause). X and Y themselves are independent.",
+      "predict": "Switch to \"collider\" and press \"control for Z\". What happens to the X–Y relationship?",
+      "reveal": "A SPURIOUS relationship appears that wasn't there without the control! Controlling for a collider creates distortion. The classic: among university admits (Z), talent (X) and connections (Y) are negatively related even though they are independent in the population — because we are looking only at those admitted."
+    },
+    {
+      "text": "The third structure — the mediator (a chain): X → Z → Y. Here Z is the link through which X affects Y.",
+      "predict": "On the \"mediator\" structure, switch on the control for Z. What happens to the real effect of X on Y?",
+      "reveal": "It disappears — we blocked the very path the effect traveled. By controlling for a mediator, it is easy to accidentally \"hide\" real influence. Usually the mediator is NOT controlled for if you want to see the full effect of X."
+    },
+    {
+      "text": "The main takeaway: the same move — controlling for Z — gives opposite results in different structures. A confounder MUST be controlled; a collider MUST NOT (it creates a lie); a mediator — depends on the question. So \"let's add all the variables to the model\" is a dangerous idea: you can introduce bias with your own hands."
+    },
+    {
+      "text": "So how is causality established? The gold standard is the randomized experiment (A/B): random assignment severs all arrows coming into X, killing every confounder at once. When an experiment is impossible, you lean on the causal diagram: control confounders, leave colliders alone — and honestly admit the residual uncertainty."
+    }
+  ],
+  "definitions": [
+    { "term": "Confounder", "text": "a common cause of X and Y. Creates a spurious relationship; it must be controlled for." },
+    { "term": "Collider", "text": "a common consequence of X and Y. Controlling for a collider creates a spurious relationship — it must not be controlled for." },
+    { "term": "Mediator", "text": "the intermediate link X → Z → Y. Controlling for a mediator blocks the real effect." },
+    { "term": "Causal diagram (DAG)", "text": "a graph of \"cause → effect\" arrows; it tells you what to control for and what not to." }
+  ],
+  "practice": [
+    "The practical skill: before \"adding a control\", draw the arrows. Is the variable a common cause? Control for it. A common consequence (a collider)? Absolutely not. A link in the effect? Depends on the question. Mindlessly controlling for \"everything\" is as dangerous as controlling for nothing.",
+    "The classic collider in product work is analyzing \"active users only\" or \"survivors only\": selecting on a consequence breeds paradoxical relationships (this IS the survivorship bias from the traps module)."
+  ],
+  "realLife": [
+    "In medicine, causal diagrams decide which factors go into a treatment-effect model: age and severity are confounders (control), while a treatment complication is a collider (do not control).",
+    "The famous \"paradoxes\" (why talent and looks seem at odds among movie stars) are collider effects born of selection, not real relationships."
+  ],
+  "assumptions": [
+    "Any causal conclusion from observational data rests on an ASSUMED diagram of arrows, which cannot be verified from the data alone. Got the diagram wrong — got wrong what to control for.",
+    "Controlling removes only the ACCOUNTED-FOR confounders. There may always remain an unknown one — which is why an experiment beats any observational adjustment."
+  ],
+  "nextLabel": "What if you need to predict a category, not a number? → Classification"
+}

@@ -9,7 +9,8 @@ const PAD = 36
 const DMIN = 0
 const DMAX = 100
 
-export default function Regression() {
+export default function Regression({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [pts, setPts] = useState([
     { x: 18, y: 28 }, { x: 28, y: 38 }, { x: 38, y: 42 }, { x: 50, y: 52 },
     { x: 60, y: 50 }, { x: 70, y: 68 }, { x: 82, y: 74 },
@@ -66,8 +67,8 @@ export default function Regression() {
       <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} className="w-full h-auto touch-none select-none" onPointerMove={move} onPointerUp={up}>
         <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="#d6cebf" strokeWidth="1.5" />
         <line x1={PAD} y1={PAD} x2={PAD} y2={H - PAD} stroke="#d6cebf" strokeWidth="1.5" />
-        <text x={W - PAD} y={H - PAD + 22} fill="#9a907c" fontSize="11" textAnchor="end">x (например, расходы на рекламу) →</text>
-        <text x={PAD - 8} y={PAD - 12} fill="#9a907c" fontSize="11">y (продажи)</text>
+        <text x={W - PAD} y={H - PAD + 22} fill="#9a907c" fontSize="11" textAnchor="end">{en ? 'x (say, ad spend) →' : 'x (например, расходы на рекламу) →'}</text>
+        <text x={PAD - 8} y={PAD - 12} fill="#9a907c" fontSize="11">{en ? 'y (sales)' : 'y (продажи)'}</text>
         {/* квадраты ошибок (то, что минимизирует МНК) */}
         {showSquares && pts.map((p, i) => {
           const yhat = lineY(p.x)
@@ -91,16 +92,16 @@ export default function Regression() {
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2 text-sm text-gray-700">
         <span className="font-mono text-cyanink bg-accent/10 px-2 py-0.5 rounded">y = {intercept.toFixed(1)} + {slope.toFixed(2)}·x</span>
-        <span className="text-gray-600">сдвиг b₀ = {intercept.toFixed(1)}</span>
-        <span className="text-gray-600">наклон b₁ = {slope.toFixed(2)}</span>
+        <span className="text-gray-600">{en ? 'intercept' : 'сдвиг'} b₀ = {intercept.toFixed(1)}</span>
+        <span className="text-gray-600">{en ? 'slope' : 'наклон'} b₁ = {slope.toFixed(2)}</span>
         <span className="text-[#2ab8eb]">r = {r.toFixed(2)}</span>
-        {showSquares && <span className="text-[#d9a300]">сумма квадратов = {sse.toFixed(0)}</span>}
+        {showSquares && <span className="text-[#d9a300]">{en ? 'sum of squares' : 'сумма квадратов'} = {sse.toFixed(0)}</span>}
       </div>
 
       <div className="flex items-center justify-between mt-3">
-        <p className="text-xs text-gray-500">Перетаскивайте точки. Наклон b₁ — на сколько растёт y при +1 по x; r — сила связи от −1 до +1.</p>
+        <p className="text-xs text-gray-500">{en ? 'Drag the points. The slope b₁ is how much y grows per +1 in x; r is the strength of the relationship from −1 to +1.' : 'Перетаскивайте точки. Наклон b₁ — на сколько растёт y при +1 по x; r — сила связи от −1 до +1.'}</p>
         <button onClick={() => setShowSquares((s) => !s)} className="shrink-0 text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">
-          {showSquares ? 'скрыть квадраты' : 'показать квадраты ошибок'}
+          {showSquares ? (en ? 'hide the squares' : 'скрыть квадраты') : (en ? 'show the squared errors' : 'показать квадраты ошибок')}
         </button>
       </div>
     </div>

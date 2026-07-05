@@ -14,7 +14,8 @@ const BASE = [
   { x: 54, y: 50 }, { x: 64, y: 62 }, { x: 74, y: 66 }, { x: 86, y: 80 },
 ]
 
-export default function RegressionMetrics() {
+export default function RegressionMetrics({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [pts, setPts] = useState(BASE)
   const [drag, setDrag] = useState(null)
   const svgRef = useRef(null)
@@ -96,16 +97,16 @@ export default function RegressionMetrics() {
       </svg>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3">
-        {metric('MAE', mae.toFixed(1), 'средняя |ошибка|', 'text-gray-900')}
-        {metric('RMSE', rmse.toFixed(1), 'штрафует выбросы', 'text-cyanink')}
-        {metric('MAPE', mape.toFixed(0) + '%', 'ошибка в %', 'text-gray-900')}
-        {metric('R²', r2.toFixed(2), 'доля объяснённого', 'text-gray-900')}
+        {metric('MAE', mae.toFixed(1), en ? 'average |error|' : 'средняя |ошибка|', 'text-gray-900')}
+        {metric('RMSE', rmse.toFixed(1), en ? 'punishes outliers' : 'штрафует выбросы', 'text-cyanink')}
+        {metric('MAPE', mape.toFixed(0) + '%', en ? 'error in %' : 'ошибка в %', 'text-gray-900')}
+        {metric('R²', r2.toFixed(2), en ? 'share explained' : 'доля объяснённого', 'text-gray-900')}
       </div>
 
       <div className="flex items-center justify-between mt-3">
-        <p className="text-xs text-gray-500">Перетаскивайте точки и следите за метриками. RMSE всегда ≥ MAE и реагирует на выброс резче.</p>
+        <p className="text-xs text-gray-500">{en ? 'Drag the points and watch the metrics. RMSE is always ≥ MAE and reacts to an outlier more sharply.' : 'Перетаскивайте точки и следите за метриками. RMSE всегда ≥ MAE и реагирует на выброс резче.'}</p>
         <button onClick={toggleOutlier} className="shrink-0 text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">
-          {hasOutlier ? 'убрать выброс' : 'добавить выброс'}
+          {hasOutlier ? (en ? 'remove the outlier' : 'убрать выброс') : (en ? 'add an outlier' : 'добавить выброс')}
         </button>
       </div>
     </div>

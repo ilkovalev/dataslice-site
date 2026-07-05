@@ -1,0 +1,48 @@
+{
+  "id": "regression-assumptions",
+  "module": 7,
+  "title": "Regression assumptions and residual analysis",
+  "tier": 1,
+  "intro": "Regression can be computed on any data — the button won't ask whether a straight line is appropriate. But the coefficients and their \"significance\" are honest only if the assumptions hold. You check them not by r itself but by the RESIDUALS — the line's misses. Drag the points and watch the residuals.",
+  "widget": "residual-diagnostics",
+  "beats": [
+    {
+      "text": "A residual is the model's miss (actual minus predicted). The main diagnostic tool is the plot of residuals against x. In the \"all fine\" mode they form a structureless cloud around zero: the straight line is appropriate. Any pattern in the residuals is a signal the model cannot be trusted, whatever the R²."
+    },
+    {
+      "text": "Assumption 1 — linearity. Switch to \"nonlinearity\".",
+      "predict": "If the relationship is actually curved and we drew a straight line — what pattern appears in the residuals?",
+      "reveal": "An arc: the residuals bend systematically (sagging in the middle, rising at the edges) — that is a pattern, not random noise. It means \"the relationship is not linear, a straight line is inappropriate\". The cure — add a nonlinear term (x²), transform the variables, or take a different model."
+    },
+    {
+      "text": "Assumption 2 — constant spread of residuals (homoscedasticity). Switch to \"heteroscedasticity\".",
+      "predict": "What shows up in the residuals when the spread grows with x?",
+      "reveal": "A fan: the residuals spread out to the right. The slope estimate is still usable, but its \"significance\" and confidence intervals become wrong. It is treated with a log transform, weighting, or robust standard errors."
+    },
+    {
+      "text": "Assumption 3 — no excessive influence of individual points. Switch to \"outlier\": one distant point (red) with high leverage can set the slope for the whole cloud. That is why influential observations are checked, and the model is compared with and without them."
+    },
+    {
+      "text": "Two more assumptions: independence of residuals (violated in time series — neighboring errors correlate) and approximate normality of residuals (needed mostly for small samples). The main practical skill — after a regression, ALWAYS look at the residual plot: it honestly shows whether the line can be trusted at all."
+    }
+  ],
+  "definitions": [
+    { "term": "Residuals", "text": "the model's misses (actual − predicted). Their structure tells whether the model is fit for the data." },
+    { "term": "Linearity", "text": "the relationship is close to a straight line; a violation shows as an arc/bend in the residuals." },
+    { "term": "Homoscedasticity", "text": "constant spread of residuals across the range of x; a \"fan\" means heteroscedasticity." },
+    { "term": "Influential observation", "text": "a point (often at the edge in x) that strongly changes the coefficient estimates." }
+  ],
+  "practice": [
+    "The working ritual: computed a regression — plotted the residuals. An arc → the relationship is nonlinear. A fan → heteroscedasticity. A lone distant point → check its influence. Only after that do you read the coefficients and their significance.",
+    "A high R² does not save you from broken assumptions: a model can fit well on average while giving wrong intervals and a deceptive slope. The residual picture is more honest than a single number."
+  ],
+  "realLife": [
+    "Economic and financial data are almost always heteroscedastic and time-dependent — which is why robust standard errors and dedicated time-series models are the default there.",
+    "In product data nonlinearity is everywhere (saturation, thresholds), so blind linear regression often understates or distorts the relationship — a look at the residuals and transformations save the day."
+  ],
+  "assumptions": [
+    "Residual diagnostics themselves assume you have enough data for structure to be visible; on a handful of points a pattern in the residuals is hard to spot.",
+    "Fixing one violation (say, a log transform for heteroscedasticity) changes how the coefficients read — they are now about percentages, not absolute units."
+  ],
+  "nextLabel": "One variable deceives — how to account for the rest? → Multiple regression"
+}

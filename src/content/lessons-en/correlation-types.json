@@ -1,0 +1,70 @@
+{
+  "id": "correlation-types",
+  "module": 7,
+  "title": "Correlation: Pearson, Spearman and what r misses",
+  "tier": 1,
+  "intro": "The correlation coefficient r is a handy single number about a relationship. But it measures only ONE kind of relationship — the linear one — and it is easy to fool. An experienced analyst never trusts r without looking at the chart itself. Switch between the point clouds and compare Pearson with Spearman.",
+  "widget": "correlation-shapes",
+  "beats": [
+    {
+      "text": "Straight to the two charts and the formula. On the left — the cloud by values with the cross of means (x̄, ȳ); this is Pearson: r = Σ(x−x̄)(y−ȳ) / √(Σ(x−x̄)²·Σ(y−ȳ)²). Each point contributes (x−x̄)(y−ȳ): blue points (both coordinates on the same side of the mean) pull r up, red ones pull it down; the sum is divided by the spread so r lands in [−1, 1]. On the right — the same points, but by RANKS (places): Spearman's ρ is the same Pearson computed on ranks. On \"Linear\" the points stretch in a straight band, almost all blue — Pearson is high and deservedly so."
+    },
+    {
+      "text": "Now switch to \"Curved\" (a parabola).",
+      "predict": "The relationship between x and y here is very strong (a clean arc). What will Pearson's r be?",
+      "reveal": "Close to zero! Pearson sees only a STRAIGHT relationship and misses a perfect arc — the rising half cancels the falling one. Concluding \"r ≈ 0, no relationship\" would be a gross error: the relationship is strong, just nonlinear. That is why looking at the chart is mandatory."
+    },
+    {
+      "text": "Switch to \"A relationship from one outlier\".",
+      "predict": "Nine points form a shapeless cloud with no relationship, plus one distant point. What will r show?",
+      "reveal": "A high r — created entirely by ONE outlier. Remove it — and there is no relationship. A single extreme can both paint a relationship out of nothing and (in the neighboring example, \"an outlier hides the relationship\") zero out a real one. Pearson is very sensitive to outliers."
+    },
+    {
+      "text": "This is what Spearman is for (the right chart). It computes the correlation not on values but on their RANKS — places in the sorted order. Open \"An outlier hides the relationship\": nine points line up in a clean straight line, but one distant outlier drags Pearson almost to zero (on the left chart it is red — pulling down) — the relationship is \"hidden\". Spearman on the right barely flinched: the outlier's rank is still just one \"place\", and the order of the remaining points survived. That is why Spearman is robust to outliers and catches ANY monotonic relationship, not just a straight one."
+    },
+    {
+      "text": "The practical rule. Roughly linear relationship, no outliers → Pearson. Monotonic but curved, or there are outliers, or the data are ordinal (ratings) → Spearman. And in any case — scatter plot first, number second. r without a chart is a frequent source of both false and missed relationships."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Pearson correlation (r)",
+      "text": "the strength of the linear relationship by values; from −1 to +1. Sensitive to outliers, blind to nonlinearity."
+    },
+    {
+      "term": "Spearman correlation (ρ)",
+      "text": "Pearson correlation on ranks; catches any monotonic relationship and is robust to outliers."
+    },
+    {
+      "term": "Monotonic relationship",
+      "text": "y steadily grows (or falls) with x, even if not along a straight line. Spearman catches it; Pearson not necessarily."
+    },
+    {
+      "term": "Scatter plot",
+      "text": "the chart of (x, y) points — the first and mandatory look at a relationship before any coefficient."
+    }
+  ],
+  "practice": [
+    "Anscombe's quartet is the famous example: four datasets with nearly identical means, variances and r ≈ 0.82, but completely different pictures (a line, an arc, an outlier). One moral: a correlation number without a chart is deceptive.",
+    "In practice, for ratings, placements, scores (ordinal data) and for relationships with outliers you take Spearman. For clean linear measurements — Pearson. But you always look at the scatter."
+  ],
+  "realLife": [
+    "\"Salary vs tenure\" is often monotonic but not linear (growth slows) — Pearson will understate the relationship, Spearman shows it more honestly.",
+    "In monitoring, a single anomalous day easily paints or breaks a correlation between metrics — so relationships are re-checked without outliers and with rank methods."
+  ],
+  "assumptions": [
+    "Pearson reflects a relationship correctly only if it is roughly linear and there are no strong outliers; otherwise it systematically misleads.",
+    "Any correlation (Pearson or Spearman) is a relationship, not causation. A high coefficient does not mean one thing causes the other."
+  ],
+  "nextLabel": "How accurate is the forecast? Measuring the model's error → Regression quality metrics",
+  "related": [
+    {
+      "id": "causality",
+      "label": "Causality and confounders"
+    },
+    {
+      "id": "simpson-paradox",
+      "label": "Simpson's paradox"
+    }
+  ]
+}

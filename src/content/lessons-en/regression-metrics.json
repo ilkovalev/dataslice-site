@@ -1,0 +1,65 @@
+{
+  "id": "regression-metrics",
+  "module": 7,
+  "title": "Regression quality metrics: MAE, RMSE, MAPE",
+  "tier": 1,
+  "intro": "We know how to draw the line. But any forecast misses — the question is by how much. To compare models and know whether to trust them, the error is rolled up into a single number. There are several such numbers, and they answer different questions. Drag the points and add an outlier — watch how each metric reacts.",
+  "widget": "regression-metrics",
+  "beats": [
+    {
+      "text": "Each point has a residual — its distance to the line (the yellow ticks). All quality metrics are different ways to average these misses into one number. The smaller it is, the more accurate the model."
+    },
+    {
+      "text": "MAE (mean absolute error) is the most direct: take the length of each miss in absolute value and average. \"The model is off by 5 on average\" — that is MAE. It is in the same units as y (rubles, minutes) and reads easily."
+    },
+    {
+      "text": "RMSE (root mean squared error) counts differently: the misses are first squared, averaged, and then the root is taken. Because of the square, large misses weigh more.",
+      "predict": "Press \"add an outlier\" — one point moves far from the line. Which metric jumps more: MAE or RMSE?",
+      "reveal": "RMSE. One big miss squared contributes enormously, and RMSE shoots up while MAE changes modestly. So RMSE is chosen when large errors are especially dangerous (missing badly is worse than missing slightly but often); MAE — when all errors are equally unpleasant. RMSE is always ≥ MAE."
+    },
+    {
+      "text": "MAPE (mean absolute percentage error) converts the miss into percent of the actual: off by 5 on a value of 100 — that is 5%. Handy when quantities differ in scale or relative accuracy matters. But MAPE breaks near zero: with a tiny actual, even a small miss gives a huge percentage."
+    },
+    {
+      "text": "R² (the coefficient of determination) answers a different question: what share of y's spread the model explains. R² = 1 — a perfect hit on every point; R² = 0 — the model is no better than always naming the mean. It is a convenient \"school grade\": how much x helps predict y at all."
+    },
+    {
+      "text": "The main takeaway: there is no single correct metric — you choose for the task and the cost of the error. Forecasting warehouse demand? Big misses are costly — watch RMSE. Comparing accuracy across products of different prices? Take MAPE. Need to tell the client \"how well the model captures the pattern at all\"? Show R²."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "MAE",
+      "formula": "mean of |yᵢ − ŷᵢ|",
+      "text": "the average absolute miss, in units of y. Simple and robust to outliers."
+    },
+    {
+      "term": "RMSE",
+      "formula": "√(mean of (yᵢ − ŷᵢ)²)",
+      "text": "the root of the mean squared error. Punishes large misses harder; always ≥ MAE."
+    },
+    {
+      "term": "MAPE",
+      "formula": "mean of |yᵢ − ŷᵢ| / |yᵢ|",
+      "text": "the average error in percent of the actual. Handy across scales, but dangerous near zero."
+    },
+    {
+      "term": "R² (determination)",
+      "formula": "1 − SSres / SStot",
+      "text": "the share of y's spread explained by the model: 1 — ideal, 0 — no better than the mean."
+    }
+  ],
+  "practice": [
+    "In practice the metric is fixed before training the model — otherwise there is a temptation to pick the one where the result looks prettier. And you watch more than one: MAE and RMSE side by side immediately show whether the data has heavy outliers (if RMSE is noticeably larger than MAE — it does).",
+    "These same metrics drive model selection in machine learning: out of a dozen models you take the one with the smaller error on new data. And what exactly counts as \"error\" — MAE, RMSE or something else — is determined by the business meaning of the task."
+  ],
+  "realLife": [
+    "Forecasting weather, demand, prices, travel time — quality is measured exactly this way everywhere. A delivery service optimizes the RMSE of predicted time: better to be consistently off by a couple of minutes than occasionally by half an hour.",
+    "Financial and product forecasts are often judged in MAPE: \"the model is off by 8% on average\" is clear to management and analysts alike, and does not depend on the units."
+  ],
+  "assumptions": [
+    "MAPE explodes on values near zero and is asymmetric: under- and over-forecasting are fined differently. For metrics with zeros (daily demand, rare orders) take MAE/RMSE or weighted variants.",
+    "R² grows from adding any variables and says nothing about performance on new data. A high R² with a nonlinear relationship, or when extrapolating beyond the training range, is an illusion of accuracy."
+  ],
+  "nextLabel": "Is a straight line even appropriate? Checking the residuals → Regression assumptions"
+}

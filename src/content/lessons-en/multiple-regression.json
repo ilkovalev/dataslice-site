@@ -1,0 +1,48 @@
+{
+  "id": "multiple-regression",
+  "module": 7,
+  "title": "Multiple regression and controlling for variables",
+  "tier": 1,
+  "intro": "Simple regression looks at the relationship of x and y alone — and is therefore easily fooled. The analyst's real workhorse is multiple regression: it estimates the effect of x while holding other factors constant. This is where the practical answer to \"correlation ≠ causation\" lives.",
+  "widget": "multiple-regression",
+  "beats": [
+    {
+      "text": "Before you are two groups of points by a hidden factor z (gray — z=0, teal — z=1). There is no control right now: the red line is the pooled regression of y on x. It goes up — as if x strongly affected y."
+    },
+    {
+      "text": "But the groups sit differently: z moves both x and y at once (it is a confounder).",
+      "predict": "Set \"the true effect of x\" to 0 and the \"confounder strength\" higher. What will the pooled red line show — and is it really the effect of x?",
+      "reveal": "The red line will still go up — showing a relationship that does NOT exist. The whole \"effect\" is created by the z=1 group being both further right in x and higher in y. This is the classic false conclusion from simple regression."
+    },
+    {
+      "text": "Press \"control for z\". Now the lines are drawn WITHIN each group — that is, at a fixed z.",
+      "predict": "What will the within-group slopes look like when the true effect is 0?",
+      "reveal": "Almost horizontal — the x→y relationship vanished, as it should. By controlling for z (comparing objects with the same z), we cleansed the effect of x of the confounder's influence. This is exactly what multiple regression does — just not by hand per group, but across many factors at once."
+    },
+    {
+      "text": "Formally, multiple regression is y = b₀ + b₁·x + b₂·z + … The coefficient b₁ reads as \"the effect of x, ALL ELSE EQUAL\": how much y changes when x grows by one unit with all other factors fixed. By adding the important factors to the model, we \"subtract\" their influence and see the contribution of x itself."
+    },
+    {
+      "text": "This is the practical tool against spurious relationships: when an A/B test cannot be run, you control for the known confounders in a regression. But careful — you must control for the RIGHT variables. What exactly is right (and what hurts) is the subject of the causality lesson."
+    }
+  ],
+  "definitions": [
+    { "term": "Multiple regression", "formula": "y = b₀ + b₁x + b₂z + …", "text": "a regression on several predictors at once; estimates each one's contribution with the rest fixed." },
+    { "term": "Controlling for a variable", "text": "include a factor in the model (or compare at equal values of it) to remove its influence from the effect estimate." },
+    { "term": "All else equal (ceteris paribus)", "text": "how a coefficient reads: the effect of one predictor with the rest held fixed." },
+    { "term": "Confounder", "text": "a factor that affects both x and y, thereby creating a spurious relationship between them." }
+  ],
+  "practice": [
+    "Multiple regression is the analyst's most frequent tool after descriptive statistics. \"Does tenure affect salary once role and city are accounted for?\", \"the effect of a promo on revenue controlling for season and channel\" — these are all coefficients, all else equal.",
+    "Its main strength and main danger are one and the same: what exactly you put in the model. Forgot an important confounder — the effect is distorted; included the wrong thing (see the collider in the next lesson) — also distorted. So the set of controls is chosen by the logic of the problem, not \"everything in\"."
+  ],
+  "realLife": [
+    "Econometrics and the social sciences rest almost entirely on multiple regression: estimate the effect of education on income holding age, gender, region constant.",
+    "In product work — estimate a feature's contribution to retention controlling for account age and platform, when a clean A/B on that feature is impossible."
+  ],
+  "assumptions": [
+    "The \"all else equal\" coefficient is honest only if the right confounders are in the model and the relationship is roughly linear. An omitted important factor biases the estimate (omitted variable bias).",
+    "Strongly correlated predictors (multicollinearity) make individual coefficients unstable. And controlling does not turn observational data into an experiment — the risk of unaccounted factors remains."
+  ],
+  "nextLabel": "Which variables to control for — and which must you not? → Causality"
+}

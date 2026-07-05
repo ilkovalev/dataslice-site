@@ -9,29 +9,30 @@ const NODES = { X: [90, 150], Y: [370, 150], Z: [230, 50] }
 
 const STRUCT = {
   confounder: {
-    label: 'Конфаундер (Z → X, Z → Y)',
+    label: 'Конфаундер (Z → X, Z → Y)', labelEn: 'Confounder (Z → X, Z → Y)',
     edges: [['Z', 'X'], ['Z', 'Y']],
-    no: { assoc: 'есть', kind: 'ложная (создана Z)', good: false },
-    yes: { assoc: 'нет', kind: 'очищена — верно', good: true },
-    verdict: { no: 'Без контроля видна ложная связь X–Y.', yes: 'Контроль Z убирает ложную связь — ЭТО ПРАВИЛЬНО.' },
+    no: { assoc: 'есть', assocEn: 'present', kind: 'ложная (создана Z)', kindEn: 'spurious (created by Z)', good: false },
+    yes: { assoc: 'нет', assocEn: 'none', kind: 'очищена — верно', kindEn: 'cleansed — correct', good: true },
+    verdict: { no: 'Без контроля видна ложная связь X–Y.', yes: 'Контроль Z убирает ложную связь — ЭТО ПРАВИЛЬНО.', noEn: 'Without the control, a spurious X–Y relationship is visible.', yesEn: 'Controlling for Z removes the spurious relationship — THIS IS RIGHT.' },
   },
   collider: {
-    label: 'Коллайдер (X → Z, Y → Z)',
+    label: 'Коллайдер (X → Z, Y → Z)', labelEn: 'Collider (X → Z, Y → Z)',
     edges: [['X', 'Z'], ['Y', 'Z']],
-    no: { assoc: 'нет', kind: 'X и Y независимы — верно', good: true },
-    yes: { assoc: 'есть', kind: 'ложная (создана контролем!)', good: false },
-    verdict: { no: 'Без контроля X и Y не связаны — так и есть.', yes: 'Контроль коллайдера СОЗДАЁТ ложную связь — ЭТО ОШИБКА.' },
+    no: { assoc: 'нет', assocEn: 'none', kind: 'X и Y независимы — верно', kindEn: 'X and Y are independent — correct', good: true },
+    yes: { assoc: 'есть', assocEn: 'present', kind: 'ложная (создана контролем!)', kindEn: 'spurious (created by the control!)', good: false },
+    verdict: { no: 'Без контроля X и Y не связаны — так и есть.', yes: 'Контроль коллайдера СОЗДАЁТ ложную связь — ЭТО ОШИБКА.', noEn: 'Without the control, X and Y are unrelated — as they truly are.', yesEn: 'Controlling for a collider CREATES a spurious relationship — THIS IS A MISTAKE.' },
   },
   mediator: {
-    label: 'Медиатор / цепочка (X → Z → Y)',
+    label: 'Медиатор / цепочка (X → Z → Y)', labelEn: 'Mediator / chain (X → Z → Y)',
     edges: [['X', 'Z'], ['Z', 'Y']],
-    no: { assoc: 'есть', kind: 'истинный эффект X на Y', good: true },
-    yes: { assoc: 'нет', kind: 'реальный путь заблокирован', good: false },
-    verdict: { no: 'Без контроля видно реальное влияние X на Y (через Z).', yes: 'Контроль медиатора УБИВАЕТ реальный эффект — обычно не нужно.' },
+    no: { assoc: 'есть', assocEn: 'present', kind: 'истинный эффект X на Y', kindEn: 'the true effect of X on Y', good: true },
+    yes: { assoc: 'нет', assocEn: 'none', kind: 'реальный путь заблокирован', kindEn: 'the real path is blocked', good: false },
+    verdict: { no: 'Без контроля видно реальное влияние X на Y (через Z).', yes: 'Контроль медиатора УБИВАЕТ реальный эффект — обычно не нужно.', noEn: 'Without the control, the real influence of X on Y (through Z) is visible.', yesEn: 'Controlling for a mediator KILLS the real effect — usually not what you want.' },
   },
 }
 
-export default function CausalDiagram() {
+export default function CausalDiagram({ locale = 'ru' }) {
+  const en = locale === 'en'
   const [s, setS] = useState('confounder')
   const [ctrl, setCtrl] = useState(false)
   const st = STRUCT[s]
@@ -49,7 +50,7 @@ export default function CausalDiagram() {
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <div className="flex flex-wrap gap-2 mb-3">
         {Object.entries(STRUCT).map(([k, v]) => (
-          <button key={k} onClick={() => setS(k)} className={`text-xs px-2.5 py-1 rounded-md border ${s === k ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{v.label.split(' (')[0]}</button>
+          <button key={k} onClick={() => setS(k)} className={`text-xs px-2.5 py-1 rounded-md border ${s === k ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{(en ? v.labelEn : v.label).split(' (')[0]}</button>
         ))}
       </div>
 
@@ -67,20 +68,22 @@ export default function CausalDiagram() {
             </g>
           )
         })}
-        {ctrl && <text x={NODES.Z[0]} y={NODES.Z[1] - 30} fontSize="10" textAnchor="middle" fill="#d9a300">контролируем</text>}
+        {ctrl && <text x={NODES.Z[0]} y={NODES.Z[1] - 30} fontSize="10" textAnchor="middle" fill="#d9a300">{en ? 'controlled' : 'контролируем'}</text>}
       </svg>
 
       <div className="mt-2 text-sm">
-        <div className="text-gray-700">Наблюдаемая связь X–Y: <span className={cur.good ? 'text-green-600 font-medium' : 'text-[#dc4d4d] font-medium'}>{cur.assoc}</span> — {cur.kind}</div>
+        <div className="text-gray-700">{en ? 'Observed X–Y relationship:' : 'Наблюдаемая связь X–Y:'} <span className={cur.good ? 'text-green-600 font-medium' : 'text-[#dc4d4d] font-medium'}>{en ? cur.assocEn : cur.assoc}</span> — {en ? cur.kindEn : cur.kind}</div>
         <div className={`mt-1 rounded-lg border px-3 py-2 ${cur.good ? 'border-green-500/30 bg-green-500/5 text-gray-700' : 'border-amber-400/40 bg-amber-400/[0.07] text-gray-700'}`}>
-          {ctrl ? st.verdict.yes : st.verdict.no}
+          {ctrl ? (en ? st.verdict.yesEn : st.verdict.yes) : (en ? st.verdict.noEn : st.verdict.no)}
         </div>
       </div>
 
       <button onClick={() => setCtrl((c) => !c)} className="mt-3 text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">
-        {ctrl ? 'не контролировать Z' : 'контролировать Z'}
+        {ctrl ? (en ? 'don’t control for Z' : 'не контролировать Z') : (en ? 'control for Z' : 'контролировать Z')}
       </button>
-      <p className="text-xs text-gray-500 mt-2">Один и тот же приём (контроль Z) в разных структурах даёт противоположный результат: для конфаундера — спасает, для коллайдера — портит, для медиатора — убивает эффект. Поэтому «контролировать всё подряд» — ошибка.</p>
+      <p className="text-xs text-gray-500 mt-2">{en
+        ? 'The same move (controlling for Z) gives opposite results in different structures: for a confounder it saves you, for a collider it hurts, for a mediator it kills the effect. That is why "control for everything" is a mistake.'
+        : 'Один и тот же приём (контроль Z) в разных структурах даёт противоположный результат: для конфаундера — спасает, для коллайдера — портит, для медиатора — убивает эффект. Поэтому «контролировать всё подряд» — ошибка.'}</p>
     </div>
   )
 }

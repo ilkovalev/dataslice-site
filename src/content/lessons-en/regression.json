@@ -1,0 +1,60 @@
+{
+  "id": "regression",
+  "module": 7,
+  "title": "Regression: predicting one number from another",
+  "tier": 1,
+  "intro": "So far we have described one quantity at a time — its center, spread, shape. But the interesting part starts when there are two quantities and a relationship between them: more ad spend — more sales? bigger apartment — higher price? Regression answers two questions at once: is there a relationship (and how strong is it), and how to predict one quantity from the other. Drag the points on the chart — the line and the numbers recompute live.",
+  "widget": "regression",
+  "beats": [
+    {
+      "text": "Each point is one observation with two numbers: horizontally x (say, ad spend), vertically y (sales). The cloud of points trends upward: more advertising — usually more sales. The teal line is the regression: the one straight line that best describes this cloud. Drag any point and watch the line adjust."
+    },
+    {
+      "text": "The line has an equation: y = b₀ + b₁·x. Two numbers define it completely. b₁ is the slope: how much y changes on average when x grows by one unit (spent 1 more on ads — sales grew by b₁). b₀ is the intercept: where the line crosses the axis, i.e. the prediction at x = 0.",
+      "predict": "Gather the points into a steep rising band, then into an almost horizontal one. What does the slope b₁ do meanwhile?",
+      "reveal": "A steep rising band → a large positive b₁ (x strongly affects y). An almost horizontal cloud → b₁ near zero (x says almost nothing about y). A falling band → a negative b₁. The slope IS the \"strength and direction\" of the relationship in the units of the data."
+    },
+    {
+      "text": "What does \"describes best\" mean? The yellow vertical ticks are the prediction errors, the residuals: how much the line misses each point by. Press \"show the squared errors\" — each residual turns into a square whose side equals the miss.",
+      "predict": "The line is drawn so that the total area of these squares is smallest. Why squares, and not just the lengths of the misses?",
+      "reveal": "A square grows faster than a length, so a big miss is \"fined\" far more than a small one — the line tries to avoid large errors on any single point. Plus, squares keep the pluses and minuses from canceling out. Drawing the line through the minimum of the sum of squares is called the method of least squares (OLS)."
+    },
+    {
+      "text": "Next to the equation there is a number r — the correlation coefficient, from −1 to +1. It measures how tightly the points hug the line.",
+      "predict": "Gather the points into a thin rising band, then scatter them into a shapeless cloud. What happens to r?",
+      "reveal": "A thin rising band → r close to +1 (a strong direct relationship). A shapeless cloud → r around 0 (no relationship). A falling band → r close to −1. The slope b₁ speaks to direction and steepness, while r speaks to how well a straight line describes the points at all."
+    },
+    {
+      "text": "Here comes the most important warning in all of statistics: correlation is not causation. Two quantities can move together not because one causes the other, but because a third thing affects both. In summer both ice cream sales and water accidents rise — but ice cream doesn't drown people; the shared cause is the heat."
+    },
+    {
+      "text": "So regression gives a forecast: plug in x — get the predicted y from the line. But any forecast can be sharp or crude. Before trusting a model, you need to measure how badly it misses on average — that is the next lesson."
+    }
+  ],
+  "definitions": [
+    { "term": "Regression", "text": "a way to predict one numeric quantity (y) from another (x) by drawing a line through the data." },
+    { "term": "Equation of the line", "formula": "y = b₀ + b₁·x", "text": "b₀ — the intercept (the prediction at x = 0), b₁ — the slope (how much y changes when x grows by one unit)." },
+    { "term": "Residual", "text": "the prediction error at a point — the difference between the actual y and what the line gives." },
+    { "term": "Method of least squares (OLS)", "text": "draw the line so that the sum of squared residuals is minimal." },
+    { "term": "Correlation (r)", "formula": "−1 … +1", "text": "the strength and direction of the linear relationship. 0 — no relationship, ±1 — the points lie exactly on a line." }
+  ],
+  "practice": [
+    "Regression is used for prediction everywhere: sales from the ad budget, apartment price from floor area, server load from the number of users, delivery time from distance. The idea is always the same — estimate the unknown y from a known x.",
+    "The coefficients read in plain language. \"b₁ = 3\" for sales vs advertising means: each ruble invested brings three rubles of sales on average. This is exactly why regression is built — it not only predicts, it shows which lever is how strong.",
+    "But a strong correlation by itself does not prove that x causes y. To claim causality you need an experiment — that same A/B test from the previous module, where we change x ourselves and see whether y changes."
+  ],
+  "realLife": [
+    "Relationships surround us: height and weight, education and income, outdoor temperature and electricity use. Correlation helps notice and measure them; regression turns them into forecasts.",
+    "The internet is full of \"spurious correlations\" — quantities that move together by accident for years (cheese consumption and drownings, divorces and margarine consumption). They are funny precisely because the relationship is there and the causation is not.",
+    "That is why a competent analyst, upon seeing a correlation, first asks: is there a hidden common cause, and can this be tested with an experiment? A line on a chart is grounds for a hypothesis, not proof."
+  ],
+  "assumptions": [
+    "Linear regression assumes a roughly linear relationship, independent residuals with roughly constant spread (homoscedasticity), and weak influence of outliers. Nonlinearity or a single strong outlier can flip the slope — always look at the chart itself, not just at r.",
+    "A coefficient is a relationship, not causation. Without controlling for extraneous factors (multiple regression) or an experiment, you cannot read b₁ as \"the effect of x on y\"."
+  ],
+  "deepDive": [
+    "Why squares — deeper than \"a fine for big misses\". If you predict y with a single number and no x at all, the number that minimizes the sum of squared deviations is exactly the mean (and the one minimizing the sum of absolute deviations is the median). So OLS is a direct generalization of \"the mean\" to the case with a predictor: regression predicts the conditional mean of y given x. Hence also the link to variance: R² is the share of y's variance the line explains.",
+    "The practical bonus of squares: the sum of squares is a smooth, convex function of b₀, b₁, so it has a unique minimum with an explicit formula (no search needed). And OLS coincides with the maximum likelihood estimate when the noise around the line is normal — so squares are not arbitrary but the natural choice for bell-shaped errors."
+  ],
+  "nextLabel": "r doesn't catch everything — and is easily fooled → Pearson, Spearman and shapes of relationships"
+}

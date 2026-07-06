@@ -151,19 +151,27 @@ export default function CenterMeasures({ highlight, unit = '', initial, locale =
           )
         })}
 
-        {/* точки данных */}
+        {/* точки данных: прозрачная зона захвата под пальцем + видимый кружок */}
         {points.map((v, i) => (
-          <circle
-            key={i}
-            cx={sx(v)}
-            cy={LINE_Y}
-            r={drag === i ? 10 : 8}
-            fill="#2a2f3a"
-            stroke="#ffffff"
-            strokeWidth="2"
-            className="cursor-grab"
-            onPointerDown={(e) => onDown(i, e)}
-          />
+          <g key={i}>
+            <circle
+              cx={sx(v)}
+              cy={LINE_Y}
+              r={18}
+              fill="transparent"
+              className="cursor-grab"
+              onPointerDown={(e) => onDown(i, e)}
+            />
+            <circle
+              cx={sx(v)}
+              cy={LINE_Y}
+              r={drag === i ? 13 : 10}
+              fill="#2a2f3a"
+              stroke="#ffffff"
+              strokeWidth="2.5"
+              className="pointer-events-none"
+            />
+          </g>
         ))}
 
         {/* подписи значений с выносками (разведены по коллизии) */}
@@ -196,7 +204,7 @@ export default function CenterMeasures({ highlight, unit = '', initial, locale =
 
       <div className="flex gap-2 mt-4">
         <button
-          onClick={() => setPoints((p) => [...p, Math.round(30 + Math.random() * 40)])}
+          onClick={() => setPoints((p) => [...p, Math.round(85 + Math.random() * 15)])}
           className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5"
         >
           {l.add}

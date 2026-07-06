@@ -3,17 +3,17 @@
   "module": 1,
   "title": "Mean, median and mode",
   "tier": 1,
-  "intro": "Your pizzeria \"Slice\" has seven employees: cooks, a cashier, couriers. Time to post a job opening, and you want to state the \"typical salary\". But \"typical\" can mean different things, and the measure you pick changes both the posting and the candidate's expectations. Let's work through a live example — drag the points and press the buttons to the right of the text.",
+  "intro": "Imagine you run a pizzeria, \"Mama John's\", with seven employees — cooks, a cashier, couriers. Time to post a job opening, and you want to state the \"typical salary\". Only \"typical\" can mean different things, and the measure you pick changes both the wording of the posting and the candidate's expectations. Let's work through a live example: drag the points right on the chart and try the buttons beneath it.",
   "widget": "center-measures",
   "widgetProps": {
     "unit": "k",
     "initial": [
-      28,
-      32,
-      34,
+      30,
+      33,
       35,
-      36,
-      38,
+      35,
+      37,
+      39,
       42
     ]
   },
@@ -39,7 +39,7 @@
       }
     },
     {
-      "text": "Play with it yourself: hire a couple more employees with \"add a point\", fire the director with \"remove a point\". Notice the pattern — the mean chases the extremes every time, while the median sticks with the \"middle of the team\".",
+      "text": "Play with it yourself: hire new people with \"add a point\" — they come in on high salaries and pull the mean up every time, while the median barely flinches. \"Remove a point\" drops the last one. You can see the pattern: the mean chases the extreme values, while the median sticks with the \"middle of the team\".",
       "widget": {
         "highlight": null
       }
@@ -51,7 +51,7 @@
       }
     },
     {
-      "text": "How do you pick the measure for the task? Symmetric data without outliers — take the mean, it uses all the information. A long tail or outliers (salaries, prices, time) — the median is more honest. Categories (\"which option is more popular\") — only the mode. In practice an analyst often shows a pair: the mean next to the median, and the gap between them is itself a signal that the data is skewed.",
+      "text": "Let's pull it together: the mean chases the extreme values, the median holds the middle of the row, and the mode shows the most frequent value. Which measure to take depends on the data: symmetric without outliers → the mean works, it uses all the information; a long tail or outliers (incomes, prices, time) → the median is more honest; categories (\"which option is more popular\") → only the mode. Below we'll unpack what this means in practice.",
       "widget": {
         "highlight": null
       }
@@ -61,29 +61,27 @@
     {
       "term": "Mean",
       "formula": "(x₁ + x₂ + … + xₙ) / n",
-      "text": "add up all the values and divide by their count n. It weighs the size of every number — which is why it is sensitive to outliers.",
-      "simple": "the total split evenly — every dollar counts."
+      "text": "The sum of all values divided by their count. It uses the size of every number, so one large value noticeably pulls the mean toward itself.",
+      "simple": "split the total evenly among everyone — every value contributes."
     },
     {
       "term": "Median",
-      "text": "the value exactly in the middle when everything is sorted (with an even count, the average of the two central ones). It depends on order, not size — robust to outliers.",
-      "simple": "the person in the middle of the queue: the rich cannot budge them."
+      "text": "The value exactly in the middle of the row sorted in ascending order (with an even count, the average of the two central ones). It relies only on the order of values, not their size, so it is robust to outliers.",
+      "simple": "the value from the middle of the row — rare extreme points don't move it."
     },
     {
       "term": "Mode",
-      "text": "the value that occurs most often. A dataset can have one mode, several, or none.",
-      "simple": "simply the most frequent answer."
+      "text": "The value that occurs more often than the rest. There can be one mode, several, or none — if all values are distinct.",
+      "simple": "the most frequent value in the set."
     }
   ],
   "practice": [
-    "Back to our pizzeria. You just saw it yourself: while salaries are close, the mean and the median walk side by side and calmly describe the \"typical\" income.",
-    "But as soon as one big paycheck appears — the director's — the mean drifts up, even though nothing changed for nine employees out of ten. That is why the \"average company salary\" often ends up higher than what most people actually earn: the top inflates it.",
-    "When you need to honestly show a regular person's income, you take the median — it stands in the middle of the row and does not yield to lone rich outliers. The mode is almost useless here: salaries identical to the cent are rare."
+    "The average company salary is almost always higher than what most people earn: the top inflates it. One director's paycheck is enough for the mean to drift up, even though nothing changed for the rest of the staff.",
+    "That is why the \"typical\" income is more honestly shown by the median: it stands in the middle of the row, and lone rich outliers cannot move it. And the gap between the mean and the median is itself a handy signal: the larger it is, the more skewed the data."
   ],
   "realLife": [
-    "The same effect works at the scale of a whole country. When household incomes or housing prices are discussed, statistical agencies deliberately publish the median next to the mean: a few billionaires or a couple of luxury mansions would drag the mean so far up it would stop describing an ordinary family's life.",
-    "So in salary news look for the word \"median\" — that is \"what the person in the middle earns\", not an \"average over the hospital, fevers included\".",
-    "And the rule is wider than salaries: service response times, call durations, order sizes — wherever rare large values drag the mean along, the median is more honest. We will meet this skew again when we get to distribution shapes."
+    "At the scale of a whole country this is critical: when household incomes or housing prices are discussed, statistical agencies publish the median next to the mean — otherwise a few billionaires or a couple of luxury mansions would drag the mean so far up it would stop describing an ordinary family's life. So in salary news look for the word \"median\".",
+    "And the rule is wider than salaries: service response times, call durations, order sizes — wherever rare large values drag the mean along, the median is more honest. We'll meet this skew again when we get to distribution shapes."
   ],
   "nextLabel": "We found the center — but how spread out are the salaries around it? Two teams with the same mean can live completely differently → spread and standard deviation.",
   "related": [

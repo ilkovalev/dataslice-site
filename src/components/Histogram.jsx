@@ -22,7 +22,7 @@ const L = {
   en: { box: 'box plot', bins: 'Number of bins', addBoss: '+ add the director', reset: 'reset' },
 }
 
-export default function Histogram({ unit = '', data: initial, bins: initialBins = 9 , locale = 'ru' }) {
+export default function Histogram({ unit = '', data: initial, bins: initialBins = 9, showBox = true, locale = 'ru' }) {
   const l = L[locale] ?? L.ru
   const base = initial ?? [22, 24, 26, 28, 28, 30, 30, 31, 32, 33, 33, 34, 34, 35, 35, 36, 36, 37, 38, 39, 40, 42, 44, 48]
   const [data, setData] = useState(() => [...base])
@@ -61,9 +61,11 @@ export default function Histogram({ unit = '', data: initial, bins: initialBins 
 
   const ticks = [0, 0.25, 0.5, 0.75, 1].map((t) => Math.round(domMin + (domMax - domMin) * t))
 
+  const vbH = showBox ? H : 172
+
   return (
     <div className="rounded-xl border border-black/10 bg-panel p-5">
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none">
+      <svg viewBox={`0 0 ${W} ${vbH}`} className="w-full h-auto select-none">
         {counts.map((c, k) => {
           const h = (c / maxCount) * (HIST_BOTTOM - HIST_TOP)
           const x0 = sx(domMin + k * binW)
@@ -77,22 +79,26 @@ export default function Histogram({ unit = '', data: initial, bins: initialBins 
           <text key={i} x={sx(t)} y={HIST_BOTTOM + 16} fill="#6b7280" fontSize="10" textAnchor="middle">{t}</text>
         ))}
 
-        <text x={PAD} y={BOX_Y - 18} fill="#6b7280" fontSize="11">{l.box}</text>
-        <line x1={sx(whiskLo)} y1={BOX_Y} x2={sx(whiskHi)} y2={BOX_Y} stroke="#0ea5e9" strokeWidth="1.5" />
-        <line x1={sx(whiskLo)} y1={BOX_Y - 6} x2={sx(whiskLo)} y2={BOX_Y + 6} stroke="#0ea5e9" strokeWidth="1.5" />
-        <line x1={sx(whiskHi)} y1={BOX_Y - 6} x2={sx(whiskHi)} y2={BOX_Y + 6} stroke="#0ea5e9" strokeWidth="1.5" />
-        <rect x={sx(q1)} y={BOX_Y - 12} width={Math.max(0, sx(q3) - sx(q1))} height="24" fill="#0ea5e9" opacity="0.15" stroke="#0ea5e9" strokeWidth="1.2" />
-        <line x1={sx(med)} y1={BOX_Y - 12} x2={sx(med)} y2={BOX_Y + 12} stroke="#2ab8eb" strokeWidth="2" />
-        {outliers.map((o, i) => (
-          <circle key={i} cx={sx(o)} cy={BOX_Y} r="4" fill="#fbbf24" />
-        ))}
+        {showBox && <>
+          <text x={PAD} y={BOX_Y - 18} fill="#6b7280" fontSize="11">{l.box}</text>
+          <line x1={sx(whiskLo)} y1={BOX_Y} x2={sx(whiskHi)} y2={BOX_Y} stroke="#0ea5e9" strokeWidth="1.5" />
+          <line x1={sx(whiskLo)} y1={BOX_Y - 6} x2={sx(whiskLo)} y2={BOX_Y + 6} stroke="#0ea5e9" strokeWidth="1.5" />
+          <line x1={sx(whiskHi)} y1={BOX_Y - 6} x2={sx(whiskHi)} y2={BOX_Y + 6} stroke="#0ea5e9" strokeWidth="1.5" />
+          <rect x={sx(q1)} y={BOX_Y - 12} width={Math.max(0, sx(q3) - sx(q1))} height="24" fill="#0ea5e9" opacity="0.15" stroke="#0ea5e9" strokeWidth="1.2" />
+          <line x1={sx(med)} y1={BOX_Y - 12} x2={sx(med)} y2={BOX_Y + 12} stroke="#2ab8eb" strokeWidth="2" />
+          {outliers.map((o, i) => (
+            <circle key={i} cx={sx(o)} cy={BOX_Y} r="4" fill="#fbbf24" />
+          ))}
+        </>}
       </svg>
 
-      <div className="flex flex-wrap gap-4 mt-1 text-sm text-gray-700">
-        <span><span className="text-[#2ab8eb]">Медиана:</span> {med.toFixed(0)}{u}</span>
-        <span><span className="text-[#0ea5e9]">Q1–Q3:</span> {q1.toFixed(0)}–{q3.toFixed(0)}{u}</span>
-        <span><span className="text-[#fbbf24]">Выбросы:</span> {outliers.length ? outliers.map((o) => o + u).join(', ') : '—'}</span>
-      </div>
+      {showBox && (
+        <div className="flex flex-wrap gap-4 mt-1 text-sm text-gray-700">
+          <span><span className="text-[#2ab8eb]">Медиана:</span> {med.toFixed(0)}{u}</span>
+          <span><span className="text-[#0ea5e9]">Q1–Q3:</span> {q1.toFixed(0)}–{q3.toFixed(0)}{u}</span>
+          <span><span className="text-[#fbbf24]">Выбросы:</span> {outliers.length ? outliers.map((o) => o + u).join(', ') : '—'}</span>
+        </div>
+      )}
 
       <label className="block mt-4 text-sm">
         <div className="flex justify-between text-gray-700 mb-1">

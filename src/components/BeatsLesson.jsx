@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { widgets } from './widgets.js'
 import Paragraphs from './Paragraphs.jsx'
+import Formula from './Formula.jsx'
 import { gloss } from './Glossed.jsx'
 import { STR, prefix } from '../lib/i18n.js'
 
@@ -149,21 +150,24 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
 
       <div ref={summaryRef} className="scroll-mt-16">
         {lesson.definitions && (
-          <div className="max-w-2xl mt-10">
-            <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-2">{t.definitions}</div>
+          <details open className="group max-w-2xl mt-10">
+            <summary className="cursor-pointer select-none list-none flex items-center gap-1.5 text-xs uppercase tracking-wider text-cyanink/80 mb-2">
+              <span aria-hidden className="text-[9px] transition-transform group-open:rotate-90">▶</span>
+              {t.definitions}
+            </summary>
             <dl className="space-y-3">
               {lesson.definitions.map((d) => (
                 <div key={d.term} className="text-sm">
                   <div>
                     <span className="text-gray-900 font-medium">{d.term}</span>
-                    {d.formula && <span className="font-mono text-cyanink ml-2">{d.formula}</span>}
+                    {d.formula && <Formula tex={d.formula} className="text-cyanink ml-2" />}
                   </div>
                   <div className="text-gray-600 leading-relaxed">{d.text}</div>
                   {d.simple && <div className="text-sky-700/90 italic mt-0.5">{t.simple} {d.simple}</div>}
                 </div>
               ))}
             </dl>
-          </div>
+          </details>
         )}
 
         <div className="max-w-2xl mt-10">

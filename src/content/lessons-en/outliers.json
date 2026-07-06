@@ -3,7 +3,7 @@
   "module": 1,
   "title": "Outliers: find them and decide what to do",
   "tier": 1,
-  "intro": "The register at \"Slice\" sees ordinary receipts — and suddenly an order for twenty pizzas: an office party. One such value can flip the mean, inflate the variance and ruin a model. Yet an outlier is not always \"an error\": sometimes it is the most valuable thing in the data. Let's learn to find them and, crucially, to decide deliberately what to do with them.",
+  "intro": "The register at \"Mama John's\" sees ordinary receipts — and suddenly an order for twenty pizzas: an office party. One such value can flip the mean, inflate the variance and ruin a model. Yet an outlier is not always \"an error\": sometimes it is the most valuable thing in the data. Let's learn to find them and, crucially, to decide deliberately what to do with them.",
   "widget": "outlier-actions",
   "beats": [
     {

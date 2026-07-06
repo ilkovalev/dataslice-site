@@ -18,8 +18,8 @@ const std = (p) => {
 }
 
 const L = {
-  ru: { mean: 'среднее', shrink: 'сжать Б', stretch: 'растянуть Б', reset: 'сбросить', defA: 'Отдел А', defB: 'Отдел Б' },
-  en: { mean: 'mean', shrink: 'shrink B', stretch: 'stretch B', reset: 'reset', defA: 'Team A', defB: 'Team B' },
+  ru: { mean: 'среднее', shrink: 'сжать Б', stretch: 'растянуть Б', reset: 'сбросить', defA: 'Пиццерия А', defB: 'Пиццерия Б' },
+  en: { mean: 'mean', shrink: 'shrink B', stretch: 'stretch B', reset: 'reset', defA: 'Pizzeria A', defB: 'Pizzeria B' },
 }
 
 export default function TwoTeams({ unit = '', initialA, initialB, labelA, labelB, locale = 'ru' }) {
@@ -76,14 +76,21 @@ export default function TwoTeams({ unit = '', initialA, initialB, labelA, labelB
             <circle
               cx={sx(v)}
               cy={y}
-              r={drag && drag.row === row && drag.i === i ? 10 : 8}
-              fill="#2a2f3a"
-              stroke="#ffffff"
-              strokeWidth="2"
+              r={18}
+              fill="transparent"
               className="cursor-grab"
               onPointerDown={(e) => down(row, i, e)}
             />
-            <text x={sx(v)} y={y + 20} fill="#6b7280" fontSize="11" textAnchor="middle" className="select-none pointer-events-none">{v}</text>
+            <circle
+              cx={sx(v)}
+              cy={y}
+              r={drag && drag.row === row && drag.i === i ? 13 : 10}
+              fill="#2a2f3a"
+              stroke="#ffffff"
+              strokeWidth="2.5"
+              className="pointer-events-none"
+            />
+            <text x={sx(v)} y={y + 22} fill="#6b7280" fontSize="11" textAnchor="middle" className="select-none pointer-events-none">{v}</text>
           </g>
         ))}
       </g>

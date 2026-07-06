@@ -3,7 +3,7 @@
   "module": 1,
   "title": "The shape of data: histogram and box plot",
   "tier": 1,
-  "intro": "Points on a line work while the numbers are few. But the \"Slice\" chain has grown to fifty employees — individual points no longer tell you anything. You need to see the whole shape: where salaries are dense, where sparse, whether there are outliers. So the data is dropped into \"bins\" — ranges — counting how many people fall into each. That is a histogram.",
+  "intro": "Points on a line work while the numbers are few. But the \"Mama John's\" chain has grown to fifty employees — individual points no longer tell you anything. You need to see the whole shape: where salaries are dense, where sparse, whether there are outliers. So the data is dropped into \"bins\" — ranges — counting how many people fall into each. That is a histogram.",
   "widget": "histogram",
   "widgetProps": {
     "unit": "k"

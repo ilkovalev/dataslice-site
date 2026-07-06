@@ -3,19 +3,19 @@
   "module": 1,
   "title": "Spread and standard deviation",
   "tier": 1,
-  "intro": "The \"Slice\" chain has grown to two locations. The average salary at both is exactly 35k: at pizzeria A everyone earns roughly the same, at pizzeria B some earn much less, some much more. Same mean — completely different teams. To catch that difference you need a second characteristic: how far the values scatter around the center.",
+  "intro": "The \"Mama John's\" chain has grown to two locations. The average salary at both is exactly 35k: at pizzeria A everyone earns roughly the same, at pizzeria B some earn much less, some much more. Same mean — completely different teams. To catch that difference you need a second characteristic: how far the values scatter around the center.",
   "widget": "two-teams",
   "widgetProps": {
     "unit": "k",
-    "labelA": "Pizzeria A (steady)",
+    "labelA": "Pizzeria A (even)",
     "labelB": "Pizzeria B (contrasting)",
     "initialA": [
+      26,
       30,
       33,
-      34,
-      36,
       37,
-      40
+      40,
+      44
     ],
     "initialB": [
       13,
@@ -28,69 +28,65 @@
   },
   "beats": [
     {
-      "text": "Two pizzerias, both with a mean salary of exactly 35k — the dashed line stands in the same place in both rows. But the points of pizzeria B are scattered much wider than A's. To the right of each row is its σ, the standard deviation."
+      "text": "Two pizzerias, both with an average salary of exactly 35k — the dashed line sits in the same spot in both rows. But the points of Pizzeria B are scattered noticeably wider than A's. To the right of each row is its σ, the standard deviation."
     },
     {
-      "text": "The means of A and B are identical. The spread is not.",
-      "predict": "Press \"shrink B\" — the points of team B will slide toward the center. What do you think happens to B's mean and to its σ?",
-      "reveal": "B's mean stays at 35 (we shrink symmetrically toward the center), while σ drops — and team B starts to look like the steady team A. Press \"stretch B\" — σ grows back. The mean never moves."
+      "text": "The mean of A and B is the same. The spread is not.",
+      "predict": "Press \"shrink B\" — the points of Pizzeria B pull toward the center. What do you think happens to Pizzeria B's mean and its σ?",
+      "reveal": "B's mean stays 35 (we shrink symmetrically toward the center), while σ drops — and Pizzeria B starts to look like the even A. Press \"stretch B\" and σ grows again. The mean stays put the whole time."
     },
     {
-      "text": "That is what σ is for: A and B share a mean, but the teams are different. σ catches what the mean cannot see — how widely the values diverge around the center. Small σ — everyone huddles near the middle; large σ — the spread is wide."
+      "text": "That is what σ is for: A and B share one mean, but the teams differ. σ catches what the mean cannot see — how widely the values diverge around the center. A small σ — everyone hugs the middle; a large σ — the spread is wide."
     },
     {
-      "text": "Here is how σ is computed: take each value's deviation from the mean, square it (so minuses do not cancel pluses), average — that is the variance — then take the square root to get back to money units. Because of the squaring, rare far-away values weigh more and noticeably inflate σ."
+      "text": "σ is computed like this: for each value take its deviation from the mean, square it (so minuses don't cancel pluses), average them — that is the variance — and then take the square root to return to the original units. Because of the squaring, rare distant values weigh more and noticeably inflate σ."
     },
     {
-      "text": "σ has the same weakness as the mean: it is built around the mean and is therefore sensitive to outliers — one director inflates not only the mean but σ too. That is why spread has a robust alternative — the interquartile range (IQR): the width of the \"middle half\" of the data, which ignores the extremes. We will see it on a box plot in the next lesson."
+      "text": "σ has the same weakness as the mean: it is built around the mean, so one director at the edge inflates not only the mean but σ too.",
+      "predict": "Drag Pizzeria B's rightmost point far to the right. Which changes more — the mean or σ?",
+      "reveal": "Both grow, but σ jumps especially sharply: a distant value enters it squared. Most salaries did not change, yet the \"typical spread\" is already inflated by a single point — we'll deal with this when we get to percentiles."
     },
     {
-      "text": "To judge whether a spread is large, compare σ with the mean. σ = 3 against a mean of 35 is under 10% — a steady team. σ = 14 against the same mean is almost 40% — salaries are all over the place. The ratio of σ to the mean (the coefficient of variation) lets you compare variability across scales."
+      "text": "To tell whether the spread is large or not, it helps to compare σ with the mean. σ = 6 at a mean of 35 is a spread of about 17% — a fairly even team; σ = 14 at the same mean is almost 40% — salaries are all over the place. The ratio of σ to the mean is called the coefficient of variation: it lets you compare spread across quantities of different scale. Now let's pull together the main thing — what all this means in practice."
     }
   ],
   "definitions": [
     {
       "term": "Deviation",
-      "formula": "xᵢ − x̄",
-      "text": "how far one value sits from the mean (x̄).",
-      "simple": "насколько конкретное значение промахнулось мимо среднего."
+      "formula": "x_i - \\bar{x}",
+      "text": "The difference between a single value and the mean. It shows how far that value sits from the center, and in which direction.",
+      "simple": "how far a particular value has strayed from the mean."
     },
     {
       "term": "Variance",
-      "formula": "Σ(xᵢ − x̄)² / n",
-      "text": "the average of squared deviations. It lives in \"squared\" units, so it is awkward to read directly.",
-      "simple": "the average squared miss — spread, but in \"squared\" units."
+      "formula": "\\sigma^2 = \\dfrac{\\sum (x_i - \\bar{x})^2}{N}",
+      "text": "The mean of the squared deviations from the mean. Squaring removes the signs and penalizes distant values more heavily. It is measured in squared original units, so it is usually not read directly — you take its square root instead.",
+      "simple": "the average squared deviation from the mean."
     },
     {
       "term": "Standard deviation (σ)",
-      "formula": "√дисперсии",
-      "text": "the square root of variance — the typical deviation from the mean, in the same units as the data.",
-      "simple": "the typical miss from the mean, in normal units."
+      "formula": "\\sigma = \\sqrt{\\dfrac{\\sum (x_i - \\bar{x})^2}{N}}",
+      "text": "A measure of how widely the values are scattered around their mean. It is the square root of the variance, so it is expressed in the same units as the data and reads as the \"typical deviation from the mean\".",
+      "simple": "the typical distance from a point to the mean, in ordinary units."
     },
     {
       "term": "Coefficient of variation",
-      "formula": "σ / x̄",
-      "text": "spread relative to the mean; lets you compare variability of quantities at different scales.",
-      "simple": "spread as a percentage of the mean — comparable across scales."
-    },
-    {
-      "term": "Interquartile range (IQR)",
-      "text": "the width of the middle half of the data (from Q1 to Q3); an outlier-robust measure of spread.",
-      "simple": "the width of the middle: where the central half of the data lives."
+      "formula": "CV = \\dfrac{\\sigma}{\\bar{x}}",
+      "text": "The standard deviation divided by the mean — the spread as a fraction (or percentage) of the mean. It is independent of the units, so it lets you compare variability across quantities of different scale.",
+      "simple": "the spread as a percentage of the mean — comparable across different quantities."
     }
   ],
   "practice": [
-    "Back to the two pizzerias. Both average 35k, but the first has σ ≈ 3 and the second σ ≈ 14. Same mean — completely different lives: in the first team salaries are predictable, in the second the gap between people is huge.",
-    "That is why the center is almost never shown alone. \"Mean plus spread\" is the minimal honest pair that describes data: where it concentrates and how widely it diverges."
+    "Back to our two pizzerias. Both have the same average salary — 35k — but σ is about 6 at Pizzeria A and about 14 at Pizzeria B. The center coincides, yet life inside is completely different: at Pizzeria A salaries are predictable and stay close together, at Pizzeria B the gap between people is huge.",
+    "Hence the main takeaway of the lesson: the center is almost never looked at alone. \"Mean plus spread\" is the minimal honest pair that describes data: where it concentrates and how widely it diverges around that center."
   ],
   "realLife": [
-    "Spread is everywhere stability matters, not just size. Two couriers both average 30 minutes per delivery, but one lands within 25–35 and the other swings from 10 to 60: same mean, different reliability — and σ shows it instantly.",
-    "The same idea underpins stock volatility (it is the σ of returns: the bigger, the riskier) and manufacturing quality control, where going \"beyond 3σ\" counts as a defect.",
-    "Next we will look at the shapes data can take. There the mean and σ play together: for the bell-shaped, \"normal\" distribution they almost fully define it."
+    "Spread is everywhere that not only the magnitude but also the stability matters. Two couriers deliver in 30 minutes on average, but one stays within 25–35 while the other jumps from 10 to 60: same mean, different reliability — and σ shows it at once.",
+    "The same underlies the volatility of stocks (that is the σ of returns: the larger, the riskier) and quality control in manufacturing, where \"beyond 3σ\" is treated as a defect.",
+    "Next we'll look at what shapes data takes at all. There the mean and σ come into their own together: for a bell-shaped, \"normal\" distribution they almost fully define it."
   ],
   "assumptions": [
-    "The standard deviation is built on the mean, so it inherits its weakness: one strong outlier inflates σ until the \"typical spread\" no longer describes typical data. For skewed distributions (incomes, response times) IQR or percentiles are more honest.",
-    "σ reads well through the 68-95-99.7 rule only for roughly symmetric \"bells\". For two-humped data (a mix of two different groups) σ describes the emptiness between the humps — look at the shape first, compress it into one number second."
+    "Standard deviation relies on the mean, so it inherits its weakness: one strong outlier inflates σ so much that the \"typical spread\" stops describing typical data. For skewed quantities (incomes, response times) it is more honest to look at spread through percentiles."
   ],
-  "nextLabel": "We have the mean and the spread — but what shapes does the data itself take? → distributions and the bell curve"
+  "nextLabel": "We have the center and the spread — but what shapes does the data itself take? → distributions and the bell"
 }

@@ -60,7 +60,7 @@
   "definitions": [
     {
       "term": "Mean",
-      "formula": "(x₁ + x₂ + … + xₙ) / n",
+      "formula": "\\bar{x} = \\dfrac{x_1 + x_2 + \\dots + x_N}{N}",
       "text": "The sum of all values divided by their count. It uses the size of every number, so one large value noticeably pulls the mean toward itself.",
       "simple": "split the total evenly among everyone — every value contributes."
     },

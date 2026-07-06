@@ -29,10 +29,10 @@ export default function App() {
   return (
     <div className="min-h-screen">
       <div className="h-1 bg-gradient-to-r from-accent to-brand" />
-      {/* Мобайл: обычная полоса. Десктоп (lg+): парящая glass-«капсула» (soft-skill). */}
-      <header className="sticky top-0 z-10 lg:top-4 lg:px-4">
-        <div className="border-b border-accent/20 bg-accent/10 backdrop-blur lg:max-w-fit lg:mx-auto lg:rounded-full lg:border lg:border-black/5 lg:bg-white/75 lg:shadow-[0_8px_30px_rgba(32,36,46,0.08)]">
-        <div className="max-w-[1600px] mx-auto px-4 py-2 sm:py-0 sm:h-14 lg:h-12 lg:px-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+      {/* Бар во всю ширину экрана; контент внутри — в общей сетке max-w-[1600px]. */}
+      <header className="sticky top-0 z-10">
+        <div className="border-b border-accent/20 bg-accent/10 backdrop-blur">
+        <div className="max-w-[1600px] mx-auto px-4 py-2 sm:py-0 sm:h-14 lg:h-14 flex flex-wrap items-center gap-x-3 gap-y-2">
           <span className="order-1 font-semibold whitespace-nowrap sm:mr-4">{t.brand} <span aria-hidden>🍕</span></span>
           <span className="order-2 ml-auto flex items-center gap-2 sm:order-3">
             <Link

@@ -31,12 +31,6 @@ const FRAMEWORKS = [
   { name: 'Profit Tree', items: 'Прибыль = Доход − Расход → дальше раскладываем каждую ветку на рычаги', use: 'Финансовое дерево для юнит-экономики: показывает, какой рычаг как влияет на прибыль.' },
 ]
 
-const DEFS = [
-  { term: 'North Star Metric (L0)', def: 'одна метрика, лучше всего отражающая ключевую ценность продукта.' },
-  { term: 'Output / Input метрики (L1 / L2)', def: 'L1 — драйверы, из которых складывается North Star; L2 — операционные рычаги, на которые команда влияет напрямую.' },
-  { term: 'Контр-метрики (guardrails)', def: 'ограничители качества: ловят накрутку и деградацию при погоне за основной метрикой.' },
-]
-
 // Глоссарий метрик по типам — с формулами. Чтобы было видно «какие вообще бывают».
 const GLOSSARY = [
   {
@@ -101,13 +95,35 @@ export default function Framework({ industries, onPick }) {
 
   return (
     <div className="space-y-8">
-      <section className="max-w-3xl">
-        <h2 className="text-lg font-medium mb-2">Что такое метрика и зачем иерархия</h2>
-        <div className="text-sm text-gray-700 leading-relaxed space-y-2">
-          <p>Метрика — это число, измеряющее состояние продукта или бизнеса: выручка, конверсия, удержание, время ответа. Сама по себе одна цифра мало что значит — важно, как метрики связаны между собой и какая из них главная.</p>
-          <p>Поэтому метрики выстраивают в иерархию. На вершине — одна <span className="text-cyanink">North Star</span>, лучше всего отражающая ценность продукта. Под ней — драйверы, из которых она складывается, и операционные рычаги, на которые команда влияет напрямую. А в фундаменте — контр-метрики, не дающие «накрутить» главную в ущерб качеству (привет закону Гудхарта).</p>
-          <p>Раскладывают метрики двумя разными способами — деревом и пирамидой. Это не одно и то же, и ниже видно, чем они отличаются.</p>
+      <section className="lg:grid lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-10 lg:items-start">
+        <div>
+          <h2 className="text-lg font-medium mb-2">Что такое метрика и зачем иерархия</h2>
+          <div className="text-[15px] text-gray-700 leading-relaxed space-y-3">
+            <p>Метрика — это число, измеряющее состояние продукта или бизнеса: выручка, конверсия, удержание, время ответа. Сама по себе одна цифра мало что значит — важно, как метрики связаны между собой и какая из них главная.</p>
+            <p>Поэтому метрики выстраивают в иерархию. На вершине — одна <span className="text-cyanink">North Star</span>, лучше всего отражающая ценность продукта. Под ней — драйверы, из которых она складывается, и операционные рычаги, на которые команда влияет напрямую. А в фундаменте — контр-метрики, не дающие «накрутить» главную в ущерб качеству (привет закону Гудхарта).</p>
+            <p>Раскладывают метрики двумя разными способами — деревом и пирамидой. Это не одно и то же, и ниже видно, чем они отличаются.</p>
+          </div>
         </div>
+        {/* Схема-шпаргалка справа: заполняет ширину и визуализирует три уровня иерархии */}
+        <aside className="mt-6 lg:mt-0 rounded-xl border border-black/10 bg-panel p-5">
+          <div className="text-xs uppercase tracking-wider text-gray-500 mb-3">Анатомия иерархии</div>
+          <div className="space-y-2">
+            <div className="rounded-lg border border-accent/40 bg-accent/12 px-3.5 py-2.5">
+              <div className="text-sm font-semibold text-cyanink">North Star · L0</div>
+              <div className="text-xs text-gray-600 mt-0.5">одна метрика, лучше всего отражающая ключевую ценность продукта</div>
+            </div>
+            <div className="flex justify-center text-gray-300 text-xs leading-none">↑</div>
+            <div className="rounded-lg border border-sky-500/30 bg-sky-500/[0.07] px-3.5 py-2.5">
+              <div className="text-sm font-semibold text-sky-700">Драйверы и рычаги · L1 / L2</div>
+              <div className="text-xs text-gray-600 mt-0.5">из чего складывается North Star и на что команда влияет напрямую</div>
+            </div>
+            <div className="flex justify-center text-gray-300 text-xs leading-none">↑</div>
+            <div className="rounded-lg border border-amber-400/45 bg-amber-400/[0.1] px-3.5 py-2.5">
+              <div className="text-sm font-semibold text-amber-700">Контр-метрики · guardrails</div>
+              <div className="text-xs text-gray-600 mt-0.5">ограничители качества против «накрутки» главной метрики</div>
+            </div>
+          </div>
+        </aside>
       </section>
 
       <section>
@@ -145,18 +161,6 @@ export default function Framework({ industries, onPick }) {
                 </div>
               ))}
             </div>
-          </section>
-
-          <section>
-            <h2 className="text-lg font-medium mb-3">Основные определения</h2>
-            <dl className="space-y-2">
-              {DEFS.map((d) => (
-                <div key={d.term} className="text-sm">
-                  <dt className="text-gray-900 font-medium">{d.term}</dt>
-                  <dd className="text-gray-600">{d.def}</dd>
-                </div>
-              ))}
-            </dl>
           </section>
 
           <section>

@@ -36,12 +36,12 @@ export default function MetricsPage() {
   )
 
   return (
-    <div className="max-w-6xl">
+    <div>
       <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">{t.metricsH1}</h1>
       {locale === 'en' ? (
-        <p className="text-gray-600 mb-4">Start with <span className="text-cyanink">Basics</span>, then open <span className="text-cyanink">Industries</span>: ready-made metric trees for 15 verticals with real-company breakdowns.</p>
+        <p className="text-gray-600 mb-4 max-w-3xl">Start with <span className="text-cyanink">Basics</span>, then open <span className="text-cyanink">Industries</span>: ready-made metric trees for 15 verticals with real-company breakdowns.</p>
       ) : (
-        <p className="text-gray-600 mb-4">Начните с вкладки <span className="text-cyanink">«Основы»</span> — что такое метрики, какие они бывают и как выстраивать иерархии. Затем переходите в <span className="text-cyanink">«Индустрии»</span> — готовые деревья по 15 направлениям с разбором по компаниям.</p>
+        <p className="text-gray-600 mb-4 max-w-3xl">Начните с вкладки <span className="text-cyanink">«Основы»</span> — что такое метрики, какие они бывают и как выстраивать иерархии. Затем переходите в <span className="text-cyanink">«Индустрии»</span> — готовые деревья по 15 направлениям с разбором по компаниям.</p>
       )}
       {t.metricsNotice && (
         <div className="mb-4 rounded-lg border border-amber-400/40 bg-amber-400/[0.08] px-4 py-2.5 text-sm text-gray-700 max-w-3xl">{t.metricsNotice}</div>

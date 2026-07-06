@@ -100,8 +100,8 @@ export default function Framework({ industries, onPick }) {
   const matches = sel ? industries.filter((i) => i.archetype === sel) : []
 
   return (
-    <div className="max-w-4xl space-y-8">
-      <section>
+    <div className="space-y-8">
+      <section className="max-w-3xl">
         <h2 className="text-lg font-medium mb-2">Что такое метрика и зачем иерархия</h2>
         <div className="text-sm text-gray-700 leading-relaxed space-y-2">
           <p>Метрика — это число, измеряющее состояние продукта или бизнеса: выручка, конверсия, удержание, время ответа. Сама по себе одна цифра мало что значит — важно, как метрики связаны между собой и какая из них главная.</p>
@@ -112,7 +112,7 @@ export default function Framework({ industries, onPick }) {
 
       <section>
         <h2 className="text-lg font-medium mb-2">Дерево против иерархии метрик</h2>
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2 gap-4 lg:gap-6">
           <div className="min-w-0">
             <div className="text-sm text-gray-700 mb-2"><span className="text-cyanink">Дерево</span> раскладывает одну метрику на множители и слагаемые (Прибыль = Доход − Расход). Идём по причинно-следственным рычагам — какую «шестерёнку» подкрутить.</div>
             <MetricTreeGraph tree={profitTree} />
@@ -131,82 +131,87 @@ export default function Framework({ industries, onPick }) {
         </div>
       </section>
 
-      <section>
-        <h2 className="text-lg font-medium mb-3">Готовые фреймворки</h2>
-        <div className="space-y-3">
-          {FRAMEWORKS.map((f) => (
-            <div key={f.name} className="rounded-lg border border-black/10 bg-panel px-4 py-3">
-              <div className="text-cyanink font-medium">{f.name}</div>
-              <div className="text-sm text-gray-900 mt-0.5">{f.items}</div>
-              <div className="text-sm text-gray-600 mt-1">{f.use}</div>
+      {/* Справочные секции в две колонки на десктопе — чтобы заполнить ширину, как в статистике */}
+      <div className="lg:grid lg:grid-cols-2 lg:gap-x-10 lg:items-start space-y-8 lg:space-y-0">
+        <div className="space-y-8">
+          <section>
+            <h2 className="text-lg font-medium mb-3">Готовые фреймворки</h2>
+            <div className="space-y-3">
+              {FRAMEWORKS.map((f) => (
+                <div key={f.name} className="rounded-lg border border-black/10 bg-panel px-4 py-3">
+                  <div className="text-cyanink font-medium">{f.name}</div>
+                  <div className="text-sm text-gray-900 mt-0.5">{f.items}</div>
+                  <div className="text-sm text-gray-600 mt-1">{f.use}</div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
+          </section>
 
-      <section>
-        <h2 className="text-lg font-medium mb-3">Основные определения</h2>
-        <dl className="space-y-2">
-          {DEFS.map((d) => (
-            <div key={d.term} className="text-sm">
-              <dt className="text-gray-900 font-medium">{d.term}</dt>
-              <dd className="text-gray-600">{d.def}</dd>
+          <section>
+            <h2 className="text-lg font-medium mb-3">Основные определения</h2>
+            <dl className="space-y-2">
+              {DEFS.map((d) => (
+                <div key={d.term} className="text-sm">
+                  <dt className="text-gray-900 font-medium">{d.term}</dt>
+                  <dd className="text-gray-600">{d.def}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-medium mb-1">Собрать дерево под незнакомый продукт</h2>
+            <p className="text-gray-600 text-sm mb-3">Определите архетип по способу монетизации — и форма дерева готова.</p>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {SHAPES.map((s) => (
+                <button key={s.archetype} onClick={() => setSel(s.archetype)} className={`text-sm px-3 py-1.5 rounded-md border transition-colors ${s.archetype === sel ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-700 hover:bg-black/5'}`}>
+                  {s.q}
+                </button>
+              ))}
             </div>
-          ))}
-        </dl>
-      </section>
-
-      <section>
-        <h2 className="text-lg font-medium mb-3">Глоссарий метрик по типам</h2>
-        <p className="text-gray-600 text-sm mb-3">Базовый словарь: какие метрики вообще бывают и как считаются. Сгруппированы по этапу жизненного цикла (как в AARRR).</p>
-        <div className="space-y-3">
-          {GLOSSARY.map((g) => (
-            <div key={g.group} className="rounded-lg border border-black/10 bg-panel px-4 py-3">
-              <div className="text-cyanink font-medium mb-1.5">{g.group}</div>
-              <dl className="space-y-1.5">
-                {g.items.map((it) => (
-                  <div key={it.m} className="text-sm sm:flex sm:gap-2">
-                    <dt className="text-gray-900 font-medium sm:w-32 shrink-0">{it.m}</dt>
-                    <dd className="text-gray-600">
-                      <span className="font-mono text-cyanink/90 text-xs bg-accent/10 px-1.5 py-0.5 rounded">{it.f}</span>
-                      <span className="ml-2">{it.d}</span>
-                    </dd>
+            {shape && (
+              <div className="rounded-xl border border-black/10 bg-panel p-5">
+                <div className="text-xs uppercase tracking-wider text-gray-500">Архетип</div>
+                <div className="text-lg text-cyanink font-medium mb-3">{shape.archetype}</div>
+                <div className="text-sm text-gray-600">North Star</div>
+                <div className="font-mono text-sm text-cyanink/90 bg-accent/10 inline-block px-2 py-0.5 rounded mb-3">{shape.northStar}</div>
+                <div className="text-sm text-gray-600 mb-1">Драйверы (L1): <span className="text-sky-600/90">{shape.drivers.join(' · ')}</span></div>
+                <div className="text-sm text-gray-600 mb-4">Контр-метрики: <span className="text-amber-600/80">{shape.counters.join(' · ')}</span></div>
+                {matches.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {matches.map((m) => (
+                      <button key={m.id} onClick={() => onPick(m.id)} className="text-sm px-3 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">{m.industry} →</button>
+                    ))}
                   </div>
-                ))}
-              </dl>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section>
-        <h2 className="text-lg font-medium mb-1">Собрать дерево под незнакомый продукт</h2>
-        <p className="text-gray-600 text-sm mb-3">Определите архетип по способу монетизации — и форма дерева готова.</p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {SHAPES.map((s) => (
-            <button key={s.archetype} onClick={() => setSel(s.archetype)} className={`text-sm px-3 py-1.5 rounded-md border transition-colors ${s.archetype === sel ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-700 hover:bg-black/5'}`}>
-              {s.q}
-            </button>
-          ))}
-        </div>
-        {shape && (
-          <div className="rounded-xl border border-black/10 bg-panel p-5">
-            <div className="text-xs uppercase tracking-wider text-gray-500">Архетип</div>
-            <div className="text-lg text-cyanink font-medium mb-3">{shape.archetype}</div>
-            <div className="text-sm text-gray-600">North Star</div>
-            <div className="font-mono text-sm text-cyanink/90 bg-accent/10 inline-block px-2 py-0.5 rounded mb-3">{shape.northStar}</div>
-            <div className="text-sm text-gray-600 mb-1">Драйверы (L1): <span className="text-sky-600/90">{shape.drivers.join(' · ')}</span></div>
-            <div className="text-sm text-gray-600 mb-4">Контр-метрики: <span className="text-amber-600/80">{shape.counters.join(' · ')}</span></div>
-            {matches.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {matches.map((m) => (
-                  <button key={m.id} onClick={() => onPick(m.id)} className="text-sm px-3 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">{m.industry} →</button>
-                ))}
+                )}
               </div>
             )}
+          </section>
+        </div>
+
+        <section>
+          <h2 className="text-lg font-medium mb-3">Глоссарий метрик по типам</h2>
+          <p className="text-gray-600 text-sm mb-3">Базовый словарь: какие метрики вообще бывают и как считаются. Сгруппированы по этапу жизненного цикла (как в AARRR).</p>
+          <div className="space-y-3">
+            {GLOSSARY.map((g) => (
+              <div key={g.group} className="rounded-lg border border-black/10 bg-panel px-4 py-3">
+                <div className="text-cyanink font-medium mb-1.5">{g.group}</div>
+                <dl className="space-y-1.5">
+                  {g.items.map((it) => (
+                    <div key={it.m} className="text-sm sm:flex sm:gap-2">
+                      <dt className="text-gray-900 font-medium sm:w-32 shrink-0">{it.m}</dt>
+                      <dd className="text-gray-600">
+                        <span className="font-mono text-cyanink/90 text-xs bg-accent/10 px-1.5 py-0.5 rounded">{it.f}</span>
+                        <span className="ml-2">{it.d}</span>
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            ))}
           </div>
-        )}
-      </section>
+        </section>
+      </div>
     </div>
   )
 }

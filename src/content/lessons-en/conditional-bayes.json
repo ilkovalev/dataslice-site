@@ -38,7 +38,7 @@
     },
     {
       "term": "Bayes’ theorem",
-      "formula": "P(A|B) = P(A)·P(B|A) / P(B)",
+      "formula": "P(A \\mid B) = \\dfrac{P(A)\\cdot P(B \\mid A)}{P(B)}",
       "text": "how to update the probability of A after observing B, accounting for both the test's accuracy and the base rate P(A)."
     }
   ],

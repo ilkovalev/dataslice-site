@@ -10,8 +10,9 @@ import { STR, prefix } from '../lib/i18n.js'
 // Каждый бит — проза + состояние/подсветка виджета + опц. предсказание→раскрытие.
 // Виджеты с собственной кнопкой «сбросить» — общую не показываем (без дублей).
 const OWN_RESET = new Set([
-  'bootstrap', 'center-measures', 'coin-flips', 'confidence-intervals', 'distribution',
-  'estimator-sampler', 'histogram', 'outlier-actions', 'peeking', 'percentile-explorer', 'sampling-distribution', 'sequential-test', 'two-teams',
+  'bayes-grid', 'bootstrap', 'center-measures', 'coin-flips', 'confidence-intervals', 'distribution',
+  'estimator-sampler', 'events-probability', 'histogram', 'outlier-actions', 'peeking', 'percentile-explorer',
+  'random-variable', 'sampling-distribution', 'sequential-test', 'two-teams',
 ])
 
 export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext }) {

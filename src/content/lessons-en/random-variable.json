@@ -31,17 +31,17 @@
     },
     {
       "term": "Expectation E[X]",
-      "formula": "E[X] = Σ xᵢ·pᵢ",
+      "formula": "E[X] = \\sum x_i\\, p_i",
       "text": "the variable's average over a long series of repeats: multiply each value xᵢ by its probability pᵢ and sum. It is the center of the distribution."
     },
     {
       "term": "Variance Var[X]",
-      "formula": "E[(X − E[X])²]",
+      "formula": "\\mathrm{Var}(X) = E\\big[(X - E[X])^2\\big]",
       "text": "the average squared deviation from the expectation; σ = √Var is the spread in original units."
     },
     {
       "term": "Adding variances",
-      "formula": "Var(X+Y) = Var(X)+Var(Y) (независимые)",
+      "formula": "\\mathrm{Var}(X+Y) = \\mathrm{Var}(X) + \\mathrm{Var}(Y)",
       "text": "the variances of independent variables add up. The foundation of σ/√n, the CLT and ANOVA."
     },
     {

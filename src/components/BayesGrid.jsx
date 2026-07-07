@@ -60,6 +60,9 @@ export default function BayesGrid({ locale = 'ru' }) {
           <input type="range" min="0.5" max="0.99" step="0.01" value={acc} onChange={(e) => setAcc(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
+      <div className="flex justify-end mt-3">
+        <button onClick={() => { setPrev(0.01); setAcc(0.9) }} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">{en ? 'reset' : 'сбросить'}</button>
+      </div>
     </div>
   )
 }

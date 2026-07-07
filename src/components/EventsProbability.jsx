@@ -85,6 +85,9 @@ export default function EventsProbability({ highlight , locale = 'ru' }) {
           </div>
         ))}
       </div>
+      <div className="flex justify-end mt-2">
+        <button onClick={() => { setA([false, true, false, true, false, true]); setB([false, false, false, true, true, true]) }} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">{en ? 'reset' : 'сбросить'}</button>
+      </div>
 
       {/* Вероятности */}
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-4 text-sm">

@@ -81,6 +81,7 @@ export default function RandomVariable({ locale = 'ru' }) {
           {sum ? (en ? '← single variable X' : '← одна величина X') : (en ? 'show the sum of two independent X+X' : 'показать сумму двух независимых X+X')}
         </button>
         {sum && <span className="text-xs text-gray-500">{en ? <>E doubled ({(2 * EX).toFixed(2)}), Var doubled ({(2 * VarX).toFixed(2)}), the shape is closer to a bell.</> : <>E удвоилось ({(2 * EX).toFixed(2)}), Var удвоилась ({(2 * VarX).toFixed(2)}), форма ближе к колоколу.</>}</span>}
+        <button onClick={() => { setW([1, 2, 4, 2, 1]); setSum(false) }} className="ml-auto text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">{en ? 'reset' : 'сбросить'}</button>
       </div>
       <p className="text-xs text-gray-500 mt-2">{en ? 'E[X] is the "center of gravity" of the values weighted by probability. Var[X] = E[(X−E[X])²] is the mean squared deviation. For a sum of INDEPENDENT variables both E and Var add up — which yields σ/√n for the mean and the bell of the CLT.' : 'E[X] — «центр тяжести» значений с весами-вероятностями. Var[X] = E[(X−E[X])²] — средний квадрат отклонения. У суммы НЕЗАВИСИМЫХ величин и E, и Var складываются — это и даёт σ/√n у среднего и колокол в ЦПТ.'}</p>
     </div>

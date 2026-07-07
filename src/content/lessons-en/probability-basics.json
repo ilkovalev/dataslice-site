@@ -37,17 +37,17 @@
     },
     {
       "term": "Complement",
-      "formula": "P(не A) = 1 − P(A)",
+      "formula": "P(\\bar{A}) = 1 - P(A)",
       "text": "handy for \"at least one\" via \"none\"."
     },
     {
       "term": "Addition rule (OR)",
-      "formula": "P(A∪B) = P(A) + P(B) − P(A∩B)",
+      "formula": "P(A \\cup B) = P(A) + P(B) - P(A \\cap B)",
       "text": "for mutually exclusive events the intersection is 0."
     },
     {
       "term": "Multiplication rule (AND)",
-      "formula": "P(A∩B) = P(A)·P(B) (независимые)",
+      "formula": "P(A \\cap B) = P(A)\\cdot P(B)",
       "text": "for independent events, probabilities multiply."
     },
     {

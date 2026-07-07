@@ -29,7 +29,7 @@
   "definitions": [
     {
       "term": "Probability",
-      "formula": "P(A) ∈ [0, 1]",
+      "formula": "P(A) \\in [0,\\,1]",
       "text": "the share of cases in which the event happens over a very long run. 0 — never, 1 — always."
     },
     {
@@ -38,12 +38,12 @@
     },
     {
       "term": "Law of large numbers",
-      "formula": "доля → p при n → ∞",
+      "formula": "\\hat{p} \\to p \\ \\ (n \\to \\infty)",
       "text": "as trials accumulate, the observed share approaches the true probability."
     },
     {
       "term": "Convergence speed",
-      "formula": "разброс доли ∝ 1/√n",
+      "formula": "SD(\\hat{p}) \\propto \\dfrac{1}{\\sqrt{n}}",
       "text": "to cut the typical error of a share in half, you need four times more observations."
     }
   ],

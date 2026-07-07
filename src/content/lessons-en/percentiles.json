@@ -3,52 +3,66 @@
   "module": 1,
   "title": "Percentiles, quartiles and ranks",
   "tier": 1,
-  "intro": "Mean and median are about the center. But a pizzeria customer does not care about the center: \"how long if I am unlucky?\" How long the unluckiest 5% of orders wait, what the top 10% earn, what counts as normal — that is the language of percentiles, one of the most practical for an analyst.",
+  "intro": "The mean and the median describe the center of the data. But often it is not the center that matters, it is the edges: how long the pizza takes if you're unlucky? How long do the slowest 5% of orders wait? What do the top 10% earn? These questions are answered by percentiles — one of an analyst's most practical tools. A percentile tells you what share of the data lies below a given value.",
   "widget": "percentile-explorer",
+  "widgetProps": {
+    "unit": "min",
+    "metric": "delivery time"
+  },
   "beats": [
     {
-      "text": "A percentile is the value below which a given share of the data lies. Move the p slider: the shaded part of the histogram is the p% of values to the left, and the yellow line is the percentile value itself. p50 is the median: half the values are below. p90 is the threshold below which 90% of the data sits — above it, the top 10%."
+      "text": "Before you is the delivery time across all the chain's orders. A percentile is the value below which a given share of the data lies. Move the p slider: the shaded part of the histogram is the p% of values to the left, and the yellow line is the percentile value itself. p50 is the median: half the orders are faster. p90 is the threshold below which 90% of deliveries sit — above it, the slowest 10%."
     },
     {
-      "text": "Quartiles are percentiles that cut the data into quarters: Q1 = p25, Q2 = p50 (the median), Q3 = p75. Between Q1 and Q3 lies the middle half of the observations; its width is the interquartile range IQR = Q3 − Q1. These anchor percentiles are shown as numbers under the chart."
+      "text": "Quartiles are percentiles that cut the data into quarters: Q1 = p25, Q2 = p50 (the median), Q3 = p75. Between Q1 and Q3 lies the central half of the observations; its width is the interquartile range: IQR = Q3 − Q1. On the chart this is the light-blue \"box\" from Q1 to Q3, with the anchor percentiles labeled as numbers under the axis.",
+      "widget": {
+        "highlight": "iqr"
+      }
     },
     {
       "text": "Why are percentiles better than the mean on \"tailed\" data?",
-      "predict": "The data here is right-skewed. Where will p50 (the median) sit relative to the mean — to the left or to the right?",
-      "reveal": "To the left: the long right tail drags the mean up, while the median and the quartiles stay with the bulk — they depend on ORDER, not size. That is why incomes, response times and durations are described with percentiles: robust to outliers, honest about both the typical and the extreme."
+      "predict": "Delivery time is right-skewed — a long tail of slow orders. Where will the median p50 sit relative to the mean: to the left or the right?",
+      "reveal": "To the left. Look at the chart: the green mean line has drifted to the right of the purple median. The long right tail drags the mean up, while the median and the quartiles stay with the bulk — they depend on the ORDER of values, not their size. That is why incomes, response times and durations are more honestly described with percentiles: robust to outliers, and honest about both the typical and the extreme.",
+      "widget": {
+        "highlight": "mean"
+      }
     },
     {
-      "text": "Slide to p95 and p99. That is \"how bad it gets for the unluckiest 5% and 1%\". The mean response time can look great while p99 is terrible — and p99 is what unhappy users feel. The mean hides it; the tail percentile exposes it. That is how SLAs are written: \"95% of requests faster than X\"."
+      "text": "Slide to p95 and p99. That is \"how bad it gets for the unluckiest 5% and 1% of customers\". The mean delivery time can look great while p99 is terrible — and p99 is what the most unhappy customers feel. The mean hides it; the tail percentile exposes it. That is how SLAs are written: \"95% of orders faster than X minutes\"."
     },
     {
-      "text": "A rank is a value's \"place\" in the sorted row, and a percentile is a rank expressed in percent. \"Your result is in the 80th percentile\" means \"you are above 80% of everyone else\". Ranks also power non-parametric methods (like Mann–Whitney): they look at order rather than raw numbers, which makes them robust to outliers."
+      "text": "A rank is a value's \"place\" in the ordered row, and a percentile is the same rank expressed in percent. \"Your result is in the 80th percentile\" means \"you are above 80% of everyone else\". The ticks under the axis are all the observations lined up by place; the percentile simply cuts off the required share on the left. Precisely because percentiles and ranks look at the order of values rather than their size, they are robust to outliers — the same principle as the median.",
+      "widget": {
+        "highlight": "rank"
+      }
     }
   ],
   "definitions": [
     {
       "term": "Percentile",
-      "text": "the value below which a given share of the data lies (p90 — 90% below it).",
+      "text": "The value below which a given share of the data lies: below p90 sit 90% of the values.",
       "simple": "p90 means you beat 90% of the data."
     },
     {
       "term": "Quartiles Q1/Q2/Q3",
-      "text": "the 25/50/75 percentiles: they cut the data into quarters. Q2 is the median.",
+      "text": "The 25/50/75 percentiles: they cut the ordered row into four equal parts. Q2 is the median.",
       "simple": "the row cut into four equal parts."
     },
     {
       "term": "IQR",
-      "formula": "Q3 − Q1",
-      "text": "the interquartile range — the width of the middle half of the data; a robust measure of spread.",
+      "formula": "IQR = Q3 - Q1",
+      "text": "The interquartile range — the width of the central half of the data (from Q1 to Q3). A robust measure of spread.",
       "simple": "the distance from Q1 to Q3 — home of the central half."
     },
     {
       "term": "Rank",
-      "text": "a value's position in the sorted row; a percentile is a rank in percent.",
-      "simple": "your number in the sorted list."
+      "text": "A value's position in the ordered row; a percentile is a rank expressed as a percentage of the number of observations.",
+      "simple": "your value's number in the sorted list."
     }
   ],
+  "practiceTitle": "Why an analyst needs this",
   "practice": [
-    "Percentiles are the language of SLAs and monitoring: \"95% of requests under 200 ms\" is about p95, not the mean. Reliability teams barely look at the average response time precisely because tails inflate or hide it.",
+    "Percentiles are the language of monitoring and SLAs. The requirement \"95% of requests faster than 200 ms\" is about p95, not the mean. Reliability teams watch the tail percentiles (p95, p99) precisely because the mean response time is deceptive — a few very slow requests inflate it, while many equally slow ones hide behind an acceptable average. A percentile shows what a specific share of users actually experiences.",
     "In product analytics percentiles describe the user distribution: the median receipt, the top 10% by revenue (where the profit usually sits), the bottom 25% by activity (churn candidates)."
   ],
   "realLife": [

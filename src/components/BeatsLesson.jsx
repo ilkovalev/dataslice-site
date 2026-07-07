@@ -11,7 +11,7 @@ import { STR, prefix } from '../lib/i18n.js'
 // Виджеты с собственной кнопкой «сбросить» — общую не показываем (без дублей).
 const OWN_RESET = new Set([
   'bootstrap', 'center-measures', 'coin-flips', 'confidence-intervals', 'distribution',
-  'estimator-sampler', 'histogram', 'peeking', 'sampling-distribution', 'sequential-test', 'two-teams',
+  'estimator-sampler', 'histogram', 'peeking', 'percentile-explorer', 'sampling-distribution', 'sequential-test', 'two-teams',
 ])
 
 export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext }) {

@@ -22,22 +22,22 @@ function quantile(sorted, p) {
 
 const ACTIONS = {
   ru: {
-    keep: { label: 'оставить', note: 'Реальный выброс оставлен. Среднее раздуто им, боксплот помечает его точкой за усом — для «типичного» берите медиану.' },
-    cap: { label: 'кэп до p95', note: 'Экстремум обрезан до p95: наблюдение сохранено, но его влияние ограничено — точка за усом исчезла, шкала сжалась.' },
-    winsor: { label: 'винзоризация', note: 'Значение заменено на ближайшее не-экстремальное — мягкая альтернатива удалению.' },
-    remove: { label: 'удалить', note: 'Удалять можно лишь явные ошибки. Реальные выбросы удалять = искажать данные; решение фиксируют.' },
+    keep: { label: 'оставить', note: 'Реальный выброс оставлен. Среднее раздуто им, боксплот помечает его точкой за усом — для «типичного» берите медиану. Годится, когда выброс важен сам по себе.' },
+    cap: { label: 'кэп до p95', note: 'Кэп (клиппинг): всё выше выбранного порога p95 приравнено к самому p95. Наблюдение сохранено, но его влияние ограничено сверху. Для реальных выбросов, которые не хочется терять.' },
+    winsor: { label: 'винзоризация', note: 'Винзоризация: крайнее значение заменено на границу «обычных» данных (ближайшее не-выбросовое). По духу как кэп, но обрезает до самого края нормальных значений.' },
+    remove: { label: 'удалить', note: 'Удаление: наблюдение выкинуто совсем. Допустимо ТОЛЬКО для явных ошибок (невозможные значения). Реальные выбросы удалять = искажать данные; решение фиксируют.' },
   },
   en: {
-    keep: { label: 'keep', note: 'The real outlier stays. It inflates the mean, and the box plot flags it as a dot past the whisker — for a "typical" value use the median.' },
-    cap: { label: 'cap at p95', note: 'The extreme is clipped to p95: the observation survives but its influence is limited — the dot past the whisker is gone, the scale contracts.' },
-    winsor: { label: 'winsorize', note: 'The value is replaced with the nearest non-extreme one — a gentle alternative to deletion.' },
-    remove: { label: 'remove', note: 'Only delete clear data errors. Removing real outliers = distorting the data; document the decision.' },
+    keep: { label: 'keep', note: 'The real outlier stays. It inflates the mean, and the box plot flags it as a dot past the whisker — for a "typical" value use the median. Right when the outlier matters in itself.' },
+    cap: { label: 'cap at p95', note: 'Capping (clipping): everything above the chosen threshold p95 is set to p95. The observation survives, its influence is limited from above. For real outliers you do not want to lose.' },
+    winsor: { label: 'winsorize', note: 'Winsorizing: the extreme value is replaced with the edge of the "ordinary" data (the nearest non-outlier). Like capping, but clipped to the very edge of normal values.' },
+    remove: { label: 'remove', note: 'Removal: the observation is dropped entirely. Acceptable ONLY for clear errors (impossible values). Removing real outliers = distorting the data; document the decision.' },
   },
 }
 const L = {
-  ru: { hist: 'гистограмма формы', box: 'боксплот', dots: 'точки · среднее и медиана', mean: 'среднее', median: 'медиана', out: 'выброс',
+  ru: { hist: 'гистограмма формы', box: 'боксплот', dots: 'точки · среднее и медиана', mean: 'среднее', median: 'медиана', out: 'выброс', reset: 'сбросить',
     note: (m) => `Один выброс тянет за собой всё: среднее ≈ ${m}, гистограмма растягивается в длинный хвост, на боксплоте появляется точка за усом. Медиана и «коробка» Q1–Q3 почти не двигаются — они устойчивы. Сначала поймите природу выброса (ошибка или реальность), потом выбирайте действие — и документируйте его.` },
-  en: { hist: 'shape histogram', box: 'box plot', dots: 'points · mean and median', mean: 'mean', median: 'median', out: 'outlier',
+  en: { hist: 'shape histogram', box: 'box plot', dots: 'points · mean and median', mean: 'mean', median: 'median', out: 'outlier', reset: 'reset',
     note: (m) => `One outlier drags everything: the mean is ≈ ${m}, the histogram stretches into a long tail, a dot appears past the whisker on the box plot. The median and the Q1–Q3 box barely move — they are robust. First understand the outlier's nature (error or reality), then pick the action — and document it.` },
 }
 
@@ -111,10 +111,11 @@ export default function OutlierActions({ locale = 'ru' }) {
         <span className="text-[#dc4d4d]">{l.out}: {outs.length ? outs.map((o) => o.toFixed(0)).join(', ') : '—'}</span>
       </div>
 
-      <div className="flex flex-wrap gap-2 mt-2">
+      <div className="flex flex-wrap items-center gap-2 mt-2">
         {Object.entries(A).map(([k, v]) => (
           <button key={k} onClick={() => setAct(k)} className={`text-xs px-2.5 py-1 rounded-md border ${act === k ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{v.label}</button>
         ))}
+        <button onClick={() => setAct('keep')} className="ml-auto text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-500 hover:bg-black/5">{l.reset}</button>
       </div>
       <div className="mt-2 text-sm text-gray-700">{A[act].note}</div>
       <p className="text-xs text-gray-500 mt-2">{l.note(meanFull.toFixed(0))}</p>

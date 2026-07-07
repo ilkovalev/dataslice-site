@@ -3,7 +3,7 @@
   "module": 1,
   "title": "Outliers: find them and decide what to do",
   "tier": 1,
-  "intro": "The register at \"Mama John's\" sees ordinary receipts — and suddenly an order for twenty pizzas: an office party. One such value can flip the mean, inflate the variance and ruin a model. Yet an outlier is not always \"an error\": sometimes it is the most valuable thing in the data. Let's learn to find them — including on the box plot — and, crucially, to decide deliberately what to do with them.",
+  "intro": "The register at \"Mama John's\" sees ordinary receipts — and suddenly an order for twenty pizzas: an office party. One such value can flip the mean, inflate the variance and ruin a model. Yet an outlier is not always \"an error\": sometimes it is the most valuable thing in the data. On the right — the same data in three ways (points, histogram, box plot); we'll go step by step through how to spot an outlier and how to deliberately choose what to do with it.",
   "widget": "outlier-actions",
   "beats": [
     {
@@ -18,9 +18,12 @@
       "reveal": "No. \"−5\" is an obvious input error (salaries below zero do not exist): fix it or drop it. \"280\" is a real value: deleting it means lying about the data. A real outlier is not \"garbage\" but a signal — possibly the most interesting part."
     },
     {
-      "text": "Cycle through the action buttons and watch how all three views change at once.",
+      "text": "Below the chart are four action buttons for the outlier: \"keep\", \"cap at p95\", \"winsorize\" and \"remove\". Press them in turn and watch how all three views change at once — points, histogram and box plot.",
       "predict": "Which action pulls the mean back to the main group hardest — capping, winsorizing or removing?",
-      "reveal": "All three remove the extreme's \"pull\": the dot past the whisker disappears, the histogram stops stretching into a tail, the scale contracts, and the mean returns to the group. The difference: capping and winsorizing KEEP the observation (clipped to a sensible threshold), while removal throws it away entirely — acceptable only for clear errors. The median and the Q1–Q3 box barely move the whole time — they are robust."
+      "reveal": "All three remove the extreme's \"pull\": the dot past the whisker disappears, the histogram stops stretching into a tail, the scale contracts, and the mean returns to the group. The median and the Q1–Q3 box barely move the whole time — they are robust. But you choose the action by the outlier's nature, not by the size of the effect — coming up next."
+    },
+    {
+      "text": "How to choose the action. \"Remove\" — only for clear errors: impossible values like a negative salary or a date in the future. A real outlier (the director on 280) is not removed but tamed, keeping the observation. Here are two related tricks: \"cap at p95\" sets everything above the chosen threshold to that threshold (p95), while \"winsorize\" does the same in spirit but replaces the extreme values with a percentile boundary, usually symmetric on both tails (everything above p95 → p95, everything below p5 → p5). Essentially capping is one-sided winsorizing: both limit the outlier's influence without throwing it away. And if the tail is long and \"real\" (incomes, response times), the points are often left untouched — you use robust measures (the median, percentiles) or take logarithms."
     },
     {
       "text": "The golden rule: never delete outliers just because they are inconvenient. First understand their nature, choose a deliberate action, document it, and check how it affects the conclusion. Quietly dropping inconvenient points is exactly what fitting the data to a desired answer looks like."

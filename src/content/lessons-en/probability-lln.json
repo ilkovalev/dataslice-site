@@ -47,6 +47,7 @@
       "text": "to cut the typical error of a share in half, you need four times more observations."
     }
   ],
+  "practiceTitle": "Why sample size matters",
   "practice": [
     "That is why \"we have 50% conversion\" based on five visitors means nothing — too few trials, the share is still bouncing. On five thousand — now you can believe it.",
     "Sample size is not a formality but a condition of reliability: it is what turns random noise into a stable estimate."

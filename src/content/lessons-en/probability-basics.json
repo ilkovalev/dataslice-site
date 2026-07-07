@@ -55,6 +55,7 @@
       "text": "one event does not change the probability of the other. If it does — the events are dependent."
     }
   ],
+  "practiceTitle": "Why these rules matter",
   "practice": [
     "These rules are not school formalities — they are an analyst's daily arithmetic. \"The chance that at least one of 1000 users hits a rare bug (p=0.1%)\" is computed through the complement: 1 − 0.999¹⁰⁰⁰ ≈ 63%. Intuition fails here; the rule does not.",
     "Multiplying independent probabilities also explains multiple comparisons (20 tests → the chance of at least one false alarm is 1 − 0.95²⁰ ≈ 64%) and why long coincidences are suspicious. Independence is the key — and often false — assumption, always worth a look."

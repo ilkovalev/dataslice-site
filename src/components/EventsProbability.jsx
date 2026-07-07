@@ -70,7 +70,10 @@ export default function EventsProbability({ highlight , locale = 'ru' }) {
       </div>
 
       {/* Кубик с переключателями A/B */}
-      <div className="text-xs text-gray-500 mb-1.5">{en ? 'Die outcomes — press the A / B buttons under each:' : 'Исходы кубика — нажимайте кнопки A / B под каждым:'}</div>
+      <div className="flex items-center justify-between gap-3 mb-1.5">
+        <span className="text-xs text-gray-500">{en ? 'Die outcomes — press the A / B buttons under each:' : 'Исходы кубика — нажимайте кнопки A / B под каждым:'}</span>
+        <button onClick={() => { setA([false, true, false, true, false, true]); setB([false, false, false, true, true, true]) }} className="shrink-0 text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-500 hover:bg-black/5">{en ? 'reset' : 'сбросить'}</button>
+      </div>
       <div className="grid grid-cols-6 gap-2">
         {OUT.map((v, i) => (
           <div key={v} className="text-center">
@@ -84,9 +87,6 @@ export default function EventsProbability({ highlight , locale = 'ru' }) {
             </div>
           </div>
         ))}
-      </div>
-      <div className="flex justify-end mt-2">
-        <button onClick={() => { setA([false, true, false, true, false, true]); setB([false, false, false, true, true, true]) }} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">{en ? 'reset' : 'сбросить'}</button>
       </div>
 
       {/* Вероятности */}

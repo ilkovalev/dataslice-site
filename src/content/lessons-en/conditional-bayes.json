@@ -42,6 +42,7 @@
       "text": "how to update the probability of A after observing B, accounting for both the test's accuracy and the base rate P(A)."
     }
   ],
+  "practiceTitle": "Why this matters",
   "practice": [
     "This trap is real in medicine: when screening for rare diseases, most positive results turn out false, so the first test is followed by a confirmatory, more precise one.",
     "The same effect drives fraud and spam filters: if fraud is rare, even a good detector will bury you in false alarms unless the base rate is taken into account."

@@ -49,6 +49,7 @@
       "text": "the outcome of one variable does not affect the distribution of the other. Without it, variance addition breaks."
     }
   ],
+  "practiceTitle": "Why an analyst needs this",
   "practice": [
     "Expectation and variance are an analyst's working language. \"How much will a user bring on average\" is E[X]. \"How unpredictable is revenue\" is σ. Sample-size, confidence-interval and power calculations are the arithmetic of estimator variances.",
     "The variance-addition rule explains why averaging calms noise: add n independent observations, divide by n — the mean's variance comes out n times smaller than a single observation's. Hence the σ/√n that will chase us through the whole course."

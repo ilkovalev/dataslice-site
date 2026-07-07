@@ -60,17 +60,18 @@ export default function CoinFlips({ locale = 'ru' }) {
   const prop = n ? heads / n : 0
 
   // частотная гистограмма исходов: доли орлов/решек против целей p и 1−p
-  const HW = 260
-  const HH = 150
-  const HPAD = 30
-  const bx = [0.32, 0.68].map((f) => HPAD + f * (HW - 2 * HPAD))
-  const byBase = HH - HPAD
-  const bh = (v) => v * (HH - 2 * HPAD - 8)
+  const HW = 640
+  const HH = 130
+  const HPAD = 40
+  const BW = 120 // ширина столбика
+  const bx = [0.36, 0.64].map((f) => HPAD + f * (HW - 2 * HPAD))
+  const byBase = HH - 26
+  const bh = (v) => v * (HH - 46)
   const tailsProp = n ? 1 - prop : 0
 
   return (
     <div className="rounded-xl border border-black/10 bg-panel p-5">
-      <div className="space-y-4">
+      <div className="space-y-2">
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none">
           {[0, 0.5, 1].map((g) => (
             <g key={g}>
@@ -86,16 +87,16 @@ export default function CoinFlips({ locale = 'ru' }) {
 
         {/* частотная гистограмма исходов */}
         <svg viewBox={`0 0 ${HW} ${HH}`} className="w-full h-auto select-none">
-          <text x={HW / 2} y={12} fill="#6b7280" fontSize="10" textAnchor="middle">{en ? 'outcome frequencies' : 'частоты исходов'}</text>
+          <text x={HPAD} y={12} fill="#6b7280" fontSize="10">{en ? 'outcome frequencies' : 'частоты исходов'}</text>
           <line x1={HPAD} y1={byBase} x2={HW - HPAD} y2={byBase} stroke="#d6cebf" strokeWidth="1.5" />
           {/* целевые доли p и 1−p */}
           {[[bx[0], p], [bx[1], 1 - p]].map(([x, t], i) => (
-            <line key={i} x1={x - 26} y1={byBase - bh(t)} x2={x + 26} y2={byBase - bh(t)} stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="4 3" />
+            <line key={i} x1={x - BW / 2 - 4} y1={byBase - bh(t)} x2={x + BW / 2 + 4} y2={byBase - bh(t)} stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="5 3" />
           ))}
-          <rect x={bx[0] - 22} y={byBase - bh(prop)} width="44" height={bh(prop)} fill="#2ab8eb" opacity="0.85" rx="2" />
-          <rect x={bx[1] - 22} y={byBase - bh(tailsProp)} width="44" height={bh(tailsProp)} fill="#9ca3af" opacity="0.7" rx="2" />
-          <text x={bx[0]} y={byBase + 14} fill="#2ab8eb" fontSize="11" textAnchor="middle">{en ? 'heads ' : 'орёл '}{n ? (prop * 100).toFixed(0) + '%' : ''}</text>
-          <text x={bx[1]} y={byBase + 14} fill="#6b7280" fontSize="11" textAnchor="middle">{en ? 'tails ' : 'решка '}{n ? (tailsProp * 100).toFixed(0) + '%' : ''}</text>
+          <rect x={bx[0] - BW / 2} y={byBase - bh(prop)} width={BW} height={bh(prop)} fill="#2ab8eb" opacity="0.85" rx="2" />
+          <rect x={bx[1] - BW / 2} y={byBase - bh(tailsProp)} width={BW} height={bh(tailsProp)} fill="#9ca3af" opacity="0.7" rx="2" />
+          <text x={bx[0]} y={byBase + 15} fill="#2ab8eb" fontSize="11" textAnchor="middle">{en ? 'heads ' : 'орёл '}{n ? (prop * 100).toFixed(0) + '%' : ''}</text>
+          <text x={bx[1]} y={byBase + 15} fill="#6b7280" fontSize="11" textAnchor="middle">{en ? 'tails ' : 'решка '}{n ? (tailsProp * 100).toFixed(0) + '%' : ''}</text>
         </svg>
       </div>
 

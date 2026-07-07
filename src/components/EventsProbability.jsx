@@ -2,7 +2,8 @@ import { useState } from 'react'
 
 // Основы вероятности на кубике (6 исходов). Кликами задаём события A и B,
 // видим их на диаграмме Венна и считаем P(A), P(B), P(A∪B), P(A∩B).
-// highlight из бита фокусирует урок: 'complement' (не A), 'independence'.
+// highlight из бита фокусирует урок и подсвечивает область на Венне:
+// 'complement' (не A), 'union' (A∪B, ИЛИ), 'intersection' (A∩B, И + независимость).
 const OUT = [1, 2, 3, 4, 5, 6]
 const VW = 440
 const VH = 250
@@ -22,8 +23,25 @@ export default function EventsProbability({ highlight , locale = 'ru' }) {
   const pInter = count(inter) / 6
   const pUnion = count(union) / 6
   const indep = Math.abs(pInter - pA * pB) < 1e-9
-  const showIndep = highlight === 'independence'
   const showCompl = highlight === 'complement'
+  const showUnion = highlight === 'union'
+  const showInter = highlight === 'intersection'
+
+  // подсветка чисел по областям под текущий бит
+  const regOpacity = (reg) => {
+    if (showUnion) return reg === 'none' ? 0.28 : 1
+    if (showInter) return reg === 'both' ? 1 : 0.28
+    if (showCompl) return reg === 'aOnly' || reg === 'both' ? 0.3 : 1 // не A = bOnly + none
+    return 1
+  }
+  // контекстная подпись вместо статичной «ни A, ни B»
+  const caption = showUnion
+    ? { text: en ? `A ∪ B — union · P = ${pUnion.toFixed(2)}` : `A ∪ B — объединение · P = ${pUnion.toFixed(2)}`, color: '#374151' }
+    : showInter
+      ? { text: en ? `A ∩ B — intersection · P = ${pInter.toFixed(2)}` : `A ∩ B — пересечение · P = ${pInter.toFixed(2)}`, color: '#16a34a' }
+      : showCompl
+        ? { text: en ? `not A · P = ${(1 - pA).toFixed(2)}` : `не A · P = ${(1 - pA).toFixed(2)}`, color: '#6b7280' }
+        : { text: en ? 'neither A nor B' : 'ни A, ни B', color: '#9ca3af' }
 
   const region = (i) => (a[i] && b[i] ? 'both' : a[i] ? 'aOnly' : b[i] ? 'bOnly' : 'none')
   const colorOf = { both: '#16a34a', aOnly: '#2ab8eb', bOnly: '#d99a06', none: '#9ca3af' }
@@ -48,17 +66,20 @@ export default function EventsProbability({ highlight , locale = 'ru' }) {
       <svg viewBox={`0 0 ${VW} ${VH}`} className="w-full h-auto select-none">
         <text x={cxA - r + 6} y={26} fill="#0d7fb0" fontSize="12" fontWeight="700" textAnchor="middle">{en ? 'event A' : 'событие A'}</text>
         <text x={cxB + r - 6} y={26} fill="#b8830a" fontSize="12" fontWeight="700" textAnchor="middle">{en ? 'event B' : 'событие B'}</text>
-        <circle cx={cxA} cy={cy} r={r} fill="#2ab8eb" fillOpacity="0.16" stroke="#2ab8eb" strokeWidth={showCompl ? 2.5 : 1.5} strokeDasharray={showCompl ? '5 3' : ''} />
-        <circle cx={cxB} cy={cy} r={r} fill="#fbbf24" fillOpacity="0.18" stroke="#d99a06" strokeWidth="1.5" />
+        <defs><clipPath id="lensClip"><circle cx={cxA} cy={cy} r={r} /></clipPath></defs>
+        <circle cx={cxA} cy={cy} r={r} fill="#2ab8eb" fillOpacity="0.16" stroke="#2ab8eb" strokeWidth={showCompl || showUnion ? 2.5 : 1.5} strokeDasharray={showCompl ? '5 3' : ''} />
+        <circle cx={cxB} cy={cy} r={r} fill="#fbbf24" fillOpacity="0.18" stroke="#d99a06" strokeWidth={showUnion ? 2.5 : 1.5} />
+        {/* пересечение (линза) подсвечивается на бите про И */}
+        {showInter && <circle cx={cxB} cy={cy} r={r} fill="#16a34a" fillOpacity="0.3" clipPath="url(#lensClip)" />}
         {/* числа по областям */}
         {Object.entries(placed).map(([reg, nums]) => {
           const [cxc, cyc] = centroids[reg]
           const start = cxc - (nums.length - 1) * 13
           return nums.map((v, j) => (
-            <text key={`${reg}-${v}`} x={start + j * 26} y={cyc + 6} fill={colorOf[reg]} fontSize="18" fontWeight="700" textAnchor="middle">{v}</text>
+            <text key={`${reg}-${v}`} x={start + j * 26} y={cyc + 6} fill={colorOf[reg]} fontSize="18" fontWeight="700" textAnchor="middle" opacity={regOpacity(reg)}>{v}</text>
           ))
         })}
-        {placed.none && <text x={centroids.none[0]} y={centroids.none[1] + 22} fill="#9ca3af" fontSize="10" textAnchor="middle">{en ? 'neither A nor B' : 'ни A, ни B'}</text>}
+        <text x={centroids.none[0]} y={centroids.none[1] + 22} fill={caption.color} fontSize="10" textAnchor="middle" fontWeight={highlight ? 600 : 400}>{caption.text}</text>
       </svg>
 
       {/* Легенда */}
@@ -102,8 +123,8 @@ export default function EventsProbability({ highlight , locale = 'ru' }) {
         {showCompl && (
           <div className="font-mono text-gray-700">P(не A) = 1 − P(A) = 1 − {pA.toFixed(2)} = {(1 - pA).toFixed(2)} <span className="text-gray-500">{en ? '(dash-outlined cells)' : '(клетки с пунктиром)'}</span></div>
         )}
-        <div className="font-mono text-gray-700">P(A∪B) = P(A) + P(B) − P(A∩B) = {pA.toFixed(2)} + {pB.toFixed(2)} − {pInter.toFixed(2)} = {pUnion.toFixed(2)}</div>
-        {showIndep && (
+        <div className={`font-mono ${showUnion ? 'text-cyanink' : 'text-gray-700'}`}>P(A∪B) = P(A) + P(B) − P(A∩B) = {pA.toFixed(2)} + {pB.toFixed(2)} − {pInter.toFixed(2)} = {pUnion.toFixed(2)}</div>
+        {showInter && (
           <div className="font-mono text-gray-700">P(A∩B) = {pInter.toFixed(2)} {indep ? '=' : '≠'} P(A)·P(B) = {(pA * pB).toFixed(2)} → <span className={indep ? 'text-green-600' : 'text-[#dc4d4d]'}>{indep ? (en ? 'independent' : 'независимы') : (en ? 'dependent' : 'зависимы')}</span></div>
         )}
       </div>

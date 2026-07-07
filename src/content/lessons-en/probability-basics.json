@@ -3,7 +3,7 @@
   "module": 2,
   "title": "Probability basics: events, AND, OR, independence",
   "tier": 1,
-  "intro": "Before computing anything fancy, let's agree on the language of chance. Just a few rules — how probabilities of events combine — underpin everything from A/B tests to spam filters. We'll work them out on a coin and a die.",
+  "intro": "Before computing anything fancy, let's master the basic language of chance. Just a few simple rules — how to combine probabilities of events: add them, multiply them, take the complement — underpin almost everything that follows, from A/B tests to spam filters. We'll work them out on a clear example: a roll of a die with six equally likely outcomes.",
   "widget": "events-probability",
   "beats": [
     {
@@ -16,14 +16,17 @@
       }
     },
     {
-      "text": "The OR rule (union). P(A∪B) = P(A) + P(B) − P(A∩B). The green lens (outcomes in both events) gets subtracted — otherwise it would be counted twice. The formula under the die recomputes live as you change A and B. For mutually exclusive events (the lens is empty, the circles do not overlap) there is nothing to subtract: P(A∪B) = P(A) + P(B)."
+      "text": "The OR rule (union). P(A∪B) = P(A) + P(B) − P(A∩B). The union is highlighted on the Venn now — every cell that fell into at least one event. The green lens (outcomes in both) gets subtracted — otherwise it would be counted twice. The formula under the die recomputes live as you change A and B. For mutually exclusive events (the lens is empty, the circles do not overlap) there is nothing to subtract: P(A∪B) = P(A) + P(B).",
+      "widget": {
+        "highlight": "union"
+      }
     },
     {
-      "text": "The AND rule (intersection) and independence. Events are independent when P(A∩B) equals EXACTLY P(A)·P(B).",
+      "text": "The AND rule (intersection) and independence. The intersection A∩B is the green lens on the Venn (outcomes in both events at once). Events are called independent when P(A∩B) equals EXACTLY P(A)·P(B).",
       "predict": "Use the buttons to pick A and B so that \"independent\" lights up below. Is it easy?",
       "reveal": "Not very — most pairs on a single die are dependent. An independent example: A = {1,2}, B = {1,3,5}: P(A∩B) = 1/6 = (1/3)·(1/2). For independent events P(A∩B) = P(A)·P(B) — probabilities multiply. That is how you get \"two heads in a row\" = 0.5·0.5 = 0.25 and five in a row = 0.5⁵ ≈ 3%. Naive Bayes and A/B math stand on this multiplication.",
       "widget": {
-        "highlight": "independence"
+        "highlight": "intersection"
       }
     },
     {

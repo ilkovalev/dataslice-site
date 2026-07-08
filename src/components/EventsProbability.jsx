@@ -36,11 +36,11 @@ export default function EventsProbability({ highlight , locale = 'ru' }) {
   }
   // контекстная подпись вместо статичной «ни A, ни B»
   const caption = showUnion
-    ? { text: en ? `A ∪ B — union · P = ${pUnion.toFixed(2)}` : `A ∪ B — объединение · P = ${pUnion.toFixed(2)}`, color: '#374151' }
+    ? { text: `P(A ∪ B) = ${pUnion.toFixed(2)}`, color: '#374151' }
     : showInter
-      ? { text: en ? `A ∩ B — intersection · P = ${pInter.toFixed(2)}` : `A ∩ B — пересечение · P = ${pInter.toFixed(2)}`, color: '#16a34a' }
+      ? { text: `P(A ∩ B) = ${pInter.toFixed(2)}`, color: '#16a34a' }
       : showCompl
-        ? { text: en ? `not A · P = ${(1 - pA).toFixed(2)}` : `не A · P = ${(1 - pA).toFixed(2)}`, color: '#6b7280' }
+        ? { text: en ? `P(not A) = ${(1 - pA).toFixed(2)}` : `P(не A) = ${(1 - pA).toFixed(2)}`, color: '#6b7280' }
         : { text: en ? 'neither A nor B' : 'ни A, ни B', color: '#9ca3af' }
 
   const region = (i) => (a[i] && b[i] ? 'both' : a[i] ? 'aOnly' : b[i] ? 'bOnly' : 'none')

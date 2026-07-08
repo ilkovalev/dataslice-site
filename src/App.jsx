@@ -16,7 +16,8 @@ const StatsPage = lazy(() => import('./pages/StatsPage.jsx'))
 const MetricsPage = lazy(() => import('./pages/MetricsPage.jsx'))
 const GlossaryPage = lazy(() => import('./pages/GlossaryPage.jsx'))
 
-const linkBase = 'px-3 py-1.5 rounded-full text-sm transition-colors'
+// min-h-[44px] на мобильном — комфортная тап-зона (WCAG); на sm+ шапка снова компактная.
+const linkBase = 'px-3 py-1.5 rounded-full text-sm transition-colors inline-flex items-center min-h-[44px] sm:min-h-0'
 const linkClass = ({ isActive }) =>
   `${linkBase} ${isActive ? 'bg-accent/20 text-cyanink' : 'text-gray-700 hover:bg-black/5'}`
 
@@ -38,7 +39,7 @@ export default function App() {
             <Link
               to={switchLocalePath(pathname, otherLocale)}
               title={otherLocale === 'en' ? 'English version' : 'Русская версия'}
-              className="text-xs px-2.5 py-1.5 rounded-full border border-black/10 text-gray-600 hover:bg-black/5 transition-colors uppercase tracking-wide"
+              className="text-xs px-2.5 py-1.5 rounded-full border border-black/10 text-gray-600 hover:bg-black/5 transition-colors uppercase tracking-wide inline-flex items-center min-h-[44px] sm:min-h-0"
             >
               {otherLocale}
             </Link>
@@ -47,7 +48,7 @@ export default function App() {
               target="_blank"
               rel="noreferrer"
               onClick={() => track('tg_click', { place: 'header' })}
-              className="text-sm px-3 py-1.5 rounded-full text-cyanink border border-accent/30 hover:bg-accent/10 transition-colors whitespace-nowrap"
+              className="text-sm px-3 py-1.5 rounded-full bg-cyanink text-white hover:bg-cyanink/90 transition-colors whitespace-nowrap inline-flex items-center min-h-[44px] sm:min-h-0"
             >
               {t.tgButton}
             </a>

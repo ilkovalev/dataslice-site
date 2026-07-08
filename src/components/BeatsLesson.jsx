@@ -67,8 +67,13 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
                 </button>
               </div>
             )}
-            {/* Double-Bezel: виджет-«стекло» в мягком «алюминиевом» лотке */}
-            <div className="rounded-[1.15rem] bg-black/[0.04] ring-1 ring-black/5 p-1.5 shadow-[0_10px_36px_rgba(32,36,46,0.07)]">
+            {/* Double-Bezel: виджет-«стекло» в мягком «алюминиевом» лотке.
+                role/aria-label — чтобы скринридер объявил интерактивный график по названию урока. */}
+            <div
+              role="group"
+              aria-label={lesson.title}
+              className="rounded-[1.15rem] bg-black/[0.04] ring-1 ring-black/5 p-1.5 shadow-[0_10px_36px_rgba(32,36,46,0.07)]"
+            >
               <Widget key={`${widgetId}-${resetKey}`} {...widgetProps} locale={locale} highlight={beat.widget?.highlight} />
             </div>
           </div>

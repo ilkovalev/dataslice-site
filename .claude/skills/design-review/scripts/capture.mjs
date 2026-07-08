@@ -50,7 +50,8 @@ const collectMetrics = `(() => {
   const smallTargets = interactive.map(el => { const b = el.getBoundingClientRect(); return { tag: el.tagName.toLowerCase(), w: Math.round(b.width), h: Math.round(b.height), label: (el.innerText||el.getAttribute('aria-label')||'').trim().slice(0,30) } }).filter(t => (t.w && t.h) && (t.w < 44 || t.h < 44))
 
   const imgsNoAlt = [...document.querySelectorAll('img')].filter(i => !i.hasAttribute('alt')).map(i => i.currentSrc || i.src)
-  const svgNoLabel = [...document.querySelectorAll('svg')].filter(s => !s.getAttribute('aria-label') && !s.querySelector('title') && s.getBoundingClientRect().width > 80).length
+  // svg считается покрытым, если помечен сам или лежит в именованной группе/figure (role=group+aria-label и т.п.)
+  const svgNoLabel = [...document.querySelectorAll('svg')].filter(s => !s.getAttribute('aria-label') && !s.querySelector('title') && !s.closest('[aria-label],[role=img],[role=figure]') && s.getBoundingClientRect().width > 80).length
 
   const overflowX = document.documentElement.scrollWidth > window.innerWidth + 2
 

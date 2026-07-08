@@ -1,0 +1,2835 @@
+{
+  "slug": "center-measures",
+  "base": "http://localhost:4203",
+  "capturedAt": "2026-07-08T16:48:21.864Z",
+  "viewports": {
+    "mobile": {
+      "url": "http://localhost:4203/stats/center-measures",
+      "fontSizes": {
+        "14/400": 29,
+        "17/400": 20,
+        "16/400": 18,
+        "12/400": 11,
+        "14/500": 5,
+        "16/600": 3,
+        "24/700": 2
+      },
+      "uniqueFontSizes": 5,
+      "lowContrast": [
+        {
+          "text": "EN",
+          "size": 12,
+          "weight": "400",
+          "ratio": 3.29,
+          "need": 4.5
+        },
+        {
+          "text": "🍕 Telegram-канал",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "Статистика",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "Иерархии метрик",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "Глоссарий",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "Оглавление ·",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "●\nСреднее: 35.9 тыс ₽",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "На масштабе целой страны это критично: г",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "средним",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "средним",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.1,
+          "need": 4.5
+        },
+        {
+          "text": "медиану",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "медиану",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.1,
+          "need": 4.5
+        },
+        {
+          "text": "И правило шире зарплат: время ответа сер",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "среднее",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "среднее",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.1,
+          "need": 4.5
+        },
+        {
+          "text": "медиана",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "медиана",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.1,
+          "need": 4.5
+        },
+        {
+          "text": "Эти материалы делает канал «Кусочек пицц",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        }
+      ],
+      "smallTargets": [
+        {
+          "tag": "a",
+          "w": 39,
+          "h": 30,
+          "label": "EN"
+        },
+        {
+          "tag": "a",
+          "w": 156,
+          "h": 34,
+          "label": "🍕 Telegram-канал"
+        },
+        {
+          "tag": "a",
+          "w": 102,
+          "h": 32,
+          "label": "Статистика"
+        },
+        {
+          "tag": "a",
+          "w": 146,
+          "h": 32,
+          "label": "Иерархии метрик"
+        },
+        {
+          "tag": "a",
+          "w": 96,
+          "h": 32,
+          "label": "Глоссарий"
+        },
+        {
+          "tag": "button",
+          "w": 358,
+          "h": 38,
+          "label": "Оглавление ·Среднее, медиана и"
+        },
+        {
+          "tag": "button",
+          "w": 155,
+          "h": 26,
+          "label": "🔗 поделиться уроком"
+        },
+        {
+          "tag": "circle",
+          "w": 5,
+          "h": 5,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 17,
+          "h": 17,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 10,
+          "h": 10,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 17,
+          "h": 17,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 10,
+          "h": 10,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 17,
+          "h": 17,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 10,
+          "h": 10,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 17,
+          "h": 17,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 10,
+          "h": 10,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 17,
+          "h": 17,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 10,
+          "h": 10,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 17,
+          "h": 17,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 10,
+          "h": 10,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 17,
+          "h": 17,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 10,
+          "h": 10,
+          "label": ""
+        },
+        {
+          "tag": "button",
+          "w": 112,
+          "h": 42,
+          "label": "+ добавить точку"
+        },
+        {
+          "tag": "button",
+          "w": 99,
+          "h": 42,
+          "label": "− убрать точку"
+        },
+        {
+          "tag": "button",
+          "w": 76,
+          "h": 42,
+          "label": "сбросить"
+        },
+        {
+          "tag": "button",
+          "w": 24,
+          "h": 6,
+          "label": "Шаг 1"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 2"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 3"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 4"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 5"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 6"
+        },
+        {
+          "tag": "button",
+          "w": 58,
+          "h": 20,
+          "label": "← Назад"
+        },
+        {
+          "tag": "button",
+          "w": 104,
+          "h": 36,
+          "label": "Дальше\n→"
+        },
+        {
+          "tag": "button",
+          "w": 72,
+          "h": 16,
+          "label": "↑ к графику"
+        },
+        {
+          "tag": "a",
+          "w": 260,
+          "h": 26,
+          "label": "Скошенные данные: когда средне"
+        },
+        {
+          "tag": "a",
+          "w": 183,
+          "h": 26,
+          "label": "Перцентили и края данных"
+        },
+        {
+          "tag": "a",
+          "w": 142,
+          "h": 17,
+          "label": "«Кусочек пиццы» 🍕"
+        },
+        {
+          "tag": "a",
+          "w": 106,
+          "h": 17,
+          "label": "Подписаться →"
+        },
+        {
+          "tag": "a",
+          "w": 319,
+          "h": 37,
+          "label": "Оставить фидбек →"
+        }
+      ],
+      "imgsNoAlt": [],
+      "svgNoLabel": 1,
+      "overflowX": false,
+      "consoleErrors": []
+    },
+    "tablet": {
+      "url": "http://localhost:4203/stats/center-measures",
+      "fontSizes": {
+        "14/400": 59,
+        "16/400": 35,
+        "17/400": 20,
+        "12/400": 10,
+        "14/500": 8,
+        "13/400": 8,
+        "16/600": 3,
+        "30/700": 2,
+        "13/500": 2
+      },
+      "uniqueFontSizes": 6,
+      "lowContrast": [
+        {
+          "text": "EN",
+          "size": 12,
+          "weight": "400",
+          "ratio": 3.29,
+          "need": 4.5
+        },
+        {
+          "text": "🍕 Telegram-канал",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "Статистика",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "Иерархии метрик",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "Глоссарий",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "1.Описательная статистика 📊",
+          "size": 14,
+          "weight": "500",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "1.",
+          "size": 14,
+          "weight": "500",
+          "ratio": 1.11,
+          "need": 4.5
+        },
+        {
+          "text": "📊",
+          "size": 14,
+          "weight": "500",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "▸\nСреднее, медиана и мода",
+          "size": 13,
+          "weight": "500",
+          "ratio": 1.18,
+          "need": 4.5
+        },
+        {
+          "text": "Среднее, медиана и мода",
+          "size": 13,
+          "weight": "500",
+          "ratio": 1.18,
+          "need": 4.5
+        },
+        {
+          "text": "2.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "3.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "4.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "5.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "6.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "7.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "8.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "9.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "10.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "11.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "12.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "●\nСреднее: 35.9 тыс ₽",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "На масштабе целой страны это критично: г",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "средним",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "средним",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.1,
+          "need": 4.5
+        },
+        {
+          "text": "медиану",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "медиану",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.1,
+          "need": 4.5
+        },
+        {
+          "text": "И правило шире зарплат: время ответа сер",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "среднее",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "среднее",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.1,
+          "need": 4.5
+        },
+        {
+          "text": "медиана",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "медиана",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.1,
+          "need": 4.5
+        },
+        {
+          "text": "Эти материалы делает канал «Кусочек пицц",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        }
+      ],
+      "smallTargets": [
+        {
+          "tag": "a",
+          "w": 39,
+          "h": 30,
+          "label": "EN"
+        },
+        {
+          "tag": "a",
+          "w": 156,
+          "h": 34,
+          "label": "🍕 Telegram-канал"
+        },
+        {
+          "tag": "a",
+          "w": 102,
+          "h": 32,
+          "label": "Статистика"
+        },
+        {
+          "tag": "a",
+          "w": 146,
+          "h": 32,
+          "label": "Иерархии метрик"
+        },
+        {
+          "tag": "a",
+          "w": 96,
+          "h": 32,
+          "label": "Глоссарий"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "1.Описательная статистика 📊"
+        },
+        {
+          "tag": "button",
+          "w": 223,
+          "h": 30,
+          "label": "▸\nСреднее, медиана и мода"
+        },
+        {
+          "tag": "button",
+          "w": 223,
+          "h": 30,
+          "label": "○\nФорма данных: гистограмма"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "2.Вероятность 🎲"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "3.Распределения 🔔"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "4.От выборки к миру 🎯"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "5.Проверка гипотез ⚖️"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "6.Эксперименты: A/B 🧪"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "7.Связи и регрессия 📈"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "8.Классификация 🏷️"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "9.Ловушки данных 🪤"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "10.Байесовский вывод 🔄"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "11.Дисперсионный анализ 🧩"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "12.Капстоун 🏁"
+        },
+        {
+          "tag": "button",
+          "w": 155,
+          "h": 26,
+          "label": "🔗 поделиться уроком"
+        },
+        {
+          "tag": "circle",
+          "w": 4,
+          "h": 4,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 13,
+          "h": 13,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 7,
+          "h": 7,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 13,
+          "h": 13,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 7,
+          "h": 7,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 13,
+          "h": 13,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 7,
+          "h": 7,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 13,
+          "h": 13,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 7,
+          "h": 7,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 13,
+          "h": 13,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 7,
+          "h": 7,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 13,
+          "h": 13,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 7,
+          "h": 7,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 13,
+          "h": 13,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 7,
+          "h": 7,
+          "label": ""
+        },
+        {
+          "tag": "button",
+          "w": 24,
+          "h": 6,
+          "label": "Шаг 1"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 2"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 3"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 4"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 5"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 6"
+        },
+        {
+          "tag": "button",
+          "w": 58,
+          "h": 20,
+          "label": "← Назад"
+        },
+        {
+          "tag": "button",
+          "w": 104,
+          "h": 36,
+          "label": "Дальше\n→"
+        },
+        {
+          "tag": "a",
+          "w": 260,
+          "h": 26,
+          "label": "Скошенные данные: когда средне"
+        },
+        {
+          "tag": "a",
+          "w": 183,
+          "h": 26,
+          "label": "Перцентили и края данных"
+        },
+        {
+          "tag": "a",
+          "w": 142,
+          "h": 17,
+          "label": "«Кусочек пиццы» 🍕"
+        },
+        {
+          "tag": "a",
+          "w": 106,
+          "h": 17,
+          "label": "Подписаться →"
+        },
+        {
+          "tag": "a",
+          "w": 135,
+          "h": 17,
+          "label": "Оставить фидбек →"
+        }
+      ],
+      "imgsNoAlt": [],
+      "svgNoLabel": 1,
+      "overflowX": false,
+      "consoleErrors": []
+    },
+    "desktop": {
+      "url": "http://localhost:4203/stats/center-measures",
+      "fontSizes": {
+        "14/400": 59,
+        "16/400": 35,
+        "17/400": 20,
+        "12/400": 10,
+        "14/500": 8,
+        "13/400": 8,
+        "16/600": 3,
+        "30/700": 2,
+        "13/500": 2
+      },
+      "uniqueFontSizes": 6,
+      "lowContrast": [
+        {
+          "text": "EN",
+          "size": 12,
+          "weight": "400",
+          "ratio": 3.29,
+          "need": 4.5
+        },
+        {
+          "text": "🍕 Telegram-канал",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "Статистика",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "Иерархии метрик",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "Глоссарий",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "1.Описательная статистика 📊",
+          "size": 14,
+          "weight": "500",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "1.",
+          "size": 14,
+          "weight": "500",
+          "ratio": 1.11,
+          "need": 4.5
+        },
+        {
+          "text": "📊",
+          "size": 14,
+          "weight": "500",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "▸\nСреднее, медиана и мода",
+          "size": 13,
+          "weight": "500",
+          "ratio": 1.18,
+          "need": 4.5
+        },
+        {
+          "text": "Среднее, медиана и мода",
+          "size": 13,
+          "weight": "500",
+          "ratio": 1.18,
+          "need": 4.5
+        },
+        {
+          "text": "2.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "3.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "4.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "5.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "6.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "7.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "8.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "9.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "10.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "11.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "12.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "●\nСреднее: 35.9 тыс ₽",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "На масштабе целой страны это критично: г",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "средним",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "средним",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.1,
+          "need": 4.5
+        },
+        {
+          "text": "медиану",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "медиану",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.1,
+          "need": 4.5
+        },
+        {
+          "text": "И правило шире зарплат: время ответа сер",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "среднее",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "среднее",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.1,
+          "need": 4.5
+        },
+        {
+          "text": "медиана",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "медиана",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.1,
+          "need": 4.5
+        },
+        {
+          "text": "Эти материалы делает канал «Кусочек пицц",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        }
+      ],
+      "smallTargets": [
+        {
+          "tag": "a",
+          "w": 39,
+          "h": 30,
+          "label": "EN"
+        },
+        {
+          "tag": "a",
+          "w": 156,
+          "h": 34,
+          "label": "🍕 Telegram-канал"
+        },
+        {
+          "tag": "a",
+          "w": 102,
+          "h": 32,
+          "label": "Статистика"
+        },
+        {
+          "tag": "a",
+          "w": 146,
+          "h": 32,
+          "label": "Иерархии метрик"
+        },
+        {
+          "tag": "a",
+          "w": 96,
+          "h": 32,
+          "label": "Глоссарий"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "1.Описательная статистика 📊"
+        },
+        {
+          "tag": "button",
+          "w": 223,
+          "h": 30,
+          "label": "▸\nСреднее, медиана и мода"
+        },
+        {
+          "tag": "button",
+          "w": 223,
+          "h": 30,
+          "label": "○\nФорма данных: гистограмма"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "2.Вероятность 🎲"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "3.Распределения 🔔"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "4.От выборки к миру 🎯"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "5.Проверка гипотез ⚖️"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "6.Эксперименты: A/B 🧪"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "7.Связи и регрессия 📈"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "8.Классификация 🏷️"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "9.Ловушки данных 🪤"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "10.Байесовский вывод 🔄"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "11.Дисперсионный анализ 🧩"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "12.Капстоун 🏁"
+        },
+        {
+          "tag": "button",
+          "w": 155,
+          "h": 26,
+          "label": "🔗 поделиться уроком"
+        },
+        {
+          "tag": "circle",
+          "w": 11,
+          "h": 11,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 39,
+          "h": 39,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 21,
+          "h": 21,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 39,
+          "h": 39,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 21,
+          "h": 21,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 39,
+          "h": 39,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 21,
+          "h": 21,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 39,
+          "h": 39,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 21,
+          "h": 21,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 39,
+          "h": 39,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 21,
+          "h": 21,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 39,
+          "h": 39,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 21,
+          "h": 21,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 39,
+          "h": 39,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 21,
+          "h": 21,
+          "label": ""
+        },
+        {
+          "tag": "button",
+          "w": 123,
+          "h": 26,
+          "label": "+ добавить точку"
+        },
+        {
+          "tag": "button",
+          "w": 108,
+          "h": 26,
+          "label": "− убрать точку"
+        },
+        {
+          "tag": "button",
+          "w": 76,
+          "h": 26,
+          "label": "сбросить"
+        },
+        {
+          "tag": "button",
+          "w": 24,
+          "h": 6,
+          "label": "Шаг 1"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 2"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 3"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 4"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 5"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Шаг 6"
+        },
+        {
+          "tag": "button",
+          "w": 58,
+          "h": 20,
+          "label": "← Назад"
+        },
+        {
+          "tag": "button",
+          "w": 104,
+          "h": 36,
+          "label": "Дальше\n→"
+        },
+        {
+          "tag": "a",
+          "w": 260,
+          "h": 26,
+          "label": "Скошенные данные: когда средне"
+        },
+        {
+          "tag": "a",
+          "w": 183,
+          "h": 26,
+          "label": "Перцентили и края данных"
+        },
+        {
+          "tag": "button",
+          "w": 768,
+          "h": 40,
+          "label": "Центр мы нашли — но насколько "
+        },
+        {
+          "tag": "button",
+          "w": 246,
+          "h": 36,
+          "label": "Дальше →\nРазброс и стандартное"
+        },
+        {
+          "tag": "a",
+          "w": 142,
+          "h": 17,
+          "label": "«Кусочек пиццы» 🍕"
+        },
+        {
+          "tag": "a",
+          "w": 106,
+          "h": 17,
+          "label": "Подписаться →"
+        },
+        {
+          "tag": "a",
+          "w": 135,
+          "h": 17,
+          "label": "Оставить фидбек →"
+        }
+      ],
+      "imgsNoAlt": [],
+      "svgNoLabel": 1,
+      "overflowX": false,
+      "consoleErrors": []
+    },
+    "mobile_en": {
+      "url": "http://localhost:4203/en/stats/center-measures",
+      "fontSizes": {
+        "14/400": 21,
+        "17/400": 20,
+        "12/400": 11,
+        "16/400": 10,
+        "14/500": 5,
+        "16/600": 3,
+        "24/700": 2
+      },
+      "uniqueFontSizes": 5,
+      "lowContrast": [
+        {
+          "text": "RU",
+          "size": 12,
+          "weight": "400",
+          "ratio": 3.29,
+          "need": 4.5
+        },
+        {
+          "text": "🍕 Telegram (in Russian)",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "Statistics",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "Metric trees",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "Glossary",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "Contents ·",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "●\nMean: 35.9 k",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "At the scale of a whole country this is ",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "And the rule is wider than salaries: ser",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "This site is built by the DataSlice Tele",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        }
+      ],
+      "smallTargets": [
+        {
+          "tag": "a",
+          "w": 39,
+          "h": 30,
+          "label": "RU"
+        },
+        {
+          "tag": "a",
+          "w": 193,
+          "h": 34,
+          "label": "🍕 Telegram (in Russian)"
+        },
+        {
+          "tag": "a",
+          "w": 87,
+          "h": 32,
+          "label": "Statistics"
+        },
+        {
+          "tag": "a",
+          "w": 105,
+          "h": 32,
+          "label": "Metric trees"
+        },
+        {
+          "tag": "a",
+          "w": 83,
+          "h": 32,
+          "label": "Glossary"
+        },
+        {
+          "tag": "button",
+          "w": 358,
+          "h": 38,
+          "label": "Contents ·Mean, median and mod"
+        },
+        {
+          "tag": "button",
+          "w": 138,
+          "h": 26,
+          "label": "🔗 share this lesson"
+        },
+        {
+          "tag": "circle",
+          "w": 5,
+          "h": 5,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 17,
+          "h": 17,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 10,
+          "h": 10,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 17,
+          "h": 17,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 10,
+          "h": 10,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 17,
+          "h": 17,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 10,
+          "h": 10,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 17,
+          "h": 17,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 10,
+          "h": 10,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 17,
+          "h": 17,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 10,
+          "h": 10,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 17,
+          "h": 17,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 10,
+          "h": 10,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 17,
+          "h": 17,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 10,
+          "h": 10,
+          "label": ""
+        },
+        {
+          "tag": "button",
+          "w": 96,
+          "h": 26,
+          "label": "+ add a point"
+        },
+        {
+          "tag": "button",
+          "w": 117,
+          "h": 26,
+          "label": "− remove a point"
+        },
+        {
+          "tag": "button",
+          "w": 52,
+          "h": 26,
+          "label": "reset"
+        },
+        {
+          "tag": "button",
+          "w": 24,
+          "h": 6,
+          "label": "Step 1"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 2"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 3"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 4"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 5"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 6"
+        },
+        {
+          "tag": "button",
+          "w": 49,
+          "h": 20,
+          "label": "← Back"
+        },
+        {
+          "tag": "button",
+          "w": 83,
+          "h": 36,
+          "label": "Next\n→"
+        },
+        {
+          "tag": "button",
+          "w": 80,
+          "h": 16,
+          "label": "↑ to the chart"
+        },
+        {
+          "tag": "a",
+          "w": 214,
+          "h": 26,
+          "label": "Skewed data: when the mean lie"
+        },
+        {
+          "tag": "a",
+          "w": 162,
+          "h": 26,
+          "label": "Percentiles and the tails"
+        },
+        {
+          "tag": "a",
+          "w": 86,
+          "h": 17,
+          "label": "DataSlice 🍕"
+        },
+        {
+          "tag": "a",
+          "w": 83,
+          "h": 17,
+          "label": "Subscribe →"
+        },
+        {
+          "tag": "a",
+          "w": 121,
+          "h": 17,
+          "label": "Leave feedback →"
+        }
+      ],
+      "imgsNoAlt": [],
+      "svgNoLabel": 1,
+      "overflowX": false,
+      "consoleErrors": []
+    },
+    "tablet_en": {
+      "url": "http://localhost:4203/en/stats/center-measures",
+      "fontSizes": {
+        "14/400": 51,
+        "16/400": 27,
+        "17/400": 20,
+        "12/400": 10,
+        "14/500": 8,
+        "13/400": 8,
+        "16/600": 3,
+        "30/700": 2,
+        "13/500": 2
+      },
+      "uniqueFontSizes": 6,
+      "lowContrast": [
+        {
+          "text": "RU",
+          "size": 12,
+          "weight": "400",
+          "ratio": 3.29,
+          "need": 4.5
+        },
+        {
+          "text": "🍕 Telegram (in Russian)",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "Statistics",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "Metric trees",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "Glossary",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "1.Descriptive statistics 📊",
+          "size": 14,
+          "weight": "500",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "1.",
+          "size": 14,
+          "weight": "500",
+          "ratio": 1.11,
+          "need": 4.5
+        },
+        {
+          "text": "📊",
+          "size": 14,
+          "weight": "500",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "▸\nMean, median and mode",
+          "size": 13,
+          "weight": "500",
+          "ratio": 1.18,
+          "need": 4.5
+        },
+        {
+          "text": "Mean, median and mode",
+          "size": 13,
+          "weight": "500",
+          "ratio": 1.18,
+          "need": 4.5
+        },
+        {
+          "text": "2.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "3.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "4.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "5.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "6.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "7.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "8.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "9.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "10.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "11.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "12.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "●\nMean: 35.9 k",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "At the scale of a whole country this is ",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "And the rule is wider than salaries: ser",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "This site is built by the DataSlice Tele",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        }
+      ],
+      "smallTargets": [
+        {
+          "tag": "a",
+          "w": 39,
+          "h": 30,
+          "label": "RU"
+        },
+        {
+          "tag": "a",
+          "w": 193,
+          "h": 34,
+          "label": "🍕 Telegram (in Russian)"
+        },
+        {
+          "tag": "a",
+          "w": 87,
+          "h": 32,
+          "label": "Statistics"
+        },
+        {
+          "tag": "a",
+          "w": 105,
+          "h": 32,
+          "label": "Metric trees"
+        },
+        {
+          "tag": "a",
+          "w": 83,
+          "h": 32,
+          "label": "Glossary"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "1.Descriptive statistics 📊"
+        },
+        {
+          "tag": "button",
+          "w": 223,
+          "h": 30,
+          "label": "▸\nMean, median and mode"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "2.Probability 🎲"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "3.Distributions 🔔"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "4.From sample to world 🎯"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "5.Hypothesis testing ⚖️"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "6.Experiments: A/B 🧪"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "7.Relationships & regression \ud83d"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "8.Classification 🏷️"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "9.Data traps 🪤"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "10.Bayesian inference 🔄"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "11.Analysis of variance 🧩"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "12.Capstone 🏁"
+        },
+        {
+          "tag": "button",
+          "w": 138,
+          "h": 26,
+          "label": "🔗 share this lesson"
+        },
+        {
+          "tag": "circle",
+          "w": 4,
+          "h": 4,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 13,
+          "h": 13,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 7,
+          "h": 7,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 13,
+          "h": 13,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 7,
+          "h": 7,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 13,
+          "h": 13,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 7,
+          "h": 7,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 13,
+          "h": 13,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 7,
+          "h": 7,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 13,
+          "h": 13,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 7,
+          "h": 7,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 13,
+          "h": 13,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 7,
+          "h": 7,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 13,
+          "h": 13,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 7,
+          "h": 7,
+          "label": ""
+        },
+        {
+          "tag": "button",
+          "w": 78,
+          "h": 42,
+          "label": "+ add a point"
+        },
+        {
+          "tag": "button",
+          "w": 94,
+          "h": 42,
+          "label": "− remove a point"
+        },
+        {
+          "tag": "button",
+          "w": 52,
+          "h": 42,
+          "label": "reset"
+        },
+        {
+          "tag": "button",
+          "w": 24,
+          "h": 6,
+          "label": "Step 1"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 2"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 3"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 4"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 5"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 6"
+        },
+        {
+          "tag": "button",
+          "w": 49,
+          "h": 20,
+          "label": "← Back"
+        },
+        {
+          "tag": "button",
+          "w": 83,
+          "h": 36,
+          "label": "Next\n→"
+        },
+        {
+          "tag": "a",
+          "w": 214,
+          "h": 26,
+          "label": "Skewed data: when the mean lie"
+        },
+        {
+          "tag": "a",
+          "w": 162,
+          "h": 26,
+          "label": "Percentiles and the tails"
+        },
+        {
+          "tag": "a",
+          "w": 86,
+          "h": 17,
+          "label": "DataSlice 🍕"
+        },
+        {
+          "tag": "a",
+          "w": 83,
+          "h": 17,
+          "label": "Subscribe →"
+        },
+        {
+          "tag": "a",
+          "w": 121,
+          "h": 17,
+          "label": "Leave feedback →"
+        }
+      ],
+      "imgsNoAlt": [],
+      "svgNoLabel": 1,
+      "overflowX": false,
+      "consoleErrors": []
+    },
+    "desktop_en": {
+      "url": "http://localhost:4203/en/stats/center-measures",
+      "fontSizes": {
+        "14/400": 51,
+        "16/400": 27,
+        "17/400": 20,
+        "12/400": 10,
+        "14/500": 8,
+        "13/400": 8,
+        "16/600": 3,
+        "30/700": 2,
+        "13/500": 2
+      },
+      "uniqueFontSizes": 6,
+      "lowContrast": [
+        {
+          "text": "RU",
+          "size": 12,
+          "weight": "400",
+          "ratio": 3.29,
+          "need": 4.5
+        },
+        {
+          "text": "🍕 Telegram (in Russian)",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "Statistics",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "Metric trees",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "Glossary",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "1.Descriptive statistics 📊",
+          "size": 14,
+          "weight": "500",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "1.",
+          "size": 14,
+          "weight": "500",
+          "ratio": 1.11,
+          "need": 4.5
+        },
+        {
+          "text": "📊",
+          "size": 14,
+          "weight": "500",
+          "ratio": 2.54,
+          "need": 4.5
+        },
+        {
+          "text": "▸\nMean, median and mode",
+          "size": 13,
+          "weight": "500",
+          "ratio": 1.18,
+          "need": 4.5
+        },
+        {
+          "text": "Mean, median and mode",
+          "size": 13,
+          "weight": "500",
+          "ratio": 1.18,
+          "need": 4.5
+        },
+        {
+          "text": "2.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "3.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "4.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "5.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "6.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "7.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "8.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "9.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "10.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "11.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "12.",
+          "size": 14,
+          "weight": "400",
+          "ratio": 2.41,
+          "need": 4.5
+        },
+        {
+          "text": "●\nMean: 35.9 k",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        },
+        {
+          "text": "At the scale of a whole country this is ",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "And the rule is wider than salaries: ser",
+          "size": 14,
+          "weight": "400",
+          "ratio": 3.72,
+          "need": 4.5
+        },
+        {
+          "text": "This site is built by the DataSlice Tele",
+          "size": 14,
+          "weight": "400",
+          "ratio": 4.49,
+          "need": 4.5
+        }
+      ],
+      "smallTargets": [
+        {
+          "tag": "a",
+          "w": 39,
+          "h": 30,
+          "label": "RU"
+        },
+        {
+          "tag": "a",
+          "w": 193,
+          "h": 34,
+          "label": "🍕 Telegram (in Russian)"
+        },
+        {
+          "tag": "a",
+          "w": 87,
+          "h": 32,
+          "label": "Statistics"
+        },
+        {
+          "tag": "a",
+          "w": 105,
+          "h": 32,
+          "label": "Metric trees"
+        },
+        {
+          "tag": "a",
+          "w": 83,
+          "h": 32,
+          "label": "Glossary"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "1.Descriptive statistics 📊"
+        },
+        {
+          "tag": "button",
+          "w": 223,
+          "h": 30,
+          "label": "▸\nMean, median and mode"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "2.Probability 🎲"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "3.Distributions 🔔"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "4.From sample to world 🎯"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "5.Hypothesis testing ⚖️"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "6.Experiments: A/B 🧪"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "7.Relationships & regression \ud83d"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "8.Classification 🏷️"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "9.Data traps 🪤"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "10.Bayesian inference 🔄"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "11.Analysis of variance 🧩"
+        },
+        {
+          "tag": "button",
+          "w": 244,
+          "h": 32,
+          "label": "12.Capstone 🏁"
+        },
+        {
+          "tag": "button",
+          "w": 138,
+          "h": 26,
+          "label": "🔗 share this lesson"
+        },
+        {
+          "tag": "circle",
+          "w": 11,
+          "h": 11,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 39,
+          "h": 39,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 21,
+          "h": 21,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 39,
+          "h": 39,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 21,
+          "h": 21,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 39,
+          "h": 39,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 21,
+          "h": 21,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 39,
+          "h": 39,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 21,
+          "h": 21,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 39,
+          "h": 39,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 21,
+          "h": 21,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 39,
+          "h": 39,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 21,
+          "h": 21,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 39,
+          "h": 39,
+          "label": ""
+        },
+        {
+          "tag": "circle",
+          "w": 21,
+          "h": 21,
+          "label": ""
+        },
+        {
+          "tag": "button",
+          "w": 96,
+          "h": 26,
+          "label": "+ add a point"
+        },
+        {
+          "tag": "button",
+          "w": 117,
+          "h": 26,
+          "label": "− remove a point"
+        },
+        {
+          "tag": "button",
+          "w": 52,
+          "h": 26,
+          "label": "reset"
+        },
+        {
+          "tag": "button",
+          "w": 24,
+          "h": 6,
+          "label": "Step 1"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 2"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 3"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 4"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 5"
+        },
+        {
+          "tag": "button",
+          "w": 12,
+          "h": 6,
+          "label": "Step 6"
+        },
+        {
+          "tag": "button",
+          "w": 49,
+          "h": 20,
+          "label": "← Back"
+        },
+        {
+          "tag": "button",
+          "w": 83,
+          "h": 36,
+          "label": "Next\n→"
+        },
+        {
+          "tag": "a",
+          "w": 214,
+          "h": 26,
+          "label": "Skewed data: when the mean lie"
+        },
+        {
+          "tag": "a",
+          "w": 162,
+          "h": 26,
+          "label": "Percentiles and the tails"
+        },
+        {
+          "tag": "button",
+          "w": 768,
+          "h": 40,
+          "label": "We found the center — but how "
+        },
+        {
+          "tag": "button",
+          "w": 205,
+          "h": 36,
+          "label": "Next →\nSpread and standard dev"
+        },
+        {
+          "tag": "a",
+          "w": 86,
+          "h": 17,
+          "label": "DataSlice 🍕"
+        },
+        {
+          "tag": "a",
+          "w": 83,
+          "h": 17,
+          "label": "Subscribe →"
+        },
+        {
+          "tag": "a",
+          "w": 121,
+          "h": 17,
+          "label": "Leave feedback →"
+        }
+      ],
+      "imgsNoAlt": [],
+      "svgNoLabel": 1,
+      "overflowX": false,
+      "consoleErrors": []
+    }
+  }
+}

@@ -3,7 +3,7 @@
   "module": 2,
   "title": "Randomness and the law of large numbers",
   "tier": 1,
-  "intro": "Data almost always contains randomness. Before drawing conclusions from it, you need to see how chance behaves. Let's start with the simplest random event — a coin flip.",
+  "intro": "In the previous lesson we agreed that every event has a probability, and learned to combine them. But where does that probability come from, and where can you actually \"see\" it in the data? It turns out you can't spot it in a single flip — it emerges only over a long series: the more repetitions, the closer the observed share gets to the true probability. That is the law we'll explore on the simplest experiment — a coin flip.",
   "widget": "coin-flips",
   "beats": [
     {
@@ -19,8 +19,8 @@
     },
     {
       "text": "Move the probability p, say to 0.30 (a biased coin). Now the share converges not to 0.5 but to 0.30. Probability IS the number the share tends to over the long run.",
-      "predict": "Five tails in a row. Is a tails-heavy coin now \"due\" for heads to even things out?",
-      "reveal": "No — the coin has no memory, and the next flip is still 50/50. That is the gambler's fallacy: people expect randomness to \"correct itself\" in the next few flips. In reality the share evens out not because misses get compensated, but because new flips dissolve the old imbalance in a large count."
+      "predict": "Five tails came up in a row. Do you think heads is now more likely, to \"even out\" the balance?",
+      "reveal": "No — the coin has no memory of past flips, and the next one is still 50/50. Expecting heads to \"catch up\" after a run of tails is the gambler's fallacy. The share evens out not because the imbalance is deliberately compensated, but because new flips simply dissolve it into the larger mass."
     },
     {
       "text": "Convergence is slow: to cut the typical wobble of the share in half you need four times more flips (the spread falls as 1/√n). So going from 100 observations to 400 stabilizes the estimate noticeably, while 100 → 110 barely does. We will meet this √n again when we measure how precise a sample estimate is."
@@ -49,8 +49,8 @@
   ],
   "practiceTitle": "Why sample size matters",
   "practice": [
-    "That is why \"we have 50% conversion\" based on five visitors means nothing — too few trials, the share is still bouncing. On five thousand — now you can believe it.",
-    "Sample size is not a formality but a condition of reliability: it is what turns random noise into a stable estimate."
+    "A direct consequence for analytics: the figure \"we have 50% conversion\" from five visitors means almost nothing — there are far too few trials, and the share swings wildly from case to case. On five thousand the same share is already close to the true one, and can be trusted.",
+    "So sample size is not a formality but a condition of reliability: it is what turns random noise into a stable estimate."
   ],
   "realLife": [
     "Casinos and insurers live off the law of large numbers: a single game or claim can lose money, but over a million events the total is predictable and stable.",

@@ -30,7 +30,10 @@
       }
     },
     {
-      "text": "What if the events are DEPENDENT? Then P(A∩B) = P(A)·P(B | A), where P(B | A) is the probability of B given that A has ALREADY happened. That is conditional probability — the bridge to the next lesson, where we will see how it deceives on rare events (medical tests, fraud detection)."
+      "text": "What if the events are DEPENDENT? Then P(A∩B) = P(A)·P(B | A), where P(B | A) is the probability of B given that A has ALREADY happened. That is conditional probability — the bridge to the next lesson, where we will see how it deceives on rare events (medical tests, fraud detection).",
+      "widget": {
+        "highlight": "intersection"
+      }
     }
   ],
   "definitions": [

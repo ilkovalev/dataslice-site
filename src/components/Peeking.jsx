@@ -143,7 +143,7 @@ export default function Peeking({ sequential = false, locale = 'ru' }) {
             : (en ? 'No effect: over the whole test the line never dropped under the threshold.' : 'Эффекта нет: за весь тест линия не опустилась под порог.'))}
       </div>}
 
-      <div className="flex gap-2 mt-3">
+      <div className="flex flex-wrap gap-2 mt-3">
         <button onClick={() => run(1)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{en ? '+1 test (one trajectory)' : '+1 тест (одна траектория)'}</button>
         <button onClick={() => run(50)} className="text-xs px-3 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{en ? '+50 tests' : '+50 тестов'}</button>
         <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? (en ? '⏸ stop' : '⏸ стоп') : (en ? '▶ auto-run' : '▶ автопрогон')}</button>

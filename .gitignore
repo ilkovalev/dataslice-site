@@ -6,3 +6,8 @@ dist
 *.log
 .vercel
 _*.mjs
+
+# Артефакты дизайн-ревью: скриншоты и метрики генерируются заново каждый прогон.
+# Отчёты (reports/*.md, goal-progress.md) — версионируем, шоты/метрики — нет.
+.claude/skills/design-review/reports/shots/
+.claude/skills/design-review/reports/scan-behavior.json

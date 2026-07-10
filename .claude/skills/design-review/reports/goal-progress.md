@@ -70,12 +70,12 @@
 - [x] overfitting — Переобучение — +simple к 3 (Недообучение атомарно, без)
 - [x] roc — ROC-кривая и AUC — +simple к 4
 
-## Модуль 9
-- [ ] data-leakage — Утечка данных (data leakage)
-- [ ] goodhart — Закон Гудхарта: метрика как цель
-- [ ] regression-to-mean — Регрессия к среднему
-- [ ] simpson-paradox — Парадокс Симпсона
-- [ ] survivorship-bias — Ошибка выжившего
+## Модуль 9  (не был доведён — +simple к 15 определениям)
+- [x] data-leakage — Утечка данных — +simple к 4
+- [x] goodhart — Закон Гудхарта — +simple к 3
+- [x] regression-to-mean — Регрессия к среднему — +simple к 3
+- [x] simpson-paradox — Парадокс Симпсона — +simple к 3
+- [x] survivorship-bias — Ошибка выжившего — +simple к 2
 
 ## Модуль 10
 - [ ] bayesian-ab — Байесовский A/B: вероятность, что B лучше A

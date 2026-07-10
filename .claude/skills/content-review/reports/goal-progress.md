@@ -12,7 +12,7 @@
 
 - [x] Модуль 3 (5 ур.): continuous-distributions, discrete-distributions, identify-distribution, normal-distribution, skew-tail
 
-- [ ] Модуль 4 (4 ур.): bootstrap, clt, confidence-intervals, sampling-statistic
+- [x] Модуль 4 (4 ур.): bootstrap, clt, confidence-intervals, sampling-statistic
 
 - [ ] Модуль 5 (6 ур.): ci-vs-pvalue, hypothesis-intro, hypothesis-test, power-sample-size, stat-criteria, variance-reduction
 
@@ -62,3 +62,7 @@ predict/reveal; обозначения P(·) и «|» разжёваны в cond
 **Модуль 3** — 5/5 прошли novice-test без правок. PMF/CDF и «плотность = площадь, не высота» разжёваны;
 z-оценка на росте 192→z=2; identify-distribution даёт рабочий чек-лист (гистограмма первой, бимодальность→сегмент,
 Q-Q, дисперсия≈среднее→Пуассон). Пустые `simple` у μ/σ — корректно (атомарны, text уже человеческий).
+
+**Модуль 4** — 4/4 прошли novice-test без правок. «Оценка = случайная величина» держит весь вывод;
+трактовка «95% доверия» дана корректно (частотная, заблуждение снято явно); бутстреп связан с ЦПТ
+и честно ограничен («мусор на входе → уверенно посчитанный мусор»). Сильнейший блок курса.

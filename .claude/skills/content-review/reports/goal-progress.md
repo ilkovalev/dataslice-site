@@ -8,7 +8,7 @@
 
 - [x] Модуль 1 (5 ур.): center-measures, histogram, outliers, percentiles, spread
 
-- [ ] Модуль 2 (4 ур.): conditional-bayes, probability-basics, probability-lln, random-variable
+- [x] Модуль 2 (4 ур.): conditional-bayes, probability-basics, probability-lln, random-variable
 
 - [ ] Модуль 3 (5 ур.): continuous-distributions, discrete-distributions, identify-distribution, normal-distribution, skew-tail
 
@@ -54,3 +54,7 @@
 **Модуль 1** — 5/5 прошли novice-test без правок. Эталонный модуль: мотивация→провал→predict/reveal,
 сквозной пример «Мама Джонс» доказывает мысль, `simple` у всех определений непустые и не дублируют text.
 Правок по достаточности не требуется (добавлять нечего, воды нет).
+
+**Модуль 2** — 4/4 прошли novice-test без правок. Ошибка игрока и база-ставка (90%→8%) поданы через
+predict/reveal; обозначения P(·) и «|» разжёваны в conditional-bayes. Пустой `simple` у «Испытание» —
+корректно: term атомарный («одно случайное наблюдение — бросок монеты»), дубль не нужен (правило 11).

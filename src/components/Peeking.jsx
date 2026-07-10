@@ -94,17 +94,17 @@ export default function Peeking({ sequential = false, locale = 'ru' }) {
         {sequential ? (
           <>
             <path d={dBound} fill="none" stroke="#fbbf24" strokeWidth="1.8" strokeDasharray="5 4" />
-            <text x={sx(DESIGN_DAY)} y={syP(0.05) + 14} fill="#c69214" fontSize="10" textAnchor="end">{en ? 'α-spending boundary' : 'граница α-spending'}</text>
+            <text x={sx(DESIGN_DAY)} y={syP(0.05) + 14} fill="#c69214" fontSize="12" textAnchor="end">{en ? 'α-spending boundary' : 'граница α-spending'}</text>
           </>
         ) : (
           <>
             <line x1={PAD} y1={syP(0.05)} x2={W - PAD} y2={syP(0.05)} stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="5 4" />
-            <text x={W - PAD} y={syP(0.05) - 4} fill="#c69214" fontSize="10" textAnchor="end">{en ? 'threshold 0.05' : 'порог 0.05'}</text>
+            <text x={W - PAD} y={syP(0.05) - 4} fill="#c69214" fontSize="12" textAnchor="end">{en ? 'threshold 0.05' : 'порог 0.05'}</text>
           </>
         )}
         {/* линия запланированного размера (дизайн) */}
         <line x1={sx(DESIGN_DAY)} y1={16} x2={sx(DESIGN_DAY)} y2={H1 - 28} stroke="#2a2f3a" strokeWidth="1.2" strokeDasharray="3 3" />
-        <text x={sx(DESIGN_DAY)} y={14} fill="#2a2f3a" fontSize="9" textAnchor="middle">{en ? 'plan (design)' : 'план (дизайн)'}</text>
+        <text x={sx(DESIGN_DAY)} y={14} fill="#2a2f3a" fontSize="11" textAnchor="middle">{en ? 'plan (design)' : 'план (дизайн)'}</text>
         <line x1={PAD} y1={H1 - 28} x2={W - PAD} y2={H1 - 28} stroke="#d6cebf" strokeWidth="1.5" />
         {/* облако прошлых тестов: каждая бледная линия — отдельный A/A-эксперимент */}
         {ghosts.map((g, gi) => (
@@ -113,19 +113,19 @@ export default function Peeking({ sequential = false, locale = 'ru' }) {
         ))}
         {traj && <path d={dP} fill="none" stroke={traj.everBelow ? '#f87171' : '#2ab8eb'} strokeWidth="2" />}
         {traj && <circle cx={sx(DESIGN_DAY)} cy={syP(traj.finalP)} r="4" fill={traj.finalP < 0.05 ? '#16a34a' : '#6b7280'} />}
-        <text x={PAD} y={H1 - 10} fill="#6b7280" fontSize="10" textAnchor="start">{en ? 'test day (the sample accumulates) →' : 'день теста (выборка копится) →'}</text>
-        <text x={PAD} y={12} fill="#6b7280" fontSize="10" textAnchor="start">p-value ↑</text>
+        <text x={PAD} y={H1 - 10} fill="#6b7280" fontSize="12" textAnchor="start">{en ? 'test day (the sample accumulates) →' : 'день теста (выборка копится) →'}</text>
+        <text x={PAD} y={12} fill="#6b7280" fontSize="12" textAnchor="start">p-value ↑</text>
       </svg>
 
       {/* График 2: накопление выборки */}
       <svg viewBox={`0 0 ${W} ${H2}`} className="w-full h-auto select-none mt-1">
         <line x1={PAD} y1={syN(DESIGN_N)} x2={W - PAD} y2={syN(DESIGN_N)} stroke="#2ab8eb" strokeWidth="1.3" strokeDasharray="5 4" />
-        <text x={W - PAD} y={syN(DESIGN_N) - 4} fill="#0d7fb0" fontSize="10" textAnchor="end">{en ? `required size by design (${DESIGN_N})` : `нужный размер по дизайну (${DESIGN_N})`}</text>
+        <text x={W - PAD} y={syN(DESIGN_N) - 4} fill="#0d7fb0" fontSize="12" textAnchor="end">{en ? `required size by design (${DESIGN_N})` : `нужный размер по дизайну (${DESIGN_N})`}</text>
         <line x1={sx(DESIGN_DAY)} y1={16} x2={sx(DESIGN_DAY)} y2={H2 - 26} stroke="#2a2f3a" strokeWidth="1.2" strokeDasharray="3 3" />
         <line x1={PAD} y1={H2 - 26} x2={W - PAD} y2={H2 - 26} stroke="#d6cebf" strokeWidth="1.5" />
         {traj && <path d={dN} fill="none" stroke="#9ca3af" strokeWidth="2" />}
-        <text x={PAD} y={H2 - 9} fill="#6b7280" fontSize="10" textAnchor="start">{en ? 'test day →' : 'день теста →'}</text>
-        <text x={PAD} y={14} fill="#6b7280" fontSize="10" textAnchor="start">{en ? 'observations accumulated ↑' : 'накоплено наблюдений ↑'}</text>
+        <text x={PAD} y={H2 - 9} fill="#6b7280" fontSize="12" textAnchor="start">{en ? 'test day →' : 'день теста →'}</text>
+        <text x={PAD} y={14} fill="#6b7280" fontSize="12" textAnchor="start">{en ? 'observations accumulated ↑' : 'накоплено наблюдений ↑'}</text>
       </svg>
 
       <div className="flex flex-wrap gap-2 mt-2">

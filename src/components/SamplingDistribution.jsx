@@ -74,10 +74,10 @@ export default function SamplingDistribution({ locale = 'ru' }) {
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none">
         {/* истинное среднее — общая вертикаль через все панели */}
         <line x1={sx(popMean)} y1={A0} x2={sx(popMean)} y2={C1} stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="5 4" />
-        <text x={sx(popMean)} y={A0 - 4} fill="#d9a300" fontSize="10" textAnchor="middle">{en ? 'true mean ' : 'истинное среднее '}{popMean.toFixed(1)}</text>
+        <text x={sx(popMean)} y={A0 - 4} fill="#d9a300" fontSize="12" textAnchor="middle">{en ? 'true mean ' : 'истинное среднее '}{popMean.toFixed(1)}</text>
 
         {/* панель 1: совокупность */}
-        <text x={PAD} y={A0 + 8} fill="#6b7280" fontSize="10">{en ? '1 · population (skewed)' : '1 · генеральная совокупность (скошена)'}</text>
+        <text x={PAD} y={A0 + 8} fill="#6b7280" fontSize="12">{en ? '1 · population (skewed)' : '1 · генеральная совокупность (скошена)'}</text>
         {popBins.map((c, k) => {
           const h = (c / popMax) * (A1 - A0 - 14)
           return c ? <rect key={k} x={sx((k / BINS) * DOM) + 0.5} y={A1 - h} width={(W - 2 * PAD) / BINS - 1} height={h} fill="#9ca3af" opacity="0.55" /> : null
@@ -85,14 +85,14 @@ export default function SamplingDistribution({ locale = 'ru' }) {
         <line x1={PAD} y1={A1} x2={W - PAD} y2={A1} stroke="#d6cebf" strokeWidth="1" />
 
         {/* панель 2: одна выборка + её среднее */}
-        <text x={PAD} y={B0 + 2} fill="#6b7280" fontSize="10">{en ? <>2 · one sample (n = {n}) and its mean</> : <>2 · одна выборка (n = {n}) и её среднее</>}</text>
+        <text x={PAD} y={B0 + 2} fill="#6b7280" fontSize="12">{en ? <>2 · one sample (n = {n}) and its mean</> : <>2 · одна выборка (n = {n}) и её среднее</>}</text>
         {last && last.map((v, i) => <circle key={i} cx={sx(v)} cy={B1 - 10} r="3.5" fill="#2a2f3a" opacity="0.6" />)}
         {lastMean != null && <line x1={sx(lastMean)} y1={B0 + 6} x2={sx(lastMean)} y2={B1} stroke="#16a34a" strokeWidth="2" />}
-        {lastMean != null && <text x={sx(lastMean)} y={B0 + 16} fill="#16a34a" fontSize="10" textAnchor="middle">x̄ = {lastMean.toFixed(1)}</text>}
+        {lastMean != null && <text x={sx(lastMean)} y={B0 + 16} fill="#16a34a" fontSize="12" textAnchor="middle">x̄ = {lastMean.toFixed(1)}</text>}
         <line x1={PAD} y1={B1} x2={W - PAD} y2={B1} stroke="#d6cebf" strokeWidth="1" />
 
         {/* панель 3: распределение средних */}
-        <text x={PAD} y={C0 + 2} fill="#6b7280" fontSize="10">{en ? '3 · distribution of sample means → a bell' : '3 · распределение выборочных средних → колокол'}</text>
+        <text x={PAD} y={C0 + 2} fill="#6b7280" fontSize="12">{en ? '3 · distribution of sample means → a bell' : '3 · распределение выборочных средних → колокол'}</text>
         {meanBins.map((c, k) => {
           const h = (c / meanMax) * (C1 - C0 - 16)
           return c ? <rect key={k} x={sx((k / BINS) * DOM) + 0.5} y={C1 - h} width={(W - 2 * PAD) / BINS - 1} height={h} fill="#2ab8eb" opacity="0.8" rx="1" /> : null

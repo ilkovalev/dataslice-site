@@ -67,10 +67,10 @@ export default function PriorPosterior({ locale = 'ru' }) {
         <path d={`${line('po')}`} fill="none" stroke="#2ab8eb" strokeWidth="2.5" />
         <line x1={sx(priorMean)} y1={TOP} x2={sx(priorMean)} y2={BASE} stroke="#9ca3af" strokeWidth="1" strokeDasharray="3 3" />
         <line x1={sx(postMean)} y1={TOP} x2={sx(postMean)} y2={BASE} stroke="#2ab8eb" strokeWidth="1" strokeDasharray="3 3" />
-        <text x={sx(priorMean)} y={TOP - 2} fill="#9ca3af" fontSize="9" textAnchor="middle">{en ? 'prior' : 'априори'} {priorMean.toFixed(2)}</text>
-        <text x={sx(postMean)} y={TOP + 9} fill="#0d7fb0" fontSize="9" textAnchor="middle">{en ? 'result' : 'итог'} {postMean.toFixed(2)}</text>
-        <text x={sx(0)} y={BASE + 16} fill="#9a907c" fontSize="10">0</text>
-        <text x={sx(1)} y={BASE + 16} fill="#9a907c" fontSize="10" textAnchor="end">{en ? '1 · θ (true share/conversion)' : '1 · θ (истинная доля/конверсия)'}</text>
+        <text x={sx(priorMean)} y={TOP - 2} fill="#9ca3af" fontSize="11" textAnchor="middle">{en ? 'prior' : 'априори'} {priorMean.toFixed(2)}</text>
+        <text x={sx(postMean)} y={TOP + 9} fill="#0d7fb0" fontSize="11" textAnchor="middle">{en ? 'result' : 'итог'} {postMean.toFixed(2)}</text>
+        <text x={sx(0)} y={BASE + 16} fill="#9a907c" fontSize="12">0</text>
+        <text x={sx(1)} y={BASE + 16} fill="#9a907c" fontSize="12" textAnchor="end">{en ? '1 · θ (true share/conversion)' : '1 · θ (истинная доля/конверсия)'}</text>
       </svg>
 
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-xs">

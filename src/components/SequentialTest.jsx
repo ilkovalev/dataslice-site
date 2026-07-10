@@ -98,18 +98,18 @@ export default function SequentialTest({ locale = 'ru' }) {
         {seq ? (
           <>
             <path d={dBound} fill="none" stroke="#fbbf24" strokeWidth="1.8" strokeDasharray="5 4" />
-            <text x={sx(DESIGN_DAY)} y={syP(0.05) + 13} fill="#c69214" fontSize="10" textAnchor="end">{en ? 'sequential boundary (α-spending)' : 'последовательная граница (α-spending)'}</text>
+            <text x={sx(DESIGN_DAY)} y={syP(0.05) + 13} fill="#c69214" fontSize="12" textAnchor="end">{en ? 'sequential boundary (α-spending)' : 'последовательная граница (α-spending)'}</text>
           </>
         ) : (
           <>
             <rect x={PAD} y={syP(0.05)} width={W - 2 * PAD} height={H - 28 - syP(0.05)} fill="#f87171" opacity="0.06" />
             <line x1={PAD} y1={syP(0.05)} x2={W - PAD} y2={syP(0.05)} stroke="#fbbf24" strokeWidth="1.6" strokeDasharray="5 4" />
-            <text x={W - PAD} y={syP(0.05) - 4} fill="#c69214" fontSize="10" textAnchor="end">{en ? 'naive 0.05 threshold' : 'наивный порог 0.05'}</text>
+            <text x={W - PAD} y={syP(0.05) - 4} fill="#c69214" fontSize="12" textAnchor="end">{en ? 'naive 0.05 threshold' : 'наивный порог 0.05'}</text>
           </>
         )}
         {/* плановый день */}
         <line x1={sx(DESIGN_DAY)} y1={16} x2={sx(DESIGN_DAY)} y2={H - 28} stroke="#2a2f3a" strokeWidth="1.2" strokeDasharray="3 3" />
-        <text x={sx(DESIGN_DAY)} y={14} fill="#2a2f3a" fontSize="9" textAnchor="middle">{en ? 'plan (design)' : 'план (дизайн)'}</text>
+        <text x={sx(DESIGN_DAY)} y={14} fill="#2a2f3a" fontSize="11" textAnchor="middle">{en ? 'plan (design)' : 'план (дизайн)'}</text>
         <line x1={PAD} y1={H - 28} x2={W - PAD} y2={H - 28} stroke="#d6cebf" strokeWidth="1.5" />
 
         {/* облако прошлых тестов; красные — те, что пересекли выбранную границу */}
@@ -123,13 +123,13 @@ export default function SequentialTest({ locale = 'ru' }) {
         {traj && curStop && (
           <>
             <circle cx={sx(curStop)} cy={syP(traj.pts[curStop - 1].p)} r="5" fill={traj.hasEffect ? '#16a34a' : '#f87171'} />
-            <text x={sx(curStop)} y={syP(traj.pts[curStop - 1].p) - 9} fill={traj.hasEffect ? '#16a34a' : '#f87171'} fontSize="10" textAnchor="middle">
+            <text x={sx(curStop)} y={syP(traj.pts[curStop - 1].p) - 9} fill={traj.hasEffect ? '#16a34a' : '#f87171'} fontSize="12" textAnchor="middle">
               {traj.hasEffect ? (en ? 'early stop' : 'ранняя остановка') : (en ? 'false stop' : 'ложная остановка')}
             </text>
           </>
         )}
-        <text x={PAD} y={H - 10} fill="#6b7280" fontSize="10" textAnchor="start">{en ? 'test day (the sample accumulates) →' : 'день теста (выборка копится) →'}</text>
-        <text x={PAD} y={12} fill="#6b7280" fontSize="10" textAnchor="start">p-value ↑</text>
+        <text x={PAD} y={H - 10} fill="#6b7280" fontSize="12" textAnchor="start">{en ? 'test day (the sample accumulates) →' : 'день теста (выборка копится) →'}</text>
+        <text x={PAD} y={12} fill="#6b7280" fontSize="12" textAnchor="start">p-value ↑</text>
       </svg>
 
       {/* выбор границы */}

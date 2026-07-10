@@ -100,11 +100,11 @@ export default function PowerCurve({ locale = 'ru' }) {
         <path d={curvePts(diff)} fill="none" stroke="#2ab8eb" strokeWidth="2.5" />
         {/* порог */}
         <line x1={sxD(crit)} y1={TOP - 6} x2={sxD(crit)} y2={base} stroke="#2a2f3a" strokeWidth="1.3" strokeDasharray="4 3" />
-        <text x={sxD(crit)} y={TOP - 10} fill="#2a2f3a" fontSize="10" textAnchor="middle">{en ? 'critical value' : 'критич. значение'}</text>
+        <text x={sxD(crit)} y={TOP - 10} fill="#2a2f3a" fontSize="12" textAnchor="middle">{en ? 'critical value' : 'критич. значение'}</text>
         {/* центры */}
-        <text x={sxD(0)} y={base + 14} fill="#6b7280" fontSize="10" textAnchor="middle">0</text>
-        <text x={sxD(diff)} y={base + 14} fill="#0d7fb0" fontSize="10" textAnchor="middle">MDE = +{Math.round(diff)} ₽ ({mde}%)</text>
-        <text x={PADX} y={base + 28} fill="#9a907c" fontSize="10" textAnchor="start">{en ? 'estimate of the between-group mean difference, ₽ →' : 'оценка разницы средних между группами, ₽ →'}</text>
+        <text x={sxD(0)} y={base + 14} fill="#6b7280" fontSize="12" textAnchor="middle">0</text>
+        <text x={sxD(diff)} y={base + 14} fill="#0d7fb0" fontSize="12" textAnchor="middle">MDE = +{Math.round(diff)} ₽ ({mde}%)</text>
+        <text x={PADX} y={base + 28} fill="#9a907c" fontSize="12" textAnchor="start">{en ? 'estimate of the between-group mean difference, ₽ →' : 'оценка разницы средних между группами, ₽ →'}</text>
       </svg>
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs mt-1 mb-1">
         <span className="text-gray-500"><span className="inline-block w-3 h-0.5 align-middle bg-[#9ca3af]" /> {en ? 'H0: no effect' : 'H0: эффекта нет'}</span>
@@ -119,14 +119,14 @@ export default function PowerCurve({ locale = 'ru' }) {
         <line x1={PADX} y1={HP - 34} x2={W - PADX} y2={HP - 34} stroke="#d6cebf" strokeWidth="1.5" />
         <line x1={PADX} y1={TOP} x2={PADX} y2={HP - 34} stroke="#d6cebf" strokeWidth="1.5" />
         <line x1={PADX} y1={sy(target)} x2={W - PADX} y2={sy(target)} stroke="#fbbf24" strokeWidth="1.5" strokeDasharray="5 4" />
-        <text x={W - PADX} y={sy(target) - 5} fill="#c69214" fontSize="10" textAnchor="end">{en ? 'target ' : 'цель '}{(target * 100).toFixed(0)}%</text>
+        <text x={W - PADX} y={sy(target) - 5} fill="#c69214" fontSize="12" textAnchor="end">{en ? 'target ' : 'цель '}{(target * 100).toFixed(0)}%</text>
         <path d={dd} fill="none" stroke="#2ab8eb" strokeWidth="2" />
         {/* маркер текущего n */}
         <line x1={sx(Math.min(n, NMAX))} y1={TOP} x2={sx(Math.min(n, NMAX))} y2={HP - 34} stroke="#2a2f3a" strokeWidth="1" strokeDasharray="3 3" />
         <circle cx={sx(Math.min(n, NMAX))} cy={sy(curPower)} r="4" fill="#2ab8eb" />
-        <text x={sx(Math.min(n, NMAX))} y={HP - 20} fill="#2a2f3a" fontSize="10" textAnchor="middle">n = {n}</text>
-        <text x={PADX} y={TOP - 12} fill="#6b7280" fontSize="10" textAnchor="start">{en ? 'power ↑' : 'мощность ↑'}</text>
-        <text x={W - PADX} y={HP - 8} fill="#6b7280" fontSize="10" textAnchor="end">{en ? 'sample size n →' : 'размер выборки n →'}</text>
+        <text x={sx(Math.min(n, NMAX))} y={HP - 20} fill="#2a2f3a" fontSize="12" textAnchor="middle">n = {n}</text>
+        <text x={PADX} y={TOP - 12} fill="#6b7280" fontSize="12" textAnchor="start">{en ? 'power ↑' : 'мощность ↑'}</text>
+        <text x={W - PADX} y={HP - 8} fill="#6b7280" fontSize="12" textAnchor="end">{en ? 'sample size n →' : 'размер выборки n →'}</text>
       </svg>
 
       <div className="mt-1 text-sm">

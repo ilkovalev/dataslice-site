@@ -27,7 +27,7 @@ for (const slug of slugs) {
     await page.waitForTimeout(500)
     const m = await page.evaluate(() => ({
       overflowX: document.documentElement.scrollWidth > window.innerWidth + 2,
-      svgNoLabel: [...document.querySelectorAll('svg')].filter(s => !s.getAttribute('aria-label') && !s.querySelector('title') && !s.closest('[aria-label],[role=img],[role=figure]') && s.getBoundingClientRect().width > 80).length,
+      svgNoLabel: [...document.querySelectorAll('svg')].filter(s => !s.getAttribute('aria-label') && !s.querySelector('title') && !s.closest('[aria-label],[role=img],[role=figure],.katex') && s.getBoundingClientRect().width > 80).length,
       notReady: /виджет «.*» ещё не готов/.test(document.body.innerText),
     }))
     row.overflowX = m.overflowX; row.svgNoLabel = m.svgNoLabel; row.notReady = m.notReady

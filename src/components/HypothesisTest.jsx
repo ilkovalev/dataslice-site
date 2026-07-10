@@ -88,11 +88,11 @@ export default function HypothesisTest({ locale = 'ru' }) {
         <path d={curve(delta)} fill="none" stroke="#2ab8eb" strokeWidth="2" />
         <line x1={sx(crit)} y1={PAD - 6} x2={sx(crit)} y2={BASE} stroke="#2a2f3a" strokeWidth="1.5" strokeDasharray="4 3" />
         {twoSided && <line x1={sx(-crit)} y1={PAD - 6} x2={sx(-crit)} y2={BASE} stroke="#2a2f3a" strokeWidth="1.5" strokeDasharray="4 3" />}
-        <text x={sx(0)} y={PAD - 8} fill="#6b7280" fontSize="11" textAnchor="middle">{en ? 'H0: no effect' : 'H0: эффекта нет'}</text>
-        <text x={sx(delta)} y={PAD - 8} fill="#2ab8eb" fontSize="11" textAnchor="middle">{en ? 'H1: true effect = +' : 'H1: истинный эффект = +'}{Math.round(delta)} ₽</text>
-        <text x={sx(crit)} y={BASE + 15} fill="#2a2f3a" fontSize="13" textAnchor="middle">{en ? 'critical value' : 'критич. значение'}</text>
-        <text x={sx((crit + DMAX) / 2)} y={BASE - 6} fill="#c69214" fontSize="13" textAnchor="middle">α</text>
-        <text x={sx((crit + delta) / 2)} y={BASE - 6} fill="#dc4d4d" fontSize="13" textAnchor="middle">β</text>
+        <text x={sx(0)} y={PAD - 8} fill="#6b7280" fontSize="10" textAnchor="middle">{en ? 'H0: no effect' : 'H0: эффекта нет'}</text>
+        <text x={sx(delta)} y={PAD - 8} fill="#2ab8eb" fontSize="10" textAnchor="middle">{en ? 'H1: true effect = +' : 'H1: истинный эффект = +'}{Math.round(delta)} ₽</text>
+        <text x={sx(crit)} y={BASE + 14} fill="#2a2f3a" fontSize="10" textAnchor="middle">{en ? 'critical value' : 'критич. значение'}</text>
+        <text x={sx((crit + DMAX) / 2)} y={BASE - 6} fill="#c69214" fontSize="9" textAnchor="middle">α</text>
+        <text x={sx((crit + delta) / 2)} y={BASE - 6} fill="#dc4d4d" fontSize="9" textAnchor="middle">β</text>
       </svg>
 
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm">

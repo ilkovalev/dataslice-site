@@ -80,7 +80,7 @@ export default function OutlierActions({ locale = 'ru' }) {
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none">
         {/* гистограмма формы */}
-        <text x={PAD} y={HIST_TOP - 22} fill="#6b7280" fontSize="12">{l.hist}</text>
+        <text x={PAD} y={HIST_TOP - 22} fill="#6b7280" fontSize="10">{l.hist}</text>
         {counts.map((c, k) => {
           const h = (c / maxC) * (HIST_BOT - HIST_TOP)
           return c > 0 ? <rect key={k} x={sx(k * binW) + 1} y={HIST_BOT - h} width={Math.max(0, (W - 2 * PAD) / bins - 2)} height={h} fill="#2ab8eb" opacity="0.8" rx="1.5" /> : null
@@ -88,7 +88,7 @@ export default function OutlierActions({ locale = 'ru' }) {
         <line x1={PAD} y1={HIST_BOT} x2={W - PAD} y2={HIST_BOT} stroke="#d6cebf" strokeWidth="1.5" />
 
         {/* боксплот */}
-        <text x={PAD} y={BOX_Y - 20} fill="#6b7280" fontSize="12">{l.box}</text>
+        <text x={PAD} y={BOX_Y - 20} fill="#6b7280" fontSize="10">{l.box}</text>
         <line x1={sx(whiskLo)} y1={BOX_Y} x2={sx(whiskHi)} y2={BOX_Y} stroke="#0ea5e9" strokeWidth="1.5" />
         <line x1={sx(whiskLo)} y1={BOX_Y - 6} x2={sx(whiskLo)} y2={BOX_Y + 6} stroke="#0ea5e9" strokeWidth="1.5" />
         <line x1={sx(whiskHi)} y1={BOX_Y - 6} x2={sx(whiskHi)} y2={BOX_Y + 6} stroke="#0ea5e9" strokeWidth="1.5" />
@@ -97,7 +97,7 @@ export default function OutlierActions({ locale = 'ru' }) {
         {outs.map((o, i) => <circle key={i} cx={sx(o)} cy={BOX_Y} r="4.5" fill="#dc4d4d" />)}
 
         {/* точки + среднее/медиана */}
-        <text x={PAD} y={DOT_Y - 24} fill="#6b7280" fontSize="12">{l.dots}</text>
+        <text x={PAD} y={DOT_Y - 24} fill="#6b7280" fontSize="10">{l.dots}</text>
         <line x1={PAD} y1={DOT_Y} x2={W - PAD} y2={DOT_Y} stroke="#d6cebf" strokeWidth="1.5" />
         {data.map((v, i) => <circle key={i} cx={sx(v)} cy={DOT_Y} r="4.5" fill={outs.includes(v) ? '#dc4d4d' : '#2a2f3a'} opacity="0.6" />)}
         <line x1={sx(mean)} y1={DOT_Y - 18} x2={sx(mean)} y2={DOT_Y + 6} stroke="#16a34a" strokeWidth="2" />

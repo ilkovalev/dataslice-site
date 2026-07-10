@@ -14,7 +14,7 @@
 
 - [x] Модуль 4 (4 ур.): bootstrap, clt, confidence-intervals, sampling-statistic
 
-- [ ] Модуль 5 (6 ур.): ci-vs-pvalue, hypothesis-intro, hypothesis-test, power-sample-size, stat-criteria, variance-reduction
+- [x] Модуль 5 (6 ур.): ci-vs-pvalue, hypothesis-intro, hypothesis-test, power-sample-size, stat-criteria, variance-reduction
 
 - [ ] Модуль 6 (9 ур.): ab-process, ab-test, evidence-pyramid, experiment-metrics, multiple-comparisons, network-effects, peeking, segments-cate, sequential-tests
 
@@ -66,3 +66,14 @@ Q-Q, дисперсия≈среднее→Пуассон). Пустые `simple
 **Модуль 4** — 4/4 прошли novice-test без правок. «Оценка = случайная величина» держит весь вывод;
 трактовка «95% доверия» дана корректно (частотная, заблуждение снято явно); бутстреп связан с ЦПТ
 и честно ограничен («мусор на входе → уверенно посчитанный мусор»). Сильнейший блок курса.
+
+**Модуль 5** — 6/6 прошли novice-test без правок контента. p-value с «чего он НЕ значит», связь CI↔p,
+различение «A/B-метод vs стат-критерий» (t/z/Манна-Уитни с условиями), CUPED/стратификация. Урок
+`stat-criteria` физически лежит в файле `t-test.json` (имя≠id) — это норма, глоссарий ссылается верно.
+
+### ⚠ ЭСКАЛАЦИЯ владельцу (структурное, не правил сам)
+- **EN-дубль урока stat-criteria.** В `src/content/lessons-en/` ДВА файла с одинаковым `id: stat-criteria`:
+  `t-test.json` («which one to choose») и `stat-criteria.json` («which one to pick»). Загрузчик
+  `lessons-en/index.js` глобит все `*.json` и мапит по `id` → один файл молча затирает другой
+  (по alpha-порядку живёт `t-test.json`, `stat-criteria.json` — осиротевший). Нужно решение: какой
+  оставить, второй удалить. НЕ трогал (правило эскалации).

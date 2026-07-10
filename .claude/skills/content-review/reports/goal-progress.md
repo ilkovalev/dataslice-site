@@ -16,7 +16,7 @@
 
 - [x] Модуль 5 (6 ур.): ci-vs-pvalue, hypothesis-intro, hypothesis-test, power-sample-size, stat-criteria, variance-reduction
 
-- [ ] Модуль 6 (9 ур.): ab-process, ab-test, evidence-pyramid, experiment-metrics, multiple-comparisons, network-effects, peeking, segments-cate, sequential-tests
+- [x] Модуль 6 (9 ур.): ab-process, ab-test, evidence-pyramid, experiment-metrics, multiple-comparisons, network-effects, peeking, segments-cate, sequential-tests
 
 - [ ] Модуль 7 (6 ур.): causality, correlation-types, multiple-regression, regression-assumptions, regression-metrics, regression
 
@@ -77,3 +77,9 @@ Q-Q, дисперсия≈среднее→Пуассон). Пустые `simple
   `lessons-en/index.js` глобит все `*.json` и мапит по `id` → один файл молча затирает другой
   (по alpha-порядку живёт `t-test.json`, `stat-criteria.json` — осиротевший). Нужно решение: какой
   оставить, второй удалить. НЕ трогал (правило эскалации).
+
+**Модуль 6** — 9/9 прошли novice-test без правок. Самый прикладной блок: 5-этапный процесс A/B,
+OEC/proxy/guardrail, пирамида доказательности, подглядывание→α-spending, множественные сравнения
+(FWER/FDR/BH + holdout), ATE/CATE/ITE, SUTVA/интерференция/кластерная рандомизация. Юниор реально
+сможет спроектировать и разобрать A/B. Мелочь (не правил): порядок segments-cate ↔ multiple-comparisons
+задаётся кросс-ссылками, `order` в JSON undefined — вопрос сортировки сайдбара, структурный, не контент.

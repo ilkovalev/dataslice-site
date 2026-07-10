@@ -6,7 +6,7 @@
 
 ## ЧАСТЬ A — Статистика (/stats), 57 уроков в 12 модулях
 
-- [ ] Модуль 1 (5 ур.): center-measures, histogram, outliers, percentiles, spread
+- [x] Модуль 1 (5 ур.): center-measures, histogram, outliers, percentiles, spread
 
 - [ ] Модуль 2 (4 ур.): conditional-bayes, probability-basics, probability-lln, random-variable
 
@@ -50,3 +50,7 @@
 
 ## ЧАСТЬ C — Глоссарий (glossary.js)
 - [ ] термины глоссария понятны новичку
+
+**Модуль 1** — 5/5 прошли novice-test без правок. Эталонный модуль: мотивация→провал→predict/reveal,
+сквозной пример «Мама Джонс» доказывает мысль, `simple` у всех определений непустые и не дублируют text.
+Правок по достаточности не требуется (добавлять нечего, воды нет).

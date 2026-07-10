@@ -20,7 +20,7 @@
 
 - [x] Модуль 7 (6 ур.): causality, correlation-types, multiple-regression, regression-assumptions, regression-metrics, regression
 
-- [ ] Модуль 8 (6 ур.): capstone, class-imbalance, classification, confusion-matrix, overfitting, roc
+- [x] Модуль 8 (6 ур.): capstone, class-imbalance, classification, confusion-matrix, overfitting, roc
 
 - [ ] Модуль 9 (5 ур.): data-leakage, goodhart, regression-to-mean, simpson-paradox, survivorship-bias
 
@@ -88,3 +88,8 @@ OEC/proxy/guardrail, пирамида доказательности, подгл
 МНК с обоснованием квадратов, корреляция≠причинность, множественная регрессия/контроль конфаундера,
 анализ остатков (дуга/веер/рычаг), MAE/RMSE/MAPE/R² по цене ошибки, конфаундер/коллайдер/медиатор
 («не контролируй всё подряд»). Причинный блок особенно силён — превращает лозунг в навык.
+
+**Модуль 8** — 6/6 прошли novice-test без правок. Классификация (счёт+порог = ошибки I/II рода),
+матрица ошибок (ловушка accuracy на редком классе), ROC/AUC (= вероятность ранжирования), дисбаланс
+(PR честнее ROC, F1 гармоническое), переобучение (train/test, U-кривая, кросс-валидация), capstone-рекап.
+Пустой `simple` у «Недообучение» — корректно (атомарно, разъяснено в beat2).

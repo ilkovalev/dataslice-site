@@ -77,15 +77,15 @@
 - [x] simpson-paradox — Парадокс Симпсона — +simple к 3
 - [x] survivorship-bias — Ошибка выжившего — +simple к 2
 
-## Модуль 10
-- [ ] bayesian-ab — Байесовский A/B: вероятность, что B лучше A
-- [ ] bayesian-inference — Байесовский вывод: обновляем мнение данными
-- [ ] naive-bayes — Наивный Байес как классификатор
+## Модуль 10  (не был доведён — +simple)
+- [x] bayesian-ab — Байесовский A/B — +simple к 4
+- [x] bayesian-inference — Байесовский вывод — +simple к 4
+- [x] naive-bayes — Наивный Байес — +simple к 4
 
-## Модуль 11
-- [ ] anova — Дисперсионный анализ (ANOVA): сравниваем много групп
-- [ ] posthoc-anova — После ANOVA: какие именно группы различаются
-- [ ] two-way-anova — Двухфакторная ANOVA и взаимодействия
+## Модуль 11  (не был доведён — +simple)
+- [x] anova — Дисперсионный анализ (ANOVA) — +simple к 4
+- [x] posthoc-anova — После ANOVA — +simple к 4
+- [x] two-way-anova — Двухфакторная ANOVA — +simple к 4
 
-## Модуль 12
-- [ ] capstone-project — Капстоун: разбор реального датасета от и до
+## Модуль 12  (не был доведён — +simple)
+- [x] capstone-project — Капстоун: разбор датасета — +simple к 3

@@ -22,13 +22,13 @@
 
 - [x] Модуль 8 (6 ур.): capstone, class-imbalance, classification, confusion-matrix, overfitting, roc
 
-- [ ] Модуль 9 (5 ур.): data-leakage, goodhart, regression-to-mean, simpson-paradox, survivorship-bias
+- [x] Модуль 9 (5 ур.): data-leakage, goodhart, regression-to-mean, simpson-paradox, survivorship-bias
 
-- [ ] Модуль 10 (3 ур.): bayesian-ab, bayesian-inference, naive-bayes
+- [x] Модуль 10 (3 ур.): bayesian-ab, bayesian-inference, naive-bayes
 
-- [ ] Модуль 11 (3 ур.): anova, posthoc-anova, two-way-anova
+- [x] Модуль 11 (3 ур.): anova, posthoc-anova, two-way-anova
 
-- [ ] Модуль 12 (1 ур.): capstone-project
+- [x] Модуль 12 (1 ур.): capstone-project
 
 ## ЧАСТЬ B — Иерархии метрик (/metrics), 15 индустрий
 
@@ -93,3 +93,10 @@ OEC/proxy/guardrail, пирамида доказательности, подгл
 матрица ошибок (ловушка accuracy на редком классе), ROC/AUC (= вероятность ранжирования), дисбаланс
 (PR честнее ROC, F1 гармоническое), переобучение (train/test, U-кривая, кросс-валидация), capstone-рекап.
 Пустой `simple` у «Недообучение» — корректно (атомарно, разъяснено в beat2).
+
+**Модули 9–12** — 12/12 уроков прошли novice-test без правок (закрыты одним коммитом: правок контента нет).
+- М9 Ловушки: Симпсон, ошибка выжившего (броня где нет пробоин), регрессия к среднему (навык+удача, нужна контрольная), Гудхарт→guardrails, утечка (признак из будущего, split→препроцесс).
+- М10 Байес: prior×likelihood=posterior (данные перебивают априори при большом n), наивный Байес (независимость/сглаживание), байесовский A/B (P(B>A), ожидаемые потери).
+- М11 ANOVA: F=между/внутри, пост-хок Тьюки/FWER двухступенчато, двухфакторная (взаимодействие=CATE, =регрессия).
+- М12 Капстоун: весь цикл на одном датасете; ATE прячет разнонаправленный CATE (mobile+/desktop−).
+Весь курс 57/57 проходит порог «новичок→junior/middle».

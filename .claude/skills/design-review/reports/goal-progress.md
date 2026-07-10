@@ -62,13 +62,13 @@
 - [x] regression-assumptions — Допущения регрессии — +simple к 4
 - [x] regression-metrics — Метрики регрессии — +simple к 4
 
-## Модуль 8
-- [ ] capstone — Итог: ваш путь в данных
-- [ ] class-imbalance — Дисбаланс классов: когда ROC обманывает
-- [ ] classification — Классификация: как машина относит объект к классу
-- [ ] confusion-matrix — Матрица ошибок: precision, recall и ловушка accuracy
-- [ ] overfitting — Переобучение и честная проверка (train/test)
-- [ ] roc — ROC-кривая и AUC
+## Модуль 8  (не был доведён — +simple к 21 определению)
+- [!] capstone — Итог: ваш путь в данных — ФАЙЛ НЕ ПОДКЛЮЧЁН к сайту (см. НАХОДКА_capstone-осиротел.md); решение автора
+- [x] class-imbalance — Дисбаланс классов — +simple к 4
+- [x] classification — Классификация — +simple к 4
+- [x] confusion-matrix — Матрица ошибок — +simple к 5
+- [x] overfitting — Переобучение — +simple к 3 (Недообучение атомарно, без)
+- [x] roc — ROC-кривая и AUC — +simple к 4
 
 ## Модуль 9
 - [ ] data-leakage — Утечка данных (data leakage)

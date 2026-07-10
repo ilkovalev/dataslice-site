@@ -25,7 +25,10 @@ export default function GlossaryPage() {
     .filter((g) => g.terms.length > 0)
 
   return (
-    <div className="max-w-3xl">
+    <div>
+      {/* Список терминов держим узким (читаемая строка), а CTA ниже — на всю
+          ширину контента, как на уроках и /metrics. */}
+      <div className="max-w-3xl">
       <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">{t.glossaryH1}</h1>
       <p className="text-gray-600 mb-5">{t.glossarySub}</p>
 
@@ -67,8 +70,9 @@ export default function GlossaryPage() {
           </dl>
         </section>
       ))}
+      </div>
 
-      {/* Как на уроках и /metrics: путь к подписке замыкает страницу. */}
+      {/* Как на уроках и /metrics: путь к подписке замыкает страницу — на всю ширину. */}
       <div className="mt-10">
         <SubscribeCTA locale={locale} />
       </div>

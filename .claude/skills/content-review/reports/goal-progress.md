@@ -10,7 +10,7 @@
 
 - [x] Модуль 2 (4 ур.): conditional-bayes, probability-basics, probability-lln, random-variable
 
-- [ ] Модуль 3 (5 ур.): continuous-distributions, discrete-distributions, identify-distribution, normal-distribution, skew-tail
+- [x] Модуль 3 (5 ур.): continuous-distributions, discrete-distributions, identify-distribution, normal-distribution, skew-tail
 
 - [ ] Модуль 4 (4 ур.): bootstrap, clt, confidence-intervals, sampling-statistic
 
@@ -58,3 +58,7 @@
 **Модуль 2** — 4/4 прошли novice-test без правок. Ошибка игрока и база-ставка (90%→8%) поданы через
 predict/reveal; обозначения P(·) и «|» разжёваны в conditional-bayes. Пустой `simple` у «Испытание» —
 корректно: term атомарный («одно случайное наблюдение — бросок монеты»), дубль не нужен (правило 11).
+
+**Модуль 3** — 5/5 прошли novice-test без правок. PMF/CDF и «плотность = площадь, не высота» разжёваны;
+z-оценка на росте 192→z=2; identify-distribution даёт рабочий чек-лист (гистограмма первой, бимодальность→сегмент,
+Q-Q, дисперсия≈среднее→Пуассон). Пустые `simple` у μ/σ — корректно (атомарны, text уже человеческий).

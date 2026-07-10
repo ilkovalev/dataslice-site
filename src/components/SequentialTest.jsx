@@ -174,7 +174,7 @@ export default function SequentialTest({ locale = 'ru' }) {
         </div>
       </div>
 
-      <p className="text-xs text-gray-500 mt-3">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-3">{en
         ? 'This is the same day-by-day p-value chart as in the previous lesson, but the stopping boundary is now honest. The naive flat 0.05 threshold is checked every day → under A/A the line keeps dipping under it (red false stops), and their share is far above 5%. The sequential boundary (α-spending) is strict at the start and relaxes toward the planned day → false stops stay around 5%, while a real effect can still be caught before the deadline. Pocock and O’Brien–Fleming are specific families of such boundaries.'
         : 'Это тот же график p-value по дням, что и в прошлом уроке, но граница остановки теперь честная. Наивный плоский порог 0.05 проверяется каждый день → под A/A линия то и дело ныряет под него (красные ложные остановки), и их доля куда больше 5%. Последовательная граница (α-spending) строгая в начале и смягчается к плановому дню → ложных остановок около 5%, при этом настоящий эффект всё ещё можно поймать раньше срока. Pocock и O’Brien–Fleming — конкретные семейства таких границ.'}</p>
     </div>

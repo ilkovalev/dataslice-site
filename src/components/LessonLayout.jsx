@@ -21,7 +21,7 @@ export default function LessonLayout({ lesson, locale = 'ru', onComplete, onNext
 
   return (
     <article className="max-w-[70ch]">
-      <h2 className="text-xl font-semibold mb-6">{lesson.title}</h2>
+      <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-6">{lesson.title}</h1>
 
       <Step label="Зачем">
         <p className="text-lg text-gray-900 border-l-2 border-accent/50 pl-4">{lesson.hook}</p>

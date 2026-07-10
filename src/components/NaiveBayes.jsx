@@ -49,7 +49,7 @@ export default function NaiveBayes({ locale = 'ru' }) {
         <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Prior share of spam P(spam)' : 'Априорная доля спама P(спам)'}</span><span className="tabular-nums text-cyanink">{(prior * 100).toFixed(0)}%</span></div>
         <input type="range" min="0.05" max="0.7" step="0.05" value={prior} onChange={(e) => setPrior(Number(e.target.value))} className="w-full accent-accent" />
       </label>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'Each spam word (LR>1) pushes the probability up; a "business" word (LR<1) pushes it down. The words multiply independently — hence "naive". The base rate P(spam) is the starting odds: when spam is rare, even strong words do not make the email spam for sure.'
         : 'Каждое спам-слово (LR>1) толкает вероятность вверх, «деловое» (LR<1) — вниз. Слова перемножаются независимо — отсюда «наивный». Базовая ставка P(спам) — стартовые шансы: при редком спаме даже сильные слова не делают письмо спамом наверняка.'}</p>
     </div>

@@ -128,7 +128,7 @@ export default function EventsProbability({ highlight , locale = 'ru' }) {
           <div className="font-mono text-gray-700">P(A∩B) = {pInter.toFixed(2)} {indep ? '=' : '≠'} P(A)·P(B) = {(pA * pB).toFixed(2)} → <span className={indep ? 'text-green-600' : 'text-[#dc4d4d]'}>{indep ? (en ? 'independent' : 'независимы') : (en ? 'dependent' : 'зависимы')}</span></div>
         )}
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en ? 'Click A/B under the outcomes to change the events — the diagram and numbers recompute live. On the Venn: the left crescent is only-A, the right only-B, the middle lens is the intersection (A and B), outside are outcomes in neither event.' : 'Кликайте A/B под исходами, чтобы менять события — диаграмма и числа пересчитываются вживую. На Венне: левый серп — только A, правый — только B, линза посередине — пересечение (A и B), снаружи — исходы вне обоих событий.'}</p>
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en ? 'Click A/B under the outcomes to change the events — the diagram and numbers recompute live. On the Venn: the left crescent is only-A, the right only-B, the middle lens is the intersection (A and B), outside are outcomes in neither event.' : 'Кликайте A/B под исходами, чтобы менять события — диаграмма и числа пересчитываются вживую. На Венне: левый серп — только A, правый — только B, линза посередине — пересечение (A и B), снаружи — исходы вне обоих событий.'}</p>
     </div>
   )
 }

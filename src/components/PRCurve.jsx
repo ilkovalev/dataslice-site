@@ -71,7 +71,7 @@ export default function PRCurve({ locale = 'ru' }) {
           <input type="range" min="0.5" max="3.5" step="0.1" value={sep} onChange={(e) => setSep(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'Shrink the class share: ROC-AUC barely changes (looks "fine") while the PR curve and precision at a fixed recall collapse. On a rare class you watch PR, not ROC/accuracy.'
         : 'Уменьшайте долю класса: ROC-AUC почти не меняется (выглядит «хорошо»), а PR-кривая и precision при фиксированном recall обваливаются. На редком классе смотрят PR, а не ROC/accuracy.'}</p>
     </div>

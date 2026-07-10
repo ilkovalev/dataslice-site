@@ -64,7 +64,7 @@ export default function RegressionToMean({ locale = 'ru' }) {
         <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Share of luck in the result' : 'Доля удачи в результате'}</span><span className="tabular-nums text-cyanink">{(luck * 100).toFixed(0)}%</span></div>
         <input type="range" min="0" max="1" step="0.05" value={luck} onChange={(e) => setLuck(Number(e.target.value))} className="w-full accent-accent" />
       </label>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'Each point is the same object measured TWICE (say, a salesperson over two months or a student on two quizzes). Result = stable SKILL + random LUCK. The "share of luck" is how random the result is: 0% — pure skill (the repeat matches the first time, points on the gray diagonal); 100% — pure chance (the repeat is unrelated to the first). The red arrow shows the roll-back: the best by test 1 are on average lower on the repeat — because their luck comes out differently this time. Move the slider: the more luck, the stronger the roll-back.'
         : 'Каждая точка — один и тот же объект, измеренный ДВАЖДЫ (например, продавец за два месяца или ученик на двух контрольных). Результат = устойчивый НАВЫК + случайная УДАЧА. «Доля удачи» — насколько результат случаен: 0% — чистый навык (повтор повторяет первый раз, точки на серой диагонали); 100% — чистый случай (повтор никак не связан с первым). Красная стрелка показывает откат: лучшие по тесту 1 на повторе в среднем ниже — потому что их удача в этот раз другая. Двигайте ползунок: чем больше удачи, тем сильнее откат.'}</p>
     </div>

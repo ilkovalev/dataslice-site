@@ -50,7 +50,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
 
   return (
     <article className="max-w-7xl lesson-enter">
-      <h2 className="text-left text-2xl md:text-3xl font-bold tracking-tight mb-3">{lesson.title}</h2>
+      <h1 className="text-left text-2xl md:text-3xl font-bold tracking-tight mb-3">{lesson.title}</h1>
       {lesson.intro && <p className="text-gray-700 leading-[1.8] mb-6 max-w-[68ch]">{gloss(lesson.intro)}</p>}
 
       <div className={Widget ? 'grid md:grid-cols-3 gap-8 items-start' : ''}>
@@ -61,7 +61,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
                 <button
                   onClick={() => setResetKey((k) => k + 1)}
                   title={t.resetChartTitle}
-                  className="text-xs px-2 py-0.5 rounded-md border border-black/10 text-gray-500 hover:bg-black/5"
+                  className="text-xs px-2.5 py-1.5 rounded-md border border-black/10 text-gray-500 hover:bg-black/5"
                 >
                   {t.resetChart}
                 </button>

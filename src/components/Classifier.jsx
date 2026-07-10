@@ -78,7 +78,7 @@ export default function Classifier({ locale = 'ru' }) {
           <input type="range" min="0" max="20" step="1" value={sep} onChange={(e) => setSep(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'Move the threshold — Precision and Recall trade off. Worse separability (overlapping classes) — both metrics fall. Accuracy is deceptive under imbalance: with little spam, "nothing is spam" gives high accuracy but Recall = 0.'
         : 'Двигайте порог — Precision и Recall обмениваются. Хуже разделимость (классы перекрыты) — обе метрики падают. Accuracy обманчива на дисбалансе: если спама мало, «всё не спам» даёт высокую accuracy, но Recall = 0.'}</p>
     </div>

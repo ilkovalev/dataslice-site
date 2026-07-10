@@ -118,7 +118,7 @@ export default function OutlierActions({ locale = 'ru' }) {
         <button onClick={() => setAct('keep')} className="ml-auto text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-500 hover:bg-black/5">{l.reset}</button>
       </div>
       <div className="mt-2 text-sm text-gray-700">{A[act].note}</div>
-      <p className="text-xs text-gray-500 mt-2">{l.note(meanFull.toFixed(0))}</p>
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{l.note(meanFull.toFixed(0))}</p>
     </div>
   )
 }

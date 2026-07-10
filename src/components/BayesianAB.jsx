@@ -81,7 +81,7 @@ export default function BayesianAB({ locale = 'ru' }) {
           <input type="range" min="100" max="5000" step="100" value={n} onChange={(e) => setN(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'The two distributions are the plausible conversion values of A and B after the data. P(B>A) is the share of cases where a random value from B exceeds one from A. Larger n — both distributions get narrower and the answer more confident. A direct answer to "should we ship B", without a p-value.'
         : 'Два распределения — это правдоподобные значения конверсии A и B после данных. P(B>A) — доля случаев, где случайное значение из B больше, чем из A. Больше n — оба распределения уже, и ответ увереннее. Прямой ответ «стоит ли катить B», без p-value.'}</p>
     </div>

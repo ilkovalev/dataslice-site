@@ -28,6 +28,10 @@ export default function SamplingDistribution({ locale = 'ru' }) {
   const [last, setLast] = useState(null) // последняя выборка (точки)
   const timer = useRef(null)
   useEffect(() => () => clearInterval(timer.current), [])
+  // Не пустой первый кадр: сразу показываем ОДНУ выборку (панель 2), как и говорит
+  // бит 0 («в середине — одна выборка»). Панель 3 остаётся пустой — она «собирается
+  // насыпкой», читатель досыпает сам.
+  useEffect(() => { one() }, [])
 
   function one() {
     const s = []

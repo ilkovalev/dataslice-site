@@ -79,7 +79,7 @@ export default function FeatureClassifier({ locale = 'ru' }) {
           <input type="range" min="20" max="80" value={offset} onChange={(e) => setOffset(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'Tune the slope and the shift so the line separates the classes with the fewest errors. That is what a classifier does — searches for a hyperplane in feature space.'
         : 'Подберите наклон и сдвиг так, чтобы линия разделила классы с наименьшим числом ошибок. Это и делает классификатор — ищет гиперплоскость в пространстве признаков.'}</p>
     </div>

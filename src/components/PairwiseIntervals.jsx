@@ -63,7 +63,7 @@ export default function PairwiseIntervals({ locale = 'ru' }) {
           <input type="range" min="3" max="14" step="1" value={sd} onChange={(e) => setSd(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'Each row is a pair’s difference of means with an interval. Missed zero (green) → significant. Switch the Tukey correction off — the intervals narrow and more pairs turn "significant": that is the inflation of false findings under uncorrected pairwise tests.'
         : 'Каждая строка — разница средних пары групп с интервалом. Не накрыл ноль (зелёный) → значимо. Выключите поправку Тьюки — интервалы сузятся, и «значимых» пар станет больше: это и есть раздувание ложных находок при попарных тестах без поправки.'}</p>
     </div>

@@ -20,6 +20,9 @@ export default function CoinFlips({ locale = 'ru' }) {
   acc.current.h = heads
   acc.current.n = n
   useEffect(() => () => clearInterval(timer.current), [])
+  // Не пустой первый кадр: несколько бросков сразу рисуют начало кривой сходимости
+  // и ненулевые столбцы частот. Читатель досыпает бросками сам.
+  useEffect(() => { flip(10) }, [])
 
   function flip(count) {
     clearInterval(timer.current)

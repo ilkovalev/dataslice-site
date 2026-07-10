@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { glossary } from '../content/glossary.js'
 import { glossaryEn } from '../content/glossary-en.js'
+import SubscribeCTA from '../components/SubscribeCTA.jsx'
 import { useLocale, prefix, STR } from '../lib/i18n.js'
 
 export default function GlossaryPage() {
@@ -66,6 +67,11 @@ export default function GlossaryPage() {
           </dl>
         </section>
       ))}
+
+      {/* Как на уроках и /metrics: путь к подписке замыкает страницу. */}
+      <div className="mt-10">
+        <SubscribeCTA locale={locale} />
+      </div>
     </div>
   )
 }

@@ -167,7 +167,7 @@ export default function Peeking({ sequential = false, locale = 'ru' }) {
         )}
       </div>
 
-      <p className="text-xs text-gray-500 mt-2">{sequential
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{sequential
         ? (en
           ? 'The yellow α-spending boundary is strict at the start and relaxes toward the planned day. You may stop early, but only if the p-value line crosses THIS boundary — not the flat 0.05.'
           : 'Жёлтая граница α-spending строгая в начале и смягчается к плановому дню. Останавливаться можно досрочно, но только если линия p-value пробила ЭТУ границу, а не плоские 0.05.')

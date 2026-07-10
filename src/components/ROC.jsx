@@ -66,7 +66,7 @@ export default function ROC({ locale = 'ru' }) {
           <input type="range" min="0" max="22" step="1" value={sep} onChange={(e) => setSep(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'The threshold moves the yellow dot along the curve. Better separability — the curve hugs the top left corner, and the area under it (AUC) grows. AUC = 0.5 (the diagonal) — the model is no better than a coin.'
         : 'Порог двигает жёлтую точку по кривой. Разделимость лучше — кривая жмётся к левому верхнему углу, площадь под ней (AUC) растёт. AUC = 0.5 (диагональ) — модель не лучше монетки.'}</p>
     </div>

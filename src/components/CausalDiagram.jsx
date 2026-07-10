@@ -81,7 +81,7 @@ export default function CausalDiagram({ locale = 'ru' }) {
       <button onClick={() => setCtrl((c) => !c)} className="mt-3 text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">
         {ctrl ? (en ? 'don’t control for Z' : 'не контролировать Z') : (en ? 'control for Z' : 'контролировать Z')}
       </button>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'The same move (controlling for Z) gives opposite results in different structures: for a confounder it saves you, for a collider it hurts, for a mediator it kills the effect. That is why "control for everything" is a mistake.'
         : 'Один и тот же приём (контроль Z) в разных структурах даёт противоположный результат: для конфаундера — спасает, для коллайдера — портит, для медиатора — убивает эффект. Поэтому «контролировать всё подряд» — ошибка.'}</p>
     </div>

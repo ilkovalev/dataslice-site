@@ -92,7 +92,7 @@ export default function CorrelationShapes({ locale = 'ru' }) {
         <div className="font-mono text-gray-700 text-xs">{en ? 'Spearman: ρ = the same Pearson, but on ranks rₓ, r_y (not values)' : 'Спирмен: ρ = тот же Пирсон, но по рангам rₓ, r_y (а не по значениям)'}</div>
       </div>
 
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'Pearson sums the "rectangles" (x−x̄)(y−ȳ): blue ones (both coordinates on the same side of the mean) pull r up, red ones pull it down; the sum is normalized by the spread. Spearman does the same but first replaces the values with their RANKS (places) — so it catches any monotonic relationship and is robust to outliers: on "An outlier hides the relationship", Pearson collapses to zero while Spearman on ranks stays high.'
         : 'Пирсон складывает «прямоугольники» (x−x̄)(y−ȳ): синие (обе координаты по одну сторону от среднего) тянут r вверх, красные — вниз; сумму нормируют на разброс. Спирмен делает то же, но сначала заменяет значения их РАНГАМИ (местами) — поэтому он ловит любую монотонную связь и устойчив к выбросам: на «Выброс прячет связь» Пирсон проваливается к нулю, а Спирмен по рангам остаётся высоким.'}</p>
     </div>

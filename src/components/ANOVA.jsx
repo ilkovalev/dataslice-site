@@ -74,7 +74,7 @@ export default function ANOVA({ locale = 'ru' }) {
           <input type="range" min="2" max="16" step="1" value={within} onChange={(e) => setWithin(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'F = (spread between groups) / (spread within). Pull the means apart — F grows; add noise inside — F drops. That is how ANOVA answers "is there any difference at all" for several groups at once, without breeding pairwise comparisons.'
         : 'F = (разброс между группами) / (разброс внутри). Раздвиньте средние — F растёт; добавьте шум внутри — F падает. Так ANOVA отвечает «есть ли вообще различие» сразу для нескольких групп, не плодя попарных сравнений.'}</p>
     </div>

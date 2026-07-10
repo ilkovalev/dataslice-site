@@ -30,6 +30,9 @@ export default function EstimatorSampler({ locale = 'ru' }) {
   const [vals, setVals] = useState([])
   const timer = useRef(null)
   useEffect(() => () => clearInterval(timer.current), [])
+  // Не пустой первый кадр: несколько выборок сразу показывают, что оценка «гуляет»
+  // (нижняя панель — намёк на разброс). Читатель досыпает и видит, как он сужается с n.
+  useEffect(() => { drawN(8) }, [])
 
   const truth = useMemo(() => calc(POP, stat), [POP, stat])
   function drawN(k) {
@@ -94,7 +97,7 @@ export default function EstimatorSampler({ locale = 'ru' }) {
         <button onClick={animate} className="text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">{en ? '▶ pour' : '▶ насыпать'}</button>
         <button onClick={reset} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">{en ? 'reset' : 'сбросить'}</button>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en ? 'Whichever estimate you pick — every sample has its own, i.e. it is itself random. Its spread falls as n grows. That is the sampling distribution — the object the CLT, intervals and hypothesis testing all stand on.' : 'Какую бы оценку вы ни выбрали — она своя у каждой выборки, то есть сама случайна. Её разброс падает с ростом n. Это и есть выборочное распределение — объект, на котором держатся ЦПТ, интервалы и проверка гипотез.'}</p>
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en ? 'Whichever estimate you pick — every sample has its own, i.e. it is itself random. Its spread falls as n grows. That is the sampling distribution — the object the CLT, intervals and hypothesis testing all stand on.' : 'Какую бы оценку вы ни выбрали — она своя у каждой выборки, то есть сама случайна. Её разброс падает с ростом n. Это и есть выборочное распределение — объект, на котором держатся ЦПТ, интервалы и проверка гипотез.'}</p>
     </div>
   )
 }

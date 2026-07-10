@@ -58,7 +58,7 @@ export default function CIvsP({ locale = 'ru' }) {
           <input type="range" min="100" max="8000" step="100" value={n} onChange={(e) => setN(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en ? 'The interval excludes zero ⟺ the test is significant (p<0.05) — one and the same statement. But the interval says more: at huge n even a tiny effect is "significant", yet the interval shows it is small; at small n the interval is wide — "data is scarce", not "there is no effect".' : 'Интервал не накрыл ноль ⟺ тест значим (p<0.05) — это одно и то же утверждение. Но интервал говорит больше: при огромном n даже крошечный эффект «значим», зато интервал покажет, что он мал; при малом n интервал широкий — «данных мало», а не «эффекта нет».'}</p>
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en ? 'The interval excludes zero ⟺ the test is significant (p<0.05) — one and the same statement. But the interval says more: at huge n even a tiny effect is "significant", yet the interval shows it is small; at small n the interval is wide — "data is scarce", not "there is no effect".' : 'Интервал не накрыл ноль ⟺ тест значим (p<0.05) — это одно и то же утверждение. Но интервал говорит больше: при огромном n даже крошечный эффект «значим», зато интервал покажет, что он мал; при малом n интервал широкий — «данных мало», а не «эффекта нет».'}</p>
     </div>
   )
 }

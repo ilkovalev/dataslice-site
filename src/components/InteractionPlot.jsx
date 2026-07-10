@@ -58,7 +58,7 @@ export default function InteractionPlot({ locale = 'ru' }) {
           <input type="range" min="0" max="0.14" step="0.01" value={inter} onChange={(e) => setInter(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'Set the interaction to 0 — the lines become parallel: the test’s effect is the same on mobile and desktop. Increase it — the lines diverge and may cross: on mobile the test helps, on desktop it hurts. A significant interaction = the "average effect" lies; look by segment.'
         : 'Поставьте взаимодействие в 0 — линии станут параллельны: эффект теста одинаков на mobile и desktop. Увеличьте — линии расходятся и могут пересечься: на mobile тест помогает, на desktop вредит. Значимое взаимодействие = «средний эффект» врёт, нужно смотреть по сегментам.'}</p>
     </div>

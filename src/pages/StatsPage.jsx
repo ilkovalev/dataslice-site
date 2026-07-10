@@ -64,7 +64,7 @@ function ShareButton({ lesson, locale, t }) {
     <button
       onClick={share}
       title={t.shareTitle}
-      className="shrink-0 text-xs px-2.5 py-1 rounded-md border border-black/10 text-gray-600 hover:bg-black/5 transition-colors"
+      className="shrink-0 text-xs px-2.5 py-1.5 rounded-md border border-black/10 text-gray-600 hover:bg-black/5 transition-colors"
     >
       {copied ? t.shareCopied : t.share}
     </button>
@@ -215,8 +215,12 @@ export default function StatsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">{t.statsH1}</h1>
-      <p className="text-gray-600 mb-6 max-w-2xl">{t.statsSub(lessons.length)}</p>
+      {/* Раздел-эйбрау: не конкурирует с заголовком урока (который теперь h1).
+          Хлебные крошки читаются как «Раздел → Модуль → Урок». */}
+      <div className="mb-6">
+        <div className="text-xs uppercase tracking-wider text-gray-500">{t.statsH1}</div>
+        <p className="text-sm text-gray-500 leading-relaxed mt-0.5 max-w-2xl">{t.statsSub(lessons.length)}</p>
+      </div>
 
       <div className="md:grid md:grid-cols-[248px_minmax(0,1fr)] md:gap-8">
         <Sidebar

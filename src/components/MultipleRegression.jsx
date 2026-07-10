@@ -87,7 +87,7 @@ export default function MultipleRegression({ locale = 'ru' }) {
           <input type="range" min="0" max="2" step="0.1" value={confound} onChange={(e) => setConfound(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'Set the true effect to 0 and crank up the confounder strength: the pooled red line will show a "relationship" that isn’t there. Controlling for z (within-group lines) removes it. That is what multiple regression does — estimates the effect of x while holding z constant.'
         : 'Поставьте истинный эффект = 0 и силу конфаундера побольше: общая красная линия покажет «связь», которой нет. Контроль z (линии внутри групп) её убирает. Это и делает множественная регрессия — оценивает эффект x, удерживая z постоянным.'}</p>
     </div>

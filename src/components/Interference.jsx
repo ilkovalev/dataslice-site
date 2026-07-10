@@ -78,7 +78,7 @@ export default function Interference({ locale = 'ru' }) {
           ? (en ? 'The designs diverge noticeably — that is the signal of a SUTVA violation: the effect leaks between groups.' : 'Дизайны заметно расходятся — это и есть сигнал нарушения SUTVA: эффект протекает между группами.')
           : (en ? 'The estimates nearly coincide — almost no interference, SUTVA holds.' : 'Оценки почти совпали — интерференции почти нет, SUTVA выполняется.')}
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'User split: connected people land in different groups, B’s effect "leaks" to their friends in the control (red links), the control rises — and the naive estimate of B’s effect is understated. Cluster randomization (whole communities in one arm) removes almost all cross-group links and gives a clean estimate. A practical way to DETECT interference: estimate the effect both ways — a large gap between them is what gives away the SUTVA violation.'
         : 'Сплит по пользователям: связанные люди попадают в разные группы, эффект B «протекает» к их друзьям из контроля (красные связи), контроль подрастает — и наивная оценка эффекта B занижается. Кластерная рандомизация (целые сообщества в одну ветку) почти убирает межгрупповые связи и даёт чистую оценку. Практический способ ОБНАРУЖИТЬ интерференцию: посчитать эффект обоими способами — большое расхождение между ними и выдаёт нарушение SUTVA.'}</p>
     </div>

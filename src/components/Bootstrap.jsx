@@ -24,6 +24,9 @@ export default function Bootstrap({ locale = 'ru' }) {
   const [picked, setPicked] = useState(null) // последний ресэмпл (значения)
   const timer = useRef(null)
   useEffect(() => () => clearInterval(timer.current), [])
+  // Не пустой первый кадр: один ресэмпл сразу показывает механику (зелёные точки +
+  // «падение» среднего вниз), о которой и говорит бит 0. Колокол дособирается насыпкой.
+  useEffect(() => { step() }, [])
 
   const origMean = SAMPLE.reduce((a, b) => a + b, 0) / SAMPLE.length
   const sMin = Math.min(...SAMPLE)

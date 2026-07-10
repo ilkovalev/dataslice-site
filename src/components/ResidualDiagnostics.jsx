@@ -54,7 +54,7 @@ export default function ResidualDiagnostics({ locale = 'ru' }) {
         <text x={PAD} y={16} fill="#9a907c" fontSize="10" textAnchor="start">{en ? 'residual' : 'остаток'}</text>
       </svg>
       <div className={`mt-2 rounded-lg border px-3 py-2 text-sm ${m.good ? 'border-green-500/30 bg-green-500/5' : 'border-amber-400/40 bg-amber-400/[0.07]'} text-gray-700`}>{en ? m.verdictEn : m.verdict}</div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'A good regression leaves the residuals as structureless noise around zero. Any pattern in the residuals is a signal the line cannot be trusted, whatever the R². That is why this chart is always checked after a regression.'
         : 'Хорошая регрессия оставляет остатки бесструктурным шумом вокруг нуля. Любая закономерность в остатках — сигнал, что прямой верить нельзя, каким бы ни был R². Поэтому после регрессии всегда смотрят этот график.'}</p>
     </div>

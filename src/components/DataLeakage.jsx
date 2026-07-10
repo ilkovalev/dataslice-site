@@ -60,7 +60,7 @@ export default function DataLeakage({ locale = 'ru' }) {
         <button onClick={() => setFuture((f) => !f)} className={`text-xs px-2.5 py-1 rounded-md border ${future ? 'border-[#dc4d4d]/50 bg-[#dc4d4d]/10 text-[#dc4d4d]' : 'border-black/15 text-gray-700 hover:bg-black/5'}`}>{en ? 'feature from the future' : 'признак «из будущего»'}</button>
         <button onClick={() => setPrep((p) => !p)} className={`text-xs px-2.5 py-1 rounded-md border ${prep ? 'border-[#dc4d4d]/50 bg-[#dc4d4d]/10 text-[#dc4d4d]' : 'border-black/15 text-gray-700 hover:bg-black/5'}`}>{en ? 'preprocessing before the split' : 'предобработка до сплита'}</button>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'Production quality (green) is the real one — it does not change. Leakage inflates only train/test: a "feature from the future" (say, the account closure date when predicting churn) gives away the answer; preprocessing on all the data before the split lets the test peek into training. The goal of validation is test ≈ production.'
         : 'Прод-качество (зелёное) — настоящее, оно не меняется. Утечка раздувает только train/test: «признак из будущего» (например, дата закрытия счёта при прогнозе оттока) выдаёт ответ; предобработка на всех данных до сплита даёт тесту подсмотреть в обучение. Цель валидации — чтобы тест ≈ прод.'}</p>
     </div>

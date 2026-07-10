@@ -20,7 +20,7 @@ export default function SubscribeCTA({ locale = 'ru', heading, text }) {
           <div className="text-4xl leading-none" aria-hidden>🍕</div>
           <div className="flex-1">
             <div className="font-semibold text-lg text-gray-900">{heading}</div>
-            <p className="text-sm text-gray-700 mt-1 max-w-xl">{text}</p>
+            <p className="text-sm text-gray-700 leading-relaxed mt-1 max-w-xl">{text}</p>
           </div>
           <a
             href="https://t.me/dataslice"

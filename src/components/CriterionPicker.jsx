@@ -145,7 +145,7 @@ export default function CriterionPicker({ locale = 'ru' }) {
           {en ? 'After the treatment, apply the t-test to the mean. Mann–Whitney is the fallback when the distribution shift itself matters.' : 'После обработки применяют t-тест к среднему. Манна–Уитни — запасной вариант, когда важен именно сдвиг распределения.'}
         </div>
       )}
-      <p className="text-xs text-gray-500 mt-2">{en ? 'First pick the metric type — you will see what its data looks like in two groups. Then pick a test: the widget shows its reference (null) distribution and tells you whether it fits and why. The test is matched to the metric BEFORE the experiment.' : 'Сначала выберите тип метрики — увидите, как выглядят её данные у двух групп. Затем выберите критерий: виджет покажет его эталонное (нулевое) распределение, скажет, подходит ли он и почему. Критерий подбирают под метрику ДО эксперимента.'}</p>
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en ? 'First pick the metric type — you will see what its data looks like in two groups. Then pick a test: the widget shows its reference (null) distribution and tells you whether it fits and why. The test is matched to the metric BEFORE the experiment.' : 'Сначала выберите тип метрики — увидите, как выглядят её данные у двух групп. Затем выберите критерий: виджет покажет его эталонное (нулевое) распределение, скажет, подходит ли он и почему. Критерий подбирают под метрику ДО эксперимента.'}</p>
     </div>
   )
 }

@@ -66,7 +66,7 @@ export default function MetricRoles({ locale = 'ru' }) {
       <div className={`mt-3 rounded-lg border px-3 py-2 text-sm ${sc.ship ? 'border-green-500/30 bg-green-500/5' : 'border-[#dc4d4d]/30 bg-[#dc4d4d]/5'} text-gray-700`}>
         {sc.ship ? '✓ ' : '✕ '}{en ? sc.verdictEn : sc.verdict}
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'The decision is made on ONE primary metric — but only if the guardrail metrics have not dipped. A proxy speeds up the test, but proxy growth without primary growth is a trap. Informational metrics explain the "why", but decisions are not made on them.'
         : 'Решение принимают по ОДНОЙ ключевой метрике, но только если guardrail-метрики не просели. Прокси ускоряет тест, но рост прокси без роста ключевой — ловушка. Информационные метрики объясняют «почему», но по ним не решают.'}</p>
     </div>

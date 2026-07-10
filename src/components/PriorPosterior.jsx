@@ -103,7 +103,7 @@ export default function PriorPosterior({ locale = 'ru' }) {
           <input type="range" min="0" max="400" step="5" value={n} onChange={(e) => { const v = Number(e.target.value); setN(v); if (k > v) setK(v) }} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'θ is the unknown true share (say, a button’s conversion). The gray curve is what you believe BEFORE the data (the prior); its center is set by "Prior belief" and its width by "Prior strength" (more strength → narrower and more confident). The yellow dashed one is what the data ALONE says (k successes out of n): its peak sits at the share k/n. The blue one is the result (the posterior): it comes from multiplying the gray and the yellow and always lies BETWEEN them. Move the sliders: with little data the result leans toward the prior; at large n the yellow curve gets narrow and pulls the result toward itself — the data "overrides" the initial belief.'
         : 'θ — это неизвестная истинная доля (например, конверсия кнопки). Серая кривая — во что вы верите ДО данных (априори); её центр задаёт «Априорное мнение», а ширину — «Сила априори» (больше сила → уже и увереннее). Жёлтая пунктирная — что говорят ОДНИ данные (k успехов из n): её пик стоит на доле k/n. Синяя — итог (апостериори): он получается перемножением серой и жёлтой и всегда лежит МЕЖДУ ними. Двигайте ползунки: при малых данных итог тянется к априори, при больших n жёлтая кривая становится узкой и перетягивает итог на себя — данные «перебивают» исходное мнение.'}</p>
     </div>

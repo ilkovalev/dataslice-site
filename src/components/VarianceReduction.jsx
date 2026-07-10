@@ -118,7 +118,7 @@ export default function VarianceReduction({ locale = 'ru' }) {
         </label>
       )}
 
-      <p className="text-xs text-gray-500 mt-2">{method === 'cuped'
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{method === 'cuped'
         ? (en ? 'CUPED: the better the pre-experiment covariate predicts the metric (higher ρ), the more variance is removed — down to (1−ρ²) — and the more sensitive the test at the same n.' : 'CUPED: чем сильнее доэкспериментальный ковариат предсказывает метрику (выше ρ), тем больше дисперсии убирается — на (1−ρ²), — и тем чувствительнее тест при том же n.')
         : (en ? 'Stratification: the more the strata differ (larger Δ), the bigger the BETWEEN-stratum share of the spread was — and the more of it the within-stratum comparison removes. Within-stratum spread (the blue bell) stays; between-stratum leaves.' : 'Стратификация: чем сильнее слои различаются между собой (больше Δ), тем большая доля разброса была МЕЖслойной — и тем больше её убирает сравнение внутри слоёв. Внутрислойный разброс (синий колокол) остаётся, межслойный уходит.')}</p>
     </div>

@@ -92,7 +92,7 @@ export default function ABProcess({ locale = 'ru' }) {
           ))}
         </ul>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en
         ? 'This is an abridged map; a real checklist has dozens of items. What matters is the order: business and design first, launch only after.'
         : 'Это сокращённая карта; в реальном чек-листе десятки пунктов. Главное — порядок: сначала бизнес и дизайн, и только потом запуск.'}</p>
     </div>

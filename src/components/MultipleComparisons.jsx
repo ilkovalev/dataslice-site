@@ -155,7 +155,7 @@ export default function MultipleComparisons({ locale = 'ru' }) {
         <button onClick={() => setTests([])} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">{en ? 'reset' : 'сбросить'}</button>
       </div>
 
-      <p className="text-xs text-gray-500 mt-3">{en
+      <p className="text-xs text-gray-500 leading-relaxed mt-3">{en
         ? 'Without a correction, "significant" passes for both real effects and ~5% of the empty ones (red). Bonferroni (FWER) lowers the threshold to α/m — the false ones nearly vanish, but real findings die with them (lots of orange "missed"). Benjamini–Hochberg (FDR) bounds not "zero errors" but the share of false among the found: the threshold is the point where the i·α/m staircase stops covering the sorted p-values — it usually catches more real effects at a controlled share of false ones.'
         : 'Без поправки «значимо» проходят и настоящие эффекты, и ~5% пустых (красные). Бонферрони (FWER) опускает порог до α/m — ложные почти исчезают, но вместе с ними гаснут и настоящие находки (много оранжевых «пропущено»). Бенджамини–Хохберг (FDR) держит не «ноль ошибок», а долю ложных среди найденного: порог — точка, где лесенкой i·α/m перестаёт накрывать отсортированные p, — обычно ловит больше настоящих эффектов при контролируемой доле ложных.'}</p>
     </div>

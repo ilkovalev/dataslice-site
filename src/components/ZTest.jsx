@@ -75,7 +75,7 @@ export default function ZTest({ locale = 'ru' }) {
           <input type="range" min="100" max="20000" step="100" value={n} onChange={(e) => setN(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{en ? 'Conditions: large n, a share metric (conversion). The same difference of shares at large n yields large |z| and small p — sample size decides.' : 'Условия: большие n, метрика-доля (конверсия). Та же разница долей при большом n даёт большой |z| и маленький p — поэтому размер выборки решает.'}</p>
+      <p className="text-xs text-gray-500 leading-relaxed mt-2">{en ? 'Conditions: large n, a share metric (conversion). The same difference of shares at large n yields large |z| and small p — sample size decides.' : 'Условия: большие n, метрика-доля (конверсия). Та же разница долей при большом n даёт большой |z| и маленький p — поэтому размер выборки решает.'}</p>
     </div>
   )
 }

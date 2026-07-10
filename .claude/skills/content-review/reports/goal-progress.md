@@ -18,7 +18,7 @@
 
 - [x] Модуль 6 (9 ур.): ab-process, ab-test, evidence-pyramid, experiment-metrics, multiple-comparisons, network-effects, peeking, segments-cate, sequential-tests
 
-- [ ] Модуль 7 (6 ур.): causality, correlation-types, multiple-regression, regression-assumptions, regression-metrics, regression
+- [x] Модуль 7 (6 ур.): causality, correlation-types, multiple-regression, regression-assumptions, regression-metrics, regression
 
 - [ ] Модуль 8 (6 ур.): capstone, class-imbalance, classification, confusion-matrix, overfitting, roc
 
@@ -83,3 +83,8 @@ OEC/proxy/guardrail, пирамида доказательности, подгл
 (FWER/FDR/BH + holdout), ATE/CATE/ITE, SUTVA/интерференция/кластерная рандомизация. Юниор реально
 сможет спроектировать и разобрать A/B. Мелочь (не правил): порядок segments-cate ↔ multiple-comparisons
 задаётся кросс-ссылками, `order` в JSON undefined — вопрос сортировки сайдбара, структурный, не контент.
+
+**Модуль 7** — 6/6 прошли novice-test без правок. Пирсон/Спирмен (r не ловит нелинейное, Анскомб),
+МНК с обоснованием квадратов, корреляция≠причинность, множественная регрессия/контроль конфаундера,
+анализ остатков (дуга/веер/рычаг), MAE/RMSE/MAPE/R² по цене ошибки, конфаундер/коллайдер/медиатор
+(«не контролируй всё подряд»). Причинный блок особенно силён — превращает лозунг в навык.

@@ -54,13 +54,13 @@
 - [x] segments-cate — Сегменты и гетерогенные эффекты (ок)
 - [x] sequential-tests — Последовательные тесты (ок)
 
-## Модуль 7
-- [ ] causality — Причинность: конфаундеры и коллайдеры
-- [ ] correlation-types — Корреляция: Пирсон, Спирмен и что r не ловит
-- [ ] multiple-regression — Множественная регрессия и контроль переменных
-- [ ] regression — Регрессия: предсказываем одно число по другому
-- [ ] regression-assumptions — Допущения регрессии и анализ остатков
-- [ ] regression-metrics — Метрики качества регрессии: MAE, RMSE, MAPE
+## Модуль 7  (не был доведён — +simple к 25 определениям)
+- [x] causality — Причинность: конфаундеры и коллайдеры — +simple к 4
+- [x] correlation-types — Корреляция: Пирсон, Спирмен — +simple к 4
+- [x] multiple-regression — Множественная регрессия — +simple к 4
+- [x] regression — Регрессия — +simple к 5
+- [x] regression-assumptions — Допущения регрессии — +simple к 4
+- [x] regression-metrics — Метрики регрессии — +simple к 4
 
 ## Модуль 8
 - [ ] capstone — Итог: ваш путь в данных

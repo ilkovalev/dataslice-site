@@ -51,7 +51,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
   return (
     <article className="max-w-7xl lesson-enter">
       <h2 className="text-left text-2xl md:text-3xl font-bold tracking-tight mb-3">{lesson.title}</h2>
-      {lesson.intro && <p className="text-gray-700 leading-relaxed mb-6 max-w-[68ch]">{gloss(lesson.intro)}</p>}
+      {lesson.intro && <p className="text-gray-700 leading-[1.8] mb-6 max-w-[68ch]">{gloss(lesson.intro)}</p>}
 
       <div className={Widget ? 'grid md:grid-cols-3 gap-8 items-start' : ''}>
         {Widget && (
@@ -93,7 +93,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
 
           {/* min-height, чтобы кнопки не прыгали по вертикали между битами */}
           <div className="min-h-[11rem]">
-            <p className="text-gray-900 leading-relaxed mb-4">{gloss(beat.text)}</p>
+            <p className="text-gray-900 leading-[1.8] mb-4">{gloss(beat.text)}</p>
 
             {beat.predict && (
               <div className="rounded-lg border border-black/10 bg-ink/60 p-3 mb-4">
@@ -164,15 +164,15 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
               {lesson.decision && (
                 <div className="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/5 px-4 py-3">
                   <div className="text-xs uppercase tracking-wider text-emerald-700 mb-1.5">{t.decisionLabel}</div>
-                  <p className="text-sm text-gray-700 leading-relaxed">{lesson.decision}</p>
+                  <p className="text-sm text-gray-700 leading-[1.8]">{lesson.decision}</p>
                 </div>
               )}
-              <Paragraphs text={lesson.practice} className="text-gray-700 leading-relaxed" />
+              <Paragraphs text={lesson.practice} className="text-gray-700 leading-[1.8]" />
             </div>
             {lesson.realLife && (
               <div className="rounded-lg border border-sky-500/30 bg-sky-500/5 px-4 py-3">
                 <div className="text-xs uppercase tracking-wider text-sky-600/90 mb-2">{lesson.realLifeTitle || t.whereItAppears}</div>
-                <Paragraphs text={lesson.realLife} className="text-sm text-gray-700 leading-relaxed" />
+                <Paragraphs text={lesson.realLife} className="text-sm text-gray-700 leading-[1.8]" />
               </div>
             )}
           </div>
@@ -192,7 +192,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
                         <span className="text-gray-900 font-medium">{d.term}</span>
                         {d.formula && <Formula tex={d.formula} className="text-cyanink ml-2" />}
                       </div>
-                      <div className="text-gray-600 leading-relaxed">{d.text}</div>
+                      <div className="text-gray-600 leading-[1.8]">{d.text}</div>
                       {d.simple && <div className="text-sky-700/90 italic mt-0.5">{t.simple} {d.simple}</div>}
                     </div>
                   ))}
@@ -202,14 +202,14 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
             {lesson.assumptions && (
               <div className="rounded-lg border border-amber-400/40 bg-amber-400/[0.07] px-4 py-3">
                 <div className="text-xs uppercase tracking-wider text-amber-600 mb-2">{t.whenItLies}</div>
-                <Paragraphs text={lesson.assumptions} className="text-sm text-gray-700 leading-relaxed" />
+                <Paragraphs text={lesson.assumptions} className="text-sm text-gray-700 leading-[1.8]" />
               </div>
             )}
             {lesson.deepDive && (
               <details className="rounded-lg border border-black/10 bg-black/[0.02] px-4 py-3">
                 <summary className="cursor-pointer text-sm text-cyanink select-none">{t.deepDive}</summary>
                 <div className="mt-2">
-                  <Paragraphs text={lesson.deepDive} className="text-sm text-gray-700 leading-relaxed" />
+                  <Paragraphs text={lesson.deepDive} className="text-sm text-gray-700 leading-[1.8]" />
                 </div>
               </details>
             )}

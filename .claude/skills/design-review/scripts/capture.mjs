@@ -35,6 +35,18 @@ const collectMetrics = `(() => {
     // KaTeX рендерит формулы ~1.21em (≈17px) — это математический шрифт, а не ступень
     // body-шкалы. Исключаем, иначе typography-scale ложно видит «каша размеров».
     .filter(el => el.innerText && el.innerText.trim().length > 1 && el.offsetParent !== null && !el.closest('.katex'))
+
+  // line-height прозы: абзацы длиннее 60 символов. Сигнал: ratio < 1.55 для Golos Text
+  // (крупный x-height) читается плотно. capture раньше это НЕ мерил — пробел закрыт.
+  const tightProse = []
+  for (const el of document.querySelectorAll('p, li')) {
+    if (el.innerText && el.innerText.trim().length > 60) {
+      const cs = getComputedStyle(el)
+      const fs = px(cs.fontSize), lh = px(cs.lineHeight)
+      const ratio = fs ? +(lh / fs).toFixed(2) : null
+      if (ratio !== null && ratio < 1.55) tightProse.push({ fs: Math.round(fs), lh: Math.round(lh), ratio, text: el.innerText.trim().slice(0, 40) })
+    }
+  }
   const fontHist = {}
   const lowContrast = []
   for (const el of texts.slice(0, 400)) {
@@ -61,6 +73,7 @@ const collectMetrics = `(() => {
   return {
     fontSizes: Object.fromEntries(Object.entries(fontHist).sort((a,b)=>b[1]-a[1])),
     uniqueFontSizes: new Set(Object.keys(fontHist).map(k=>k.split('/')[0])).size,
+    tightProse,
     lowContrast, smallTargets, imgsNoAlt, svgNoLabel, overflowX,
   }
 })()`

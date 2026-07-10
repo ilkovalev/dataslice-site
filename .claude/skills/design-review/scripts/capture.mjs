@@ -32,7 +32,9 @@ const collectMetrics = `(() => {
   const effБg = el => { let n = el; while (n) { const bg = getComputedStyle(n).backgroundColor; const c = parseColor(bg); if (c && !/rgba\\(.*,\\s*0\\)/.test(bg)) return c; n = n.parentElement } return [255,248,239] }
 
   const texts = [...document.querySelectorAll('h1,h2,h3,h4,p,li,span,button,a,label,text')]
-    .filter(el => el.innerText && el.innerText.trim().length > 1 && el.offsetParent !== null)
+    // KaTeX рендерит формулы ~1.21em (≈17px) — это математический шрифт, а не ступень
+    // body-шкалы. Исключаем, иначе typography-scale ложно видит «каша размеров».
+    .filter(el => el.innerText && el.innerText.trim().length > 1 && el.offsetParent !== null && !el.closest('.katex'))
   const fontHist = {}
   const lowContrast = []
   for (const el of texts.slice(0, 400)) {

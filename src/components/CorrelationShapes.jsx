@@ -11,6 +11,13 @@ const SETS = {
   curve: { label: 'Кривая (парабола)', labelEn: 'Curved (parabola)', pts: [[1, 2], [2, 5], [3, 7.5], [4, 9], [5, 9.8], [6, 9.8], [7, 9], [8, 7.5], [9, 5], [10, 2]] },
   outlierMakes: { label: 'Связь из одного выброса', labelEn: 'A relationship from one outlier', pts: [[1, 5], [1.5, 4.7], [2, 5.3], [2.3, 4.9], [1.8, 5.1], [2.2, 4.8], [1.6, 5.2], [2.4, 5.0], [2, 4.6], [10, 10]] },
   outlierHides: { label: 'Выброс прячет связь', labelEn: 'An outlier hides the relationship', pts: [[1, 1.5], [2, 2.5], [3, 3.2], [4, 4.3], [5, 4.9], [6, 6.0], [7, 6.8], [8, 8.1], [9, 9.0], [4.6, 34]] },
+  // Квартет Анскомба (Anscombe 1973): четыре набора с ПОЧТИ ОДИНАКОВЫМ r ≈ 0.816,
+  // но совершенно разной формой — числа подлинные, из оригинальной публикации.
+  // В отличие от наборов выше, здесь r везде близкий, а меняется именно форма.
+  anscombe1: { label: 'Анскомб I (линейная)', labelEn: 'Anscombe I (linear)', pts: [[10, 8.04], [8, 6.95], [13, 7.58], [9, 8.81], [11, 8.33], [14, 9.96], [6, 7.24], [4, 4.26], [12, 10.84], [7, 4.82], [5, 5.68]] },
+  anscombe2: { label: 'Анскомб II (та же кривая)', labelEn: 'Anscombe II (same curve trick)', pts: [[10, 9.14], [8, 8.14], [13, 8.74], [9, 8.77], [11, 9.26], [14, 8.10], [6, 6.13], [4, 3.10], [12, 9.13], [7, 7.26], [5, 4.74]] },
+  anscombe3: { label: 'Анскомб III (тот же выброс, другой сюжет)', labelEn: 'Anscombe III (same outlier, different story)', pts: [[10, 7.46], [8, 6.77], [13, 12.74], [9, 7.11], [11, 7.81], [14, 8.84], [6, 6.08], [4, 5.39], [12, 8.15], [7, 6.42], [5, 5.73]] },
+  anscombe4: { label: 'Анскомб IV (без выброса корреляции нет вообще)', labelEn: 'Anscombe IV (no outlier, no correlation at all)', pts: [[8, 6.58], [8, 5.76], [8, 7.71], [8, 8.84], [8, 8.47], [8, 7.04], [8, 5.25], [19, 12.50], [8, 5.56], [8, 7.91], [8, 6.89]] },
 }
 
 function stats(pts) {
@@ -66,6 +73,9 @@ export default function CorrelationShapes({ locale = 'ru' }) {
 
   return (
     <div className="rounded-xl border border-black/10 bg-panel p-5">
+      <p className="text-xs text-gray-500 mb-2">{en
+        ? 'Try the four "Anscombe" presets in a row — Pearson r stays ≈0.82 in every one, even though the shapes are nothing alike.'
+        : 'Попробуйте подряд четыре пресета «Анскомб» — Пирсон r остаётся ≈0.82 в каждом из них, хотя картинки совершенно не похожи друг на друга.'}</p>
       <div className="flex flex-wrap gap-2 mb-3">
         {Object.entries(SETS).map(([key, v]) => (
           <button key={key} onClick={() => setK(key)} className={`text-xs px-2.5 py-1 rounded-md border ${k === key ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{en ? v.labelEn : v.label}</button>

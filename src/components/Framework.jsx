@@ -195,7 +195,7 @@ export default function Framework({ industries, onPick }) {
 
         <section>
           <h2 className="text-lg font-medium mb-3">Глоссарий метрик по типам</h2>
-          <p className="text-gray-600 text-sm mb-3">Базовый словарь: какие метрики вообще бывают и как считаются. Сгруппированы по этапу жизненного цикла (как в AARRR).</p>
+          <p className="text-gray-600 text-sm mb-3">Базовый словарь: какие метрики вообще бывают и как считаются. Сгруппированы по этапу жизненного цикла — привлечение → вовлечённость → удержание → доход, — той же логике, что и в рамке AARRR (Acquisition → Activation → Retention → Referral → Revenue).</p>
           <div className="space-y-3">
             {GLOSSARY.map((g) => (
               <div key={g.group} className="rounded-lg border border-black/10 bg-panel px-4 py-3">

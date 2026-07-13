@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react'
+import { gloss } from './Glossed.jsx'
 
 // Дерево метрик как граф: боксы сверху вниз, соединённые линиями (как схема).
 const BOX_W = 150
@@ -90,9 +91,9 @@ export default function MetricTreeGraph({ tree }) {
       )}
       {selected && (
         <div className="mt-3 rounded-lg border border-accent/30 bg-accent/5 px-4 py-2.5 text-sm text-gray-700">
-          <span className="text-cyanink font-medium">{selected.title}</span>
-          {selected.formula && <span className="font-mono text-cyanink/90 ml-2 text-xs">{selected.formula}</span>}
-          {selected.note && <span className="ml-2">{selected.note}</span>}
+          <span className="text-cyanink font-medium">{gloss(selected.title)}</span>
+          {selected.formula && <span className="font-mono text-cyanink/90 ml-2 text-xs">{gloss(selected.formula)}</span>}
+          {selected.note && <span className="ml-2">{gloss(selected.note)}</span>}
         </div>
       )}
       {tree.counterMetrics && (

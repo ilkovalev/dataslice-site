@@ -11,8 +11,8 @@
     },
     {
       "text": "A proxy metric is needed when the real goal takes too long or fires too rarely to measure.",
-      "predict": "You want to grow annual LTV, but the test runs 2 weeks. Can you measure LTV directly?",
-      "reveal": "No — annual LTV cannot be observed in 2 weeks. You take a proxy: an early signal correlated with the goal (first-week orders, activation). A proxy speeds the test up but is dangerous: the \"proxy grew, the goal did not\" scenario shows it — add-to-carts soared while conversion stood still (hello, Goodhart's law). So the proxy→goal link is validated in advance."
+      "predict": "You want to grow annual LTV (lifetime value — how much money a customer brings in over their whole time with you), but the test runs 2 weeks. Can you measure LTV directly?",
+      "reveal": "No — annual LTV cannot be observed in 2 weeks. You take a proxy: an early signal correlated with the goal (first-week orders, activation). A proxy speeds the test up but is dangerous: the \"proxy grew, the goal did not\" scenario shows it — add-to-carts soared while conversion stood still (there's a whole later lesson on this — Goodhart's law). So the proxy→goal link is validated in advance."
     },
     {
       "text": "Guardrail metrics — what must NOT be sacrificed for the primary. Switch to the \"win at a guardrail's expense\" scenario: the primary grew, but unsubscribes and refunds flared red — you cannot ship. Guardrails catch such \"wins at a cost\": a test does not count as a success if a guardrail crosses its boundary."

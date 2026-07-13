@@ -18,7 +18,7 @@
       "text": "Here is the precise meaning of \"95% confidence\": not \"the true value is inside this interval with probability 95%\", but \"if the experiment were repeated many times, 95% of the constructed intervals would cover the truth\". A specific interval either covered it or did not — we just do not know which."
     },
     {
-      "text": "Where does the interval's width come from? Under the chart is the formula: CI = x̄ ± z·SE, where SE = σ/√n and z sets the confidence level (95% → z = 1.96). So the interval is \"point ± margin\", where the margin shrinks with less data spread and more sample. For a share (A/B conversion) the same idea: p̂ ± z·√(p̂(1−p̂)/n) — that is the \"±2%\" in A/B reports."
+      "text": "Where does the interval's width come from? Under the chart is the formula: CI = x̄ ± z·SE, where SE = σ/√n and z sets the confidence level (95% → z = 1.96 — that same ≈2σ from the three-sigma rule). So the interval is \"point ± margin\", where the margin shrinks with less data spread and more sample. For a share (A/B conversion) the same idea: p̂ ± z·√(p̂(1−p̂)/n) — that is the \"±2%\" in A/B reports."
     },
     {
       "text": "The larger the sample, the narrower the intervals (recall the bell of means tightening). A narrow interval — a precise estimate; a wide one — big uncertainty. A result without an interval is half the truth: \"conversion 12%\" and \"12% ± 1%\" versus \"12% ± 9%\" are completely different grounds for a decision, though the point is the same."
@@ -39,7 +39,7 @@
     }
   ],
   "practice": [
-    "That is why reports say not \"conversion 12%\" but \"12% ± 2%\": the interval honestly shows how confident we are. Two estimates with overlapping intervals are too early to tell apart — exactly what we saw in A/B.",
+    "That is why reports say not \"conversion 12%\" but \"12% ± 2%\": the interval honestly shows how confident we are. Two estimates with overlapping intervals are too early to tell apart — we'll see this in the A/B test lesson.",
     "And remember: a wide interval is not an error but a signal that \"data is scarce\". Want it narrower — collect more observations."
   ],
   "realLife": [

@@ -15,7 +15,7 @@
       "reveal": "Yes — if you \"distribute\" the error budget across the checks in advance. That is exactly what sequential methods do: each interim check uses a stricter threshold, so the total Type I error stays at 5%. You pay in strictness for the right to look often."
     },
     {
-      "text": "Two working families. Group sequential (O'Brien–Fleming, Pocock boundaries): planned interim \"cuts\" with tightened thresholds and the option to stop early — born in clinical trials. Always-valid p-values / mSPRT: special p-values and intervals you may look at ANY moment, as many times as you like."
+      "text": "Two working families. Group sequential (O'Brien–Fleming, Pocock boundaries): planned interim \"cuts\" with tightened thresholds and the option to stop early — born in clinical trials. Always-valid p-values / mSPRT: special p-values and intervals you may look at ANY moment, as many times as you like. There are a lot of names here, and memorizing them isn't the point — that's the platform's job. The one thing worth keeping: if you want to watch a test in flight, there's a purpose-built mode for that, and you switch it on BEFORE the start, not by eyeballing the threshold."
     },
     {
       "text": "Why the business cares: you can stop a clear win or a clear failure earlier without burning traffic, and without fooling yourself. The price is a somewhat larger required sample in the worst case and heavier math. That is why these methods are built into mature A/B platforms rather than computed by hand."

@@ -10,7 +10,7 @@
       "text": "Each point has a residual — its distance to the line (the yellow ticks). All quality metrics are different ways to average these misses into one number. The smaller it is, the more accurate the model."
     },
     {
-      "text": "MAE (mean absolute error) is the most direct: take the length of each miss in absolute value and average. \"The model is off by 5 on average\" — that is MAE. It is in the same units as y (rubles, minutes) and reads easily."
+      "text": "MAE (mean absolute error) is the most direct: take the length of each miss in absolute value and average. \"The model is off by 5 on average\" — that is MAE. It is in the same units as y (rubles, minutes) and reads easily. Remember how, back in variance, we chose the square over the absolute value to punish large deviations harder? MAE is the road not taken: it doesn't make that trade-off, treating every miss equally."
     },
     {
       "text": "RMSE (root mean squared error) counts differently: the misses are first squared, averaged, and then the root is taken. Because of the square, large misses weigh more.",

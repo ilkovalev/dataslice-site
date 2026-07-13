@@ -14,7 +14,7 @@
       "text": "Before you is the delivery time across all the chain's orders. A percentile is the value below which a given share of the data lies. Move the p slider: the shaded part of the histogram is the p% of values to the left, and the yellow line is the percentile value itself. p50 is the median: half the orders are faster. p90 is the threshold below which 90% of deliveries sit — above it, the slowest 10%."
     },
     {
-      "text": "Quartiles are percentiles that cut the data into quarters: Q1 = p25, Q2 = p50 (the median), Q3 = p75. Between Q1 and Q3 lies the central half of the observations; its width is the interquartile range: IQR = Q3 − Q1. On the chart this is the light-blue \"box\" from Q1 to Q3, with the anchor percentiles labeled as numbers under the axis.",
+      "text": "Quartiles are percentiles that cut the data into quarters: Q1 = p25, Q2 = p50 (the median), Q3 = p75. Between Q1 and Q3 lies the central half of the observations; its width is the interquartile range: IQR = Q3 − Q1. On the chart this is the light-blue \"box\" from Q1 to Q3, with the anchor percentiles labeled as numbers under the axis. This gives us a working pair of measures: the mean always travels with σ, and the median travels with the IQR.",
       "widget": {
         "highlight": "iqr"
       }

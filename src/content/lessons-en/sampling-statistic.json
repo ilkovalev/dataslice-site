@@ -55,7 +55,7 @@
     "Дальше мы увидим, что для среднего это распределение имеет ширину σ/√n и стремится к нормальному (ЦПТ) — но сама идея «оценка случайна и имеет распределение» верна для любой статистики, даже когда формулы нет (тогда выручает бутстреп)."
   ],
   "assumptions": [
-    "The formula SE = σ/√n assumes independent observations. If rows are clustered (several visits by one person, cities, ad campaigns), the effective n is smaller than the row count — the real error is larger than the formula says.",
+    "The formula for the standard error, σ/√n (meet it properly in the next lesson), assumes independent observations. If rows are clustered (several visits by one person, cities, ad campaigns), the effective n is smaller than the row count — the real error is larger than the formula says.",
     "The standard error describes only random scatter. Systematic error — an unrepresentative sample, a biased measurement — is not cured by √n: as n grows you converge ever more confidently to the wrong answer."
   ],
   "nextLabel": "What shape does this distribution take for the mean? → The central limit theorem"

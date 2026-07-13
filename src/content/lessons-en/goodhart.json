@@ -15,7 +15,7 @@
       "reveal": "It collapses. Operators start dumping calls faster just to pump the counter: the metric grows while customers fume. A metric that became a target stops being a good metric."
     },
     {
-      "text": "This is Goodhart's law. Pay for lines of code → get bloated code. Measure success by closed tickets → tickets get split. Chase watch time alone → the algorithm slides into addictive junk (remember the counter-metrics from the hierarchies?)."
+      "text": "This is Goodhart's law. Pay for lines of code → get bloated code. Measure success by closed tickets → tickets get split. Chase watch time alone → the algorithm slides into addictive junk — this is exactly what counter-metrics guard against (more on them later in this lesson)."
     },
     {
       "text": "Why it happens almost always: a metric is only a simplified shadow of the real goal. While no one leans on it, the shadow moves with the goal. But as soon as the shadow earns bonuses or punishment, moving the shadow itself becomes the profitable play — by the shortest path, bypassing the real goal. \"Cutting the corner\" on a metric is almost always easier than honestly improving what it is supposed to reflect."

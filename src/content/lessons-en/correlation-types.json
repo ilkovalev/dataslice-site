@@ -24,6 +24,9 @@
     },
     {
       "text": "The practical rule. Roughly linear relationship, no outliers → Pearson. Monotonic but curved, or there are outliers, or the data are ordinal (ratings) → Spearman. And in any case — scatter plot first, number second. r without a chart is a frequent source of both false and missed relationships."
+    },
+    {
+      "text": "Want to see this proved fourfold at once? Switch the widget to any of the four \"Anscombe\" presets (I–IV) — this is the famous Anscombe's quartet (1973), genuine historical numbers. All four share the same mean, variance and r ≈ 0.82 — yet the same number describes a genuinely linear relationship, a clean arc, a line ruined by one outlier, and a case where without a single point there would be no correlation at all (everyone else shares the same x)."
     }
   ],
   "definitions": [
@@ -45,7 +48,7 @@
     }
   ],
   "practice": [
-    "Anscombe's quartet is the famous example: four datasets with nearly identical means, variances and r ≈ 0.82, but completely different pictures (a line, an arc, an outlier). One moral: a correlation number without a chart is deceptive.",
+    "Anscombe's quartet, which we just switched through in the widget, isn't just a textbook legend: the same r ≈ 0.82 genuinely sits behind four completely different pictures. One moral: a correlation number without a chart is deceptive.",
     "In practice, for ratings, placements, scores (ordinal data) and for relationships with outliers you take Spearman. For clean linear measurements — Pearson. But you always look at the scatter."
   ],
   "realLife": [

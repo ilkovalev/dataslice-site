@@ -18,7 +18,7 @@
       "reveal": "That you mixed two different groups (say, consumers and businesses, new and old users). Bimodality is almost always a hint to slice the data by segment. The mean and the median of such a mixture are deceptive — a relative of Simpson's paradox."
     },
     {
-      "text": "Quick numeric checks. Mean and median far apart → skew (mean to the right → right tail). Variance roughly equal to the mean in count data → looks like Poisson. For a stricter \"normality\" check, look at a Q-Q plot: if the data points fall on a straight line against normal quantiles, the shape is close to a bell; bends at the ends betray heavy tails."
+      "text": "Quick numeric checks. Mean and median far apart → skew (mean to the right → right tail). Variance roughly equal to the mean in count data → looks like Poisson. For a stricter \"normality\" check, look at a Q-Q plot: if the data points fall on a straight line against normal quantiles (the same percentiles, just as fractions instead of percent), the shape is close to a bell; bends at the ends betray heavy tails."
     },
     {
       "text": "Why it all matters: the shape dictates the tools. A bell → the mean, σ, the ±2σ rule and the t-test are fine. A heavy tail → only the median and percentiles, and the data often gets logged to restore symmetry. Counts → binomial/Poisson models. Recognizing the shape is the first practical step of ANY analysis, before any models."

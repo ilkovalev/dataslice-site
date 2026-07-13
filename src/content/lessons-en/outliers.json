@@ -10,7 +10,7 @@
       "text": "An outlier is a value that has broken far away from the bulk. The widget shows the same data in three ways at once: points at the bottom (the green mean has drifted toward the outlier, the yellow median stayed with the group); a histogram in the middle (the outlier is a lonely bar far to the right — a long tail); a box plot on top (a red dot flying past the whisker). One extreme moves the mean, but barely touches the median and the box."
     },
     {
-      "text": "Let's look at the box plot more closely — it is a compact five-number summary of the data. The box runs from Q1 (25% of the data below) to Q3 (75% below) and covers the central half of the values; the line inside is the median. The outlier boundary is set by the one-and-a-half interquartile range rule: IQR is the box width (Q3 − Q1); the whiskers reach the farthest values within 1.5·IQR of the box edges, and anything beyond is drawn as a separate dot. Such a dot is not a verdict of \"error\" but a signal: the value is unusually far from the bulk, take a look."
+      "text": "Let's look at the box plot more closely — it is a compact five-number summary of the data. The box runs from Q1 (25% of the data below) to Q3 (75% below) and covers the central half of the values; the line inside is the median. The outlier boundary is set by the one-and-a-half interquartile range rule: IQR is the box width (Q3 − Q1); the whiskers reach the farthest values within 1.5·IQR of the box edges, and anything beyond is drawn as a separate dot. Such a dot is not a verdict of \"error\" but a signal: the value is unusually far from the bulk, take a look. A free bonus of the box plot — it shows skew at a glance: if one half of the box (or one whisker) is noticeably longer than the other, the data is skewed toward it — a symmetric box means a symmetric distribution."
     },
     {
       "text": "You found an outlier — now what? First question: is it an error or reality?",
@@ -67,7 +67,7 @@
     "In machine learning uncleaned erroneous outliers drag the model toward themselves (especially with squared error), while real ones are, on the contrary, informative; confusing the two is expensive."
   ],
   "assumptions": [
-    "The 1.5·IQR rule and the |z|>3 threshold are heuristics, not truth: different distributions have different \"normal\" shares of outliers. On heavily skewed data 1.5·IQR will flag many perfectly normal tail values.",
+    "The 1.5·IQR rule and the |z|>3 threshold (z is the distance from the mean in standard deviations — more on this in the normal distribution lesson) are heuristics, not truth: different distributions have different \"normal\" shares of outliers. On heavily skewed data 1.5·IQR will flag many perfectly normal tail values.",
     "Removing outliers changes conclusions and easily turns into result-fitting. Every removal must be justified by the nature of the data and documented."
   ],
   "nextLabel": "Data is random by nature. What is probability? → Probability basics",

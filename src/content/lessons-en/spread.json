@@ -28,7 +28,12 @@
   },
   "beats": [
     {
-      "text": "Two pizzerias, both with an average salary of exactly 35k — the dashed line sits in the same spot in both rows. But the points of Pizzeria B are scattered noticeably wider than A's. To the right of each row is its σ, the standard deviation."
+      "text": "Two pizzerias, both with an average salary of exactly 35k — the dashed line sits in the same spot in both rows. But the points of Pizzeria B are scattered noticeably wider than A's. To the right of each row is its σ (\"sigma\"), the measure of spread this whole lesson is about."
+    },
+    {
+      "text": "The simplest way to describe spread is the range: the distance between the smallest and the largest salary. For Pizzeria A that's 44 − 26 = 18k, for Pizzeria B it's 57 − 13 = 44k. B's spread really is bigger — that's something already. But the range has a weak spot.",
+      "predict": "The range only counts two points — the smallest and the largest salary. If one of Pizzeria A's six salaries happened to be a bit higher (46 instead of 44), while the other five stayed put — what happens to the range?",
+      "reveal": "It jumps by almost a quarter, to 20, even though five of the six salaries didn't change at all. The range is hostage to just two extreme points and is blind to everything that happens between them. We need a measure that accounts for EVERY value, not just the edges — that's what σ is for."
     },
     {
       "text": "The mean of A and B is the same. The spread is not.",
@@ -60,7 +65,7 @@
     {
       "term": "Variance",
       "formula": "\\sigma^2 = \\dfrac{\\sum (x_i - \\bar{x})^2}{N}",
-      "text": "The mean of the squared deviations from the mean. Squaring removes the signs and penalizes distant values more heavily. It is measured in squared original units, so it is usually not read directly — you take its square root instead.",
+      "text": "The mean of the squared deviations from the mean. Squaring removes the signs and penalizes distant values more heavily. It is measured in squared original units, so it is usually not read directly — you take its square root instead. The formula above is for the whole population; for a sample (i.e. almost always) it is adjusted slightly — see the optional deep dive below.",
       "simple": "the average squared deviation from the mean."
     },
     {
@@ -82,11 +87,17 @@
   ],
   "realLife": [
     "Spread is everywhere that not only the magnitude but also the stability matters. Two couriers deliver in 30 minutes on average, but one stays within 25–35 while the other jumps from 10 to 60: same mean, different reliability — and σ shows it at once.",
-    "The same underlies the volatility of stocks (that is the σ of returns: the larger, the riskier) and quality control in manufacturing, where \"beyond 3σ\" is treated as a defect.",
+    "The same underlies the volatility of stocks (that is the σ of returns: the larger, the riskier) and quality control in manufacturing, where \"beyond 3σ\" is treated as a defect (why exactly 3 — we'll see in the normal distribution lesson).",
     "Next we'll look at what shapes data takes at all. There the mean and σ come into their own together: for a bell-shaped, \"normal\" distribution they almost fully define it."
   ],
   "assumptions": [
     "Standard deviation relies on the mean, so it inherits its weakness: one strong outlier inflates σ so much that the \"typical spread\" stops describing typical data. For skewed quantities (incomes, response times) it is more honest to look at spread through percentiles."
+  ],
+  "deepDive": [
+    "Working through the derivation below isn't required. For practice, one fact is enough to remember: if you're computing variance or σ on a sample (which is almost always the case), the denominator should be n−1, not n.",
+    "The formula in the definition above is for the whole population, where the mean is known in advance and doesn't depend on the data itself. In practice, though, we compute the mean from the very same sample we're measuring spread on, and that quietly fits the data to its own mean. Because of this, the sum of squared deviations comes out a bit smaller than it honestly should be, and the /N formula systematically underestimates the population's spread.",
+    "To remove this bias, sample variance uses n−1 in the denominator instead of n. One way to see why: once you've fixed the mean from n values, only n−1 of them are free to vary — the last one is already determined, since you can always back it out from the rest plus the mean. Hence the name: degrees of freedom.",
+    "This is exactly why the same numbers sometimes give a different σ in different tools. Excel and pandas divide by n−1 by default (the sample calculation), while numpy divides by n by default, and you have to explicitly ask for n−1. It's not a bug or a discrepancy — it's two different questions: how spread out is THIS data (n), or what does this data say about spread in the whole population (n−1). In analytics you almost always need the second answer."
   ],
   "nextLabel": "We have the center and the spread — but what shapes does the data itself take? → distributions and the bell"
 }

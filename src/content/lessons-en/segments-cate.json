@@ -13,7 +13,7 @@
       "text": "Why can't we measure the effect for a single person? That is the fundamental problem of causal inference: the same user cannot see both A and B at once. We observe only one of their two outcomes, so the INDIVIDUAL effect is unobservable — and we are forced to estimate the AVERAGE over groups. Randomization makes the groups comparable, and the difference of means becomes an honest estimate of the ATE."
     },
     {
-      "text": "Now the key part: the effect within a segment is the CATE (Conditional ATE) — the effect conditional on \"who this is\". Toggle \"control for z\" on the widget: you can see that the relationship (here, the effect) differs across groups.",
+      "text": "Now the key part: the effect within a segment is the CATE (Conditional ATE) — the effect conditional on \"who this is\". On the widget, z = 0 and z = 1 are two segments (say, newcomers and long-time users). Press \"control for z\": instead of one pooled line, you get two, one per segment. The slope of each line is the effect within its own segment, and it can differ sharply from the overall one.",
       "predict": "The ATE over everyone is +2%. Could the effect still be −3% in one segment?",
       "reveal": "Yes! An average of +2% can be composed of, say, +6% for newcomers and −3% for long-time users. That is effect heterogeneity: the ATE is an average over a mixed population, and it can hide exactly what matters most — who got worse off."
     },

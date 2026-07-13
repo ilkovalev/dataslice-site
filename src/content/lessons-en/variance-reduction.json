@@ -10,9 +10,9 @@
       "text": "The idea in plain terms. Part of a metric's spread is predictable in advance. An active user spent a lot before the experiment too; an inactive one — little. This \"innate\" between-people difference inflates the metric's variance yet has nothing to do with our effect. Subtract it, and a cleaner signal remains."
     },
     {
-      "text": "That is how CUPED works — the best-known method. Take a covariate: the user's behavior BEFORE the experiment (e.g. the same metric over the previous period). It correlates with the in-test metric. Adjust: Y' = Y − θ·(X − X̄), where X is the covariate. The covariate-predictable part leaves the metric.",
+      "text": "That is how CUPED works — the best-known method. Take a covariate: the user's behavior BEFORE the experiment (e.g. the same metric over the previous period). It correlates with the in-test metric. Adjust: Y' = Y − θ·(X − X̄), where X is the covariate and θ is a coefficient fitted from the data (the exact steps are in the optional deep dive below). The covariate-predictable part leaves the metric.",
       "predict": "Raise the correlation ρ between the covariate and the metric. What happens to the adjusted metric's variance?",
-      "reveal": "It falls — by exactly ρ². At ρ = 0.7, 49% of the variance is gone: the right bell becomes nearly half the width of the left. Less variance → higher sensitivity → fewer users needed for the same effect."
+      "reveal": "It falls — by exactly ρ². At ρ = 0.7, 49% of the variance is gone: the right bell becomes nearly half the width of the left. Less variance → higher sensitivity → fewer users needed for the same effect. If the formula Y' = Y − θ·(X − X̄) still feels abstract, that's fine — the one thing worth keeping is that the more the covariate X correlates with the metric, the more extra noise CUPED removes."
     },
     {
       "text": "How profitable is it? A ρ² variance cut is equivalent to multiplying the sample by 1/(1−ρ²). At ρ = 0.7 that is like doubling the audience — for free, just by using data you already had. That is why CUPED is near-mandatory in mature A/B platforms."

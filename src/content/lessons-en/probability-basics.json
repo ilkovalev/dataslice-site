@@ -64,7 +64,7 @@
   "practiceTitle": "Why these rules matter",
   "practice": [
     "These rules are not school formalities — they are an analyst's daily arithmetic. \"The chance that at least one of 1000 users hits a rare bug (p=0.1%)\" is computed through the complement: 1 − 0.999¹⁰⁰⁰ ≈ 63%. Intuition fails here; the rule does not.",
-    "Multiplying independent probabilities also explains multiple comparisons (20 tests → the chance of at least one false alarm is 1 − 0.95²⁰ ≈ 64%) and why long coincidences are suspicious. Independence is the key — and often false — assumption, always worth a look."
+    "Multiplying independent probabilities also explains multiple comparisons (20 tests, each with a 5% chance of a false alarm, → the chance of at least one false alarm is 1 − 0.95²⁰ ≈ 64%) and why long coincidences are suspicious. Independence is the key — and often false — assumption, always worth a look."
   ],
   "realLife": [
     "System reliability: failure probabilities of duplicated independent nodes multiply, which is why redundancy slashes risk — fault-tolerance engineering stands on this.",

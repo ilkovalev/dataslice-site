@@ -1,124 +1,1037 @@
 {
   "id": "ai",
-  "archetype": "AI / LLM-продукты",
-  "industry": "AI / LLM-продукты",
-  "northStar": "Выручка (API по токенам + подписки)",
+  "archetype": {
+    "ru": "AI / LLM-продукты",
+    "en": "AI / LLM products"
+  },
+  "industry": {
+    "ru": "AI / LLM-продукты",
+    "en": "AI / LLM products"
+  },
+  "northStar": {
+    "ru": "Выручка (API по токенам + подписки)",
+    "en": "Revenue (token API + subscriptions)"
+  },
   "root": {
-    "id": "rev", "level": 0, "title": "Выручка", "formula": "Использование × Цена − Стоимость инференса",
-    "note": "У AI-продуктов выручка растёт с использованием, но каждый запрос стоит денег (GPU). Поэтому маржа на запрос — не менее важна, чем рост.",
+    "id": "rev",
+    "level": 0,
+    "title": {
+      "ru": "Выручка",
+      "en": "Revenue"
+    },
+    "formula": {
+      "ru": "Использование × Цена − Стоимость инференса",
+      "en": "Usage × Price − Inference cost"
+    },
+    "note": {
+      "ru": "У AI-продуктов выручка растёт с использованием, но каждый запрос стоит денег (GPU). Поэтому маржа на запрос — не менее важна, чем рост: активный бесплатный пользователь здесь означает прямой убыток.",
+      "en": "In AI products revenue grows with usage, but every request costs money (GPU). So margin per request matters as much as growth: an active free user here is a direct loss."
+    },
     "children": [
-      { "id": "usage", "level": 1, "title": "Использование", "formula": "юзеры × запросы × токены", "note": "Объём полезной работы продукта.", "children": [
-        { "id": "active", "level": 2, "title": "Активные пользователи", "note": "Кто реально пользуется.", "children": [
-          { "id": "freq", "level": 3, "title": "Частота и токены/запрос", "note": "Глубина использования.", "children": [
-            { "id": "value", "level": 4, "title": "Доля «полезных» ответов", "note": "Решил ли запрос задачу — основа удержания." }
-          ] }
-        ] }
-      ] },
-      { "id": "monet", "level": 1, "title": "Монетизация", "formula": "подписки + API", "note": "Две модели дохода.", "children": [
-        { "id": "subs", "level": 2, "title": "Подписки (B2C/Pro)", "note": "Фикс за доступ.", "children": [
-          { "id": "free2paid", "level": 3, "title": "Free → Paid", "note": "Воронка из бесплатного." }
-        ] },
-        { "id": "api", "level": 2, "title": "API (B2B, по токенам)", "note": "Плата за использование.", "children": [
-          { "id": "nrr", "level": 3, "title": "Расширение по токенам (NRR)", "note": "Растёт ли потребление клиентов." }
-        ] }
-      ] },
-      { "id": "margin", "level": 1, "title": "Маржа и качество модели", "formula": "цена − cost/запрос", "note": "Уникальная для AI ветка.", "children": [
-        { "id": "cost", "level": 2, "title": "Стоимость инференса", "note": "GPU-косты на запрос.", "children": [
-          { "id": "efficiency", "level": 3, "title": "Эффективность (токены/$)", "note": "Оптимизация и квантизация.", "children": [
-            { "id": "cache", "level": 4, "title": "Кэширование/батчинг", "note": "Снижает стоимость популярных запросов." }
-          ] }
-        ] },
-        { "id": "quality", "level": 2, "title": "Качество модели", "note": "Точность, безопасность, латентность." }
-      ] }
-    ]
+      {
+        "id": "usage",
+        "level": 1,
+        "title": {
+          "ru": "Использование",
+          "en": "Usage"
+        },
+        "formula": {
+          "ru": "юзеры × запросы × токены",
+          "en": "users × requests × tokens"
+        },
+        "note": {
+          "ru": "Объём полезной работы продукта — и одновременно счётчик расходов.",
+          "en": "The volume of useful work the product does — and simultaneously the cost meter."
+        },
+        "children": [
+          {
+            "id": "active",
+            "level": 2,
+            "metricId": "dau-mau",
+            "title": {
+              "ru": "Активные пользователи",
+              "en": "Active users"
+            },
+            "note": {
+              "ru": "Кто реально пользуется продуктом.",
+              "en": "Who actually uses the product."
+            },
+            "children": [
+              {
+                "id": "freq",
+                "level": 3,
+                "title": {
+                  "ru": "Частота и токены/запрос",
+                  "en": "Frequency & tokens/request"
+                },
+                "note": {
+                  "ru": "Глубина использования: длинные контексты стоят кратно дороже коротких.",
+                  "en": "Usage depth: long contexts cost multiples of short ones."
+                },
+                "children": [
+                  {
+                    "id": "value",
+                    "level": 4,
+                    "title": {
+                      "ru": "Доля «полезных» ответов",
+                      "en": "Useful-answer share"
+                    },
+                    "note": {
+                      "ru": "Решил ли ответ задачу — основа удержания; меряется принятием, повтором, лайком.",
+                      "en": "Did the answer solve the task — the foundation of retention; measured by acceptance, retries, thumbs."
+                    },
+                    "children": [
+                      {
+                        "id": "retry-rate",
+                        "level": 5,
+                        "title": {
+                          "ru": "Доля переспросов",
+                          "en": "Retry rate"
+                        },
+                        "note": {
+                          "ru": "Переформулировал запрос — ответ не подошёл: плохой ответ стоит вдвое дороже хорошего.",
+                          "en": "A reformulated prompt means the answer missed: a bad answer costs twice what a good one does."
+                        },
+                        "metricId": "model-quality"
+                      }
+                    ],
+                    "metricId": "model-quality"
+                  }
+                ],
+                "metricId": "token-volume"
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "monet",
+        "level": 1,
+        "title": {
+          "ru": "Монетизация",
+          "en": "Monetization"
+        },
+        "formula": {
+          "ru": "подписки + API",
+          "en": "subscriptions + API"
+        },
+        "note": {
+          "ru": "Две модели дохода с разной экономикой: фикс за доступ и плата за использование.",
+          "en": "Two revenue models with different economics: a flat access fee and usage-based billing."
+        },
+        "children": [
+          {
+            "id": "subs",
+            "level": 2,
+            "metricId": "mrr",
+            "title": {
+              "ru": "Подписки (B2C/Pro)",
+              "en": "Subscriptions (B2C/Pro)"
+            },
+            "note": {
+              "ru": "Фикс за доступ: предсказуемая выручка при непредсказуемых костах.",
+              "en": "A flat access fee: predictable revenue against unpredictable costs."
+            },
+            "children": [
+              {
+                "id": "free2paid",
+                "level": 3,
+                "metricId": "paying-share",
+                "title": "Free → Paid",
+                "note": {
+                  "ru": "Воронка из бесплатного: здесь бесплатный тариф — это расходы, а не просто аудитория.",
+                  "en": "The free-to-paid funnel: here the free tier is an expense, not just an audience."
+                },
+                "children": [
+                  {
+                    "id": "free-tier-cost",
+                    "level": 4,
+                    "title": {
+                      "ru": "Косты бесплатного тарифа",
+                      "en": "Free-tier cost"
+                    },
+                    "note": {
+                      "ru": "Сколько сжигает free-аудитория — цена воронки, которую надо окупить платящими.",
+                      "en": "How much the free audience burns — the funnel's price, to be recouped by payers."
+                    },
+                    "metricId": "cost-per-user"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "api",
+            "level": 2,
+            "title": {
+              "ru": "API (B2B, по токенам)",
+              "en": "API (B2B, per token)"
+            },
+            "note": {
+              "ru": "Плата за использование: выручка растёт автоматически вместе с потреблением клиента.",
+              "en": "Usage-based billing: revenue grows automatically with the customer's consumption."
+            },
+            "children": [
+              {
+                "id": "api-nrr",
+                "level": 3,
+                "metricId": "nrr",
+                "title": {
+                  "ru": "Расширение по токенам (NRR)",
+                  "en": "Token expansion (NRR)"
+                },
+                "note": {
+                  "ru": "Растёт ли потребление клиентов: у usage-based модели NRR обычно выше сидовой.",
+                  "en": "Is customer consumption growing: usage-based models usually show higher NRR than seat-based."
+                }
+              }
+            ],
+            "kind": "group"
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "margin",
+        "level": 1,
+        "metricId": "gross-margin",
+        "title": {
+          "ru": "Маржа и качество модели",
+          "en": "Margin & model quality"
+        },
+        "formula": {
+          "ru": "цена − cost/запрос",
+          "en": "price − cost/request"
+        },
+        "note": {
+          "ru": "Ветка, которой нет у обычного SaaS: себестоимость здесь переменная и растёт с каждым запросом.",
+          "en": "A branch classic SaaS doesn't have: here COGS is variable and grows with every request."
+        },
+        "children": [
+          {
+            "id": "cost",
+            "level": 2,
+            "metricId": "cost-per-user",
+            "title": {
+              "ru": "Стоимость инференса",
+              "en": "Inference cost"
+            },
+            "note": {
+              "ru": "GPU-косты на запрос: 1% тяжёлых пользователей может съедать треть бюджета.",
+              "en": "GPU cost per request: 1% of heavy users can eat a third of the budget."
+            },
+            "children": [
+              {
+                "id": "efficiency",
+                "level": 3,
+                "title": {
+                  "ru": "Эффективность (токены/$)",
+                  "en": "Efficiency (tokens/$)"
+                },
+                "note": {
+                  "ru": "Оптимизация, квантизация, выбор модели под задачу.",
+                  "en": "Optimization, quantization, picking the right model for the task."
+                },
+                "children": [
+                  {
+                    "id": "cache",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Кэширование / батчинг",
+                      "en": "Caching / batching"
+                    },
+                    "note": {
+                      "ru": "Рычаг: снижает стоимость популярных запросов в разы без потери качества.",
+                      "en": "Lever: it cuts the cost of popular requests several-fold with no quality loss."
+                    },
+                    "children": [
+                      {
+                        "id": "model-routing",
+                        "level": 5,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Роутинг между моделями",
+                          "en": "Model routing"
+                        },
+                        "note": {
+                          "ru": "Рычаг: простые запросы — дешёвой модели, сложные — дорогой; главный рычаг маржи приложения.",
+                          "en": "Lever: simple requests to a cheap model, hard ones to the expensive one; the app layer's main margin lever."
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "cost-per-user"
+              }
+            ]
+          },
+          {
+            "id": "quality",
+            "level": 2,
+            "title": {
+              "ru": "Качество модели",
+              "en": "Model quality"
+            },
+            "note": {
+              "ru": "Точность, безопасность, латентность: экономия на модели видна пользователю сразу.",
+              "en": "Accuracy, safety, latency: cutting corners on the model is visible to users immediately."
+            },
+            "metricId": "model-quality"
+          }
+        ]
+      }
+    ],
+    "metricId": "revenue"
   },
   "pyramid": {
-    "note": "От юнит-экономики запроса (вершина) к GPU-инфраструктуре (основание).",
+    "note": {
+      "ru": "От юнит-экономики запроса (вершина) к GPU-инфраструктуре (основание).",
+      "en": "From request unit economics (top) to GPU infrastructure (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Валовая маржа", "NRR (API)"] },
-      { "label": "Продуктовые", "role": "продакты", "items": ["Активные пользователи", "Free→Paid", "Расширение по токенам"] },
-      { "label": "Операционные", "role": "ML/аналитики", "items": ["Полезность ответов", "Токены на запрос", "Эффективность токены/$"] },
-      { "label": "Платформенные", "role": "инфраструктура", "items": ["Латентность инференса", "Аптайм API", "Утилизация GPU"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "руководство",
+          "en": "leadership"
+        },
+        "items": [
+          {
+            "ru": "Выручка",
+            "en": "Revenue"
+          },
+          {
+            "ru": "Валовая маржа",
+            "en": "Gross margin"
+          },
+          "NRR (API)"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "продакты",
+          "en": "product"
+        },
+        "items": [
+          {
+            "ru": "Активные пользователи",
+            "en": "Active users"
+          },
+          "Free→Paid",
+          {
+            "ru": "Расширение по токенам",
+            "en": "Token expansion"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": {
+          "ru": "ML/аналитики",
+          "en": "ML/analysts"
+        },
+        "items": [
+          {
+            "ru": "Полезность ответов",
+            "en": "Answer usefulness"
+          },
+          {
+            "ru": "Токены на запрос",
+            "en": "Tokens per request"
+          },
+          {
+            "ru": "Эффективность токены/$",
+            "en": "Tokens/$ efficiency"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "инфраструктура",
+          "en": "infrastructure"
+        },
+        "items": [
+          {
+            "ru": "Латентность инференса",
+            "en": "Inference latency"
+          },
+          {
+            "ru": "Аптайм API",
+            "en": "API uptime"
+          },
+          {
+            "ru": "Утилизация GPU",
+            "en": "GPU utilization"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Стоимость на пользователя", "note": "тяжёлые юзеры могут жечь больше, чем платят — рост в убыток" },
-    { "title": "Уровень галлюцинаций / жалоб", "note": "качество ответов критично для удержания и доверия" },
-    { "title": "Безопасность (jailbreaks, abuse)", "note": "репутационный и регуляторный риск" }
+    {
+      "title": {
+        "ru": "Стоимость на пользователя",
+        "en": "Cost per user"
+      },
+      "note": {
+        "ru": "тяжёлые юзеры могут жечь больше, чем платят — рост в убыток",
+        "en": "heavy users can burn more than they pay — growth into losses"
+      }
+    },
+    {
+      "title": {
+        "ru": "Уровень галлюцинаций / жалоб",
+        "en": "Hallucination / complaint rate"
+      },
+      "note": {
+        "ru": "качество ответов критично для удержания и доверия",
+        "en": "answer quality is critical for retention and trust"
+      }
+    },
+    {
+      "title": {
+        "ru": "Безопасность (jailbreaks, abuse)",
+        "en": "Safety (jailbreaks, abuse)"
+      },
+      "note": {
+        "ru": "репутационный и регуляторный риск",
+        "en": "reputational and regulatory risk"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "foundation", "name": "OpenAI / Anthropic", "northStar": "Выручка (фронтир-модель: API + подписки)",
-      "note": "разработчик фундаментальных моделей: огромные капзатраты на обучение; выручка с API-платформы и флагманской подписки.",
+      "id": "foundation",
+      "name": "OpenAI / Anthropic",
+      "northStar": {
+        "ru": "Выручка (фронтир-модель: API + подписки)",
+        "en": "Revenue (frontier model: API + subscriptions)"
+      },
+      "note": {
+        "ru": "разработчик фундаментальных моделей: огромные капзатраты на обучение; выручка с API-платформы и флагманской подписки.",
+        "en": "a foundation-model developer: huge capex on training; revenue from the API platform and a flagship subscription."
+      },
       "root": {
-        "id": "fm-rev", "level": 0, "title": "Выручка", "formula": "API-токены + подписки − cost",
-        "note": "Капиталоёмкая игра: тренируют фронтир-модель, затем монетизируют через платформу и подписку.",
+        "id": "fm-rev",
+        "level": 0,
+        "title": {
+          "ru": "Выручка",
+          "en": "Revenue"
+        },
+        "formula": {
+          "ru": "API-токены + подписки − cost",
+          "en": "API tokens + subscriptions − cost"
+        },
+        "note": {
+          "ru": "Капиталоёмкая игра: тренируют фронтир-модель, затем монетизируют через платформу и подписку.",
+          "en": "A capital-heavy game: train the frontier model, then monetize via the platform and the subscription."
+        },
         "children": [
-          { "id": "fm-platform", "level": 1, "title": "API-платформа (B2B)", "note": "Разработчики строят поверх модели.", "children": [
-            { "id": "fm-devs", "level": 2, "title": "Активные разработчики", "note": "Экосистема на API.", "children": [
-              { "id": "fm-tokens", "level": 3, "title": "Объём токенов", "note": "Главный счётчик использования.", "children": [
-                { "id": "fm-nrr", "level": 4, "title": "Расширение клиентов (NRR)", "note": "Растёт ли потребление аккаунтов." }
-              ] }
-            ] }
-          ] },
-          { "id": "fm-consumer", "level": 1, "title": "Подписка (B2C)", "note": "Флагманский ассистент.", "children": [
-            { "id": "fm-sub", "level": 2, "title": "Платные подписчики", "note": "Pro/Plus-аудитория.", "children": [
-              { "id": "fm-f2p", "level": 3, "title": "Free → Paid", "note": "Воронка из бесплатного." }
-            ] }
-          ] },
-          { "id": "fm-model", "level": 1, "title": "Лидерство модели и маржа", "note": "Качество vs стоимость обучения/инференса.", "children": [
-            { "id": "fm-quality", "level": 2, "title": "Качество (бенчмарки, безопасность)", "note": "Опережение конкурентов.", "children": [
-              { "id": "fm-cost", "level": 3, "title": "Стоимость обучения и инференса", "note": "Капзатраты и GPU давят маржу." }
-            ] }
-          ] }
+          {
+            "id": "fm-platform",
+            "level": 1,
+            "title": {
+              "ru": "API-платформа (B2B)",
+              "en": "API platform (B2B)"
+            },
+            "note": {
+              "ru": "Разработчики строят поверх модели — экосистема как канал сбыта.",
+              "en": "Developers build on top of the model — the ecosystem as a distribution channel."
+            },
+            "children": [
+              {
+                "id": "fm-devs",
+                "level": 2,
+                "title": {
+                  "ru": "Активные разработчики",
+                  "en": "Active developers"
+                },
+                "note": {
+                  "ru": "Экосистема на API: каждое приложение приводит своё потребление.",
+                  "en": "The API ecosystem: every app brings its own consumption."
+                },
+                "children": [
+                  {
+                    "id": "fm-tokens",
+                    "level": 3,
+                    "title": {
+                      "ru": "Объём токенов",
+                      "en": "Token volume"
+                    },
+                    "note": {
+                      "ru": "Главный счётчик использования и выручки платформы.",
+                      "en": "The platform's main usage and revenue meter."
+                    },
+                    "children": [
+                      {
+                        "id": "fm-nrr",
+                        "level": 4,
+                        "metricId": "nrr",
+                        "title": {
+                          "ru": "Расширение клиентов (NRR)",
+                          "en": "Customer expansion (NRR)"
+                        },
+                        "note": {
+                          "ru": "Растёт ли потребление аккаунтов: приложение в проде увеличивает токены само.",
+                          "en": "Is account consumption growing: an app in production grows its own token spend."
+                        },
+                        "children": [
+                          {
+                            "id": "fm-concentration",
+                            "level": 5,
+                            "title": {
+                              "ru": "Концентрация клиентов",
+                              "en": "Customer concentration"
+                            },
+                            "note": {
+                              "ru": "Доля выручки от топ-клиентов: пара крупных приложений может давать треть токенов.",
+                              "en": "Revenue share from top customers: a couple of big apps can drive a third of tokens."
+                            },
+                            "metricId": "token-volume"
+                          }
+                        ]
+                      }
+                    ],
+                    "metricId": "token-volume"
+                  }
+                ],
+                "metricId": "dau-mau"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "fm-consumer",
+            "level": 1,
+            "title": {
+              "ru": "Подписка (B2C)",
+              "en": "Subscription (B2C)"
+            },
+            "note": {
+              "ru": "Флагманский ассистент: витрина модели и массовая выручка.",
+              "en": "The flagship assistant: the model's showcase and mass-market revenue."
+            },
+            "children": [
+              {
+                "id": "fm-sub",
+                "level": 2,
+                "metricId": "mrr",
+                "title": {
+                  "ru": "Платные подписчики",
+                  "en": "Paid subscribers"
+                },
+                "note": {
+                  "ru": "Pro/Plus-аудитория.",
+                  "en": "The Pro/Plus audience."
+                },
+                "children": [
+                  {
+                    "id": "fm-f2p",
+                    "level": 3,
+                    "metricId": "paying-share",
+                    "title": "Free → Paid",
+                    "note": {
+                      "ru": "Воронка из бесплатного: лимиты бесплатного тарифа — одновременно и маркетинг, и защита маржи.",
+                      "en": "The free funnel: free-tier limits are both marketing and margin protection."
+                    }
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "fm-model",
+            "level": 1,
+            "title": {
+              "ru": "Лидерство модели и маржа",
+              "en": "Model leadership & margin"
+            },
+            "note": {
+              "ru": "Качество против стоимости обучения и инференса.",
+              "en": "Quality versus the cost of training and inference."
+            },
+            "children": [
+              {
+                "id": "fm-quality",
+                "level": 2,
+                "title": {
+                  "ru": "Качество (бенчмарки, безопасность)",
+                  "en": "Quality (benchmarks, safety)"
+                },
+                "note": {
+                  "ru": "Опережение конкурентов: разработчики переключаются на лучшую модель за недели.",
+                  "en": "Staying ahead: developers switch to a better model within weeks."
+                },
+                "children": [
+                  {
+                    "id": "fm-cost",
+                    "level": 3,
+                    "metricId": "cost-per-user",
+                    "title": {
+                      "ru": "Стоимость обучения и инференса",
+                      "en": "Training & inference cost"
+                    },
+                    "note": {
+                      "ru": "Капзатраты и GPU давят маржу — гонка фронтира требует капитала раньше выручки.",
+                      "en": "Capex and GPUs squeeze margin — the frontier race demands capital before revenue."
+                    }
+                  }
+                ],
+                "metricId": "model-quality"
+              }
+            ],
+            "kind": "group"
+          }
+        ],
+        "metricId": "revenue"
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              {
+                "ru": "Валовая маржа",
+                "en": "Gross margin"
+              },
+              {
+                "ru": "Доля рынка моделей",
+                "en": "Model market share"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Активные разработчики",
+                "en": "Active developers"
+              },
+              {
+                "ru": "Платные подписчики",
+                "en": "Paid subscribers"
+              },
+              "NRR"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": "research/ML",
+            "items": [
+              {
+                "ru": "Объём токенов",
+                "en": "Token volume"
+              },
+              {
+                "ru": "Качество (бенчмарки)",
+                "en": "Quality (benchmarks)"
+              },
+              {
+                "ru": "Безопасность",
+                "en": "Safety"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инфраструктура",
+              "en": "infrastructure"
+            },
+            "items": [
+              {
+                "ru": "Латентность",
+                "en": "Latency"
+              },
+              {
+                "ru": "Аптайм API",
+                "en": "API uptime"
+              },
+              {
+                "ru": "Утилизация GPU-кластеров",
+                "en": "GPU cluster utilization"
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Валовая маржа", "Доля рынка моделей"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Активные разработчики", "Платные подписчики", "NRR"] },
-        { "label": "Операционные", "role": "research/ML", "items": ["Объём токенов", "Качество (бенчмарки)", "Безопасность"] },
-        { "label": "Платформенные", "role": "инфраструктура", "items": ["Латентность", "Аптайм API", "Утилизация GPU-кластеров"] }
-      ] },
       "counterMetrics": [
-        { "title": "Стоимость обучения vs выручка", "note": "гонка фронтира сжигает капитал быстрее монетизации" },
-        { "title": "Безопасность и регуляторика", "note": "инциденты бьют по доверию и допуску на рынки" }
+        {
+          "title": {
+            "ru": "Стоимость обучения vs выручка",
+            "en": "Training cost vs revenue"
+          },
+          "note": {
+            "ru": "гонка фронтира сжигает капитал быстрее монетизации",
+            "en": "the frontier race burns capital faster than monetization"
+          }
+        },
+        {
+          "title": {
+            "ru": "Безопасность и регуляторика",
+            "en": "Safety & regulation"
+          },
+          "note": {
+            "ru": "инциденты бьют по доверию и допуску на рынки",
+            "en": "incidents hit trust and market access"
+          }
+        }
       ]
     },
     {
-      "id": "cursor", "name": "Cursor", "northStar": "Выручка подписки (AI-IDE для разработчиков)",
-      "note": "AI-приложение поверх чужих моделей: ставка на продуктовый опыт в IDE и удержание разработчиков; маржа зажата стоимостью API.",
+      "id": "cursor",
+      "name": "Cursor",
+      "northStar": {
+        "ru": "Выручка подписки (AI-IDE для разработчиков)",
+        "en": "Subscription revenue (AI IDE for developers)"
+      },
+      "note": {
+        "ru": "AI-приложение поверх чужих моделей: ставка на продуктовый опыт в IDE и удержание разработчиков; маржа зажата стоимостью API.",
+        "en": "an AI app on top of someone else's models: a bet on the IDE experience and developer retention; margin squeezed by API costs."
+      },
       "root": {
-        "id": "cu-rev", "level": 0, "title": "Выручка подписки", "formula": "Платящие разработчики × ARPU − cost API",
-        "note": "Application-layer: ценность в UX и контексте кода, а косты — это оплата токенов базовых моделей.",
+        "id": "cu-rev",
+        "level": 0,
+        "title": {
+          "ru": "Выручка подписки",
+          "en": "Subscription revenue"
+        },
+        "formula": {
+          "ru": "Платящие разработчики × ARPU − cost API",
+          "en": "Paying developers × ARPU − API cost"
+        },
+        "note": {
+          "ru": "Application-layer: ценность в UX и контексте кода, а косты — это оплата токенов базовых моделей.",
+          "en": "The application layer: value lives in UX and code context, while costs are the foundation models' token bills."
+        },
         "children": [
-          { "id": "cu-acq", "level": 1, "title": "Привлечение разработчиков", "note": "Виральность в дев-комьюнити.", "children": [
-            { "id": "cu-install", "level": 2, "title": "Установки IDE", "note": "Бесплатный вход.", "children": [
-              { "id": "cu-activate", "level": 3, "title": "Активация (первый принятый дифф)", "note": "Ага-момент — AI написал код.", "children": [
-                { "id": "cu-wom", "level": 4, "title": "Сарафан в командах", "note": "Разработчики тащат коллег." }
-              ] }
-            ] }
-          ] },
-          { "id": "cu-engage", "level": 1, "title": "Вовлечённость и польза", "note": "Ежедневный рабочий инструмент.", "children": [
-            { "id": "cu-accept", "level": 2, "title": "Acceptance Rate подсказок", "note": "Доля принятого AI-кода — главный сигнал пользы.", "children": [
-              { "id": "cu-dau", "level": 3, "title": "DAU / активные дни", "note": "Стал ли ежедневным." }
-            ] }
-          ] },
-          { "id": "cu-monet", "level": 1, "title": "Монетизация и маржа", "note": "Подписка vs стоимость токенов.", "children": [
-            { "id": "cu-sub", "level": 2, "title": "Free → Pro / Business", "note": "Конверсия и команды.", "children": [
-              { "id": "cu-margin", "level": 3, "title": "Маржа после API-костов", "note": "Тяжёлые юзеры жгут токены — риск отрицательной маржи." }
-            ] }
-          ] }
+          {
+            "id": "cu-acq",
+            "level": 1,
+            "title": {
+              "ru": "Привлечение разработчиков",
+              "en": "Developer acquisition"
+            },
+            "note": {
+              "ru": "Виральность в дев-комьюнити вместо платного трафика.",
+              "en": "Virality in the dev community instead of paid traffic."
+            },
+            "children": [
+              {
+                "id": "cu-install",
+                "level": 2,
+                "title": {
+                  "ru": "Установки IDE",
+                  "en": "IDE installs"
+                },
+                "note": {
+                  "ru": "Бесплатный вход: попробовать ничего не стоит.",
+                  "en": "Free entry: trying costs nothing."
+                },
+                "children": [
+                  {
+                    "id": "cu-activate",
+                    "level": 3,
+                    "metricId": "activation-rate",
+                    "title": {
+                      "ru": "Активация (первый принятый дифф)",
+                      "en": "Activation (first accepted diff)"
+                    },
+                    "note": {
+                      "ru": "Ага-момент: AI написал код, который разработчик принял.",
+                      "en": "The aha moment: the AI wrote code the developer accepted."
+                    },
+                    "children": [
+                      {
+                        "id": "cu-wom",
+                        "level": 4,
+                        "title": {
+                          "ru": "Сарафан в командах",
+                          "en": "Word of mouth in teams"
+                        },
+                        "note": {
+                          "ru": "Разработчики тащат коллег — вход в командные подписки.",
+                          "en": "Developers drag colleagues in — the door to team subscriptions."
+                        },
+                        "children": [
+                          {
+                            "id": "cu-team-expansion",
+                            "level": 5,
+                            "title": {
+                              "ru": "Расширение по местам",
+                              "en": "Seat expansion"
+                            },
+                            "note": {
+                              "ru": "Рост мест внутри компании: один разработчик приводит команду, команда — отдел.",
+                              "en": "Seat growth inside a company: one developer brings a team, the team brings a department."
+                            },
+                            "metricId": "adoption-depth"
+                          }
+                        ],
+                        "metricId": "viral-coefficient"
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "installs"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "cu-engage",
+            "level": 1,
+            "title": {
+              "ru": "Вовлечённость и польза",
+              "en": "Engagement & usefulness"
+            },
+            "note": {
+              "ru": "Ежедневный рабочий инструмент — или ещё одна вкладка.",
+              "en": "A daily work tool — or just another tab."
+            },
+            "children": [
+              {
+                "id": "cu-accept",
+                "level": 2,
+                "title": {
+                  "ru": "Acceptance Rate подсказок",
+                  "en": "Suggestion acceptance rate"
+                },
+                "note": {
+                  "ru": "Доля принятого AI-кода — главный сигнал пользы и качества контекста.",
+                  "en": "The share of accepted AI code — the main signal of usefulness and context quality."
+                },
+                "children": [
+                  {
+                    "id": "cu-dau",
+                    "level": 3,
+                    "metricId": "stickiness",
+                    "title": {
+                      "ru": "DAU / активные дни",
+                      "en": "DAU / active days"
+                    },
+                    "note": {
+                      "ru": "Стал ли ежедневным: инструмент разработчика живёт или в привычке, или нигде.",
+                      "en": "Did it go daily: a developer tool lives in the habit or nowhere."
+                    }
+                  }
+                ],
+                "metricId": "acceptance-rate"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "cu-monet",
+            "level": 1,
+            "title": {
+              "ru": "Монетизация и маржа",
+              "en": "Monetization & margin"
+            },
+            "note": {
+              "ru": "Подписка против стоимости токенов — центральный конфликт application-layer.",
+              "en": "Subscription versus token cost — the application layer's central conflict."
+            },
+            "children": [
+              {
+                "id": "cu-sub",
+                "level": 2,
+                "metricId": "paying-share",
+                "title": "Free → Pro / Business",
+                "note": {
+                  "ru": "Конверсия и переход в командные тарифы.",
+                  "en": "Conversion and the move to team plans."
+                },
+                "children": [
+                  {
+                    "id": "cu-margin",
+                    "level": 3,
+                    "metricId": "contribution-margin",
+                    "title": {
+                      "ru": "Маржа после API-костов",
+                      "en": "Margin after API costs"
+                    },
+                    "note": {
+                      "ru": "Тяжёлые юзеры жгут токены — при безлимите маржа уходит в минус.",
+                      "en": "Heavy users burn tokens — with unlimited plans margin goes negative."
+                    },
+                    "children": [
+                      {
+                        "id": "cu-cost-per-seat",
+                        "level": 4,
+                        "metricId": "cost-per-user",
+                        "title": {
+                          "ru": "Косты на место",
+                          "en": "Cost per seat"
+                        },
+                        "note": {
+                          "ru": "Распределение костов по подписчикам: хвост тяжёлых юзеров определяет цену тарифа.",
+                          "en": "Cost distribution across subscribers: the heavy-user tail sets the plan's price."
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          }
+        ],
+        "metricId": "revenue"
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "основатели",
+              "en": "founders"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              {
+                "ru": "Маржа после API-костов",
+                "en": "Margin after API costs"
+              },
+              {
+                "ru": "Платящие команды",
+                "en": "Paying teams"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакт",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Активация",
+                "en": "Activation"
+              },
+              "Free→Pro",
+              "DAU"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "аналитики",
+              "en": "analysts"
+            },
+            "items": [
+              "Acceptance Rate",
+              {
+                "ru": "Активные дни",
+                "en": "Active days"
+              },
+              {
+                "ru": "Сарафан",
+                "en": "Word of mouth"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Латентность подсказок",
+                "en": "Suggestion latency"
+              },
+              {
+                "ru": "Аптайм",
+                "en": "Uptime"
+              },
+              {
+                "ru": "Себестоимость запроса",
+                "en": "Cost per request"
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "основатели", "items": ["Выручка", "Маржа после API-костов", "Платящие команды"] },
-        { "label": "Продуктовые", "role": "продакт", "items": ["Активация", "Free→Pro", "DAU"] },
-        { "label": "Операционные", "role": "аналитики", "items": ["Acceptance Rate", "Активные дни", "Сарафан"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Латентность подсказок", "Аптайм", "Себестоимость запроса"] }
-      ] },
       "counterMetrics": [
-        { "title": "Отрицательная маржа на тяжёлых юзерах", "note": "безлимит на дорогих моделях съедает подписку" },
-        { "title": "Зависимость от чужих моделей", "note": "цены и доступ к API вне контроля продукта" }
+        {
+          "title": {
+            "ru": "Отрицательная маржа на тяжёлых юзерах",
+            "en": "Negative margin on heavy users"
+          },
+          "note": {
+            "ru": "безлимит на дорогих моделях съедает подписку",
+            "en": "unlimited access to expensive models eats the subscription"
+          }
+        },
+        {
+          "title": {
+            "ru": "Зависимость от чужих моделей",
+            "en": "Dependence on third-party models"
+          },
+          "note": {
+            "ru": "цены и доступ к API вне контроля продукта",
+            "en": "API pricing and access are outside the product's control"
+          }
+        }
       ]
     }
   ]

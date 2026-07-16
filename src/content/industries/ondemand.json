@@ -1,121 +1,1084 @@
 {
   "id": "ondemand",
-  "archetype": "Транзакционные платформы",
-  "industry": "Такси и доставка (on-demand)",
-  "northStar": "Completed Rides / Orders (успешные поездки)",
+  "archetype": {
+    "ru": "Транзакционные платформы",
+    "en": "Transactional platforms"
+  },
+  "industry": {
+    "ru": "Такси и доставка (on-demand)",
+    "en": "Rides & delivery (on-demand)"
+  },
+  "northStar": {
+    "ru": "Completed Rides / Orders (успешные поездки)",
+    "en": "Completed rides / orders"
+  },
   "root": {
-    "id": "rides", "level": 0, "title": "Completed Rides", "formula": "Запросы × Fulfilment Rate",
-    "note": "Реальная ценность — состоявшаяся поездка. Платформа берёт комиссию с каждой.",
+    "id": "rides",
+    "level": 0,
+    "metricId": "completed-orders",
+    "title": "Completed Rides",
+    "formula": {
+      "ru": "Запросы × Fulfilment Rate",
+      "en": "Requests × fulfilment rate"
+    },
+    "note": {
+      "ru": "Реальная ценность — состоявшаяся поездка: в ней сошлись спрос, предложение и матчинг. Платформа берёт комиссию с каждой.",
+      "en": "The real value is a completed ride: demand, supply and matching met in it. The platform takes a commission on each."
+    },
     "children": [
-      { "id": "riders", "level": 1, "title": "Спрос (пассажиры)", "formula": "польз. × частота", "note": "Сторона спроса.", "children": [
-        { "id": "active-riders", "level": 2, "title": "Активные пассажиры", "note": "Кто реально ездит.", "children": [
-          { "id": "freq", "level": 3, "title": "Поездок на пассажира", "note": "Частота использования.", "children": [
-            { "id": "habit", "level": 4, "title": "Доля «привычных» сценариев", "note": "Дом-работа, аэропорт." }
-          ] }
-        ] }
-      ] },
-      { "id": "drivers", "level": 1, "title": "Предложение (водители)", "formula": "водители × часы онлайн", "note": "Сторона предложения.", "children": [
-        { "id": "active-drivers", "level": 2, "title": "Активные водители", "note": "Доступная мощность.", "children": [
-          { "id": "utilization", "level": 3, "title": "Утилизация (доля времени в заказе)", "note": "Эффективность водителя.", "children": [
-            { "id": "earnings", "level": 4, "title": "Заработок в час", "note": "Удерживает водителей на линии." }
-          ] }
-        ] }
-      ] },
-      { "id": "match", "level": 1, "title": "Ликвидность / матчинг", "formula": "Fulfilment Rate", "note": "Связывает стороны вовремя.", "children": [
-        { "id": "eta", "level": 2, "title": "Время подачи (ETA)", "note": "Быстро ли приедет.", "children": [
-          { "id": "cancel", "level": 3, "title": "Доля отмен", "note": "Не дождался / нет машин." }
-        ] },
-        { "id": "surge", "level": 2, "title": "Динамическое ценообразование", "note": "Балансирует спрос и предложение." }
-      ] }
+      {
+        "id": "riders",
+        "level": 1,
+        "title": {
+          "ru": "Спрос (пассажиры)",
+          "en": "Demand (riders)"
+        },
+        "formula": {
+          "ru": "пользователи × частота",
+          "en": "users × frequency"
+        },
+        "note": {
+          "ru": "Сторона спроса: сколько людей и как часто вызывают машину.",
+          "en": "The demand side: how many people request rides and how often."
+        },
+        "children": [
+          {
+            "id": "active-riders",
+            "level": 2,
+            "metricId": "dau-mau",
+            "title": {
+              "ru": "Активные пассажиры",
+              "en": "Active riders"
+            },
+            "note": {
+              "ru": "Кто реально ездит за месяц, а не просто установил приложение.",
+              "en": "Who actually rides in a month, not who merely installed the app."
+            },
+            "children": [
+              {
+                "id": "rider-acq",
+                "level": 3,
+                "metricId": "cac",
+                "title": {
+                  "ru": "Привлечение пассажиров",
+                  "en": "Rider acquisition"
+                },
+                "note": {
+                  "ru": "CAC пассажира и конверсия установки в первую поездку.",
+                  "en": "Rider CAC and install-to-first-ride conversion."
+                },
+                "children": [
+                  {
+                    "id": "first-ride",
+                    "level": 4,
+                    "metricId": "activation-rate",
+                    "title": {
+                      "ru": "Установка → первая поездка",
+                      "en": "Install → first ride"
+                    },
+                    "note": {
+                      "ru": "Активация: первый успешный заказ в первые дни после установки.",
+                      "en": "Activation: a first successful ride within days of install."
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "freq",
+                "level": 3,
+                "metricId": "purchase-frequency",
+                "title": {
+                  "ru": "Поездок на пассажира",
+                  "en": "Rides per rider"
+                },
+                "note": {
+                  "ru": "Частота использования — главный рычаг зрелого рынка.",
+                  "en": "Usage frequency — the main lever in a mature market."
+                },
+                "children": [
+                  {
+                    "id": "habit",
+                    "level": 4,
+                    "title": {
+                      "ru": "Доля «привычных» сценариев",
+                      "en": "Habitual use cases"
+                    },
+                    "note": {
+                      "ru": "Дом—работа, аэропорт, вечер пятницы: сценарии, где вызов машины стал привычкой.",
+                      "en": "Home–work, airport, Friday night: scenarios where hailing a ride became a habit."
+                    },
+                    "children": [
+                      {
+                        "id": "retention-riders",
+                        "level": 5,
+                        "metricId": "retention-n-day",
+                        "title": {
+                          "ru": "Retention пассажиров",
+                          "en": "Rider retention"
+                        },
+                        "note": {
+                          "ru": "Возвращаемость когорт: привычка видна в кривой удержания, вышедшей на плато.",
+                          "en": "Cohort returns: habit shows as a retention curve flattening into a plateau."
+                        }
+                      }
+                    ],
+                    "metricId": "retention-n-day"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "drivers",
+        "level": 1,
+        "title": {
+          "ru": "Предложение (водители)",
+          "en": "Supply (drivers)"
+        },
+        "formula": {
+          "ru": "водители × часы онлайн",
+          "en": "drivers × online hours"
+        },
+        "note": {
+          "ru": "Мощность платформы измеряется не числом аккаунтов, а человеко-часами на линии.",
+          "en": "Platform capacity is measured in online person-hours, not account counts."
+        },
+        "children": [
+          {
+            "id": "active-drivers",
+            "level": 2,
+            "title": {
+              "ru": "Активные водители",
+              "en": "Active drivers"
+            },
+            "note": {
+              "ru": "Доступная мощность: часы онлайн в нужных районах в нужное время.",
+              "en": "Available capacity: online hours in the right areas at the right time."
+            },
+            "children": [
+              {
+                "id": "driver-acq",
+                "level": 3,
+                "title": {
+                  "ru": "Привлечение и онбординг",
+                  "en": "Driver acquisition & onboarding"
+                },
+                "note": {
+                  "ru": "Время от заявки до первой смены: документы, проверки, обучение.",
+                  "en": "Time from application to first shift: documents, checks, training."
+                },
+                "kind": "group"
+              },
+              {
+                "id": "utilization",
+                "level": 3,
+                "title": {
+                  "ru": "Утилизация водителя",
+                  "en": "Driver utilization"
+                },
+                "formula": {
+                  "ru": "время в заказе / время онлайн",
+                  "en": "on-trip time / online time"
+                },
+                "note": {
+                  "ru": "Доля времени на линии, проведённая с пассажиром, — эффективность и заработок.",
+                  "en": "Share of online time spent with a rider — efficiency and earnings."
+                },
+                "children": [
+                  {
+                    "id": "earnings",
+                    "level": 4,
+                    "title": {
+                      "ru": "Заработок в час",
+                      "en": "Hourly earnings"
+                    },
+                    "note": {
+                      "ru": "Главное, что удерживает водителя на вашей платформе, а не у конкурента.",
+                      "en": "The main thing keeping a driver on your platform instead of a competitor's."
+                    },
+                    "children": [
+                      {
+                        "id": "driver-churn",
+                        "level": 5,
+                        "metricId": "churn-rate",
+                        "title": {
+                          "ru": "Отток водителей",
+                          "en": "Driver churn"
+                        },
+                        "note": {
+                          "ru": "Уход исполнителей схлопывает предложение — и ликвидность за ним.",
+                          "en": "Provider churn collapses supply — and liquidity with it."
+                        }
+                      }
+                    ],
+                    "metricId": "hourly-earnings"
+                  }
+                ],
+                "metricId": "utilization"
+              }
+            ],
+            "metricId": "provider-availability"
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "match",
+        "level": 1,
+        "metricId": "liquidity",
+        "title": {
+          "ru": "Ликвидность / матчинг",
+          "en": "Liquidity / matching"
+        },
+        "formula": "Fulfilment Rate",
+        "note": {
+          "ru": "Связывает стороны вовремя: доля запросов, закончившихся поездкой.",
+          "en": "Connects the sides on time: the share of requests ending in a ride."
+        },
+        "children": [
+          {
+            "id": "eta",
+            "level": 2,
+            "metricId": "time-to-match",
+            "title": {
+              "ru": "Время подачи (ETA)",
+              "en": "Pickup time (ETA)"
+            },
+            "note": {
+              "ru": "Сколько ждать машину; медиана и p90 по районам и часам.",
+              "en": "How long the car takes; median and p90 by area and hour."
+            },
+            "children": [
+              {
+                "id": "density",
+                "level": 3,
+                "title": {
+                  "ru": "Плотность водителей",
+                  "en": "Driver density"
+                },
+                "note": {
+                  "ru": "Водителей на район: плотность делает подачу короткой, а поездку дешёвой.",
+                  "en": "Drivers per area: density makes pickups short and rides cheap."
+                },
+                "children": [
+                  {
+                    "id": "cancel",
+                    "level": 4,
+                    "metricId": "cancellation-rate",
+                    "title": {
+                      "ru": "Доля отмен",
+                      "en": "Cancellation rate"
+                    },
+                    "note": {
+                      "ru": "Не дождался, нет машин, водитель отменил — разбирается по инициатору.",
+                      "en": "Gave up waiting, no cars, driver cancelled — broken down by initiator."
+                    },
+                    "children": [
+                      {
+                        "id": "cancel-reasons",
+                        "level": 5,
+                        "title": {
+                          "ru": "Отмены по причинам",
+                          "en": "Cancellations by reason"
+                        },
+                        "note": {
+                          "ru": "Долгий ETA, цена, ошибка адреса: каждую причину чинит своя команда.",
+                          "en": "Long ETA, price, wrong address: each cause is fixed by a different team."
+                        },
+                        "metricId": "cancellation-rate"
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "driver-density"
+              }
+            ]
+          },
+          {
+            "id": "surge",
+            "level": 2,
+            "kind": "lever",
+            "title": {
+              "ru": "Динамическое ценообразование",
+              "en": "Dynamic pricing"
+            },
+            "note": {
+              "ru": "Рычаг: сурж балансирует спрос и предложение в пике — и злит пассажиров при перегибе.",
+              "en": "Lever: surge balances demand and supply at peak — and angers riders when overdone."
+            },
+            "children": [
+              {
+                "id": "surge-share",
+                "level": 3,
+                "title": {
+                  "ru": "Доля поездок с суржем",
+                  "en": "Surged ride share"
+                },
+                "note": {
+                  "ru": "Постоянный сурж — сигнал хронической нехватки предложения, а не «удачной» монетизации.",
+                  "en": "Constant surge signals a chronic supply shortage, not \"successful\" monetization."
+                },
+                "metricId": "surge-share"
+              }
+            ]
+          }
+        ]
+      }
     ]
   },
   "pyramid": {
-    "note": "От юнит-экономики поездки (вершина) к матчинг-движку (основание).",
+    "note": {
+      "ru": "От юнит-экономики поездки (вершина) к матчинг-движку (основание).",
+      "en": "From ride unit economics (top) to the matching engine (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка (комиссия)", "Completed Rides", "Contribution margin/поездку"] },
-      { "label": "Продуктовые", "role": "продакты", "items": ["Активные пассажиры", "Активные водители", "Fulfilment Rate"] },
-      { "label": "Операционные", "role": "операции города", "items": ["ETA", "Доля отмен", "Утилизация водителя"] },
-      { "label": "Платформенные", "role": "инженеры", "items": ["Скорость матчинга", "Точность ETA/гео", "Аптайм"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "руководство",
+          "en": "leadership"
+        },
+        "items": [
+          {
+            "ru": "Выручка (комиссия)",
+            "en": "Revenue (take)"
+          },
+          "Completed Rides",
+          {
+            "ru": "Contribution margin/поездку",
+            "en": "Contribution margin/ride"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "продакты",
+          "en": "product"
+        },
+        "items": [
+          {
+            "ru": "Активные пассажиры",
+            "en": "Active riders"
+          },
+          {
+            "ru": "Активные водители",
+            "en": "Active drivers"
+          },
+          "Fulfilment Rate"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": {
+          "ru": "операции города",
+          "en": "city ops"
+        },
+        "items": [
+          "ETA",
+          {
+            "ru": "Доля отмен",
+            "en": "Cancellation rate"
+          },
+          {
+            "ru": "Утилизация водителя",
+            "en": "Driver utilization"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "инженеры",
+          "en": "engineers"
+        },
+        "items": [
+          {
+            "ru": "Скорость матчинга",
+            "en": "Matching speed"
+          },
+          {
+            "ru": "Точность ETA/гео",
+            "en": "ETA/geo accuracy"
+          },
+          {
+            "ru": "Аптайм",
+            "en": "Uptime"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Отмены и долгое ожидание", "note": "рост заказов при росте отмен — плохая ликвидность" },
-    { "title": "Жалобы на surge", "note": "перегиб цен бьёт по лояльности" },
-    { "title": "Отток водителей", "note": "низкий заработок схлопывает предложение" }
+    {
+      "title": {
+        "ru": "Отмены и долгое ожидание",
+        "en": "Cancellations & long waits"
+      },
+      "note": {
+        "ru": "рост заказов при росте отмен — плохая ликвидность",
+        "en": "order growth with rising cancellations is bad liquidity"
+      }
+    },
+    {
+      "title": {
+        "ru": "Жалобы на surge",
+        "en": "Surge complaints"
+      },
+      "note": {
+        "ru": "перегиб цен бьёт по лояльности",
+        "en": "price overreach hits loyalty"
+      }
+    },
+    {
+      "title": {
+        "ru": "Отток водителей",
+        "en": "Driver churn"
+      },
+      "note": {
+        "ru": "низкий заработок схлопывает предложение",
+        "en": "low earnings collapse supply"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "uber", "name": "Uber", "northStar": "Completed Trips (мультипродукт + membership)",
-      "note": "глобальная платформа: ставка на плотность городов, мультипродукт (такси+еда) и подписку Uber One.",
+      "id": "uber",
+      "name": "Uber",
+      "northStar": {
+        "ru": "Completed Trips (мультипродукт + membership)",
+        "en": "Completed trips (multi-product + membership)"
+      },
+      "note": {
+        "ru": "глобальная платформа: ставка на плотность городов, мультипродукт (такси+еда) и подписку Uber One.",
+        "en": "a global platform: a bet on city density, multi-product (rides+food) and the Uber One membership."
+      },
       "root": {
-        "id": "ub-trips", "level": 0, "title": "Completed Trips", "formula": "Запросы × Fulfilment",
-        "note": "Рост через плотность рынков и кросс-использование такси и доставки.",
+        "id": "ub-trips",
+        "level": 0,
+        "metricId": "completed-orders",
+        "title": "Completed Trips",
+        "formula": {
+          "ru": "Запросы × Fulfilment",
+          "en": "Requests × fulfilment"
+        },
+        "note": {
+          "ru": "Рост через плотность рынков и кросс-использование такси и доставки.",
+          "en": "Growth via market density and cross-use of rides and delivery."
+        },
         "children": [
-          { "id": "ub-demand", "level": 1, "title": "Спрос", "note": "Пассажиры и едоки.", "children": [
-            { "id": "ub-member", "level": 2, "title": "Uber One (подписка)", "note": "Чаще ездят и заказывают.", "children": [
-              { "id": "ub-cross", "level": 3, "title": "Кросс-использование", "note": "Такси + Eats у одного юзера.", "children": [
-                { "id": "ub-freq", "level": 4, "title": "Поездок/заказов в месяц", "note": "Частота на участника." }
-              ] }
-            ] }
-          ] },
-          { "id": "ub-supply", "level": 1, "title": "Водители/курьеры", "note": "Общий пул мощности.", "children": [
-            { "id": "ub-util", "level": 2, "title": "Утилизация", "note": "Доля времени в заказе.", "children": [
-              { "id": "ub-earn", "level": 3, "title": "Заработок в час", "note": "Удержание исполнителей." }
-            ] }
-          ] },
-          { "id": "ub-liquidity", "level": 1, "title": "Ликвидность", "note": "Плотность = короткий ETA.", "children": [
-            { "id": "ub-eta", "level": 2, "title": "ETA", "note": "Время подачи.", "children": [
-              { "id": "ub-density", "level": 3, "title": "Плотность водителей на район", "note": "Чем плотнее, тем быстрее и дешевле." }
-            ] }
-          ] }
+          {
+            "id": "ub-demand",
+            "level": 1,
+            "title": {
+              "ru": "Спрос",
+              "en": "Demand"
+            },
+            "note": {
+              "ru": "Пассажиры и едоки в одном аккаунте.",
+              "en": "Riders and eaters in one account."
+            },
+            "children": [
+              {
+                "id": "ub-member",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Uber One (подписка)",
+                  "en": "Uber One (membership)"
+                },
+                "note": {
+                  "ru": "Рычаг: подписчики чаще ездят и заказывают, отток ниже.",
+                  "en": "Lever: members ride and order more, churn less."
+                },
+                "children": [
+                  {
+                    "id": "ub-cross",
+                    "level": 3,
+                    "title": {
+                      "ru": "Кросс-использование",
+                      "en": "Cross-use"
+                    },
+                    "note": {
+                      "ru": "Такси + Eats у одного пользователя: два продукта делят CAC.",
+                      "en": "Rides + Eats for the same user: two products share the CAC."
+                    },
+                    "children": [
+                      {
+                        "id": "ub-freq",
+                        "level": 4,
+                        "metricId": "purchase-frequency",
+                        "title": {
+                          "ru": "Поездок/заказов в месяц",
+                          "en": "Trips/orders per month"
+                        },
+                        "note": {
+                          "ru": "Частота на участника — денежный эффект подписки.",
+                          "en": "Frequency per member — the membership's money effect."
+                        },
+                        "children": [
+                          {
+                            "id": "ub-member-retention",
+                            "level": 5,
+                            "metricId": "churn-rate",
+                            "title": {
+                              "ru": "Отток подписчиков",
+                              "en": "Member churn"
+                            },
+                            "note": {
+                              "ru": "Продление Uber One: подписка окупается только при удержании.",
+                              "en": "Uber One renewals: the membership only pays off with retention."
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "metricId": "products-per-customer"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "ub-supply",
+            "level": 1,
+            "title": {
+              "ru": "Водители/курьеры",
+              "en": "Drivers/couriers"
+            },
+            "note": {
+              "ru": "Общий пул мощности между поездками и доставкой.",
+              "en": "A shared capacity pool across rides and delivery."
+            },
+            "children": [
+              {
+                "id": "ub-util",
+                "level": 2,
+                "title": {
+                  "ru": "Утилизация",
+                  "en": "Utilization"
+                },
+                "note": {
+                  "ru": "Доля времени в заказе; кросс-диспетчеризация такси/еда сглаживает простои.",
+                  "en": "Share of time on task; rides/food cross-dispatch smooths idle time."
+                },
+                "children": [
+                  {
+                    "id": "ub-earn",
+                    "level": 3,
+                    "title": {
+                      "ru": "Заработок в час",
+                      "en": "Hourly earnings"
+                    },
+                    "note": {
+                      "ru": "Удержание исполнителей против конкурентов.",
+                      "en": "Provider retention against competitors."
+                    },
+                    "children": [
+                      {
+                        "id": "ub-driver-nps",
+                        "level": 4,
+                        "metricId": "nps-csat",
+                        "title": {
+                          "ru": "NPS водителей",
+                          "en": "Driver NPS"
+                        },
+                        "note": {
+                          "ru": "Отношение исполнителей — ранний сигнал оттока предложения.",
+                          "en": "Provider sentiment — an early supply-churn signal."
+                        }
+                      }
+                    ],
+                    "metricId": "hourly-earnings"
+                  }
+                ],
+                "metricId": "utilization"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "ub-liquidity",
+            "level": 1,
+            "metricId": "liquidity",
+            "title": {
+              "ru": "Ликвидность",
+              "en": "Liquidity"
+            },
+            "note": {
+              "ru": "Плотность рынка = короткий ETA = дешёвая поездка.",
+              "en": "Market density = short ETA = cheap ride."
+            },
+            "children": [
+              {
+                "id": "ub-eta",
+                "level": 2,
+                "metricId": "time-to-match",
+                "title": "ETA",
+                "note": {
+                  "ru": "Время подачи по рынкам.",
+                  "en": "Pickup time by market."
+                },
+                "children": [
+                  {
+                    "id": "ub-density",
+                    "level": 3,
+                    "title": {
+                      "ru": "Плотность водителей на район",
+                      "en": "Driver density per area"
+                    },
+                    "note": {
+                      "ru": "Чем плотнее, тем быстрее и дешевле; главный сетевой эффект on-demand.",
+                      "en": "The denser, the faster and cheaper; on-demand's main network effect."
+                    },
+                    "metricId": "driver-density"
+                  }
+                ]
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Completed Trips", "Take rate"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Uber One", "Кросс-использование", "Активные водители"] },
-        { "label": "Операционные", "role": "city ops", "items": ["ETA", "Утилизация", "Плотность"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Матчинг", "Точность гео/ETA", "Аптайм"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              "Completed Trips",
+              "Take rate"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              "Uber One",
+              {
+                "ru": "Кросс-использование",
+                "en": "Cross-use"
+              },
+              {
+                "ru": "Активные водители",
+                "en": "Active drivers"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": "city ops",
+            "items": [
+              "ETA",
+              {
+                "ru": "Утилизация",
+                "en": "Utilization"
+              },
+              {
+                "ru": "Плотность",
+                "en": "Density"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Матчинг",
+                "en": "Matching"
+              },
+              {
+                "ru": "Точность гео/ETA",
+                "en": "Geo/ETA accuracy"
+              },
+              {
+                "ru": "Аптайм",
+                "en": "Uptime"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Surge-недовольство", "note": "ценовые скачки гонят пассажиров" },
-        { "title": "Отток водителей", "note": "падение заработка" }
+        {
+          "title": {
+            "ru": "Surge-недовольство",
+            "en": "Surge dissatisfaction"
+          },
+          "note": {
+            "ru": "ценовые скачки гонят пассажиров",
+            "en": "price spikes drive riders away"
+          }
+        },
+        {
+          "title": {
+            "ru": "Отток водителей",
+            "en": "Driver churn"
+          },
+          "note": {
+            "ru": "падение заработка",
+            "en": "falling earnings"
+          }
+        }
       ]
     },
     {
-      "id": "yandexgo", "name": "Яндекс Go", "northStar": "Completed Rides (суперапп + экосистема)",
-      "note": "суперапп РФ: такси, доставка, самокаты в одном; ставка на экосистему Плюс и плотность городов.",
+      "id": "yandexgo",
+      "name": {
+        "ru": "Яндекс Go",
+        "en": "Yandex Go"
+      },
+      "northStar": {
+        "ru": "Completed Rides (суперапп + экосистема)",
+        "en": "Completed rides (super-app + ecosystem)"
+      },
+      "note": {
+        "ru": "суперапп РФ: такси, доставка, самокаты в одном; ставка на экосистему Плюс и плотность городов.",
+        "en": "a Russian super-app: rides, delivery, scooters in one; a bet on the Plus ecosystem and city density."
+      },
       "root": {
-        "id": "yg-rides", "level": 0, "title": "Completed Rides", "formula": "Запросы × Fulfilment",
-        "note": "Множество сервисов в одном приложении + экосистемная подписка Плюс.",
+        "id": "yg-rides",
+        "level": 0,
+        "metricId": "completed-orders",
+        "title": "Completed Rides",
+        "formula": {
+          "ru": "Запросы × Fulfilment",
+          "en": "Requests × fulfilment"
+        },
+        "note": {
+          "ru": "Множество сервисов в одном приложении + экосистемная подписка Плюс.",
+          "en": "Many services in one app + the ecosystem-wide Plus subscription."
+        },
         "children": [
-          { "id": "yg-demand", "level": 1, "title": "Спрос", "note": "Пользователи супераппа.", "children": [
-            { "id": "yg-plus", "level": 2, "title": "Подписка Плюс", "note": "Кэшбэк удерживает в экосистеме.", "children": [
-              { "id": "yg-multi", "level": 3, "title": "Сервисов на пользователя", "note": "Такси+Еда+Самокаты.", "children": [
-                { "id": "yg-freq", "level": 4, "title": "Поездок в месяц", "note": "Частота использования." }
-              ] }
-            ] }
-          ] },
-          { "id": "yg-supply", "level": 1, "title": "Водители", "note": "Пул исполнителей.", "children": [
-            { "id": "yg-util", "level": 2, "title": "Утилизация", "note": "Доля времени в заказе.", "children": [
-              { "id": "yg-earn", "level": 3, "title": "Заработок в час", "note": "Удержание на линии." }
-            ] }
-          ] },
-          { "id": "yg-liquidity", "level": 1, "title": "Ликвидность", "note": "Скорость подачи.", "children": [
-            { "id": "yg-eta", "level": 2, "title": "ETA", "note": "Время до подачи.", "children": [
-              { "id": "yg-surge", "level": 3, "title": "Динамический коэффициент", "note": "Балансировка спроса." }
-            ] }
-          ] }
+          {
+            "id": "yg-demand",
+            "level": 1,
+            "title": {
+              "ru": "Спрос",
+              "en": "Demand"
+            },
+            "note": {
+              "ru": "Пользователи супераппа.",
+              "en": "Super-app users."
+            },
+            "children": [
+              {
+                "id": "yg-plus",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Подписка Плюс",
+                  "en": "Plus subscription"
+                },
+                "note": {
+                  "ru": "Рычаг: кэшбэк баллами удерживает в экосистеме сервисов.",
+                  "en": "Lever: points cashback locks users into the service ecosystem."
+                },
+                "children": [
+                  {
+                    "id": "yg-multi",
+                    "level": 3,
+                    "title": {
+                      "ru": "Сервисов на пользователя",
+                      "en": "Services per user"
+                    },
+                    "note": {
+                      "ru": "Такси + Еда + Самокаты: каждый следующий сервис снижает отток из всех.",
+                      "en": "Rides + food + scooters: each added service lowers churn from all."
+                    },
+                    "children": [
+                      {
+                        "id": "yg-freq",
+                        "level": 4,
+                        "metricId": "purchase-frequency",
+                        "title": {
+                          "ru": "Поездок в месяц",
+                          "en": "Rides per month"
+                        },
+                        "note": {
+                          "ru": "Частота использования по когортам подписки.",
+                          "en": "Usage frequency by subscription cohort."
+                        },
+                        "children": [
+                          {
+                            "id": "yg-eco-retention",
+                            "level": 5,
+                            "metricId": "retention-n-day",
+                            "title": {
+                              "ru": "Retention экосистемы",
+                              "en": "Ecosystem retention"
+                            },
+                            "note": {
+                              "ru": "Удержание пользователей 2+ сервисов против моно-пользователей.",
+                              "en": "Retention of 2+ service users versus single-service users."
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "metricId": "products-per-customer"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "yg-supply",
+            "level": 1,
+            "title": {
+              "ru": "Водители",
+              "en": "Drivers"
+            },
+            "note": {
+              "ru": "Пул исполнителей.",
+              "en": "The provider pool."
+            },
+            "children": [
+              {
+                "id": "yg-util",
+                "level": 2,
+                "title": {
+                  "ru": "Утилизация",
+                  "en": "Utilization"
+                },
+                "note": {
+                  "ru": "Доля времени в заказе.",
+                  "en": "Share of time on task."
+                },
+                "children": [
+                  {
+                    "id": "yg-earn",
+                    "level": 3,
+                    "title": {
+                      "ru": "Заработок в час",
+                      "en": "Hourly earnings"
+                    },
+                    "note": {
+                      "ru": "Удержание на линии.",
+                      "en": "Keeping drivers online."
+                    },
+                    "children": [
+                      {
+                        "id": "yg-driver-churn",
+                        "level": 4,
+                        "metricId": "churn-rate",
+                        "title": {
+                          "ru": "Отток водителей",
+                          "en": "Driver churn"
+                        },
+                        "note": {
+                          "ru": "Переток к конкурентам при падении заработка.",
+                          "en": "Defection to competitors when earnings fall."
+                        }
+                      }
+                    ],
+                    "metricId": "hourly-earnings"
+                  }
+                ],
+                "metricId": "utilization"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "yg-liquidity",
+            "level": 1,
+            "metricId": "liquidity",
+            "title": {
+              "ru": "Ликвидность",
+              "en": "Liquidity"
+            },
+            "note": {
+              "ru": "Скорость подачи в каждом районе.",
+              "en": "Pickup speed in every area."
+            },
+            "children": [
+              {
+                "id": "yg-eta",
+                "level": 2,
+                "metricId": "time-to-match",
+                "title": "ETA",
+                "note": {
+                  "ru": "Время до подачи.",
+                  "en": "Time to pickup."
+                },
+                "children": [
+                  {
+                    "id": "yg-surge",
+                    "level": 3,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Динамический коэффициент",
+                      "en": "Dynamic multiplier"
+                    },
+                    "note": {
+                      "ru": "Рычаг: балансировка спроса ценой в часы пик.",
+                      "en": "Lever: balancing peak demand with price."
+                    }
+                  }
+                ]
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Completed Rides", "GMV экосистемы"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Плюс", "Сервисов на юзера", "Активные водители"] },
-        { "label": "Операционные", "role": "операции", "items": ["ETA", "Утилизация", "Коэффициент спроса"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Матчинг", "Гео/карты", "Аптайм супераппа"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              "Completed Rides",
+              {
+                "ru": "GMV экосистемы",
+                "en": "Ecosystem GMV"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Плюс",
+                "en": "Plus"
+              },
+              {
+                "ru": "Сервисов на юзера",
+                "en": "Services per user"
+              },
+              {
+                "ru": "Активные водители",
+                "en": "Active drivers"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "операции",
+              "en": "operations"
+            },
+            "items": [
+              "ETA",
+              {
+                "ru": "Утилизация",
+                "en": "Utilization"
+              },
+              {
+                "ru": "Коэффициент спроса",
+                "en": "Demand multiplier"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Матчинг",
+                "en": "Matching"
+              },
+              {
+                "ru": "Гео/карты",
+                "en": "Geo/maps"
+              },
+              {
+                "ru": "Аптайм супераппа",
+                "en": "Super-app uptime"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Рост коэффициента в часы пик", "note": "недовольство ценой" },
-        { "title": "Отток водителей", "note": "заработок и условия" }
+        {
+          "title": {
+            "ru": "Рост коэффициента в часы пик",
+            "en": "Peak-hour multiplier growth"
+          },
+          "note": {
+            "ru": "недовольство ценой",
+            "en": "price dissatisfaction"
+          }
+        },
+        {
+          "title": {
+            "ru": "Отток водителей",
+            "en": "Driver churn"
+          },
+          "note": {
+            "ru": "заработок и условия",
+            "en": "earnings and conditions"
+          }
+        }
       ]
     }
   ]

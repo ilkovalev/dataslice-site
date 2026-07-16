@@ -1,0 +1,343 @@
+{
+  "id": "messengers",
+  "archetype": { "ru": "Коммуникационные сети", "en": "Communication networks" },
+  "industry": { "ru": "Мессенджеры и коммуникации", "en": "Messengers & communication" },
+  "northStar": { "ru": "Отправленные сообщения / связанные пары", "en": "Messages sent / connected pairs" },
+  "root": {
+    "id": "msg", "level": 0, "metricId": "messages-sent",
+    "title": { "ru": "Отправленные сообщения", "en": "Messages sent" },
+    "formula": { "ru": "Активные × Частота × Размер графа", "en": "Active users × Frequency × Graph size" },
+    "note": { "ru": "Ценность мессенджера — не во времени в приложении, а в состоявшемся общении: продукт не развлекает, а соединяет. Отсюда главное отличие от контентных платформ: ценность создают сами пользователи друг для друга, а сеть держит их сильнее любых фич — уйти в одиночку нельзя, надо уводить всех знакомых.", "en": "A messenger's value isn't time in the app but communication that happened: the product doesn't entertain, it connects. Hence the key difference from content platforms: users create the value for each other, and the network holds them harder than any feature — you can't leave alone, you'd have to take everyone you know." },
+    "children": [
+      {
+        "id": "network", "level": 1, "kind": "group",
+        "title": { "ru": "Сеть и её плотность", "en": "The network and its density" },
+        "note": { "ru": "Сколько людей в сети и насколько плотно они связаны между собой. Главный актив мессенджера, который невозможно скопировать фичами.", "en": "How many people are in the network and how densely they're tied. A messenger's main asset — impossible to copy with features." },
+        "children": [
+          {
+            "id": "active-users", "level": 2, "metricId": "dau-mau",
+            "title": { "ru": "Активные пользователи", "en": "Active users" },
+            "note": { "ru": "База сети. У мессенджеров stickiness (DAU/MAU) один из самых высоких в индустрии: общение — ежедневная потребность.", "en": "The network's base. Messengers have some of the highest stickiness (DAU/MAU) in the industry: communication is a daily need." },
+            "children": [
+              {
+                "id": "invited", "level": 3, "metricId": "viral-coefficient",
+                "title": { "ru": "Приглашения знакомых", "en": "Contact invitations" },
+                "note": { "ru": "Мессенджер растёт сам собой: чтобы написать другу, надо привести друга. Виральность здесь встроена в сам продукт, а не приделана маркетингом.", "en": "A messenger grows by itself: to message a friend you must bring the friend. Virality here is built into the product, not bolted on by marketing." },
+                "children": [
+                  {
+                    "id": "pairs", "level": 4, "metricId": "connected-pairs",
+                    "title": { "ru": "Связанные пары", "en": "Connected pairs" },
+                    "note": { "ru": "Двусторонние диалоги: настоящая мера сети. Односторонняя отправка — ещё не связь.", "en": "Two-way dialogues: the real measure of the network. One-way sending isn't a connection yet." },
+                    "children": [
+                      {
+                        "id": "core-contacts", "level": 5, "metricId": "follow-graph",
+                        "title": { "ru": "Ядро контактов", "en": "Core contacts" },
+                        "note": { "ru": "У человека 5–10 живых контактов, а не сотни: попадание этого ядра в мессенджер и есть порог, после которого он не уходит.", "en": "A person has 5–10 live contacts, not hundreds: getting that core onto the messenger is the threshold past which they don't leave." }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "usage", "level": 1, "kind": "group",
+        "title": { "ru": "Интенсивность общения", "en": "Communication intensity" },
+        "note": { "ru": "Как часто и насколько плотно пользуются: частота × объём переписки.", "en": "How often and how densely people use it: frequency × message volume." },
+        "children": [
+          {
+            "id": "frequency", "level": 2, "metricId": "sessions-per-user",
+            "title": { "ru": "Частота открытий", "en": "Open frequency" },
+            "note": { "ru": "Мессенджер открывают десятки раз в день — но это следствие сети, а не цель: гнаться за частотой через пуши здесь бессмысленно.", "en": "A messenger gets opened dozens of times a day — but that follows from the network, it isn't a goal: chasing frequency with pushes is pointless here." },
+            "children": [
+              {
+                "id": "delivery", "level": 3, "metricId": "latency-p95",
+                "title": { "ru": "Скорость доставки сообщений", "en": "Message delivery speed" },
+                "note": { "ru": "Инфраструктура здесь и есть продукт: сообщение, дошедшее через минуту, ломает диалог. Редкий случай, когда техническая метрика стоит в продуктовом дереве по праву.", "en": "Infrastructure here is the product: a message arriving a minute late breaks the dialogue. A rare case where a technical metric belongs in a product tree by right." },
+                "children": [
+                  {
+                    "id": "reply", "level": 4, "metricId": "reply-rate",
+                    "title": { "ru": "Доля отвеченных", "en": "Reply rate" },
+                    "note": { "ru": "Сообщение без ответа — несостоявшаяся ценность; для новичка первый неотвеченный диалог часто последний.", "en": "An unanswered message is value that didn't happen; for a newcomer the first unanswered dialogue is often the last." },
+                    "children": [
+                      {
+                        "id": "retention-msg", "level": 5, "metricId": "retention-n-day",
+                        "title": { "ru": "Удержание после первого диалога", "en": "Retention after first dialogue" },
+                        "note": { "ru": "Состоявшийся диалог — aha-момент мессенджера: у тех, кто его прошёл, кривая удержания выходит на плато почти сразу.", "en": "A dialogue that happened is a messenger's aha moment: for those who reach it, the retention curve flattens almost immediately." }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "monet", "level": 1, "kind": "group",
+        "title": { "ru": "Монетизация", "en": "Monetization" },
+        "note": { "ru": "Главная проблема архетипа: сеть огромна, а денег с неё почти нет. Реклама в переписке невозможна — она разрушает доверие, ради которого продуктом и пользуются. Поэтому монетизируют соседние поверхности: бизнес-переписку, каналы, подписки.", "en": "The archetype's core problem: the network is huge and earns almost nothing. Ads inside private chats are impossible — they destroy the very trust the product runs on. So monetization moves to adjacent surfaces: business messaging, channels, subscriptions." },
+        "children": [
+          {
+            "id": "business", "level": 2, "metricId": "revenue",
+            "title": { "ru": "Бизнес-коммуникации", "en": "Business messaging" },
+            "note": { "ru": "Компании платят за то, чтобы писать клиентам там, где те и так сидят: уведомления, поддержка, продажи через API.", "en": "Companies pay to message customers where they already are: notifications, support, sales via API." },
+            "children": [
+              {
+                "id": "biz-conv", "level": 3, "metricId": "conversion-rate",
+                "title": { "ru": "Конверсия бизнес-диалогов", "en": "Business dialogue conversion" },
+                "note": { "ru": "Открываемость в мессенджере кратно выше email — это и продают бизнесу.", "en": "Open rates in a messenger dwarf email — that's what's sold to businesses." },
+                "children": [
+                  {
+                    "id": "spam-complaints", "level": 4, "metricId": "complaint-rate",
+                    "title": { "ru": "Жалобы на бизнес-спам", "en": "Business spam complaints" },
+                    "note": { "ru": "Guardrail всей модели: перебор с бизнес-рассылками превращает личный мессенджер в почтовый ящик и убивает доверие.", "en": "The guardrail of the whole model: too much business messaging turns a personal messenger into an inbox and kills trust." }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "subs", "level": 2, "metricId": "mrr",
+            "title": { "ru": "Подписки (Premium)", "en": "Subscriptions (Premium)" },
+            "note": { "ru": "Плата за возможности поверх бесплатной базы: лимиты, кастомизация, отсутствие рекламы в каналах.", "en": "Paying for capabilities on top of a free base: limits, customization, no ads in channels." },
+            "children": [
+              {
+                "id": "paying", "level": 3, "metricId": "paying-share",
+                "title": { "ru": "Доля платящих", "en": "Paying share" },
+                "note": { "ru": "Единицы процентов от сети — но сеть огромна, поэтому даже 1% даёт заметные деньги.", "en": "Low single-digit percent of the network — but the network is vast, so even 1% is real money." }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "pyramid": {
+    "note": { "ru": "От денег (вершина) к доставке сообщений (основание): в мессенджере фундамент важнее обычного — если сообщения не доходят, разваливается всё сразу.", "en": "From money (top) to message delivery (base): in a messenger the foundation matters more than usual — if messages don't arrive, everything collapses at once." },
+    "bands": [
+      { "label": { "ru": "Бизнесовые", "en": "Business" }, "role": { "ru": "руководство", "en": "leadership" }, "items": [{ "ru": "Выручка (бизнес + подписки)", "en": "Revenue (business + subs)" }, { "ru": "Активные пользователи", "en": "Active users" }, { "ru": "Доля платящих", "en": "Paying share" }] },
+      { "label": { "ru": "Продуктовые", "en": "Product" }, "role": { "ru": "продакты", "en": "product" }, "items": [{ "ru": "Отправленные сообщения", "en": "Messages sent" }, { "ru": "Связанные пары", "en": "Connected pairs" }, "DAU/MAU"] },
+      { "label": { "ru": "Операционные", "en": "Operational" }, "role": { "ru": "аналитики", "en": "analysts" }, "items": [{ "ru": "Доля отвеченных", "en": "Reply rate" }, { "ru": "Приглашения знакомых", "en": "Invitations" }, { "ru": "Ядро контактов", "en": "Core contacts" }] },
+      { "label": { "ru": "Платформенные", "en": "Platform" }, "role": { "ru": "инженеры", "en": "engineers" }, "items": [{ "ru": "Доставка сообщений", "en": "Message delivery" }, { "ru": "Скорость пушей", "en": "Push speed" }, { "ru": "Аптайм", "en": "Uptime" }] }
+    ]
+  },
+  "counterMetrics": [
+    { "title": { "ru": "Спам и бизнес-рассылки", "en": "Spam & business blasts" }, "note": { "ru": "монетизация переписки разрушает доверие, на котором держится вся сеть", "en": "monetizing private chats destroys the trust the whole network rests on" } },
+    { "title": { "ru": "Уведомительный шум", "en": "Notification noise" }, "note": { "ru": "рост сообщений за счёт ботов и групп выжигает внимание", "en": "message growth from bots and groups burns attention out" } },
+    { "title": { "ru": "Приватность и доверие", "en": "Privacy & trust" }, "note": { "ru": "единственный инцидент с перепиской стоит дороже любой выручки", "en": "one incident with private messages costs more than any revenue" } }
+  ],
+  "companies": [
+    {
+      "id": "telegram", "name": "Telegram",
+      "northStar": { "ru": "Сообщения + просмотры каналов (мессенджер + медиа)", "en": "Messages + channel views (messenger + media)" },
+      "note": { "ru": "гибрид мессенджера и медиаплатформы: личная переписка даёт сеть, каналы дают внимание и рекламный инвентарь; монетизация — Premium и реклама в каналах, но не в переписке.", "en": "a hybrid of messenger and media platform: private chats provide the network, channels provide attention and ad inventory; monetized via Premium and channel ads — never in private chats." },
+      "root": {
+        "id": "tg-root", "level": 0, "metricId": "messages-sent",
+        "title": { "ru": "Сообщения + просмотры каналов", "en": "Messages + channel views" },
+        "formula": { "ru": "Переписка + Медиа-потребление", "en": "Messaging + Media consumption" },
+        "note": { "ru": "Двойная природа: как мессенджер держит сетью, как медиа зарабатывает вниманием. Поэтому дерево совмещает две логики — коммуникационную (пары, ответы) и контентную (охват, просмотры).", "en": "A dual nature: as a messenger it holds you with the network, as media it earns on attention. So the tree merges two logics — communication (pairs, replies) and content (reach, views)." },
+        "children": [
+          {
+            "id": "tg-msg", "level": 1, "kind": "group",
+            "title": { "ru": "Переписка (сеть)", "en": "Messaging (the network)" },
+            "note": { "ru": "Базовый слой: то, ради чего ставят приложение.", "en": "The base layer: the reason the app gets installed." },
+            "children": [
+              {
+                "id": "tg-active", "level": 2, "metricId": "dau-mau",
+                "title": { "ru": "Активные пользователи", "en": "Active users" },
+                "note": { "ru": "Сеть, выросшая почти без маркетинга — на виральности и репутации приватности.", "en": "A network grown almost without marketing — on virality and a privacy reputation." },
+                "children": [
+                  {
+                    "id": "tg-pairs", "level": 3, "metricId": "connected-pairs",
+                    "title": { "ru": "Связанные пары", "en": "Connected pairs" },
+                    "note": { "ru": "Живые диалоги, а не установки.", "en": "Live dialogues, not installs." },
+                    "children": [
+                      {
+                        "id": "tg-groups", "level": 4, "metricId": "follow-graph",
+                        "title": { "ru": "Группы и сообщества", "en": "Groups & communities" },
+                        "note": { "ru": "Группы держат сильнее личных чатов: уйти = потерять сразу все сообщества.", "en": "Groups hold harder than private chats: leaving means losing every community at once." },
+                        "children": [
+                          {
+                            "id": "tg-retention", "level": 5, "metricId": "retention-n-day",
+                            "title": { "ru": "Удержание участников групп", "en": "Group member retention" },
+                            "note": { "ru": "Удержание участников активных групп против пользователей только с личными чатами — цена сообществ в цифрах.", "en": "Retention of active-group members versus private-chat-only users — the value of communities in numbers." }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tg-media", "level": 1, "kind": "group",
+            "title": { "ru": "Каналы (медиа)", "en": "Channels (media)" },
+            "note": { "ru": "Слой, которого нет у обычного мессенджера: односторонняя публикация превращает Telegram в медиаплатформу с рекламным инвентарём.", "en": "The layer a regular messenger lacks: one-way publishing turns Telegram into a media platform with ad inventory." },
+            "children": [
+              {
+                "id": "tg-views", "level": 2, "metricId": "time-spent",
+                "title": { "ru": "Просмотры в каналах", "en": "Channel views" },
+                "note": { "ru": "Внимание, которое можно продать: тот же ресурс, что у соцсетей.", "en": "Attention that can be sold: the same resource social networks trade in." },
+                "children": [
+                  {
+                    "id": "tg-authors", "level": 3, "metricId": "content-supply",
+                    "title": { "ru": "Авторы каналов", "en": "Channel creators" },
+                    "note": { "ru": "Предложение контента: каналы живут, пока авторы пишут.", "en": "Content supply: channels live while creators post." },
+                    "children": [
+                      {
+                        "id": "tg-ads", "level": 4, "metricId": "ad-coverage",
+                        "title": { "ru": "Реклама в каналах", "en": "Channel ads" },
+                        "note": { "ru": "Монетизация внимания — но не переписки: граница, которую платформа не переходит.", "en": "Monetizing attention — but never private chats: the line the platform doesn't cross." }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tg-monet", "level": 1, "kind": "group",
+            "title": { "ru": "Монетизация", "en": "Monetization" },
+            "note": { "ru": "Premium + реклама в каналах.", "en": "Premium + channel ads." },
+            "children": [
+              {
+                "id": "tg-premium", "level": 2, "metricId": "mrr",
+                "title": "Telegram Premium",
+                "note": { "ru": "Подписка за лимиты и кастомизацию: платит меньшинство, но база огромна.", "en": "A subscription for limits and customization: a minority pays, but the base is vast." },
+                "children": [
+                  {
+                    "id": "tg-paying", "level": 3, "metricId": "paying-share",
+                    "title": { "ru": "Доля платящих", "en": "Paying share" },
+                    "note": { "ru": "Единицы процентов от сотен миллионов — этого хватает на инфраструктуру.", "en": "Single-digit percent of hundreds of millions — enough to fund the infrastructure." }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "pyramid": { "bands": [
+        { "label": { "ru": "Бизнесовые", "en": "Business" }, "role": { "ru": "руководство", "en": "leadership" }, "items": [{ "ru": "Выручка (Premium + реклама)", "en": "Revenue (Premium + ads)" }, { "ru": "Активные пользователи", "en": "Active users" }] },
+        { "label": { "ru": "Продуктовые", "en": "Product" }, "role": { "ru": "продакты", "en": "product" }, "items": [{ "ru": "Сообщения", "en": "Messages" }, { "ru": "Просмотры каналов", "en": "Channel views" }, { "ru": "Доля платящих", "en": "Paying share" }] },
+        { "label": { "ru": "Операционные", "en": "Operational" }, "role": { "ru": "аналитики", "en": "analysts" }, "items": [{ "ru": "Группы", "en": "Groups" }, { "ru": "Авторы каналов", "en": "Channel creators" }, { "ru": "Связанные пары", "en": "Connected pairs" }] },
+        { "label": { "ru": "Платформенные", "en": "Platform" }, "role": { "ru": "инженеры", "en": "engineers" }, "items": [{ "ru": "Доставка сообщений", "en": "Message delivery" }, { "ru": "Скорость медиа", "en": "Media speed" }, { "ru": "Аптайм", "en": "Uptime" }] }
+      ] },
+      "counterMetrics": [
+        { "title": { "ru": "Реклама в каналах", "en": "Channel ads" }, "note": { "ru": "перебор гонит читателей из каналов и обесценивает медиа-слой", "en": "overload drives readers out of channels and devalues the media layer" } },
+        { "title": { "ru": "Модерация и запрещённый контент", "en": "Moderation & illegal content" }, "note": { "ru": "свобода публикации притягивает и то, за что платформу блокируют страны", "en": "publishing freedom also attracts what gets the platform banned by countries" } }
+      ]
+    },
+    {
+      "id": "whatsapp", "name": "WhatsApp",
+      "northStar": { "ru": "Отправленные сообщения (чистая коммуникация)", "en": "Messages sent (pure communication)" },
+      "note": { "ru": "чистый мессенджер без медиа-слоя: ставка на вездесущность и приватность; переписка не монетизируется вообще — деньги приходят от бизнесов, которые платят за право писать клиентам.", "en": "a pure messenger with no media layer: a bet on ubiquity and privacy; private chats aren't monetized at all — money comes from businesses paying to message customers." },
+      "root": {
+        "id": "wa-root", "level": 0, "metricId": "messages-sent",
+        "title": { "ru": "Отправленные сообщения", "en": "Messages sent" },
+        "formula": { "ru": "Активные × Частота × Размер графа", "en": "Active × Frequency × Graph size" },
+        "note": { "ru": "Продукт-утилита: в ряде стран заменил SMS и стал инфраструктурой, без которой не работает быт. Отсюда парадокс — крупнейшая сеть планеты с почти нулевой прямой монетизацией.", "en": "A utility product: in many countries it replaced SMS and became infrastructure daily life runs on. Hence the paradox — the planet's largest network with almost zero direct monetization." },
+        "children": [
+          {
+            "id": "wa-network", "level": 1, "kind": "group",
+            "title": { "ru": "Сеть", "en": "The network" },
+            "note": { "ru": "Вездесущность: продукт ценен, когда в нём есть все — и бесполезен, когда нет никого.", "en": "Ubiquity: the product is valuable when everyone is on it and worthless when nobody is." },
+            "children": [
+              {
+                "id": "wa-active", "level": 2, "metricId": "dau-mau",
+                "title": { "ru": "Активные пользователи", "en": "Active users" },
+                "note": { "ru": "Проникновение в стране важнее общего числа: сеть работает по странам, а не глобально.", "en": "Country penetration matters more than the global total: the network works per country, not worldwide." },
+                "children": [
+                  {
+                    "id": "wa-penetration", "level": 3, "metricId": "connected-pairs",
+                    "title": { "ru": "Проникновение в стране", "en": "Country penetration" },
+                    "note": { "ru": "Достигнув критической массы, сеть становится стандартом де-факто, и конкурент уже не может зайти.", "en": "Past critical mass the network becomes the de facto standard, and a competitor can no longer enter." },
+                    "children": [
+                      {
+                        "id": "wa-sms", "level": 4, "metricId": "follow-graph",
+                        "title": { "ru": "Замещение SMS и звонков", "en": "SMS & call replacement" },
+                        "note": { "ru": "Продукт вытеснил операторскую связь: там, где это произошло, отток невозможен в принципе.", "en": "The product displaced carrier communication: where that happened, churn is structurally impossible." },
+                        "children": [
+                          {
+                            "id": "wa-retention", "level": 5, "metricId": "retention-n-day",
+                            "title": { "ru": "Удержание (близкое к 100%)", "en": "Retention (near 100%)" },
+                            "note": { "ru": "Аномалия архетипа: удержание держится не продуктом, а тем, что в сети сидят все знакомые.", "en": "The archetype's anomaly: retention is held not by the product but by the fact that everyone you know is on it." }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "wa-usage", "level": 1, "kind": "group",
+            "title": { "ru": "Использование", "en": "Usage" },
+            "note": { "ru": "Интенсивность общения и надёжность доставки.", "en": "Communication intensity and delivery reliability." },
+            "children": [
+              {
+                "id": "wa-freq", "level": 2, "metricId": "sessions-per-user",
+                "title": { "ru": "Частота открытий", "en": "Open frequency" },
+                "note": { "ru": "Десятки раз в день: у утилит частота — следствие потребности, а не геймификации.", "en": "Dozens of times a day: for utilities frequency follows need, not gamification." },
+                "children": [
+                  {
+                    "id": "wa-delivery", "level": 3, "metricId": "latency-p95",
+                    "title": { "ru": "Надёжность доставки", "en": "Delivery reliability" },
+                    "note": { "ru": "Инфраструктурное обещание: сообщение должно дойти всегда и мгновенно, даже на плохой сети.", "en": "An infrastructure promise: the message must always arrive, instantly, even on a bad network." },
+                    "children": [
+                      {
+                        "id": "wa-reply", "level": 4, "metricId": "reply-rate",
+                        "title": { "ru": "Доля отвеченных", "en": "Reply rate" },
+                        "note": { "ru": "Качество коммуникации: диалог состоялся или сообщение ушло в пустоту.", "en": "Communication quality: the dialogue happened, or the message went into the void." }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "wa-monet", "level": 1, "kind": "group",
+            "title": { "ru": "Монетизация через бизнесы", "en": "Business monetization" },
+            "note": { "ru": "Переписка людей бесплатна и без рекламы принципиально: платят компании за доступ к клиентам.", "en": "Person-to-person messaging is free and ad-free on principle: companies pay for access to customers." },
+            "children": [
+              {
+                "id": "wa-biz", "level": 2, "metricId": "revenue",
+                "title": { "ru": "Business API", "en": "Business API" },
+                "note": { "ru": "Плата за шаблонные сообщения: уведомления, поддержка, доставка — там, где раньше была SMS.", "en": "Paying for template messages: notifications, support, delivery updates — where SMS used to be." },
+                "children": [
+                  {
+                    "id": "wa-biz-conv", "level": 3, "metricId": "conversion-rate",
+                    "title": { "ru": "Конверсия click-to-chat", "en": "Click-to-chat conversion" },
+                    "note": { "ru": "Реклама ведёт не на сайт, а в переписку с бизнесом: конверсия выше, чем у обычного лендинга.", "en": "Ads lead into a chat with the business rather than a website: conversion beats a regular landing page." },
+                    "children": [
+                      {
+                        "id": "wa-spam", "level": 4, "metricId": "complaint-rate",
+                        "title": { "ru": "Жалобы на бизнес-спам", "en": "Business spam complaints" },
+                        "note": { "ru": "Главный guardrail: превратив личный мессенджер в рекламный канал, Meta потеряет то, ради чего его открывают.", "en": "The key guardrail: turn a personal messenger into an ad channel and Meta loses the very reason it gets opened." }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "pyramid": { "bands": [
+        { "label": { "ru": "Бизнесовые", "en": "Business" }, "role": { "ru": "руководство", "en": "leadership" }, "items": [{ "ru": "Выручка (Business API)", "en": "Revenue (Business API)" }, { "ru": "Активные пользователи", "en": "Active users" }, { "ru": "Проникновение по странам", "en": "Country penetration" }] },
+        { "label": { "ru": "Продуктовые", "en": "Product" }, "role": { "ru": "продакты", "en": "product" }, "items": [{ "ru": "Сообщения", "en": "Messages" }, { "ru": "Связанные пары", "en": "Connected pairs" }, { "ru": "Бизнес-диалоги", "en": "Business dialogues" }] },
+        { "label": { "ru": "Операционные", "en": "Operational" }, "role": { "ru": "аналитики", "en": "analysts" }, "items": [{ "ru": "Доля отвеченных", "en": "Reply rate" }, { "ru": "Замещение SMS", "en": "SMS replacement" }, { "ru": "Click-to-chat", "en": "Click-to-chat" }] },
+        { "label": { "ru": "Платформенные", "en": "Platform" }, "role": { "ru": "инженеры", "en": "engineers" }, "items": [{ "ru": "Надёжность доставки", "en": "Delivery reliability" }, { "ru": "Работа на слабой сети", "en": "Low-bandwidth support" }, { "ru": "Шифрование", "en": "Encryption" }] }
+      ] },
+      "counterMetrics": [
+        { "title": { "ru": "Бизнес-спам в личном мессенджере", "en": "Business spam in a personal messenger" }, "note": { "ru": "монетизация подтачивает то, ради чего продуктом пользуются", "en": "monetization erodes the reason people use the product" } },
+        { "title": { "ru": "Приватность и шифрование", "en": "Privacy & encryption" }, "note": { "ru": "любое ослабление шифрования бьёт по доверию сильнее, чем любая фича его поднимает", "en": "any weakening of encryption hits trust harder than any feature lifts it" } }
+      ]
+    }
+  ]
+}

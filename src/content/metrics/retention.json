@@ -1,0 +1,227 @@
+[
+  {
+    "id": "ttv",
+    "category": "retention",
+    "title": { "ru": "Time-to-Value — время до первой пользы", "en": "Time to value" },
+    "aliases": ["ttv", "time to first value"],
+    "tex": { "ru": "\\mathrm{TTV}=\\text{медиана}(\\text{первая ценность}-\\text{регистрация})", "en": "\\mathrm{TTV}=\\text{median}(\\text{first value}-\\text{signup})" },
+    "desc": {
+      "ru": "Сколько времени проходит от регистрации до момента, когда пользователь получил первую реальную пользу. Терпение новичка конечно и тратится в первые минуты: чем длиннее путь до первой ценности, тем меньше людей до неё доходит — и тем ниже все метрики ниже по воронке.",
+      "en": "How long from signup to the moment the user got real value for the first time. A newcomer's patience is finite and spent in the first minutes: the longer the path to first value, the fewer people reach it — and the lower every downstream metric."
+    },
+    "pitfalls": {
+      "ru": [
+        "«Ценность» надо определить честно: заполненный профиль — не ценность, а работа, которую вы поручили пользователю.",
+        "Медиана считается только по дошедшим — те, кто не дошёл никогда, в неё не попадают и прячут проблему.",
+        "Сокращать TTV, убирая нужные шаги, опасно: настройка под себя может быть тем, что потом удерживает."
+      ],
+      "en": [
+        "Define \"value\" honestly: a filled-in profile isn't value, it's work you handed to the user.",
+        "The median counts only those who arrived — those who never did stay out of it and hide the problem.",
+        "Cutting TTV by removing necessary steps is risky: the setup work may be exactly what retains later."
+      ]
+    },
+    "sql": "-- Time to first value and the share who never reach it\nWITH first_value AS (\n  SELECT u.user_id, u.created_at,\n         MIN(e.ts) FILTER (WHERE e.event_name = 'aha_event') AS value_at\n  FROM users u\n  LEFT JOIN events e ON e.user_id = u.user_id\n  GROUP BY 1, 2\n)\nSELECT date_trunc('month', created_at) AS cohort,\n       COUNT(*) AS signups,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE value_at IS NULL) / COUNT(*), 1) AS never_reached_pct,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (\n         ORDER BY EXTRACT(epoch FROM value_at - created_at) / 60) AS median_ttv_min\nFROM first_value\nGROUP BY 1\nORDER BY 1;",
+    "related": ["activation-rate", "retention-n-day", "conversion-rate"]
+  },
+  {
+    "id": "adoption-depth",
+    "category": "retention",
+    "title": { "ru": "Глубина внедрения", "en": "Adoption depth" },
+    "aliases": ["ширина использования фич", "активные на место", "глубина внедрения"],
+    "tex": { "ru": "\\text{Глубина}=\\dfrac{\\text{используемые фичи (или активные места)}}{\\text{оплаченные}}", "en": "\\text{Depth}=\\dfrac{\\text{features used (or seats active)}}{\\text{paid for}}" },
+    "desc": {
+      "ru": "Насколько глубоко клиент реально пользуется тем, за что платит: сколько мест из оплаченных активны и сколько ключевых сценариев освоено. Лучший предиктор продления в B2B: то, что не используют, срезают на первой же ревизии бюджета — задолго до того, как это увидит churn.",
+      "en": "How deeply a customer actually uses what they pay for: how many paid seats are active and how many key workflows are adopted. The best B2B renewal predictor: what isn't used gets cut at the first budget review — long before churn reveals it."
+    },
+    "pitfalls": {
+      "ru": [
+        "Логины — не внедрение: считайте осмысленные действия, а не факт входа.",
+        "Средняя по аккаунтам прячет риск: важно, сколько аккаунтов ниже порога, а не среднее значение.",
+        "Глубина растёт медленно и падает быстро: реорганизация у клиента обнуляет её за месяц."
+      ],
+      "en": [
+        "Logins aren't adoption: count meaningful actions, not the fact of signing in.",
+        "An account average hides the risk: what matters is how many accounts sit below the threshold, not the mean.",
+        "Depth grows slowly and collapses fast: a reorg at the customer zeroes it in a month."
+      ]
+    },
+    "sql": "-- Seat utilization and feature breadth per account\nWITH usage AS (\n  SELECT props->>'account_id' AS account_id,\n         COUNT(DISTINCT user_id) FILTER (WHERE ts >= now() - INTERVAL '30 days') AS active_seats,\n         MAX((props->>'paid_seats')::int) AS paid_seats,\n         COUNT(DISTINCT event_name) FILTER (WHERE ts >= now() - INTERVAL '30 days') AS features_used\n  FROM events\n  GROUP BY 1\n)\nSELECT COUNT(*) AS accounts,\n       ROUND(AVG(100.0 * active_seats / NULLIF(paid_seats, 0)), 1) AS avg_seat_utilization_pct,\n       ROUND(AVG(features_used), 1) AS avg_features,\n       COUNT(*) FILTER (WHERE active_seats < 0.5 * paid_seats) AS at_risk_accounts\nFROM usage;",
+    "related": ["nrr", "churn-rate", "dau-mau", "ttv"]
+  },
+  {
+    "id": "health-score",
+    "category": "retention",
+    "title": { "ru": "Health Score аккаунта", "en": "Account health score" },
+    "aliases": ["health score", "риск оттока"],
+    "tex": { "ru": "\\text{Health}=\\sum_i w_i\\times \\text{сигнал}_i", "en": "\\text{Health}=\\sum_i w_i\\times \\text{signal}_i" },
+    "desc": {
+      "ru": "Составная оценка риска ухода клиента: активность, глубина внедрения, тикеты, платежи, смена контактных лиц. Смысл в упреждении: churn — это диагноз постфактум, а health score позволяет вмешаться, пока клиент ещё здесь.",
+      "en": "A composite churn-risk score: activity, adoption depth, tickets, payments, champion turnover. The point is anticipation: churn is a post-mortem diagnosis, while a health score lets you intervene while the customer is still here."
+    },
+    "pitfalls": {
+      "ru": [
+        "Веса, взятые из интуиции, дают красивый дашборд и нулевую предсказательную силу — калибруйте на исторических оттоках.",
+        "Score скрывает причину: аккаунт «жёлтый» — а что делать, непонятно; показывайте вклад каждого сигнала.",
+        "Уход чемпиона на стороне клиента часто важнее всей продуктовой активности — этот сигнал нельзя вывести из логов."
+      ],
+      "en": [
+        "Weights taken from intuition give a pretty dashboard and zero predictive power — calibrate them on historical churn.",
+        "The score hides the cause: an account is \"amber\" — and what to do is unclear; show each signal's contribution.",
+        "Losing the champion at the customer often matters more than all product activity — and that signal isn't in your logs."
+      ]
+    },
+    "sql": "-- Simple health score from behavioural signals\nWITH signals AS (\n  SELECT props->>'account_id' AS account_id,\n         COUNT(DISTINCT user_id) FILTER (WHERE ts >= now() - INTERVAL '30 days') AS active_users,\n         COUNT(*) FILTER (WHERE event_name = 'support_ticket'\n                            AND ts >= now() - INTERVAL '30 days') AS tickets,\n         MAX(ts) FILTER (WHERE event_name = 'key_action') AS last_key_action\n  FROM events\n  GROUP BY 1\n)\nSELECT account_id,\n       active_users, tickets,\n       (CASE WHEN active_users >= 5 THEN 40 ELSE active_users * 8 END)\n       + (CASE WHEN tickets = 0 THEN 30 WHEN tickets <= 2 THEN 15 ELSE 0 END)\n       + (CASE WHEN last_key_action >= now() - INTERVAL '7 days' THEN 30 ELSE 0 END) AS health_score\nFROM signals\nORDER BY health_score;",
+    "related": ["churn-rate", "adoption-depth", "complaint-rate", "nrr"]
+  },
+  {
+    "id": "course-completion",
+    "category": "retention",
+    "title": { "ru": "Completion Rate курса — доходимость", "en": "Course completion rate" },
+    "aliases": ["доходимость", "завершаемость"],
+    "tex": { "ru": "\\text{Completion}=\\dfrac{\\text{завершили курс}}{\\text{начали курс}}", "en": "\\text{Completion}=\\dfrac{\\text{finished the course}}{\\text{started the course}}" },
+    "desc": {
+      "ru": "Доля учеников, дошедших до конца программы. Главная метрика EdTech: продаётся результат, а результата без прохождения не бывает. Доходимость массовых онлайн-курсов исторически измеряется единицами процентов — и именно поэтому её рост так дорого стоит.",
+      "en": "The share of learners who finish a program. EdTech's key metric: the outcome is what's sold, and there is no outcome without completing. Completion in mass online courses is historically in the single-digit percent range — which is exactly why improving it is worth so much."
+    },
+    "pitfalls": {
+      "ru": [
+        "«Начал» надо определить: оплата, первый вход или первый урок дают три разные цифры.",
+        "Метрика зависит от длины программы: недельный курс и годовая профессия несравнимы.",
+        "Улучшить доходимость можно, упростив курс до бессмысленности — держите рядом метрику реального результата (навык, трудоустройство)."
+      ],
+      "en": [
+        "Define \"started\": payment, first login or first lesson give three different numbers.",
+        "It depends on program length: a one-week course and a year-long profession aren't comparable.",
+        "Completion can be improved by dumbing the course down — keep a real-outcome metric (skill, employment) next to it."
+      ]
+    },
+    "sql": "-- Completion by cohort, with the drop-off module\nWITH progress AS (\n  SELECT user_id,\n         date_trunc('month', MIN(ts)) AS cohort,\n         MAX((props->>'module_no')::int) AS last_module,\n         MAX((props->>'total_modules')::int) AS total_modules\n  FROM events\n  WHERE event_name = 'lesson_complete'\n  GROUP BY user_id\n)\nSELECT cohort,\n       COUNT(*) AS started,\n       COUNT(*) FILTER (WHERE last_module >= total_modules) AS completed,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE last_module >= total_modules) / COUNT(*), 1) AS completion_pct,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY last_module)\n         FILTER (WHERE last_module < total_modules) AS median_dropoff_module\nFROM progress\nGROUP BY 1\nORDER BY 1;",
+    "related": ["activation-rate", "retention-n-day", "nps-csat"]
+  },
+  {
+    "id": "retention-n-day",
+    "category": "retention",
+    "title": { "ru": "Retention N-дня", "en": "Day-N retention" },
+    "aliases": ["удержание", "retention"],
+    "tex": { "ru": "\\mathrm{Ret}_N=\\dfrac{\\text{вернувшиеся на день }N}{\\text{размер когорты}}", "en": "\\mathrm{Ret}_N=\\dfrac{\\text{returned on day }N}{\\text{cohort size}}" },
+    "desc": {
+      "ru": "Доля когорты (пользователей, пришедших в один день), которая вернулась через N дней. Классические точки — D1, D7, D30. Главный индикатор product-market fit: кривая retention, выходящая на плато, означает, что у продукта есть ядро постоянных пользователей.",
+      "en": "The share of a cohort (users who arrived on the same day) that comes back N days later. Classic points are D1, D7, D30. The main product-market-fit signal: a retention curve that flattens into a plateau means the product has a core of habitual users."
+    },
+    "pitfalls": {
+      "ru": [
+        "Classic (вернулся ровно в день N), rolling (в день N или позже) и bracket-retention — три разных числа; всегда уточняйте определение.",
+        "Смешивание когорт из разных каналов прячет их разницу: органика почти всегда удерживается лучше платного трафика.",
+        "Свежие когорты ещё «не дожили» до D30 — не сравнивайте их с давними без поправки."
+      ],
+      "en": [
+        "Classic (returned exactly on day N), rolling (on day N or later) and bracket retention are three different numbers; always state the definition.",
+        "Mixing cohorts from different channels hides their gap: organic almost always retains better than paid.",
+        "Fresh cohorts haven't \"lived\" to D30 yet — don't compare them with older ones without correction."
+      ]
+    },
+    "sql": "-- Classic D1/D7/D30 retention by signup cohort\nWITH cohort AS (\n  SELECT user_id, created_at::date AS d0 FROM users\n),\nactivity AS (\n  SELECT DISTINCT user_id, ts::date AS day FROM events\n)\nSELECT c.d0 AS cohort_day,\n       COUNT(DISTINCT c.user_id) AS cohort_size,\n       ROUND(100.0 * COUNT(DISTINCT a1.user_id) / COUNT(DISTINCT c.user_id), 1) AS d1_pct,\n       ROUND(100.0 * COUNT(DISTINCT a7.user_id) / COUNT(DISTINCT c.user_id), 1) AS d7_pct,\n       ROUND(100.0 * COUNT(DISTINCT a30.user_id) / COUNT(DISTINCT c.user_id), 1) AS d30_pct\nFROM cohort c\nLEFT JOIN activity a1 ON a1.user_id = c.user_id AND a1.day = c.d0 + 1\nLEFT JOIN activity a7 ON a7.user_id = c.user_id AND a7.day = c.d0 + 7\nLEFT JOIN activity a30 ON a30.user_id = c.user_id AND a30.day = c.d0 + 30\nGROUP BY 1\nORDER BY 1;",
+    "related": ["churn-rate", "activation-rate", "dau-mau", "repeat-rate"]
+  },
+  {
+    "id": "churn-rate",
+    "category": "retention",
+    "title": { "ru": "Churn — отток", "en": "Churn rate" },
+    "aliases": ["отток"],
+    "tex": { "ru": "\\mathrm{Churn}=\\dfrac{\\text{ушедшие за период}}{\\text{база на начало периода}}", "en": "\\mathrm{Churn}=\\dfrac{\\text{customers lost in period}}{\\text{base at period start}}" },
+    "desc": {
+      "ru": "Какая доля клиентов перестала пользоваться или платить за период. Обратная сторона удержания и главный враг подписочной модели: при churn 5% в месяц за год теряется почти половина базы.",
+      "en": "What share of customers stopped using or paying during the period. The flip side of retention and the subscription model's main enemy: at 5% monthly churn you lose almost half the base in a year."
+    },
+    "pitfalls": {
+      "ru": [
+        "Отток клиентов и отток выручки — разные метрики: уход мелких клиентов при удержании крупных даёт высокий customer churn при низком revenue churn.",
+        "Вынужденный отток (проблема с картой) лечится ретраями платежей, добровольный — продуктом; разделяйте их.",
+        "В быстрорастущей базе месячный churn занижен: новички ещё не успели уйти."
+      ],
+      "en": [
+        "Customer churn and revenue churn differ: losing small clients while keeping big ones gives high customer churn with low revenue churn.",
+        "Involuntary churn (card failure) is fixed by payment retries, voluntary churn by the product; separate them.",
+        "In a fast-growing base monthly churn is understated: newcomers haven't had time to leave yet."
+      ]
+    },
+    "sql": "-- Monthly subscription churn: active at month start who cancelled within it\nWITH months AS (\n  SELECT generate_series(date_trunc('month', now()) - INTERVAL '11 months',\n                         date_trunc('month', now()), '1 month') AS m\n)\nSELECT m::date AS month,\n       COUNT(*) FILTER (WHERE s.started_at < m\n         AND (s.cancelled_at IS NULL OR s.cancelled_at >= m)) AS active_at_start,\n       COUNT(*) FILTER (WHERE s.cancelled_at >= m\n         AND s.cancelled_at < m + INTERVAL '1 month') AS churned,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE s.cancelled_at >= m\n         AND s.cancelled_at < m + INTERVAL '1 month')\n         / NULLIF(COUNT(*) FILTER (WHERE s.started_at < m\n         AND (s.cancelled_at IS NULL OR s.cancelled_at >= m)), 0), 2) AS churn_pct\nFROM months\nCROSS JOIN subscriptions s\nGROUP BY 1\nORDER BY 1;",
+    "related": ["retention-n-day", "nrr", "ltv", "win-back"]
+  },
+  {
+    "id": "repeat-rate",
+    "category": "retention",
+    "title": { "ru": "Repeat Rate — повторные покупки", "en": "Repeat purchase rate" },
+    "aliases": ["повторные покупки"],
+    "tex": { "ru": "\\text{Repeat Rate}=\\dfrac{\\text{клиенты с }\\geq 2\\text{ покупками}}{\\text{все клиенты}}", "en": "\\text{Repeat rate}=\\dfrac{\\text{customers with}\\geq 2\\text{ purchases}}{\\text{all customers}}" },
+    "desc": {
+      "ru": "Доля покупателей, вернувшихся за второй покупкой. Транзакционный аналог retention: в e-commerce именно повторные покупки отделяют устойчивый бизнес от «сжигания» рекламного бюджета на разовых клиентов.",
+      "en": "The share of buyers who come back for a second purchase. The transactional analog of retention: in e-commerce repeat purchases are what separates a durable business from burning ad budget on one-off customers."
+    },
+    "pitfalls": {
+      "ru": [
+        "Метрика зависит от окна: repeat rate за 90 дней и за всю жизнь — разные числа; фиксируйте окно под цикл покупки категории.",
+        "Категории с длинным циклом (мебель, электроника) обречены на низкий repeat rate — сравнивайте внутри категории.",
+        "Скидка на второй заказ покупает повторность, но может убить маржу — смотрите вместе с contribution margin."
+      ],
+      "en": [
+        "The metric depends on the window: 90-day and lifetime repeat rates are different numbers; fix a window that matches the category's purchase cycle.",
+        "Long-cycle categories (furniture, electronics) are doomed to low repeat rates — compare within a category.",
+        "A second-order discount buys repeat behavior but can kill margin — read it together with contribution margin."
+      ]
+    },
+    "sql": "-- Share of buyers making a 2nd purchase within 90 days of the first\nWITH firsts AS (\n  SELECT user_id, MIN(created_at) AS first_at\n  FROM orders WHERE status = 'paid'\n  GROUP BY user_id\n)\nSELECT date_trunc('month', f.first_at) AS first_order_month,\n       COUNT(*) AS buyers,\n       COUNT(*) FILTER (WHERE EXISTS (\n         SELECT 1 FROM orders o2\n         WHERE o2.user_id = f.user_id AND o2.status = 'paid'\n           AND o2.created_at > f.first_at\n           AND o2.created_at <= f.first_at + INTERVAL '90 days'\n       )) AS repeaters,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE EXISTS (\n         SELECT 1 FROM orders o2\n         WHERE o2.user_id = f.user_id AND o2.status = 'paid'\n           AND o2.created_at > f.first_at\n           AND o2.created_at <= f.first_at + INTERVAL '90 days'\n       )) / COUNT(*), 1) AS repeat_rate_pct\nFROM firsts f\nGROUP BY 1\nORDER BY 1;",
+    "related": ["retention-n-day", "ltv", "purchase-frequency"]
+  },
+  {
+    "id": "nrr",
+    "category": "retention",
+    "title": { "ru": "NRR — чистое удержание выручки", "en": "NRR — net revenue retention" },
+    "aliases": ["net revenue retention", "ndr"],
+    "tex": { "ru": "\\mathrm{NRR}=\\dfrac{\\text{MRR когорты сейчас}}{\\text{MRR той же когорты год назад}}", "en": "\\mathrm{NRR}=\\dfrac{\\text{cohort MRR now}}{\\text{same cohort's MRR a year ago}}" },
+    "desc": {
+      "ru": "Сколько выручки сохранила и дорастила когорта существующих клиентов — с учётом расширений (upsell), сжатий (downgrade) и оттока, но без новых продаж. North Star зрелого B2B SaaS: NRR > 100% означает, что бизнес растёт даже без единого нового клиента.",
+      "en": "How much revenue a cohort of existing customers kept and grew — counting expansion (upsell), contraction (downgrade) and churn, but excluding new sales. The North Star of mature B2B SaaS: NRR > 100% means the business grows even with zero new customers."
+    },
+    "pitfalls": {
+      "ru": [
+        "NRR выше 100% может прятать высокий отток мелких клиентов за расширением пары крупных — смотрите разложение на expansion/contraction/churn.",
+        "Годовое окно сглаживает проблемы: месячный NRR ловит тренд раньше.",
+        "Скидки при продлении — это contraction, даже если логотип остался."
+      ],
+      "en": [
+        "NRR above 100% can hide heavy churn of small clients behind expansion of a couple of big ones — inspect the expansion/contraction/churn breakdown.",
+        "The annual window smooths problems over: monthly NRR catches the trend earlier.",
+        "Renewal discounts are contraction, even if the logo stays."
+      ]
+    },
+    "sql": "-- NRR: MRR of the same customer cohort, 12 months apart\nWITH base AS (\n  SELECT user_id, SUM(mrr) AS mrr\n  FROM subscriptions\n  WHERE started_at < date_trunc('month', now()) - INTERVAL '12 months'\n    AND (cancelled_at IS NULL OR cancelled_at >= date_trunc('month', now()) - INTERVAL '12 months')\n  GROUP BY user_id\n),\ncurrent_mrr AS (\n  SELECT user_id, SUM(mrr) AS mrr\n  FROM subscriptions\n  WHERE cancelled_at IS NULL\n  GROUP BY user_id\n)\nSELECT ROUND(100.0 * SUM(COALESCE(c.mrr, 0)) / NULLIF(SUM(b.mrr), 0), 1) AS nrr_pct\nFROM base b\nLEFT JOIN current_mrr c USING (user_id);",
+    "related": ["churn-rate", "mrr", "arpu"]
+  },
+  {
+    "id": "win-back",
+    "category": "retention",
+    "title": { "ru": "Win-back / реактивация", "en": "Win-back / resurrection rate" },
+    "aliases": ["реактивация", "resurrection"],
+    "tex": { "ru": "\\text{Win-back}=\\dfrac{\\text{вернувшиеся из ушедших}}{\\text{ушедшие}}", "en": "\\text{Win-back}=\\dfrac{\\text{reactivated churned users}}{\\text{churned users}}" },
+    "desc": {
+      "ru": "Доля ушедших пользователей, которых удалось вернуть — CRM-кампанией, новой фичей, сезоном. Третий источник роста базы после привлечения и удержания; возвращать бывших обычно дешевле, чем приводить новых.",
+      "en": "The share of churned users you managed to bring back — via a CRM campaign, a new feature, a season. The third source of base growth after acquisition and retention; winning back former users is usually cheaper than acquiring new ones."
+    },
+    "pitfalls": {
+      "ru": [
+        "Реактивированные часто уходят снова быстрее новичков — смотрите их повторный retention отдельно.",
+        "Часть «вернувшихся» вернулась бы и без кампании — эффект меряется только на контрольной группе.",
+        "Определение «ушёл» (30/60/90 дней тишины) меняет и базу, и результат."
+      ],
+      "en": [
+        "Reactivated users often churn again faster than newcomers — track their second retention separately.",
+        "Some \"returners\" would have come back anyway — the effect is only measured against a control group.",
+        "The definition of \"churned\" (30/60/90 days of silence) changes both the base and the result."
+      ]
+    },
+    "sql": "-- Monthly resurrection: active this month after 60+ days of silence\nWITH monthly_active AS (\n  SELECT DISTINCT user_id, date_trunc('month', ts) AS month\n  FROM events\n),\nwith_prev AS (\n  SELECT user_id, month,\n         LAG(month) OVER (PARTITION BY user_id ORDER BY month) AS prev_month\n  FROM monthly_active\n)\nSELECT month,\n       COUNT(*) FILTER (WHERE prev_month < month - INTERVAL '1 month') AS resurrected,\n       COUNT(*) AS active_total\nFROM with_prev\nGROUP BY 1\nORDER BY 1;",
+    "related": ["churn-rate", "retention-n-day"]
+  }
+]

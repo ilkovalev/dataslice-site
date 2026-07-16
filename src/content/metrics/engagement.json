@@ -1,0 +1,477 @@
+[
+  {
+    "id": "avd",
+    "category": "engagement",
+    "title": { "ru": "Average View Duration — средняя длительность просмотра", "en": "Average view duration" },
+    "aliases": ["avd", "средняя длительность просмотра"],
+    "tex": { "ru": "\\mathrm{AVD}=\\dfrac{\\text{суммарное время просмотра}}{\\text{число просмотров}}", "en": "\\mathrm{AVD}=\\dfrac{\\text{total watch time}}{\\text{number of views}}" },
+    "desc": {
+      "ru": "Сколько минут в среднем смотрят один ролик. В отличие от досматриваемости в процентах, показывает абсолютный вклад видео в общее время просмотра: 40% от часового ролика дают больше минут, чем 90% от трёхминутного.",
+      "en": "How many minutes an average view of a video lasts. Unlike percentage completion, it shows the absolute contribution to total watch time: 40% of an hour-long video yields more minutes than 90% of a three-minute one."
+    },
+    "pitfalls": {
+      "ru": [
+        "Среднее скрывает бимодальность: часть зрителей уходит на 10-й секунде, часть смотрит до конца — смотрите кривую удержания, а не одно число.",
+        "AVD растёт с длиной ролика — сравнивать авторов и форматы можно только внутри одной длительности.",
+        "Фоновое воспроизведение и автоплей раздувают минуты без реального внимания."
+      ],
+      "en": [
+        "The average hides bimodality: some viewers leave at second 10, others finish — read the retention curve, not one number.",
+        "AVD grows with video length — compare creators and formats only within the same duration.",
+        "Background playback and autoplay inflate minutes without real attention."
+      ]
+    },
+    "sql": "-- AVD and the retention curve shape per video\nSELECT props->>'video_id' AS video_id,\n       COUNT(*) AS views,\n       ROUND(AVG((props->>'watch_sec')::int) / 60.0, 2) AS avd_min,\n       ROUND(AVG(100.0 * (props->>'watch_sec')::int\n             / NULLIF((props->>'duration_sec')::int, 0)), 1) AS avg_pct_watched,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE (props->>'watch_sec')::int < 30)\n             / COUNT(*), 1) AS bounced_30s_pct\nFROM events\nWHERE event_name = 'playback_end'\n  AND ts >= now() - INTERVAL '28 days'\nGROUP BY 1\nORDER BY views DESC;",
+    "related": ["video-completion", "time-spent", "ctr"]
+  },
+  {
+    "id": "hook-rate",
+    "category": "engagement",
+    "title": { "ru": "Hook Rate — удержание первых секунд", "en": "Hook rate" },
+    "aliases": ["хук", "3 секунды"],
+    "tex": { "ru": "\\text{Hook Rate}=\\dfrac{\\text{досмотрели первые }3\\text{ сек}}{\\text{показов в ленте}}", "en": "\\text{Hook rate}=\\dfrac{\\text{watched first }3\\text{ sec}}{\\text{feed impressions}}" },
+    "desc": {
+      "ru": "Доля показов, где зритель не пролистал видео в первые секунды. В пассивной ленте видео стартует само, поэтому клика нет — его роль играет решение «не свайпнуть». Главный сигнал ранжирования для коротких видео.",
+      "en": "The share of impressions where the viewer didn't swipe away in the first seconds. In a passive feed the video autoplays, so there is no click — the decision \"not to swipe\" replaces it. The key ranking signal for short video."
+    },
+    "pitfalls": {
+      "ru": [
+        "Порог в 3 секунды условен и подстраивается под формат — зафиксируйте его до сравнения роликов.",
+        "Хук легко накрутить шок-контентом: высокий Hook Rate при низком досмотре — сигнал приманки.",
+        "Скорость сети влияет: подвисший старт читается алгоритмом как отказ зрителя."
+      ],
+      "en": [
+        "The 3-second threshold is arbitrary and format-dependent — fix it before comparing videos.",
+        "The hook is easily gamed with shock content: a high hook rate with low completion signals bait.",
+        "Network speed matters: a stalled start reads to the algorithm as viewer rejection."
+      ]
+    },
+    "sql": "-- Hook rate and instant-swipe share\nSELECT props->>'video_id' AS video_id,\n       COUNT(*) AS impressions,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE (props->>'watch_sec')::numeric >= 3)\n             / COUNT(*), 1) AS hook_rate_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE (props->>'watch_sec')::numeric < 1)\n             / COUNT(*), 1) AS swipe_under_1s_pct\nFROM events\nWHERE event_name = 'feed_impression'\nGROUP BY 1\nHAVING COUNT(*) > 100\nORDER BY impressions DESC;",
+    "related": ["video-completion", "avd", "time-spent"]
+  },
+  {
+    "id": "share-rate",
+    "category": "engagement",
+    "title": { "ru": "Share Rate — доля шеров", "en": "Share rate" },
+    "aliases": ["шеры", "репосты"],
+    "tex": { "ru": "\\text{Share Rate}=\\dfrac{\\text{шеры}}{\\text{просмотры}}\\times 100\\%", "en": "\\text{Share rate}=\\dfrac{\\text{shares}}{\\text{views}}\\times 100\\%" },
+    "desc": {
+      "ru": "Как часто контентом делятся с другими. Двигатель виральности и самый сильный положительный сигнал качества: лайк стоит зрителю ноль, а шер — его репутации перед друзьями, поэтому просто так им не разбрасываются.",
+      "en": "How often content gets shared. The engine of virality and the strongest positive quality signal: a like costs the viewer nothing, a share costs their reputation with friends — so it isn't given away lightly."
+    },
+    "pitfalls": {
+      "ru": [
+        "Шеры вовне (в мессенджеры) часто не отслеживаются — реальная виральность выше измеренной.",
+        "Возмущение шерится не хуже восторга: рост Share Rate может означать скандал, а не качество.",
+        "Считать надо на просмотр, а не на пользователя: иначе метрика растёт вместе с аудиторией."
+      ],
+      "en": [
+        "Outbound shares (to messengers) often go untracked — real virality exceeds what you measure.",
+        "Outrage shares as well as delight: a rising share rate can mean a scandal, not quality.",
+        "Compute per view, not per user: otherwise the metric just grows with the audience."
+      ]
+    },
+    "sql": "-- Share rate and its contribution to new users\nSELECT date_trunc('week', ts) AS week,\n       COUNT(*) FILTER (WHERE event_name = 'video_view') AS views,\n       COUNT(*) FILTER (WHERE event_name = 'video_share') AS shares,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE event_name = 'video_share')\n             / NULLIF(COUNT(*) FILTER (WHERE event_name = 'video_view'), 0), 2) AS share_rate_pct,\n       COUNT(*) FILTER (WHERE event_name = 'signup_from_share') AS signups_from_shares\nFROM events\nGROUP BY 1\nORDER BY 1;",
+    "related": ["viral-coefficient", "video-completion", "dau-mau"]
+  },
+  {
+    "id": "scroll-depth",
+    "category": "engagement",
+    "title": { "ru": "Глубина скролла", "en": "Scroll depth" },
+    "aliases": ["скролл"],
+    "tex": { "ru": "\\text{Глубина}=\\text{медиана числа карточек за сессию}", "en": "\\text{Depth}=\\text{median cards per session}" },
+    "desc": {
+      "ru": "Как далеко пользователь уходит по ленте за сессию. В бесконечной ленте нет естественной точки выхода, поэтому глубина скролла показывает, где кончается терпение или интерес — и служит прокси того, сколько инвентаря показано.",
+      "en": "How far a user goes down the feed in a session. An infinite feed has no natural stopping point, so scroll depth shows where interest or patience runs out — and proxies how much inventory was shown."
+    },
+    "pitfalls": {
+      "ru": [
+        "Быстрый скролл не равен вовлечённости: человек может пролистать сотню карточек, ни на одной не задержавшись.",
+        "Глубина сильно зависит от устройства и высоты карточки — сравнивайте внутри платформы.",
+        "Рост глубины при падении удержания — признак того, что лента заставляет искать, а не даёт нужное сразу."
+      ],
+      "en": [
+        "Fast scrolling isn't engagement: a person can fly past a hundred cards without stopping on any.",
+        "Depth depends heavily on device and card height — compare within a platform.",
+        "Depth growing while retention falls means the feed makes people search instead of delivering."
+      ]
+    },
+    "sql": "-- Scroll depth per session: median and p90\nWITH per_session AS (\n  SELECT props->>'session_id' AS session_id,\n         MAX((props->>'card_index')::int) AS max_card\n  FROM events\n  WHERE event_name = 'feed_card_view'\n  GROUP BY 1\n)\nSELECT PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY max_card) AS median_cards,\n       PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY max_card) AS p90_cards,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE max_card <= 3) / COUNT(*), 1) AS shallow_sessions_pct\nFROM per_session;",
+    "related": ["session-depth", "time-spent", "hook-rate"]
+  },
+  {
+    "id": "dwell-time",
+    "category": "engagement",
+    "title": { "ru": "Dwell time — время на странице после клика", "en": "Dwell time" },
+    "aliases": ["время на странице"],
+    "tex": { "ru": "\\text{Dwell}=\\text{время от клика до возврата в выдачу}", "en": "\\text{Dwell}=\\text{time from click to return to results}" },
+    "desc": {
+      "ru": "Сколько времени пользователь провёл на странице, прежде чем вернуться в выдачу. Главный способ отличить полезный результат от обманного: короткий клик с быстрым возвратом означает, что выдача пообещала не то.",
+      "en": "How long a user stayed on a page before returning to the results. The main way to tell a useful result from a deceptive one: a short click with a fast bounce means the results promised something else."
+    },
+    "pitfalls": {
+      "ru": [
+        "Долгий dwell не всегда хорошо: пользователь мог не найти ответ и долго его искать на странице.",
+        "Для навигационных запросов короткий dwell нормален — нашёл телефон и ушёл; сегментируйте по интенту.",
+        "Метрика не видит, что произошло после закрытия вкладки: это оценка снизу."
+      ],
+      "en": [
+        "Long dwell isn't always good: the user may have failed to find the answer and hunted for it on the page.",
+        "For navigational queries short dwell is normal — found the phone number and left; segment by intent.",
+        "The metric can't see what happened after the tab closed: it's a lower bound."
+      ]
+    },
+    "sql": "-- Dwell time and short-click share by intent\nWITH clicks AS (\n  SELECT e.props->>'query_id' AS query_id,\n         e.props->>'intent' AS intent,\n         e.ts AS clicked_at,\n         MIN(r.ts) AS returned_at\n  FROM events e\n  LEFT JOIN events r\n    ON r.props->>'query_id' = e.props->>'query_id'\n   AND r.event_name = 'serp_return' AND r.ts > e.ts\n  WHERE e.event_name = 'result_click'\n  GROUP BY 1, 2, 3\n)\nSELECT intent,\n       COUNT(*) AS clicks,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (\n         ORDER BY EXTRACT(epoch FROM returned_at - clicked_at)) AS median_dwell_sec,\n       ROUND(100.0 * COUNT(*) FILTER (\n         WHERE EXTRACT(epoch FROM returned_at - clicked_at) < 15) / COUNT(*), 1) AS short_click_pct\nFROM clicks\nGROUP BY 1;",
+    "related": ["search-success", "ctr", "ad-coverage"]
+  },
+  {
+    "id": "active-days",
+    "category": "engagement",
+    "title": { "ru": "Активные дни в месяц", "en": "Active days per month" },
+    "aliases": ["активные дни"],
+    "tex": { "ru": "\\text{Активные дни}=\\dfrac{\\sum\\text{дней с активностью}}{\\text{активные пользователи}}", "en": "\\text{Active days}=\\dfrac{\\sum\\text{days with activity}}{\\text{active users}}" },
+    "desc": {
+      "ru": "Сколько дней из месяца пользователь заходит в продукт. Для подписки это лучший ранний предиктор продления: подписка, которой не пользуются, отменяется на первой же ревизии трат — задолго до того, как это увидит churn.",
+      "en": "How many days a month a user opens the product. For subscriptions it's the best early renewal predictor: an unused subscription gets cancelled at the first spending review — long before churn reveals it."
+    },
+    "pitfalls": {
+      "ru": [
+        "Среднее по базе прячет два разных продукта внутри одного: ядро с 20 днями и хвост с одним.",
+        "Для эпизодических продуктов (тревел, недвижимость) низкие активные дни — норма, а не тревога.",
+        "«Активность» должна означать потребление, а не открытие пуша."
+      ],
+      "en": [
+        "The base average hides two different products in one: a core at 20 days and a tail at one.",
+        "For episodic products (travel, real estate) low active days are normal, not alarming.",
+        "\"Active\" must mean consumption, not opening a push."
+      ]
+    },
+    "sql": "-- Active days per user and the churn-risk segment\nWITH per_user AS (\n  SELECT user_id,\n         date_trunc('month', ts) AS month,\n         COUNT(DISTINCT ts::date) AS active_days\n  FROM events\n  GROUP BY 1, 2\n)\nSELECT month,\n       ROUND(AVG(active_days), 1) AS avg_active_days,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY active_days) AS median_active_days,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE active_days <= 1) / COUNT(*), 1) AS one_day_users_pct\nFROM per_user\nGROUP BY 1\nORDER BY 1;",
+    "related": ["stickiness", "retention-n-day", "churn-rate"]
+  },
+  {
+    "id": "messages-sent",
+    "category": "engagement",
+    "title": { "ru": "Отправленные сообщения", "en": "Messages sent" },
+    "aliases": ["сообщения", "messages"],
+    "tex": { "ru": "\\text{Сообщения}=\\text{активные}\\times \\text{сообщений на пользователя}", "en": "\\text{Messages}=\\text{active users}\\times \\text{messages per user}" },
+    "desc": {
+      "ru": "Сколько сообщений отправлено за период. North Star мессенджера: ценность продукта не в минутах просмотра, а в состоявшейся коммуникации. Ключевое отличие от контентных платформ — здесь ценность создают сами пользователи друг для друга, а продукт лишь не мешает.",
+      "en": "How many messages were sent in a period. A messenger's North Star: the product's value isn't minutes watched but communication that happened. The key difference from content platforms — here users create the value for each other, and the product's job is to stay out of the way."
+    },
+    "pitfalls": {
+      "ru": [
+        "Больше сообщений не всегда лучше: если продукт заставляет писать пять сообщений вместо одного, растёт метрика, а не польза.",
+        "Автоматические и сервисные сообщения (боты, уведомления) раздувают цифру — считайте человеческие отдельно.",
+        "Метрика слепа к качеству связи: сто сообщений в мёртвом чате хуже двух в живом диалоге — смотрите вместе с отвеченными диалогами."
+      ],
+      "en": [
+        "More messages isn't always better: if the product makes people write five where one would do, the metric grows and the value doesn't.",
+        "Automated and service messages (bots, notifications) inflate the number — count human ones separately.",
+        "It's blind to connection quality: a hundred messages into a dead chat beat two in a live dialogue for nobody — read with replied conversations."
+      ]
+    },
+    "sql": "-- Messages: human vs bot, and per active user\nSELECT date_trunc('day', ts) AS day,\n       COUNT(*) FILTER (WHERE props->>'sender_type' = 'human') AS human_messages,\n       COUNT(*) FILTER (WHERE props->>'sender_type' = 'bot') AS bot_messages,\n       COUNT(DISTINCT user_id) AS senders,\n       ROUND(1.0 * COUNT(*) FILTER (WHERE props->>'sender_type' = 'human')\n             / NULLIF(COUNT(DISTINCT user_id), 0), 1) AS messages_per_sender\nFROM events\nWHERE event_name = 'message_sent'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["connected-pairs", "dau-mau", "reply-rate", "stickiness"]
+  },
+  {
+    "id": "connected-pairs",
+    "category": "engagement",
+    "title": { "ru": "Связанные пары (двусторонние диалоги)", "en": "Connected pairs (two-way conversations)" },
+    "aliases": ["диалоги", "связи", "граф общения"],
+    "tex": { "ru": "\\text{Пары}=\\#\\{(a,b): a\\to b\\text{ и }b\\to a\\text{ за период}\\}", "en": "\\text{Pairs}=\\#\\{(a,b): a\\to b\\text{ and }b\\to a\\text{ in period}\\}" },
+    "desc": {
+      "ru": "Сколько пар пользователей реально переписывались в обе стороны. Честная мера сетевого эффекта мессенджера: односторонняя отправка — это ещё не коммуникация, а вот состоявшийся диалог создаёт связь, из-за которой уйти с платформы становится невозможно в одиночку.",
+      "en": "How many user pairs actually exchanged messages both ways. The honest measure of a messenger's network effect: one-way sending isn't communication yet, while a real dialogue creates the tie that makes leaving the platform impossible to do alone."
+    },
+    "pitfalls": {
+      "ru": [
+        "Односторонние рассылки и каналы сюда не входят — и правильно: это медиа, а не связь.",
+        "Метрика тяжёлая: пары растут квадратично, считайте на семплах или инкрементально.",
+        "Пары в мессенджере концентрированы: у большинства людей 5–10 живых контактов, а не сотни — среднее по графу обманывает."
+      ],
+      "en": [
+        "One-way broadcasts and channels don't count — rightly so: that's media, not connection.",
+        "The metric is heavy: pairs grow quadratically, so compute on samples or incrementally.",
+        "Messenger pairs are concentrated: most people have 5–10 live contacts, not hundreds — the graph average deceives."
+      ]
+    },
+    "sql": "-- Two-way conversation pairs per week\nWITH directed AS (\n  SELECT DISTINCT date_trunc('week', ts) AS week,\n         user_id AS sender,\n         (props->>'recipient_id')::text AS recipient\n  FROM events\n  WHERE event_name = 'message_sent'\n    AND props->>'chat_type' = 'private'\n)\nSELECT a.week,\n       COUNT(*) / 2 AS connected_pairs,\n       COUNT(DISTINCT a.sender) AS users_in_dialogue\nFROM directed a\nJOIN directed b\n  ON b.week = a.week\n AND b.sender = a.recipient\n AND b.recipient = a.sender::text\nGROUP BY a.week\nORDER BY a.week;",
+    "related": ["messages-sent", "follow-graph", "retention-n-day", "viral-coefficient"]
+  },
+  {
+    "id": "reply-rate",
+    "category": "engagement",
+    "title": { "ru": "Доля отвеченных сообщений", "en": "Reply rate" },
+    "aliases": ["ответы", "отвеченные диалоги"],
+    "tex": { "ru": "\\text{Reply Rate}=\\dfrac{\\text{диалоги с ответом}}{\\text{начатые диалоги}}", "en": "\\text{Reply rate}=\\dfrac{\\text{conversations with a reply}}{\\text{conversations started}}" },
+    "desc": {
+      "ru": "Какая доля сообщений получает ответ. Метрика качества коммуникации: сообщение без ответа — несостоявшаяся ценность, а для нового пользователя первый неотвеченный диалог часто означает, что он не вернётся. Растёт с доставляемостью и скоростью пушей — техника здесь напрямую влияет на продукт.",
+      "en": "What share of messages gets a reply. The communication-quality metric: an unanswered message is value that didn't happen, and for a new user the first unanswered dialogue often means they won't return. It rises with deliverability and push speed — here infrastructure directly drives the product."
+    },
+    "pitfalls": {
+      "ru": [
+        "Ответ приходит с задержкой: часовое окно занижает метрику, суточное сглаживает проблему — фиксируйте окно.",
+        "Спам-рассылки бизнесов режут общий Reply Rate — считайте по типам отправителя, а не в среднем.",
+        "Низкий Reply Rate — не всегда вина продукта: получатель мог просто не хотеть отвечать; но систематическое падение означает проблемы с доставкой или пушами."
+      ],
+      "en": [
+        "Replies arrive with delay: an hourly window understates it, a daily one smooths the problem away — fix the window.",
+        "Business spam blasts drag the overall reply rate down — compute by sender type, not on average.",
+        "A low reply rate isn't always the product's fault: the recipient may simply not want to answer; but a systematic decline means delivery or push problems."
+      ]
+    },
+    "sql": "-- Reply rate within an hour, by sender type\nWITH msgs AS (\n  SELECT e.props->>'chat_id' AS chat_id,\n         e.user_id AS sender,\n         e.props->>'sender_type' AS sender_type,\n         e.ts,\n         MIN(r.ts) AS replied_at\n  FROM events e\n  LEFT JOIN events r\n    ON r.props->>'chat_id' = e.props->>'chat_id'\n   AND r.event_name = 'message_sent'\n   AND r.user_id <> e.user_id\n   AND r.ts > e.ts\n  WHERE e.event_name = 'message_sent'\n  GROUP BY 1, 2, 3, 4\n)\nSELECT sender_type,\n       COUNT(*) AS messages,\n       ROUND(100.0 * COUNT(*) FILTER (\n         WHERE replied_at <= ts + INTERVAL '1 hour') / COUNT(*), 1) AS replied_1h_pct\nFROM msgs\nGROUP BY 1;",
+    "related": ["messages-sent", "connected-pairs", "latency-p95"]
+  },
+  {
+    "id": "follow-graph",
+    "category": "engagement",
+    "title": { "ru": "Размер графа подписок", "en": "Follow graph size" },
+    "aliases": ["подписки", "граф подписок", "фолловеры"],
+    "tex": { "ru": "\\text{Граф}=\\text{медиана числа подписок на пользователя}", "en": "\\text{Graph}=\\text{median follows per user}" },
+    "desc": {
+      "ru": "На скольких авторов или людей подписан пользователь. Классический сетевой эффект соцсети: каждая подписка — это повод вернуться, поэтому у платформ есть порог (исторически известный по Facebook как «7 друзей за 10 дней»), после которого удержание резко растёт. Ниже порога пользователь уходит, выше — остаётся.",
+      "en": "How many creators or people a user follows. The classic social network effect: every follow is a reason to return, so platforms have a threshold (famously \"7 friends in 10 days\" at Facebook) past which retention jumps. Below it users leave, above it they stay."
+    },
+    "pitfalls": {
+      "ru": [
+        "Подписки без активности — мёртвый груз: считайте подписки на тех, кто публикует, а не общее число.",
+        "Порог нельзя переносить между продуктами: он выводится из ваших данных, а не берётся из чужого кейса.",
+        "Насильственное наращивание подписок (автоподписка при регистрации) даёт цифру, но не удержание."
+      ],
+      "en": [
+        "Follows without activity are dead weight: count follows of accounts that actually post, not the raw total.",
+        "The threshold doesn't transfer between products: derive it from your data, don't borrow someone's case study.",
+        "Force-growing follows (auto-follow at signup) produces the number without the retention."
+      ]
+    },
+    "sql": "-- Follow-graph size vs D30 retention: finding the threshold\nWITH graph AS (\n  SELECT user_id, COUNT(*) AS follows\n  FROM events WHERE event_name = 'follow_created'\n  GROUP BY 1\n)\nSELECT LEAST(g.follows, 20) AS follows_bucket,\n       COUNT(*) AS users,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE EXISTS (\n         SELECT 1 FROM events e\n         WHERE e.user_id = g.user_id\n           AND e.ts >= u.created_at + INTERVAL '30 days')) / COUNT(*), 1) AS retained_d30_pct\nFROM graph g\nJOIN users u USING (user_id)\nGROUP BY 1\nORDER BY 1;",
+    "related": ["retention-n-day", "dau-mau", "viral-coefficient", "sessions-per-user"]
+  },
+  {
+    "id": "video-completion",
+    "category": "engagement",
+    "title": { "ru": "Completion Rate — досматриваемость", "en": "Completion rate" },
+    "aliases": ["досматриваемость", "досмотр"],
+    "tex": { "ru": "\\text{Completion}=\\dfrac{\\text{досмотрено до конца}}{\\text{запусков}}", "en": "\\text{Completion}=\\dfrac{\\text{watched to the end}}{\\text{plays}}" },
+    "desc": {
+      "ru": "Какая доля запусков досмотрена до конца. Честный сигнал качества против кликбейта: клик покупается обложкой, а досмотр — только содержанием. Именно поэтому рекомендательные алгоритмы взвешивают его выше клика.",
+      "en": "What share of plays is watched to the end. The honest quality signal against clickbait: a click is bought with a thumbnail, completion only with substance. That's exactly why recommender algorithms weight it above clicks."
+    },
+    "pitfalls": {
+      "ru": [
+        "Метрика зависит от длины: 15-секундное видео досматривают в разы чаще получасового — сравнивайте внутри формата.",
+        "Автоплей и фоновое воспроизведение накручивают досмотры без внимания.",
+        "Оптимизация досмотра толкает авторов к укорачиванию контента — рычаг меняет платформу, а не только метрику."
+      ],
+      "en": [
+        "It depends on length: a 15-second clip is completed far more often than a half-hour video — compare within a format.",
+        "Autoplay and background playback inflate completions without attention.",
+        "Optimizing completion pushes creators to shorten content — the lever reshapes the platform, not just the metric."
+      ]
+    },
+    "sql": "-- Completion rate by video-length bucket\nSELECT CASE\n         WHEN (props->>'duration_sec')::int < 60 THEN '<1 min'\n         WHEN (props->>'duration_sec')::int < 600 THEN '1-10 min'\n         ELSE '10+ min'\n       END AS length_bucket,\n       COUNT(*) AS plays,\n       ROUND(100.0 * COUNT(*) FILTER (\n         WHERE (props->>'watch_sec')::int >= 0.95 * (props->>'duration_sec')::int\n       ) / COUNT(*), 1) AS completion_pct,\n       ROUND(AVG(100.0 * (props->>'watch_sec')::int\n             / NULLIF((props->>'duration_sec')::int, 0)), 1) AS avg_pct_watched\nFROM events\nWHERE event_name = 'playback_end'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["time-spent", "ctr", "session-depth"]
+  },
+  {
+    "id": "viral-coefficient",
+    "category": "engagement",
+    "title": { "ru": "Виральный коэффициент (K)", "en": "Viral coefficient (K)" },
+    "aliases": ["k-factor", "виральность"],
+    "tex": { "ru": "K=\\text{приглашений на пользователя}\\times \\text{конверсия приглашения}", "en": "K=\\text{invites per user}\\times \\text{invite conversion}" },
+    "desc": {
+      "ru": "Сколько новых пользователей приводит один существующий. При K > 1 продукт растёт сам по себе, экспоненциально; при K = 0.5 виральность просто удешевляет платное привлечение вдвое — что уже отличный результат.",
+      "en": "How many new users one existing user brings. At K > 1 the product grows on its own, exponentially; at K = 0.5 virality simply halves the cost of paid acquisition — already an excellent outcome."
+    },
+    "pitfalls": {
+      "ru": [
+        "K > 1 почти никогда не держится долго: сеть насыщается, и коэффициент падает — модель бесконечного роста иллюзорна.",
+        "Считать надо по когортам и с учётом цикла: K зависит от того, за какое время меряете.",
+        "Приглашённые самим продуктом (реферальная программа за деньги) — это не виральность, а платный канал с другой экономикой."
+      ],
+      "en": [
+        "K > 1 almost never lasts: the network saturates and the coefficient falls — the infinite-growth model is an illusion.",
+        "Compute it by cohort and with a cycle in mind: K depends on the window you measure over.",
+        "Users invited via a paid referral program aren't virality — they're a paid channel with different economics."
+      ]
+    },
+    "sql": "-- Viral coefficient by signup cohort\nWITH invites AS (\n  SELECT user_id AS inviter_id, COUNT(*) AS invites_sent\n  FROM events WHERE event_name = 'invite_sent'\n  GROUP BY 1\n),\naccepted AS (\n  SELECT (props->>'inviter_id')::text AS inviter_id, COUNT(*) AS accepted\n  FROM events WHERE event_name = 'invite_accepted'\n  GROUP BY 1\n)\nSELECT date_trunc('month', u.created_at) AS cohort,\n       COUNT(DISTINCT u.user_id) AS users,\n       ROUND(1.0 * SUM(COALESCE(i.invites_sent, 0)) / COUNT(DISTINCT u.user_id), 2) AS invites_per_user,\n       ROUND(1.0 * SUM(COALESCE(a.accepted, 0))\n             / NULLIF(SUM(COALESCE(i.invites_sent, 0)), 0), 2) AS invite_cr,\n       ROUND(1.0 * SUM(COALESCE(a.accepted, 0)) / COUNT(DISTINCT u.user_id), 2) AS k_factor\nFROM users u\nLEFT JOIN invites i ON i.inviter_id = u.user_id\nLEFT JOIN accepted a ON a.inviter_id = u.user_id::text\nGROUP BY 1\nORDER BY 1;",
+    "related": ["cac", "dau-mau", "activation-rate"]
+  },
+  {
+    "id": "acceptance-rate",
+    "category": "engagement",
+    "title": { "ru": "Acceptance Rate — доля принятых подсказок", "en": "Acceptance rate" },
+    "aliases": ["принятые подсказки"],
+    "tex": { "ru": "\\text{Acceptance}=\\dfrac{\\text{принятые предложения}}{\\text{показанные предложения}}", "en": "\\text{Acceptance}=\\dfrac{\\text{accepted suggestions}}{\\text{shown suggestions}}" },
+    "desc": {
+      "ru": "Какая доля предложений AI принимается пользователем. Главный сигнал полезности для AI-инструментов: в отличие от лайка, это действие, за которое человек берёт ответственность — принятый код попадёт в его коммит.",
+      "en": "What share of the AI's suggestions the user accepts. The key usefulness signal for AI tools: unlike a thumbs-up, it's an action the person takes responsibility for — accepted code lands in their commit."
+    },
+    "pitfalls": {
+      "ru": [
+        "Принял ≠ пригодилось: часть принятого тут же переписывают — смотрите ещё и «выживаемость» кода через сутки.",
+        "Короткие подсказки принимают чаще длинных: метрика поощряет мельчить.",
+        "Каждый показ стоит денег (инференс), а принимают меньшинство — читайте вместе со стоимостью запроса."
+      ],
+      "en": [
+        "Accepted ≠ useful: some accepted output is rewritten immediately — also track code survival after a day.",
+        "Short suggestions get accepted more than long ones: the metric rewards triviality.",
+        "Every suggestion costs money (inference) while a minority is accepted — read it with cost per request."
+      ]
+    },
+    "sql": "-- Acceptance rate and code survival after 24h\nSELECT date_trunc('week', ts) AS week,\n       COUNT(*) FILTER (WHERE event_name = 'suggestion_shown') AS shown,\n       COUNT(*) FILTER (WHERE event_name = 'suggestion_accepted') AS accepted,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE event_name = 'suggestion_accepted')\n             / NULLIF(COUNT(*) FILTER (WHERE event_name = 'suggestion_shown'), 0), 1) AS acceptance_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE event_name = 'suggestion_survived_24h')\n             / NULLIF(COUNT(*) FILTER (WHERE event_name = 'suggestion_accepted'), 0), 1) AS survival_pct\nFROM events\nGROUP BY 1\nORDER BY 1;",
+    "related": ["cost-per-user", "stickiness", "nps-csat"]
+  },
+  {
+    "id": "dau-mau",
+    "category": "engagement",
+    "title": { "ru": "DAU / MAU — активная аудитория", "en": "DAU / MAU — active users" },
+    "aliases": ["dau", "mau", "активная аудитория"],
+    "tex": { "ru": "\\mathrm{DAU}=\\text{уникальные за день};\\quad \\mathrm{MAU}=\\text{уникальные за месяц}", "en": "\\mathrm{DAU}=\\text{daily uniques};\\quad \\mathrm{MAU}=\\text{monthly uniques}" },
+    "desc": {
+      "ru": "Сколько уникальных пользователей взаимодействует с продуктом за день (DAU) и за месяц (MAU). Базовая мера масштаба продукта; почти все остальные метрики вовлечённости строятся поверх неё.",
+      "en": "How many unique users interact with the product per day (DAU) and per month (MAU). The base measure of product scale; most other engagement metrics build on top of it."
+    },
+    "pitfalls": {
+      "ru": [
+        "«Активность» надо определить: открытие пуша — не то же, что осмысленное действие в продукте.",
+        "DAU считается по дням календаря — у глобальных продуктов часовые пояса режут сутки по-разному.",
+        "Рост MAU при падающем DAU — сигнал: приходят новые, но не остаются."
+      ],
+      "en": [
+        "Define \"active\": opening a push is not the same as a meaningful in-product action.",
+        "DAU uses calendar days — for global products, time zones slice the day differently.",
+        "MAU growing while DAU falls is a warning: new users arrive but don't stick."
+      ]
+    },
+    "sql": "-- DAU and MAU from an events log\nSELECT d.day,\n       d.dau,\n       m.mau,\n       ROUND(1.0 * d.dau / NULLIF(m.mau, 0), 3) AS stickiness\nFROM (\n  SELECT ts::date AS day, COUNT(DISTINCT user_id) AS dau\n  FROM events\n  GROUP BY 1\n) d\nJOIN LATERAL (\n  SELECT COUNT(DISTINCT user_id) AS mau\n  FROM events e\n  WHERE e.ts::date BETWEEN d.day - 29 AND d.day\n) m ON true\nORDER BY d.day;",
+    "related": ["stickiness", "sessions-per-user", "retention-n-day"]
+  },
+  {
+    "id": "stickiness",
+    "category": "engagement",
+    "title": { "ru": "Stickiness — «липкость»", "en": "Stickiness (DAU/MAU)" },
+    "aliases": ["липкость", "dau/mau"],
+    "tex": "\\mathrm{Stickiness}=\\dfrac{\\mathrm{DAU}}{\\mathrm{MAU}}",
+    "desc": {
+      "ru": "Какая доля месячной аудитории приходит каждый день. 0.5 значит, что средний пользователь открывает продукт 15 дней из 30. Отделяет ежедневную привычку (мессенджеры, соцсети) от эпизодического использования (тревел, недвижимость).",
+      "en": "What share of the monthly audience shows up on a given day. 0.5 means the average user opens the product 15 days out of 30. Separates a daily habit (messengers, social) from episodic use (travel, real estate)."
+    },
+    "pitfalls": {
+      "ru": [
+        "Для эпизодических продуктов низкий stickiness — норма, а не проблема; сравнивайте с собой в прошлом, не с соцсетями.",
+        "Приток новых пользователей временно занижает stickiness: MAU растёт быстрее DAU.",
+        "Усреднение по всем скрывает ядро: смотрите распределение дней активности."
+      ],
+      "en": [
+        "For episodic products low stickiness is normal, not a problem; compare with your own history, not with social apps.",
+        "A wave of new users temporarily depresses stickiness: MAU grows faster than DAU.",
+        "The average hides the core audience: look at the distribution of active days."
+      ]
+    },
+    "sql": "-- Monthly stickiness: average DAU over MAU\nWITH daily AS (\n  SELECT ts::date AS day, COUNT(DISTINCT user_id) AS dau\n  FROM events\n  GROUP BY 1\n), monthly AS (\n  SELECT date_trunc('month', ts) AS month, COUNT(DISTINCT user_id) AS mau\n  FROM events\n  GROUP BY 1\n)\nSELECT m.month,\n       ROUND(AVG(d.dau)) AS avg_dau,\n       m.mau,\n       ROUND(AVG(d.dau) / NULLIF(m.mau, 0), 3) AS stickiness\nFROM daily d\nJOIN monthly m ON date_trunc('month', d.day) = m.month\nGROUP BY m.month, m.mau\nORDER BY m.month;",
+    "related": ["dau-mau", "sessions-per-user", "retention-n-day"]
+  },
+  {
+    "id": "sessions-per-user",
+    "category": "engagement",
+    "title": { "ru": "Частота — сессий на пользователя", "en": "Frequency — sessions per user" },
+    "aliases": ["частота", "frequency"],
+    "tex": { "ru": "\\text{Частота}=\\dfrac{\\text{сессии за период}}{\\text{активные пользователи}}", "en": "\\mathrm{Frequency}=\\dfrac{\\text{sessions in period}}{\\text{active users}}" },
+    "desc": {
+      "ru": "Как часто активный пользователь возвращается в продукт за период. Вместе с глубиной сессии раскладывает вовлечённость на «как часто» × «насколько плотно».",
+      "en": "How often an active user comes back within a period. Together with session depth it decomposes engagement into \"how often\" × \"how deeply\"."
+    },
+    "pitfalls": {
+      "ru": [
+        "Определение сессии (таймаут 30 минут? смена дня?) меняет метрику в разы — зафиксируйте и не трогайте.",
+        "Среднее тянут вверх суперпользователи: медиана честнее описывает типичного.",
+        "Рост частоты за счёт пушей без ценности — накрутка, которая аукнется оттоком."
+      ],
+      "en": [
+        "The session definition (30-min timeout? day boundary?) changes the metric several-fold — fix it and leave it alone.",
+        "Power users drag the mean up: the median describes the typical user more honestly.",
+        "Pushing frequency with valueless notifications is gaming the metric — churn will collect the bill."
+      ]
+    },
+    "sql": "-- Sessions per active user per week: mean and median\nWITH per_user AS (\n  SELECT date_trunc('week', started_at) AS week,\n         user_id,\n         COUNT(*) AS cnt\n  FROM sessions\n  GROUP BY 1, 2\n)\nSELECT week,\n       SUM(cnt) AS sessions,\n       COUNT(*) AS users,\n       ROUND(AVG(cnt), 2) AS avg_freq,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY cnt) AS median_freq\nFROM per_user\nGROUP BY 1\nORDER BY 1;",
+    "related": ["dau-mau", "session-depth", "stickiness"]
+  },
+  {
+    "id": "session-depth",
+    "category": "engagement",
+    "title": { "ru": "Глубина сессии", "en": "Session depth" },
+    "aliases": ["глубина", "depth"],
+    "tex": { "ru": "\\text{Глубина}=\\dfrac{\\text{действия (или минуты)}}{\\text{сессия}}", "en": "\\mathrm{Depth}=\\dfrac{\\text{actions (or minutes)}}{\\text{session}}" },
+    "desc": {
+      "ru": "Сколько осмысленных действий или минут приходится на один заход. Вторая половина декомпозиции вовлечённости: частота говорит, что пользователь вернулся, глубина — что он реально что-то делал.",
+      "en": "How many meaningful actions or minutes one visit contains. The second half of the engagement decomposition: frequency says the user came back, depth says they actually did something."
+    },
+    "pitfalls": {
+      "ru": [
+        "Большая глубина не всегда хорошо: в поиске или банке долгая сессия может значить «не смог найти».",
+        "Скролл и фоновое проигрывание — не действия; считайте события с намерением.",
+        "Распределение глубины сильно скошено — среднее почти бесполезно, смотрите медиану и p90."
+      ],
+      "en": [
+        "More depth isn't always good: in search or banking a long session may mean \"couldn't find it\".",
+        "Scrolling and background playback aren't actions; count intentful events.",
+        "Depth distributions are heavily skewed — the mean is nearly useless, look at the median and p90."
+      ]
+    },
+    "sql": "-- Actions per session: median and p90\nWITH per_session AS (\n  SELECT s.session_id,\n         COUNT(e.event_name) AS actions\n  FROM sessions s\n  LEFT JOIN events e\n    ON e.user_id = s.user_id\n   AND e.ts BETWEEN s.started_at AND s.started_at + s.duration_sec * INTERVAL '1 second'\n  GROUP BY s.session_id\n)\nSELECT PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY actions) AS median_actions,\n       PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY actions) AS p90_actions,\n       ROUND(AVG(actions), 1) AS avg_actions\nFROM per_session;",
+    "related": ["sessions-per-user", "time-spent"]
+  },
+  {
+    "id": "time-spent",
+    "category": "engagement",
+    "title": { "ru": "Time Spent / Watch Time", "en": "Time spent / watch time" },
+    "aliases": ["watch time", "время в продукте"],
+    "tex": { "ru": "\\text{Time Spent}=\\sum \\text{время в продукте за период}", "en": "\\text{Time spent}=\\sum \\text{time in product over period}" },
+    "desc": {
+      "ru": "Суммарное время, проведённое пользователями в продукте. North Star экономики внимания: у видеоплатформ и соцсетей выручка от рекламы почти линейно следует за суммарным временем просмотра.",
+      "en": "Total time users spend in the product. The North Star of the attention economy: for video platforms and social networks ad revenue follows total watch time almost linearly."
+    },
+    "pitfalls": {
+      "ru": [
+        "Время растёт и от плохого UX (не нашёл, запутался) — держите рядом метрику удовлетворённости.",
+        "Автоплей и фоновое воспроизведение накручивают часы без внимания — фильтруйте по видимости/звуку.",
+        "Оптимизация чистого времени тянет в кликбейт и думскроллинг — нужны контр-метрики качества (YouTube перешёл от Views к Watch Time, а затем добавил опросы удовлетворённости)."
+      ],
+      "en": [
+        "Time also grows with bad UX (couldn't find it, got lost) — keep a satisfaction metric next to it.",
+        "Autoplay and background playback inflate hours without attention — filter by visibility/audio.",
+        "Optimizing raw time drags you into clickbait and doomscrolling — you need quality counter-metrics (YouTube moved from views to watch time, then added satisfaction surveys)."
+      ]
+    },
+    "sql": "-- Total and per-user daily watch time from playback events\nSELECT ts::date AS day,\n       SUM((props->>'watch_sec')::int) / 3600.0 AS total_hours,\n       COUNT(DISTINCT user_id) AS viewers,\n       ROUND(SUM((props->>'watch_sec')::int) / 60.0\n             / NULLIF(COUNT(DISTINCT user_id), 0), 1) AS min_per_viewer\nFROM events\nWHERE event_name = 'playback_tick'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["session-depth", "dau-mau", "stickiness"]
+  },
+  {
+    "id": "search-success",
+    "category": "engagement",
+    "title": { "ru": "Successful Sessions — успешность задач", "en": "Successful sessions / task success" },
+    "aliases": ["task success", "успешные сессии"],
+    "tex": { "ru": "\\text{Success rate}=\\dfrac{\\text{сессии с достигнутой целью}}{\\text{все сессии}}", "en": "\\text{Success rate}=\\dfrac{\\text{sessions reaching the goal}}{\\text{all sessions}}" },
+    "desc": {
+      "ru": "Доля сессий, в которых пользователь решил свою задачу: нашёл ответ, доехал, оформил документ. North Star утилитарных продуктов (поиск, карты, госуслуги), где ценность — быстро закрытая потребность, а не время в продукте.",
+      "en": "The share of sessions where the user solved their task: found the answer, got the ride, filed the document. The North Star of utility products (search, maps, gov services), where value is a need closed quickly — not time in product."
+    },
+    "pitfalls": {
+      "ru": [
+        "«Успех» приходится определять эвристикой (короткий клик без возврата к выдаче = нашёл) — регулярно валидируйте её опросами.",
+        "Успех без клика (ответ прямо в выдаче) ломает клик-метрики — считайте и его.",
+        "Средняя успешность прячет провальные сегменты запросов: режьте по типам интентов."
+      ],
+      "en": [
+        "\"Success\" has to be defined by heuristic (a short click with no return to results = found it) — validate it regularly with surveys.",
+        "Zero-click success (answer right on the results page) breaks click metrics — count it too.",
+        "Average success hides failing query segments: slice by intent type."
+      ]
+    },
+    "sql": "-- Search success: click within session and no follow-up reformulation\nWITH search_sessions AS (\n  SELECT s.session_id,\n         MAX((e.event_name = 'result_click')::int) AS clicked,\n         MAX((e.event_name = 'query_reformulate')::int) AS reformulated\n  FROM sessions s\n  JOIN events e ON e.user_id = s.user_id\n   AND e.ts BETWEEN s.started_at AND s.started_at + INTERVAL '30 minutes'\n  WHERE EXISTS (SELECT 1 FROM events q WHERE q.user_id = s.user_id\n                  AND q.event_name = 'search_query'\n                  AND q.ts BETWEEN s.started_at AND s.started_at + INTERVAL '30 minutes')\n  GROUP BY s.session_id\n)\nSELECT COUNT(*) AS search_sessions,\n       ROUND(100.0 * SUM(CASE WHEN clicked = 1 AND reformulated = 0 THEN 1 ELSE 0 END)\n             / COUNT(*), 1) AS success_pct\nFROM search_sessions;",
+    "related": ["session-depth", "nps-csat"]
+  }
+]

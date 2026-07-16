@@ -1,0 +1,577 @@
+[
+  {
+    "id": "selection",
+    "category": "marketplace",
+    "title": { "ru": "Selection — выбор в радиусе", "en": "Selection — choice nearby" },
+    "aliases": ["выбор рядом", "ассортимент рядом"],
+    "tex": { "ru": "\\text{Selection}=\\text{медиана числа доступных вариантов на пользователя}", "en": "\\text{Selection}=\\text{median available options per user}" },
+    "desc": {
+      "ru": "Сколько вариантов реально доступно конкретному пользователю здесь и сейчас. Отличается от общего числа партнёров: в доставке важно не сколько ресторанов в городе, а сколько из них довезут вам за 30 минут. Метрика, которую надо считать на пользователя, а не на платформу.",
+      "en": "How many options are actually available to a specific user here and now. Different from the total partner count: in delivery what matters isn't how many restaurants exist in the city but how many will reach you in 30 minutes. A metric to compute per user, not per platform."
+    },
+    "pitfalls": {
+      "ru": [
+        "Среднее по городу врёт: в центре выбор огромен, на окраине пусто — считайте распределение по гео.",
+        "Число вариантов ≠ качество выбора: сто одинаковых пиццерий не лучше десяти разных кухонь.",
+        "Selection меняется по часам: ночью половина партнёров закрыта, а метрика посчитана днём."
+      ],
+      "en": [
+        "A citywide average lies: downtown has a huge choice, the outskirts have none — look at the geo distribution.",
+        "Option count ≠ choice quality: a hundred identical pizzerias beat ten diverse cuisines for nobody.",
+        "Selection changes by hour: at night half the partners are closed, while the metric was measured at noon."
+      ]
+    },
+    "sql": "-- Selection per user session, by geo\nSELECT props->>'district' AS district,\n       COUNT(DISTINCT props->>'session_id') AS sessions,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (\n         ORDER BY (props->>'available_partners')::int) AS median_selection,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE (props->>'available_partners')::int < 5)\n             / COUNT(*), 1) AS poor_selection_pct\nFROM events\nWHERE event_name = 'catalog_view'\n  AND ts >= now() - INTERVAL '7 days'\nGROUP BY 1\nORDER BY sessions DESC;",
+    "related": ["active-listings", "liquidity", "conversion-rate"]
+  },
+  {
+    "id": "delivery-time",
+    "category": "marketplace",
+    "title": { "ru": "Время доставки", "en": "Delivery time" },
+    "aliases": ["скорость доставки", "срок доставки"],
+    "tex": { "ru": "\\text{Время}=\\text{медиана}(\\text{получено}-\\text{заказано})", "en": "\\text{Time}=\\text{median}(\\text{received}-\\text{ordered})" },
+    "desc": {
+      "ru": "Сколько проходит от заказа до получения. В доставке еды складывается из времени кухни и дороги, причём кухню платформа контролирует хуже всего. Прямо влияет на частоту: каждая лишняя десятиминутка снижает готовность заказать в следующий раз.",
+      "en": "How long from order to receipt. In food delivery it's kitchen time plus travel — and the kitchen is the part the platform controls least. It directly drives frequency: every extra ten minutes lowers willingness to order again."
+    },
+    "pitfalls": {
+      "ru": [
+        "Среднее прячет хвост: p90 и есть тот опыт, из-за которого клиенты уходят.",
+        "Обещанное время важнее фактического: доставка за 40 минут при обещании 30 хуже, чем за 45 при обещании 50.",
+        "Отменённые из-за долгого ожидания заказы выпадают из выборки и приукрашивают метрику."
+      ],
+      "en": [
+        "The average hides the tail: p90 is the experience that makes customers leave.",
+        "The promise beats the fact: 40 minutes against a 30-minute promise is worse than 45 against 50.",
+        "Orders cancelled over long waits drop out of the sample and flatter the metric."
+      ]
+    },
+    "sql": "-- Delivery time split into kitchen and road legs\nSELECT props->>'city' AS city,\n       COUNT(*) AS orders,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (\n         ORDER BY EXTRACT(epoch FROM (props->>'delivered_at')::timestamp\n                                   - created_at) / 60) AS median_total_min,\n       PERCENTILE_CONT(0.9) WITHIN GROUP (\n         ORDER BY EXTRACT(epoch FROM (props->>'delivered_at')::timestamp\n                                   - created_at) / 60) AS p90_total_min,\n       ROUND(AVG(EXTRACT(epoch FROM (props->>'cooked_at')::timestamp\n                                  - created_at) / 60), 1) AS avg_kitchen_min\nFROM orders\nWHERE status = 'delivered'\nGROUP BY 1\nORDER BY orders DESC;",
+    "related": ["on-time-delivery", "time-to-match", "repeat-rate"]
+  },
+  {
+    "id": "provider-availability",
+    "category": "marketplace",
+    "title": { "ru": "Доступность исполнителей", "en": "Provider availability" },
+    "aliases": ["доступность курьеров", "мощность", "покрытие пиков"],
+    "tex": { "ru": "\\text{Доступность}=\\dfrac{\\text{часы онлайн}}{\\text{часы спроса}}", "en": "\\text{Availability}=\\dfrac{\\text{online hours}}{\\text{demand hours}}" },
+    "desc": {
+      "ru": "Хватает ли исполнителей на линии, чтобы закрыть спрос. Ключевая проверка — пиковые часы: в доставке обед и вечер дают половину заказов, и провал мощности именно там означает отмены и опоздания, а не «немного дольше в среднем».",
+      "en": "Whether there are enough providers online to cover demand. The key test is peak hours: in delivery, lunch and dinner drive half the orders, so a capacity gap there means cancellations and lateness — not \"slightly slower on average\"."
+    },
+    "pitfalls": {
+      "ru": [
+        "Суточное среднее бесполезно: избыток курьеров днём не компенсирует нехватку в 19:00.",
+        "Онлайн ≠ доступен: курьер может быть в зоне без заказов или уже на длинном маршруте.",
+        "Бонусы за выход в пик поднимают доступность, но съедают маржу заказа — смотрите вместе с contribution margin."
+      ],
+      "en": [
+        "A daily average is useless: a courier surplus at noon doesn't offset a shortage at 7pm.",
+        "Online ≠ available: a courier may sit in a zone with no orders or already be on a long route.",
+        "Peak-hour bonuses raise availability but eat the order's margin — read with contribution margin."
+      ]
+    },
+    "sql": "-- Supply vs demand by hour: where capacity breaks\nWITH demand AS (\n  SELECT date_trunc('hour', created_at) AS hour, COUNT(*) AS orders\n  FROM orders GROUP BY 1\n),\nsupply AS (\n  SELECT date_trunc('hour', ts) AS hour,\n         SUM((props->>'online_sec')::int) / 3600.0 AS courier_hours\n  FROM events WHERE event_name = 'provider_shift_tick' GROUP BY 1\n)\nSELECT EXTRACT(hour FROM d.hour) AS hour_of_day,\n       ROUND(AVG(d.orders), 1) AS avg_orders,\n       ROUND(AVG(s.courier_hours), 1) AS avg_courier_hours,\n       ROUND(AVG(d.orders / NULLIF(s.courier_hours, 0)), 2) AS orders_per_courier_hour\nFROM demand d\nLEFT JOIN supply s USING (hour)\nGROUP BY 1\nORDER BY 1;",
+    "related": ["utilization", "liquidity", "cancellation-rate", "hourly-earnings"]
+  },
+  {
+    "id": "driver-density",
+    "category": "marketplace",
+    "title": { "ru": "Плотность исполнителей", "en": "Provider density" },
+    "aliases": ["плотность водителей"],
+    "tex": { "ru": "\\text{Плотность}=\\dfrac{\\text{исполнители онлайн}}{\\text{площадь зоны}}", "en": "\\text{Density}=\\dfrac{\\text{providers online}}{\\text{zone area}}" },
+    "desc": {
+      "ru": "Сколько исполнителей приходится на район. Главный сетевой эффект on-demand: чем плотнее сеть, тем короче подача, дешевле поездка и выше утилизация — и всё это одновременно, поэтому плотность важнее общего числа водителей в городе.",
+      "en": "How many providers cover a district. The core on-demand network effect: the denser the network, the shorter the pickup, the cheaper the ride and the higher the utilization — all at once, which is why density beats the citywide driver count."
+    },
+    "pitfalls": {
+      "ru": [
+        "Плотность по городу — фикция: рынок живёт районами и часами, средняя цифра не описывает ни один из них.",
+        "Избыточная плотность бьёт по исполнителям: заказов на всех не хватает, заработок падает, они уходят.",
+        "Плотность и сурж связаны обратно: устойчивый сурж означает, что плотности не хватает, а не что «спрос высокий»."
+      ],
+      "en": [
+        "Citywide density is a fiction: the market lives in districts and hours, and the average describes neither.",
+        "Excess density hurts providers: orders don't stretch to everyone, earnings fall, they leave.",
+        "Density and surge move inversely: persistent surge means density is short, not that \"demand is high\"."
+      ]
+    },
+    "sql": "-- Density vs ETA by district: the network effect in numbers\nSELECT props->>'district' AS district,\n       ROUND(AVG((props->>'drivers_online')::int), 1) AS avg_drivers_online,\n       ROUND(AVG((props->>'eta_sec')::int) / 60.0, 1) AS avg_eta_min,\n       ROUND(AVG((props->>'surge_multiplier')::numeric), 2) AS avg_surge\nFROM events\nWHERE event_name = 'zone_snapshot'\n  AND ts >= now() - INTERVAL '7 days'\nGROUP BY 1\nORDER BY avg_drivers_online DESC;",
+    "related": ["time-to-match", "liquidity", "utilization", "supply-demand-balance"]
+  },
+  {
+    "id": "surge-share",
+    "category": "marketplace",
+    "title": { "ru": "Доля заказов с суржем", "en": "Surged order share" },
+    "aliases": ["сурж", "динамический коэффициент"],
+    "tex": { "ru": "\\text{Доля суржа}=\\dfrac{\\text{поездки с коэффициентом}>1}{\\text{все поездки}}", "en": "\\text{Surge share}=\\dfrac{\\text{rides with multiplier}>1}{\\text{all rides}}" },
+    "desc": {
+      "ru": "Как часто цена поднимается выше базовой. Сурж — рабочий инструмент балансировки на короткой дистанции, но постоянно высокая доля означает хроническую нехватку предложения: платформа не балансирует рынок, а прячет его дефицит за цену.",
+      "en": "How often the price goes above base. Surge is a legitimate short-term balancing tool, but a persistently high share signals a chronic supply shortage: the platform isn't balancing the market — it's hiding the deficit behind price."
+    },
+    "pitfalls": {
+      "ru": [
+        "Сурж — контр-метрика, а не рычаг выручки: рост доли поднимает деньги сегодня и отток завтра.",
+        "Пассажиры, отказавшиеся из-за цены, в метрику не попадают — считайте отдельно долю отказов при активном сурже.",
+        "Средняя доля по городу прячет районы, где сурж включён почти всегда."
+      ],
+      "en": [
+        "Surge is a counter-metric, not a revenue lever: a higher share lifts money today and churn tomorrow.",
+        "Riders who refused over price never enter the metric — separately track refusals during active surge.",
+        "A citywide average hides districts where surge is on almost permanently."
+      ]
+    },
+    "sql": "-- Surge share and rider refusals during surge\nSELECT props->>'district' AS district,\n       COUNT(*) AS requests,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE (props->>'surge_multiplier')::numeric > 1)\n             / COUNT(*), 1) AS surged_pct,\n       ROUND(100.0 * COUNT(*) FILTER (\n         WHERE (props->>'surge_multiplier')::numeric > 1 AND props->>'result' = 'abandoned')\n         / NULLIF(COUNT(*) FILTER (WHERE (props->>'surge_multiplier')::numeric > 1), 0), 1) AS abandon_on_surge_pct\nFROM events\nWHERE event_name = 'ride_request'\nGROUP BY 1\nORDER BY requests DESC;",
+    "related": ["driver-density", "liquidity", "cancellation-rate"]
+  },
+  {
+    "id": "search-to-cart",
+    "category": "marketplace",
+    "title": { "ru": "Search → Cart — качество поиска", "en": "Search → cart" },
+    "aliases": ["поиск в корзину", "доля пустых выдач"],
+    "tex": { "ru": "\\text{Search}\\to\\text{Cart}=\\dfrac{\\text{поиски с добавлением в корзину}}{\\text{все поиски}}", "en": "\\text{Search}\\to\\text{cart}=\\dfrac{\\text{searches with an add-to-cart}}{\\text{all searches}}" },
+    "desc": {
+      "ru": "Доля поисков, закончившихся добавлением товара в корзину. Метрика качества поиска в маркетплейсе: пользователь пришёл с намерением и назвал его словами — если он ушёл ни с чем, виноват либо поиск, либо ассортимент, и это надо различать.",
+      "en": "The share of searches ending in an add-to-cart. The marketplace search-quality metric: the user arrived with an intent and spelled it out — if they left empty-handed, either search or assortment is at fault, and you must tell which."
+    },
+    "pitfalls": {
+      "ru": [
+        "Пустая выдача и плохая выдача — разные болезни: первую лечит закупка ассортимента, вторую — ранжирование.",
+        "Часть поисков исследовательские («посмотреть, что есть») — от них добавления не ждут; сегментируйте по типу запроса.",
+        "Метрика поощряет показывать хоть что-то вместо честного «ничего не найдено» — держите рядом отказы после добавления."
+      ],
+      "en": [
+        "Empty results and bad results are different diseases: the first is cured by buying assortment, the second by ranking.",
+        "Some searches are exploratory (\"see what's there\") — no add-to-cart is expected; segment by query type.",
+        "The metric rewards showing anything over an honest \"nothing found\" — track post-add abandonment alongside."
+      ]
+    },
+    "sql": "-- Search → cart and the zero-result share\nWITH searches AS (\n  SELECT props->>'search_id' AS search_id,\n         props->>'query' AS query,\n         (props->>'results_count')::int AS results,\n         MAX((props->>'added_to_cart')::int) AS added\n  FROM events\n  WHERE event_name = 'search_performed'\n  GROUP BY 1, 2, 3\n)\nSELECT COUNT(*) AS searches,\n       ROUND(100.0 * SUM(added) / COUNT(*), 1) AS search_to_cart_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE results = 0) / COUNT(*), 1) AS zero_results_pct,\n       ROUND(100.0 * SUM(added) FILTER (WHERE results > 0)\n             / NULLIF(COUNT(*) FILTER (WHERE results > 0), 0), 1) AS cart_pct_when_found\nFROM searches;",
+    "related": ["search-success", "conversion-rate", "active-listings", "oos-rate"]
+  },
+  {
+    "id": "app-share",
+    "category": "marketplace",
+    "title": { "ru": "Доля заказов из приложения", "en": "App order share" },
+    "aliases": ["приложение", "доля приложения"],
+    "tex": { "ru": "\\text{Доля app}=\\dfrac{\\text{заказы из приложения}}{\\text{все заказы}}", "en": "\\text{App share}=\\dfrac{\\text{orders from the app}}{\\text{all orders}}" },
+    "desc": {
+      "ru": "Какая доля заказов приходит из мобильного приложения. Важна не сама по себе, а как прокси лояльности и стоимости канала: у пользователя приложения нет посредника между намерением и заказом, ему можно бесплатно слать пуши, и он почти не сравнивает цены с конкурентом.",
+      "en": "What share of orders comes from the mobile app. It matters as a proxy for loyalty and channel cost: an app user has no middleman between intent and order, can be pushed for free, and rarely comparison-shops."
+    },
+    "pitfalls": {
+      "ru": [
+        "Корреляция, а не причинность: приложение ставят самые лояльные — доля растёт не потому, что приложение делает лояльным.",
+        "Агрессивные баннеры «скачай приложение» поднимают долю и роняют конверсию веба — считайте суммарный эффект.",
+        "Комиссия сторов: заказ из приложения может быть дороже для бизнеса, чем из веба."
+      ],
+      "en": [
+        "Correlation, not causation: the most loyal install the app — the share grows for that reason, not because the app creates loyalty.",
+        "Aggressive \"download the app\" banners lift the share and drop web conversion — measure the combined effect.",
+        "Store fees: an in-app order can cost the business more than a web one."
+      ]
+    },
+    "sql": "-- App share and platform-level retention comparison\nSELECT date_trunc('month', o.created_at) AS month,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE o.props->>'platform' = 'app')\n             / COUNT(*), 1) AS app_order_share_pct,\n       ROUND(AVG((o.props->>'orders_per_user')::numeric)\n         FILTER (WHERE o.props->>'platform' = 'app'), 2) AS freq_app,\n       ROUND(AVG((o.props->>'orders_per_user')::numeric)\n         FILTER (WHERE o.props->>'platform' = 'web'), 2) AS freq_web\nFROM orders o\nWHERE o.status = 'paid'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["repeat-rate", "purchase-frequency", "cac"]
+  },
+  {
+    "id": "seller-retention",
+    "category": "marketplace",
+    "title": { "ru": "Удержание продавцов", "en": "Seller retention" },
+    "aliases": ["retention селлеров", "отток селлеров", "удержание объектов", "удержание хостов"],
+    "tex": { "ru": "\\text{Удержание}=\\dfrac{\\text{продают через }N\\text{ месяцев}}{\\text{начали продавать}}", "en": "\\text{Retention}=\\dfrac{\\text{still selling after }N\\text{ months}}{\\text{started selling}}" },
+    "desc": {
+      "ru": "Какая доля продавцов продолжает торговать через 3–6 месяцев. Метрика здоровья предложения: платформа привыкает считать оттоком уход покупателей, но уход продавцов страшнее — он схлопывает ассортимент, а за ним и спрос.",
+      "en": "What share of sellers still trade after 3–6 months. The supply-health metric: platforms are used to counting buyer churn, but seller churn is worse — it collapses assortment, and demand follows."
+    },
+    "pitfalls": {
+      "ru": [
+        "Продавец без продаж в первый месяц почти обречён уйти: смотрите время до первой продажи как ранний сигнал.",
+        "Массовый приток мелких продавцов занижает удержание — считайте по когортам и по доле GMV, а не по головам.",
+        "Рост комиссии и штрафов бьёт по удержанию с лагом в квартал: причина и следствие разъезжаются во времени."
+      ],
+      "en": [
+        "A seller with no sales in month one is nearly doomed: watch time-to-first-sale as the early signal.",
+        "A flood of tiny sellers depresses retention — measure by cohort and by GMV share, not by headcount.",
+        "Fee and penalty hikes hit retention a quarter later: cause and effect drift apart in time."
+      ]
+    },
+    "sql": "-- Seller retention by cohort and time to first sale\nWITH first_sale AS (\n  SELECT props->>'seller_id' AS seller_id,\n         MIN(created_at) AS first_sale_at\n  FROM orders GROUP BY 1\n),\ncohort AS (\n  SELECT l.seller_id,\n         date_trunc('month', MIN(l.created_at)) AS joined_month,\n         MIN(f.first_sale_at) AS first_sale_at\n  FROM listings l\n  LEFT JOIN first_sale f ON f.seller_id = l.seller_id::text\n  GROUP BY 1\n)\nSELECT joined_month,\n       COUNT(*) AS sellers,\n       ROUND(100.0 * COUNT(*) FILTER (\n         WHERE first_sale_at <= joined_month + INTERVAL '30 days') / COUNT(*), 1) AS sold_in_30d_pct,\n       ROUND(100.0 * COUNT(*) FILTER (\n         WHERE first_sale_at >= joined_month + INTERVAL '90 days') / COUNT(*), 1) AS active_at_90d_pct\nFROM cohort\nGROUP BY 1\nORDER BY 1;",
+    "related": ["active-listings", "take-rate", "churn-rate", "supply-demand-balance"]
+  },
+  {
+    "id": "assortment-width",
+    "category": "marketplace",
+    "title": { "ru": "Ширина ассортимента", "en": "Assortment width" },
+    "aliases": ["sku", "ассортимент", "доля fashion-sku"],
+    "tex": { "ru": "\\text{Ширина}=\\text{число уникальных SKU в наличии}", "en": "\\text{Width}=\\text{unique SKUs in stock}" },
+    "desc": {
+      "ru": "Сколько уникальных товаров доступно на платформе. Ассортимент — это трафик: люди приходят за конкретной вещью, и её отсутствие уводит их к конкуренту навсегда. Но считать надо взвешенно по спросу: миллион позиций в мёртвой категории не заменит сотни в ходовой.",
+      "en": "How many unique items the platform offers. Assortment is traffic: people come for a specific thing, and its absence sends them to a competitor for good. But weight it by demand: a million items in a dead category won't replace hundreds in a hot one."
+    },
+    "pitfalls": {
+      "ru": [
+        "Число SKU в каталоге ≠ доступный ассортимент: половина может быть без остатка или с неактуальной ценой.",
+        "Дубли карточек раздувают ширину и ухудшают поиск — одна вещь от пяти продавцов это одна позиция для покупателя.",
+        "Погоня за широтой без глубины (нет размеров и цветов) даёт красивую цифру и пустую корзину."
+      ],
+      "en": [
+        "Catalog SKU count ≠ available assortment: half may be out of stock or stale-priced.",
+        "Duplicate listings inflate width and degrade search — one item from five sellers is one option for the buyer.",
+        "Chasing width without depth (no sizes, no colors) yields a pretty number and an empty cart."
+      ]
+    },
+    "sql": "-- Assortment width vs demand: where the catalog is hollow\nSELECT l.props->>'category' AS category,\n       COUNT(DISTINCT l.listing_id) FILTER (WHERE l.status = 'active') AS sku_active,\n       COUNT(DISTINCT o.order_id) AS orders,\n       ROUND(1.0 * COUNT(DISTINCT o.order_id)\n             / NULLIF(COUNT(DISTINCT l.listing_id) FILTER (WHERE l.status = 'active'), 0), 3) AS orders_per_sku\nFROM listings l\nLEFT JOIN orders o ON o.props->>'category' = l.props->>'category'\n                  AND o.created_at >= now() - INTERVAL '30 days'\nGROUP BY 1\nORDER BY sku_active DESC;",
+    "related": ["active-listings", "oos-rate", "selection", "search-to-cart"]
+  },
+  {
+    "id": "price-competitiveness",
+    "category": "marketplace",
+    "title": { "ru": "Конкурентность цены", "en": "Price competitiveness" },
+    "aliases": ["паритет цен", "индекс цен"],
+    "tex": { "ru": "\\text{Индекс}=\\dfrac{\\text{наша цена}}{\\text{цена у конкурента}}", "en": "\\text{Index}=\\dfrac{\\text{our price}}{\\text{competitor price}}" },
+    "desc": {
+      "ru": "Насколько цены платформы отличаются от конкурентов и от прямых продаж поставщика. Для OTA и маркетплейсов это условие существования: если то же самое дешевле напрямую у отеля или в другом магазине, платформа превращается в витрину, за которую платит трафиком, но не получает сделку.",
+      "en": "How the platform's prices compare with competitors and with the supplier's direct sales. For OTAs and marketplaces it's existential: if the same thing is cheaper direct from the hotel or another store, the platform becomes a showroom that pays for traffic and loses the deal."
+    },
+    "pitfalls": {
+      "ru": [
+        "Сравнивать надо итоговую цену с доставкой и сборами, а не ценник: скрытые сборы всплывают в чекауте и убивают доверие.",
+        "Парсинг конкурентов даёт срез, а не картину: цены меняются несколько раз в день.",
+        "Демпинг за свой счёт улучшает индекс и уничтожает маржу — читайте вместе с contribution margin."
+      ],
+      "en": [
+        "Compare the final price with delivery and fees, not the sticker: hidden fees surface at checkout and kill trust.",
+        "Competitor scraping gives a snapshot, not a picture: prices change several times a day.",
+        "Platform-funded undercutting improves the index and destroys margin — read with contribution margin."
+      ]
+    },
+    "sql": "-- Price index vs competitors on matched items\nSELECT props->>'category' AS category,\n       COUNT(*) AS matched_items,\n       ROUND(AVG((props->>'our_price')::numeric\n                 / NULLIF((props->>'competitor_price')::numeric, 0)), 3) AS price_index,\n       ROUND(100.0 * COUNT(*) FILTER (\n         WHERE (props->>'our_price')::numeric > (props->>'competitor_price')::numeric)\n         / COUNT(*), 1) AS more_expensive_pct\nFROM events\nWHERE event_name = 'price_match_snapshot'\n  AND ts >= now() - INTERVAL '1 day'\nGROUP BY 1\nORDER BY matched_items DESC;",
+    "related": ["take-rate", "contribution-margin", "conversion-rate"]
+  },
+  {
+    "id": "lead-price",
+    "category": "marketplace",
+    "title": { "ru": "Цена и качество лида", "en": "Lead price & quality" },
+    "aliases": ["цена лида", "качество лида", "стоимость контакта"],
+    "tex": { "ru": "\\text{Цена лида}=\\dfrac{\\text{выручка с продавцов}}{\\text{переданные контакты}}", "en": "\\text{Lead price}=\\dfrac{\\text{revenue from sellers}}{\\text{contacts delivered}}" },
+    "desc": {
+      "ru": "Сколько платформа берёт за один переданный контакт и сколько таких контактов доходит до сделки. Модель lead-gen держится на балансе: цену лида можно поднимать ровно до тех пор, пока риелтору или дилеру он окупается — иначе он уйдёт вместе с бюджетом.",
+      "en": "What the platform charges for one delivered contact and how many of those contacts reach a deal. The lead-gen model rests on a balance: you can raise the lead price exactly as long as it pays back for the agent or dealer — otherwise they leave with their budget."
+    },
+    "pitfalls": {
+      "ru": [
+        "Цена лида без его качества — путь к оттоку платящих: пустые звонки дороже любого прайса.",
+        "Платформа не видит сделку (она проходит вне её) — качество приходится достраивать опросами и звонковой аналитикой.",
+        "Цены отличаются на порядки по вертикалям: лид на квартиру и на диван нельзя мерить одной метрикой."
+      ],
+      "en": [
+        "Lead price without lead quality drives paying users away: empty calls cost more than any price tag.",
+        "The platform can't see the deal (it closes off-platform) — quality has to be inferred from surveys and call analytics.",
+        "Prices differ by orders of magnitude across verticals: an apartment lead and a sofa lead can't share one metric."
+      ]
+    },
+    "sql": "-- Lead price and lead-to-deal quality by vertical\nSELECT props->>'vertical' AS vertical,\n       COUNT(*) AS leads,\n       ROUND(SUM((props->>'lead_fee')::numeric) / COUNT(*), 0) AS avg_lead_price,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE props->>'outcome' = 'viewing') / COUNT(*), 1) AS reached_viewing_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE props->>'outcome' = 'deal') / COUNT(*), 1) AS reached_deal_pct\nFROM events\nWHERE event_name = 'lead_delivered'\n  AND ts >= now() - INTERVAL '90 days'\nGROUP BY 1\nORDER BY leads DESC;",
+    "related": ["successful-contacts", "arppu", "seller-retention"]
+  },
+  {
+    "id": "listing-freshness",
+    "category": "marketplace",
+    "title": { "ru": "Свежесть объявлений", "en": "Listing freshness" },
+    "aliases": ["актуальность", "протухшие объявления"],
+    "tex": { "ru": "\\text{Свежесть}=\\dfrac{\\text{актуальные объявления}}{\\text{все активные}}", "en": "\\text{Freshness}=\\dfrac{\\text{current listings}}{\\text{all active}}" },
+    "desc": {
+      "ru": "Какая доля объявлений всё ещё соответствует реальности: товар не продан, цена та же, продавец отвечает. Тихий убийца классифайда: «позвонил — уже продано» обходится дороже, чем отсутствие объявления вовсе, потому что тратит время покупателя и убивает доверие ко всей выдаче.",
+      "en": "What share of listings still matches reality: the item is unsold, the price holds, the seller replies. A classified's silent killer: \"called — already sold\" costs more than having no listing at all, because it wastes the buyer's time and poisons trust in the whole catalog."
+    },
+    "pitfalls": {
+      "ru": [
+        "Продавцы не снимают проданное: отсутствие сигнала — не признак актуальности, нужны активные проверки.",
+        "Автопродление ради красивой ширины каталога прямо конфликтует со свежестью.",
+        "Метрика по каталогу врёт: считайте взвешенно по показам — важна свежесть того, что видят люди."
+      ],
+      "en": [
+        "Sellers don't remove sold items: no signal isn't proof of freshness — active checks are required.",
+        "Auto-renewal for a pretty catalog width directly conflicts with freshness.",
+        "A catalog-wide metric lies: weight by impressions — what matters is the freshness of what people actually see."
+      ]
+    },
+    "sql": "-- Freshness weighted by impressions, not by catalog\nSELECT props->>'category' AS category,\n       COUNT(*) AS listing_views,\n       ROUND(100.0 * COUNT(*) FILTER (\n         WHERE (props->>'listing_age_days')::int <= 30) / COUNT(*), 1) AS fresh_30d_pct,\n       ROUND(100.0 * COUNT(*) FILTER (\n         WHERE props->>'contact_outcome' = 'already_sold')\n         / NULLIF(COUNT(*) FILTER (WHERE props->>'contact_outcome' IS NOT NULL), 0), 1) AS already_sold_pct\nFROM events\nWHERE event_name = 'listing_view'\nGROUP BY 1\nORDER BY listing_views DESC;",
+    "related": ["active-listings", "fraud-rate", "successful-contacts"]
+  },
+  {
+    "id": "content-supply",
+    "category": "marketplace",
+    "title": { "ru": "Поток контента от авторов", "en": "Creator content supply" },
+    "aliases": ["видео в день", "частота загрузок", "новые авторы", "свежесть ленты"],
+    "tex": { "ru": "\\text{Поток}=\\text{новые публикации за период}", "en": "\\text{Supply}=\\text{new posts per period}" },
+    "desc": {
+      "ru": "Сколько нового контента появляется и сколько авторов его делают. Предложение контентной платформы: лента живёт, пока авторы публикуют, а публикуют они, пока получают аудиторию и деньги. Поэтому просмотры первого видео новичка — это метрика удержания предложения, а не тщеславия.",
+      "en": "How much new content appears and how many creators make it. A content platform's supply side: the feed lives while creators post, and they post while they get an audience and money. That's why a newcomer's first-video views is a supply-retention metric, not a vanity one."
+    },
+    "pitfalls": {
+      "ru": [
+        "Объём публикаций без качества обесценивает ленту: спам растит цифру и роняет удержание зрителей.",
+        "Экономика авторов концентрирована: топ-1% получает большую часть просмотров, а метрика по всем этого не показывает.",
+        "Новичок без просмотров уходит навсегда: смотрите долю авторов, получивших первую аудиторию, а не общее число загрузок."
+      ],
+      "en": [
+        "Volume without quality devalues the feed: spam grows the number and drops viewer retention.",
+        "Creator economics are concentrated: the top 1% takes most views, and an all-creator average hides it.",
+        "A newcomer with no views leaves for good: track the share of creators who got a first audience, not total uploads."
+      ]
+    },
+    "sql": "-- Content supply: volume, creators and the newcomer's first audience\nSELECT date_trunc('week', ts) AS week,\n       COUNT(*) AS posts,\n       COUNT(DISTINCT props->>'creator_id') AS creators,\n       COUNT(DISTINCT props->>'creator_id') FILTER (\n         WHERE (props->>'is_first_post')::boolean) AS new_creators,\n       ROUND(100.0 * COUNT(*) FILTER (\n         WHERE (props->>'is_first_post')::boolean AND (props->>'views_7d')::int >= 100)\n         / NULLIF(COUNT(*) FILTER (WHERE (props->>'is_first_post')::boolean), 0), 1) AS newcomers_with_audience_pct\nFROM events\nWHERE event_name = 'content_published'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["creator-payout", "time-spent", "active-listings"]
+  },
+  {
+    "id": "successful-contacts",
+    "category": "marketplace",
+    "title": { "ru": "Successful Contacts — состоявшиеся контакты", "en": "Successful contacts" },
+    "aliases": ["успешные контакты", "лиды"],
+    "tex": { "ru": "\\text{Contacts}=\\text{Просмотры объявлений}\\times \\mathrm{CR}_{\\text{в контакт}}", "en": "\\text{Contacts}=\\text{Listing views}\\times \\mathrm{CR}_{\\text{contact}}" },
+    "desc": {
+      "ru": "Число состоявшихся контактов покупателя с продавцом — North Star классифайдов. Особенность: сама сделка происходит вне платформы, поэтому измеримый максимум — это контакт, а не покупка.",
+      "en": "The number of buyer–seller contacts that happen — the North Star of classifieds. The twist: the deal itself closes off-platform, so the measurable maximum is a contact, not a purchase."
+    },
+    "pitfalls": {
+      "ru": [
+        "Контакт без ответа продавца — не ценность: считайте вместе с долей ответов.",
+        "Спам и перекупы накручивают контакты, ухудшая опыт обеих сторон.",
+        "Платформа не видит сделку — приходится опрашивать пользователей или достраивать модель атрибуции."
+      ],
+      "en": [
+        "A contact with no seller reply isn't value: read it together with the reply rate.",
+        "Spam and resellers inflate contacts while degrading both sides' experience.",
+        "The platform can't see the deal — you have to survey users or build an attribution model."
+      ]
+    },
+    "sql": "-- Contacts per listing view, with the reply rate\nSELECT date_trunc('week', ts) AS week,\n       COUNT(*) FILTER (WHERE event_name = 'listing_view') AS views,\n       COUNT(*) FILTER (WHERE event_name = 'seller_contact') AS contacts,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE event_name = 'seller_contact')\n             / NULLIF(COUNT(*) FILTER (WHERE event_name = 'listing_view'), 0), 2) AS contact_cr_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE event_name = 'seller_reply')\n             / NULLIF(COUNT(*) FILTER (WHERE event_name = 'seller_contact'), 0), 1) AS reply_rate_pct\nFROM events\nGROUP BY 1\nORDER BY 1;",
+    "related": ["conversion-rate", "active-listings", "arppu"]
+  },
+  {
+    "id": "buyout-rate",
+    "category": "marketplace",
+    "title": { "ru": "Доля выкупа", "en": "Buyout rate" },
+    "aliases": ["выкуп", "невыкуп"],
+    "tex": { "ru": "\\text{Выкуп}=\\dfrac{\\text{оставили себе}}{\\text{доставлено}}", "en": "\\text{Buyout}=\\dfrac{\\text{items kept}}{\\text{items delivered}}" },
+    "desc": {
+      "ru": "Какая доля доставленного реально куплена — специфика fashion с примеркой при курьере. Заказ здесь не равен продаже: человек заказывает три размера, чтобы купить один, и платформа везёт всё, а зарабатывает на части.",
+      "en": "What share of delivered items is actually bought — the hallmark of try-on fashion. An order isn't a sale here: a shopper orders three sizes to buy one, and the platform ships all of them while earning on a fraction."
+    },
+    "pitfalls": {
+      "ru": [
+        "Низкий выкуп заложен в модель, а не является поломкой: ругать за него бессмысленно, надо считать маржу после логистики.",
+        "Выкуп по деньгам и по штукам расходится: возвращают чаще дорогое.",
+        "Ужесточение правил поднимает выкуп и роняет заказы — оптимум ищется по contribution margin, не по самой метрике."
+      ],
+      "en": [
+        "A low buyout rate is designed into the model, not a defect: scolding it is pointless — compute margin after logistics.",
+        "Money-based and unit-based buyout diverge: expensive items come back more often.",
+        "Tightening rules lifts buyout and drops orders — the optimum is found on contribution margin, not on the metric itself."
+      ]
+    },
+    "sql": "-- Buyout rate by category, units and money\nSELECT props->>'category' AS category,\n       COUNT(*) FILTER (WHERE status IN ('delivered', 'kept', 'returned')) AS delivered,\n       COUNT(*) FILTER (WHERE status = 'kept') AS kept,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE status = 'kept')\n             / NULLIF(COUNT(*) FILTER (WHERE status IN ('delivered', 'kept', 'returned')), 0), 1) AS buyout_units_pct,\n       ROUND(100.0 * SUM(amount) FILTER (WHERE status = 'kept')\n             / NULLIF(SUM(amount) FILTER (WHERE status IN ('delivered', 'kept', 'returned')), 0), 1) AS buyout_money_pct\nFROM orders\nGROUP BY 1\nORDER BY delivered DESC;",
+    "related": ["return-rate", "contribution-margin", "gmv"]
+  },
+  {
+    "id": "on-time-delivery",
+    "category": "marketplace",
+    "title": { "ru": "Доставка вовремя (OTD)", "en": "On-time delivery (OTD)" },
+    "aliases": ["доля вовремя", "otd"],
+    "tex": { "ru": "\\mathrm{OTD}=\\dfrac{\\text{доставлено в обещанный срок}}{\\text{все доставки}}", "en": "\\mathrm{OTD}=\\dfrac{\\text{delivered within promise}}{\\text{all deliveries}}" },
+    "desc": {
+      "ru": "Доля заказов, доставленных в обещанное окно. Сильнейший операционный предиктор повторной покупки: одно опоздание стоит дороже, чем скидка, которой вы будете возвращать клиента.",
+      "en": "The share of orders delivered inside the promised window. The strongest operational predictor of a repeat purchase: one late delivery costs more than the discount you'll use to win the customer back."
+    },
+    "pitfalls": {
+      "ru": [
+        "Метрику легко «улучшить», пообещав срок побольше: следите за обещанным окном вместе с OTD.",
+        "Среднее по стране прячет провальные города и часы пик — режьте по гео и слотам.",
+        "Опоздание на 5 минут и на сутки в метрике равны; смотрите ещё и распределение просрочки."
+      ],
+      "en": [
+        "The metric is easily \"improved\" by promising a longer window: track the promised window alongside OTD.",
+        "A countrywide average hides failing cities and peak hours — slice by geo and slot.",
+        "Five minutes late and a day late count the same; also look at the lateness distribution."
+      ]
+    },
+    "sql": "-- On-time delivery by city, with the lateness tail\nSELECT props->>'city' AS city,\n       COUNT(*) AS deliveries,\n       ROUND(100.0 * COUNT(*) FILTER (\n         WHERE (props->>'delivered_at')::timestamp <= (props->>'promised_at')::timestamp\n       ) / COUNT(*), 1) AS otd_pct,\n       PERCENTILE_CONT(0.9) WITHIN GROUP (\n         ORDER BY EXTRACT(epoch FROM (props->>'delivered_at')::timestamp\n                                   - (props->>'promised_at')::timestamp) / 60\n       ) AS p90_lateness_min\nFROM orders\nWHERE status = 'delivered'\nGROUP BY 1\nORDER BY deliveries DESC;",
+    "related": ["repeat-rate", "complaint-rate", "time-to-match"]
+  },
+  {
+    "id": "utilization",
+    "category": "marketplace",
+    "title": { "ru": "Утилизация исполнителя", "en": "Provider utilization" },
+    "aliases": ["загрузка", "utilization"],
+    "tex": { "ru": "\\text{Утилизация}=\\dfrac{\\text{время в заказе}}{\\text{время онлайн}}", "en": "\\text{Utilization}=\\dfrac{\\text{time on task}}{\\text{time online}}" },
+    "desc": {
+      "ru": "Доля времени на линии, проведённая с заказом. Связывает две стороны платформы: высокая утилизация означает хороший заработок исполнителя при той же цене для клиента — то есть плотность рынка работает.",
+      "en": "The share of online time spent on a task. It ties the platform's two sides together: high utilization means good provider earnings at the same customer price — that is, market density is working."
+    },
+    "pitfalls": {
+      "ru": [
+        "Утилизация 100% недостижима и не нужна: запас мощности — это короткий ETA для клиента.",
+        "Считать надо по часам и районам: средняя по городу прячет пустой день и перегруженный вечер.",
+        "Гонка за утилизацией через батчинг удлиняет доставку — рычаг работает против клиентского опыта."
+      ],
+      "en": [
+        "100% utilization is unreachable and undesirable: spare capacity is what gives customers a short ETA.",
+        "Compute it per hour and area: a citywide average hides an empty afternoon and an overloaded evening.",
+        "Chasing utilization via batching lengthens delivery — the lever works against customer experience."
+      ]
+    },
+    "sql": "-- Provider utilization and hourly earnings by hour of day\nSELECT EXTRACT(hour FROM ts) AS hour,\n       ROUND(100.0 * SUM((props->>'on_task_sec')::int)\n             / NULLIF(SUM((props->>'online_sec')::int), 0), 1) AS utilization_pct,\n       ROUND(SUM((props->>'earnings')::numeric)\n             / NULLIF(SUM((props->>'online_sec')::int) / 3600.0, 0), 0) AS earnings_per_hour\nFROM events\nWHERE event_name = 'provider_shift_tick'\n  AND ts >= now() - INTERVAL '7 days'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["liquidity", "hourly-earnings", "supply-demand-balance"]
+  },
+  {
+    "id": "take-rate",
+    "category": "marketplace",
+    "title": { "ru": "Take Rate — комиссия платформы", "en": "Take rate — platform commission" },
+    "aliases": ["комиссия платформы"],
+    "tex": { "ru": "\\text{Take Rate}=\\dfrac{\\text{выручка платформы}}{\\mathrm{GMV}}\\times 100\\%", "en": "\\text{Take rate}=\\dfrac{\\text{platform revenue}}{\\mathrm{GMV}}\\times 100\\%" },
+    "desc": {
+      "ru": "Какую долю оборота платформа оставляет себе — комиссии, реклама продавцов, логистика, подписки. Вторая половина уравнения выручки маркетплейса: Revenue = GMV × Take Rate. Балансирует рост против монетизации: задерёшь — продавцы уйдут в обход платформы.",
+      "en": "What share of the flow the platform keeps — commissions, seller ads, logistics, subscriptions. The second half of the marketplace revenue equation: Revenue = GMV × take rate. It trades growth against monetization: raise it too far and sellers route around the platform."
+    },
+    "pitfalls": {
+      "ru": [
+        "Общий take rate смешивает комиссию, рекламу и логистику — раскладывайте по источникам, у них разная маржа.",
+        "Рост take rate может убивать ликвидность категории с задержкой в кварталы: следите за оттоком продавцов.",
+        "Скидки платформы за свой счёт — отрицательная часть take rate, её любят «забывать»."
+      ],
+      "en": [
+        "A blended take rate mixes commission, ads and logistics — split it by source, their margins differ.",
+        "A higher take rate can kill category liquidity with a lag of quarters: watch seller churn.",
+        "Platform-funded discounts are the negative part of the take rate, conveniently \"forgotten\"."
+      ]
+    },
+    "sql": "-- Take rate by month: platform revenue over GMV\nSELECT date_trunc('month', o.created_at) AS month,\n       SUM(o.amount) AS gmv,\n       SUM((o.props->>'commission')::numeric\n         + (o.props->>'ads_fee')::numeric\n         + (o.props->>'logistics_fee')::numeric) AS platform_revenue,\n       ROUND(100.0 * SUM((o.props->>'commission')::numeric\n         + (o.props->>'ads_fee')::numeric\n         + (o.props->>'logistics_fee')::numeric)\n         / NULLIF(SUM(o.amount), 0), 2) AS take_rate_pct\nFROM orders o\nWHERE o.status = 'delivered'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["gmv", "contribution-margin", "liquidity"]
+  },
+  {
+    "id": "liquidity",
+    "category": "marketplace",
+    "title": { "ru": "Ликвидность / Fill Rate", "en": "Liquidity / fill rate" },
+    "aliases": ["fill rate", "ликвидность маркетплейса"],
+    "tex": { "ru": "\\text{Fill Rate}=\\dfrac{\\text{выполненные заявки}}{\\text{все заявки}}", "en": "\\text{Fill rate}=\\dfrac{\\text{fulfilled requests}}{\\text{all requests}}" },
+    "desc": {
+      "ru": "Вероятность, что запрос одной стороны платформы встретит другую: покупатель найдёт товар, пассажир — машину, заказ — курьера. Главная «физика» маркетплейса: без ликвидности реклама приводит людей в пустой магазин.",
+      "en": "The probability that one side's request meets the other side: a buyer finds the item, a rider finds a car, an order finds a courier. The core \"physics\" of a marketplace: without liquidity, ads bring people into an empty store."
+    },
+    "pitfalls": {
+      "ru": [
+        "Средняя ликвидность по платформе прячет мёртвые сегменты: считайте по категории × городу × времени.",
+        "Задирание ликвидности избытком предложения разоряет поставщиков — у них падает утилизация.",
+        "Заявки, отменённые из-за долгого ожидания, часто выпадают из знаменателя и завышают метрику."
+      ],
+      "en": [
+        "Platform-average liquidity hides dead segments: compute it per category × city × time slot.",
+        "Forcing liquidity with excess supply bankrupts suppliers — their utilization collapses.",
+        "Requests cancelled after long waits often drop out of the denominator and inflate the metric."
+      ]
+    },
+    "sql": "-- Fill rate by city and hour-of-day\nSELECT props->>'city' AS city,\n       EXTRACT(hour FROM created_at) AS hour,\n       COUNT(*) AS requests,\n       COUNT(*) FILTER (WHERE status IN ('delivered', 'completed')) AS fulfilled,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE status IN ('delivered', 'completed'))\n             / COUNT(*), 1) AS fill_rate_pct\nFROM orders\nWHERE created_at >= now() - INTERVAL '28 days'\nGROUP BY 1, 2\nORDER BY 1, 2;",
+    "related": ["supply-demand-balance", "gmv", "cancellation-rate", "time-to-match"]
+  },
+  {
+    "id": "supply-demand-balance",
+    "category": "marketplace",
+    "title": { "ru": "Баланс спроса и предложения", "en": "Supply/demand balance" },
+    "aliases": ["баланс сторон", "supply demand ratio"],
+    "tex": { "ru": "\\text{Баланс}=\\dfrac{\\text{активное предложение}}{\\text{активный спрос}}", "en": "\\text{Balance}=\\dfrac{\\text{active supply}}{\\text{active demand}}" },
+    "desc": {
+      "ru": "Отношение активного предложения (продавцы, водители, объявления) к активному спросу (покупатели, заявки). У каждой платформы есть здоровый коридор: ниже — очереди и отмены, выше — голодающие поставщики и их отток.",
+      "en": "The ratio of active supply (sellers, drivers, listings) to active demand (buyers, requests). Every platform has a healthy corridor: below it — queues and cancellations, above it — starving suppliers and their churn."
+    },
+    "pitfalls": {
+      "ru": [
+        "«Активный продавец» без определения — пустой звук: с листингом? с продажей за 30 дней?",
+        "Агрегат по платформе бесполезен: балансируйте сегменты (город, категория, час).",
+        "Обе стороны реагируют на цену — баланс без учёта ценовых рычагов (сурж, комиссии) не интерпретируется."
+      ],
+      "en": [
+        "\"Active seller\" without a definition is noise: with a listing? with a sale in 30 days?",
+        "The platform-wide aggregate is useless: balance segments (city, category, hour).",
+        "Both sides respond to price — the balance can't be read without pricing levers (surge, fees)."
+      ]
+    },
+    "sql": "-- Weekly active supply vs demand and the ratio\nWITH supply AS (\n  SELECT date_trunc('week', created_at) AS week, COUNT(DISTINCT seller_id) AS sellers\n  FROM listings WHERE status = 'active' GROUP BY 1\n),\ndemand AS (\n  SELECT date_trunc('week', created_at) AS week, COUNT(DISTINCT user_id) AS buyers\n  FROM orders GROUP BY 1\n)\nSELECT s.week,\n       s.sellers,\n       d.buyers,\n       ROUND(1.0 * s.sellers / NULLIF(d.buyers, 0), 3) AS supply_per_buyer\nFROM supply s\nJOIN demand d USING (week)\nORDER BY s.week;",
+    "related": ["liquidity", "take-rate", "time-to-match"]
+  },
+  {
+    "id": "time-to-match",
+    "category": "marketplace",
+    "title": { "ru": "Time-to-Match — скорость матчинга", "en": "Time to match" },
+    "aliases": ["время подбора", "eta"],
+    "tex": { "ru": "\\text{TTM}=\\text{медиана времени от заявки до матча}", "en": "\\text{TTM}=\\text{median time from request to match}" },
+    "desc": {
+      "ru": "Сколько времени проходит от заявки до найденной пары: подача машины, отклик на объявление, первый отклик на вакансию. Операционное выражение ликвидности — то, что пользователь чувствует кожей.",
+      "en": "How long it takes from a request to a found match: car arrival, a reply to a listing, the first response to a job post. Liquidity expressed operationally — the thing users actually feel."
+    },
+    "pitfalls": {
+      "ru": [
+        "Среднее время бессмысленно из-за хвоста — смотрите медиану и p90.",
+        "Заявки без матча вообще (таймаут) в метрику не попадают — считайте их отдельно, это ещё хуже долгого ожидания.",
+        "Быстрый матч плохого качества (далёкий курьер, нерелевантный отклик) — не успех; держите рядом метрику качества матча."
+      ],
+      "en": [
+        "Mean time is meaningless because of the tail — use the median and p90.",
+        "Requests with no match at all (timeout) never enter the metric — count them separately, they're worse than a long wait.",
+        "A fast low-quality match (a distant courier, an irrelevant reply) is not a success; keep a match-quality metric nearby."
+      ]
+    },
+    "sql": "-- Median and p90 time to match, plus no-match share\nWITH reqs AS (\n  SELECT e1.props->>'request_id' AS request_id,\n         MIN(e1.ts) AS requested_at,\n         MIN(e2.ts) AS matched_at\n  FROM events e1\n  LEFT JOIN events e2\n    ON e2.props->>'request_id' = e1.props->>'request_id'\n   AND e2.event_name = 'match_found'\n  WHERE e1.event_name = 'request_created'\n  GROUP BY 1\n)\nSELECT COUNT(*) AS requests,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE matched_at IS NULL) / COUNT(*), 1) AS no_match_pct,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY EXTRACT(epoch FROM matched_at - requested_at)) AS median_sec,\n       PERCENTILE_CONT(0.9) WITHIN GROUP (ORDER BY EXTRACT(epoch FROM matched_at - requested_at)) AS p90_sec\nFROM reqs;",
+    "related": ["liquidity", "supply-demand-balance", "cancellation-rate"]
+  },
+  {
+    "id": "active-listings",
+    "category": "marketplace",
+    "title": { "ru": "Активное предложение (листинги)", "en": "Active supply (listings)" },
+    "aliases": ["активные объявления", "active supply"],
+    "tex": { "ru": "\\text{Активное предложение}=\\text{листинги, доступные к сделке сейчас}", "en": "\\text{Active supply}=\\text{listings available for a deal right now}" },
+    "desc": {
+      "ru": "Сколько товара/объявлений/исполнителей реально доступно к сделке. Сырьё для ликвидности: спрос без доступного предложения — это отказ, каким бы красивым ни был каталог.",
+      "en": "How much inventory/listings/providers are genuinely available for a transaction. The raw material of liquidity: demand without available supply is a bounce, however pretty the catalog."
+    },
+    "pitfalls": {
+      "ru": [
+        "«Мёртвые» листинги (давно проданное, неактуальные цены) надувают предложение и злят покупателей — чистите каталог.",
+        "Считайте предложение, взвешенное по спросу: миллион листингов в мёртвой категории не заменит сотни в горячей.",
+        "У сервисных платформ предложение — это человеко-часы онлайн, а не число аккаунтов."
+      ],
+      "en": [
+        "\"Dead\" listings (long-sold items, stale prices) inflate supply and anger buyers — clean the catalog.",
+        "Weight supply by demand: a million listings in a dead category won't replace hundreds in a hot one.",
+        "For service platforms supply is online person-hours, not account counts."
+      ]
+    },
+    "sql": "-- Active listings by category, with staleness check\nSELECT props->>'category' AS category,\n       COUNT(*) AS active_listings,\n       COUNT(*) FILTER (WHERE created_at < now() - INTERVAL '60 days') AS stale_60d,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE created_at < now() - INTERVAL '60 days')\n             / COUNT(*), 1) AS stale_pct\nFROM listings\nWHERE status = 'active'\nGROUP BY 1\nORDER BY active_listings DESC;",
+    "related": ["supply-demand-balance", "liquidity"]
+  },
+  {
+    "id": "completed-orders",
+    "category": "marketplace",
+    "title": { "ru": "Completed Orders / Rides — выполненные заказы", "en": "Completed orders / rides" },
+    "aliases": ["выполненные заказы", "completed rides"],
+    "tex": { "ru": "\\text{Completed}=\\text{заказы, доведённые до конца (доставлен / доехал)}", "en": "\\text{Completed}=\\text{orders carried through to the end (delivered / arrived)}" },
+    "desc": {
+      "ru": "Число сделок, доведённых до конца, — North Star on-demand платформ (такси, доставка). Именно завершённый заказ, а не созданный: в нём сошлись спрос, предложение и операционка, и только он приносит деньги и повторное использование.",
+      "en": "The number of transactions carried through to completion — the North Star of on-demand platforms (rides, delivery). Completed, not created: it's where demand, supply and operations meet, and only it earns money and repeat usage."
+    },
+    "pitfalls": {
+      "ru": [
+        "Разница между созданными и завершёнными — отмены; их причины (нет курьера / передумал / долго) чинятся разными командами.",
+        "Рост заказов при падении заказов на пользователя — рост на привлечении, он заканчивается вместе с бюджетом.",
+        "Мультизаказы и сплиты считайте по правилу, зафиксированному заранее."
+      ],
+      "en": [
+        "The gap between created and completed is cancellations; their causes (no courier / changed mind / too slow) are fixed by different teams.",
+        "Order growth with falling orders-per-user is acquisition-driven growth — it ends with the budget.",
+        "Multi-orders and splits need a counting rule fixed in advance."
+      ]
+    },
+    "sql": "-- Completed orders: volume, completion rate, per-user frequency\nSELECT date_trunc('week', created_at) AS week,\n       COUNT(*) AS created,\n       COUNT(*) FILTER (WHERE status = 'completed') AS completed,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE status = 'completed') / COUNT(*), 1) AS completion_pct,\n       ROUND(1.0 * COUNT(*) FILTER (WHERE status = 'completed')\n             / NULLIF(COUNT(DISTINCT user_id), 0), 2) AS completed_per_user\nFROM orders\nGROUP BY 1\nORDER BY 1;",
+    "related": ["cancellation-rate", "gmv", "purchase-frequency", "liquidity"]
+  }
+]

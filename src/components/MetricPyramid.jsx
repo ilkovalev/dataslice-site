@@ -1,4 +1,5 @@
 import { gloss } from './Glossed.jsx'
+import { useLocale } from '../lib/i18n.js'
 
 // Пирамида метрик — ИНОЙ срез, чем дерево. Дерево раскладывает North Star на
 // множители (причинно-следственно). Пирамида группирует метрики по уровню
@@ -8,6 +9,7 @@ const widths = ['46%', '64%', '82%', '100%']
 const shades = ['bg-accent/25', 'bg-accent/18', 'bg-accent/12', 'bg-accent/8']
 
 export default function MetricPyramid({ tree }) {
+  const locale = useLocale()
   const bands = tree.pyramid?.bands ?? []
   return (
     <div className="rounded-xl border border-black/10 bg-panel p-5">
@@ -23,7 +25,7 @@ export default function MetricPyramid({ tree }) {
       </div>
       {tree.counterMetrics && (
         <div className="mt-4 pt-3 border-t border-black/10 text-sm text-gray-600">
-          <span className="text-amber-600">Контр-метрики (фундамент):</span> {gloss(tree.counterMetrics.map((c) => c.title).join(' · '))}
+          <span className="text-amber-600">{locale === 'en' ? 'Counter-metrics (the foundation):' : 'Контр-метрики (фундамент):'}</span> {gloss(tree.counterMetrics.map((c) => c.title).join(' · '))}
         </div>
       )}
     </div>

@@ -1,121 +1,1121 @@
 {
   "id": "foodtech",
-  "archetype": "Транзакционные платформы",
-  "industry": "Доставка еды (фудтех, 3 стороны)",
-  "northStar": "Completed Orders (выполненные заказы)",
+  "archetype": {
+    "ru": "Транзакционные платформы",
+    "en": "Transactional platforms"
+  },
+  "industry": {
+    "ru": "Доставка еды (фудтех, 3 стороны)",
+    "en": "Food delivery (3-sided)"
+  },
+  "northStar": {
+    "ru": "Completed Orders (выполненные заказы)",
+    "en": "Completed orders"
+  },
   "root": {
-    "id": "orders", "level": 0, "title": "Completed Orders", "formula": "Едоки × Частота × Fulfilment",
-    "note": "Трёхсторонняя платформа: едоки, рестораны, курьеры. Ценность — доставленный вовремя заказ.",
+    "id": "orders",
+    "level": 0,
+    "metricId": "completed-orders",
+    "title": "Completed Orders",
+    "formula": {
+      "ru": "Едоки × Частота × Fulfilment",
+      "en": "Eaters × Frequency × Fulfilment"
+    },
+    "note": {
+      "ru": "Трёхсторонняя платформа: едоки, рестораны, курьеры. Ценность — заказ, доставленный вовремя и горячим; на нём же держится юнит-экономика.",
+      "en": "A three-sided platform: eaters, restaurants, couriers. The value is an order delivered on time and hot; unit economics rests on the same thing."
+    },
     "children": [
-      { "id": "eaters", "level": 1, "title": "Едоки (спрос)", "formula": "польз. × частота", "note": "Сторона спроса.", "children": [
-        { "id": "active-eaters", "level": 2, "title": "Активные едоки", "note": "Кто реально заказывает.", "children": [
-          { "id": "freq", "level": 3, "title": "Заказов в месяц", "note": "Частота — ключ к юнит-экономике.", "children": [
-            { "id": "subscription", "level": 4, "title": "Подписка на доставку", "note": "Бесплатная доставка растит частоту." }
-          ] }
-        ] }
-      ] },
-      { "id": "restaurants", "level": 1, "title": "Рестораны (предложение)", "formula": "точки × меню", "note": "Сторона предложения.", "children": [
-        { "id": "active-rest", "level": 2, "title": "Активные рестораны", "note": "Ширина выбора.", "children": [
-          { "id": "selection", "level": 3, "title": "Selection (выбор рядом)", "note": "Сколько вариантов в радиусе.", "children": [
-            { "id": "menu-quality", "level": 4, "title": "Качество карточек/фото", "note": "Влияет на конверсию в заказ." }
-          ] }
-        ] }
-      ] },
-      { "id": "couriers", "level": 1, "title": "Курьеры + матчинг", "formula": "Fulfilment", "note": "Доставка вовремя.", "children": [
-        { "id": "delivery-time", "level": 2, "title": "Время доставки", "note": "Быстрее → выше повтор.", "children": [
-          { "id": "ontime", "level": 3, "title": "Доля вовремя", "note": "Опоздания убивают повтор." }
-        ] },
-        { "id": "courier-supply", "level": 2, "title": "Доступность курьеров", "note": "Хватает ли мощности в пик." }
-      ] }
+      {
+        "id": "eaters",
+        "level": 1,
+        "title": {
+          "ru": "Едоки (спрос)",
+          "en": "Eaters (demand)"
+        },
+        "formula": {
+          "ru": "пользователи × частота",
+          "en": "users × frequency"
+        },
+        "note": {
+          "ru": "Сторона спроса: сколько людей заказывает и как часто.",
+          "en": "The demand side: how many people order and how often."
+        },
+        "children": [
+          {
+            "id": "active-eaters",
+            "level": 2,
+            "metricId": "dau-mau",
+            "title": {
+              "ru": "Активные едоки",
+              "en": "Active eaters"
+            },
+            "note": {
+              "ru": "Кто реально заказывает за месяц.",
+              "en": "Who actually orders in a month."
+            },
+            "children": [
+              {
+                "id": "eater-acq",
+                "level": 3,
+                "metricId": "cac",
+                "title": {
+                  "ru": "Привлечение едоков",
+                  "en": "Eater acquisition"
+                },
+                "note": {
+                  "ru": "CAC и промо первого заказа: скидка — это часть стоимости привлечения.",
+                  "en": "CAC and first-order promos: the discount is part of acquisition cost."
+                },
+                "children": [
+                  {
+                    "id": "second-order",
+                    "level": 4,
+                    "metricId": "repeat-rate",
+                    "title": {
+                      "ru": "Конверсия во 2-й заказ",
+                      "en": "Second-order conversion"
+                    },
+                    "note": {
+                      "ru": "Вернулся ли едок без скидки — проверка, что купили привычку, а не разовую сделку.",
+                      "en": "Did the eater return without a discount — the test that you bought a habit, not a one-off deal."
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "freq",
+                "level": 3,
+                "metricId": "purchase-frequency",
+                "title": {
+                  "ru": "Заказов в месяц",
+                  "en": "Orders per month"
+                },
+                "note": {
+                  "ru": "Частота — ключ к юнит-экономике: логистический слой окупается объёмом.",
+                  "en": "Frequency is the unit-economics key: the logistics layer pays off with volume."
+                },
+                "children": [
+                  {
+                    "id": "subscription",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Подписка на доставку",
+                      "en": "Delivery membership"
+                    },
+                    "note": {
+                      "ru": "Рычаг: бесплатная доставка по подписке растит частоту.",
+                      "en": "Lever: free delivery in a membership grows frequency."
+                    },
+                    "children": [
+                      {
+                        "id": "sub-frequency-lift",
+                        "level": 5,
+                        "title": {
+                          "ru": "Инкремент частоты подписки",
+                          "en": "Membership frequency lift"
+                        },
+                        "note": {
+                          "ru": "Частота подписчиков против сопоставимых неподписчиков — реальный эффект, а не самоотбор лояльных.",
+                          "en": "Members' frequency vs comparable non-members — the real effect, not the self-selection of the loyal."
+                        },
+                        "metricId": "purchase-frequency"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "restaurants",
+        "level": 1,
+        "title": {
+          "ru": "Рестораны (предложение)",
+          "en": "Restaurants (supply)"
+        },
+        "formula": {
+          "ru": "точки × меню",
+          "en": "venues × menus"
+        },
+        "note": {
+          "ru": "Сторона предложения: выбор в радиусе доставки решает, откроют ли приложение.",
+          "en": "The supply side: the choice within delivery radius decides whether the app gets opened."
+        },
+        "children": [
+          {
+            "id": "active-rest",
+            "level": 2,
+            "metricId": "active-listings",
+            "title": {
+              "ru": "Активные рестораны",
+              "en": "Active restaurants"
+            },
+            "note": {
+              "ru": "Подключённые и реально принимающие заказы точки.",
+              "en": "Venues connected and actually taking orders."
+            },
+            "children": [
+              {
+                "id": "selection",
+                "level": 3,
+                "title": {
+                  "ru": "Selection (выбор рядом)",
+                  "en": "Selection nearby"
+                },
+                "note": {
+                  "ru": "Сколько вариантов в радиусе доставки конкретного едока.",
+                  "en": "How many options within a given eater's delivery radius."
+                },
+                "children": [
+                  {
+                    "id": "menu-quality",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Качество карточек/фото",
+                      "en": "Menu content quality"
+                    },
+                    "note": {
+                      "ru": "Рычаг: фото и структура меню напрямую двигают конверсию в заказ.",
+                      "en": "Lever: photos and menu structure directly move order conversion."
+                    },
+                    "children": [
+                      {
+                        "id": "rest-cr",
+                        "level": 5,
+                        "metricId": "conversion-rate",
+                        "title": {
+                          "ru": "CR карточки ресторана",
+                          "en": "Restaurant page CR"
+                        },
+                        "note": {
+                          "ru": "Открыл меню → оформил заказ: метрика качества контента и цен.",
+                          "en": "Opened the menu → placed an order: the content-and-pricing quality metric."
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "rest-churn",
+                    "level": 4,
+                    "metricId": "churn-rate",
+                    "title": {
+                      "ru": "Отток ресторанов",
+                      "en": "Restaurant churn"
+                    },
+                    "note": {
+                      "ru": "Партнёры уходят при высокой комиссии и плохой экономике — selection тает.",
+                      "en": "Partners leave over high commission and bad economics — selection melts."
+                    }
+                  }
+                ],
+                "metricId": "selection"
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "couriers",
+        "level": 1,
+        "metricId": "liquidity",
+        "title": {
+          "ru": "Курьеры + матчинг",
+          "en": "Couriers + matching"
+        },
+        "formula": "Fulfilment Rate",
+        "note": {
+          "ru": "Логистика последней мили: заказ должен доехать вовремя и горячим.",
+          "en": "Last-mile logistics: the order must arrive on time and hot."
+        },
+        "children": [
+          {
+            "id": "delivery-time",
+            "level": 2,
+            "metricId": "time-to-match",
+            "title": {
+              "ru": "Время доставки",
+              "en": "Delivery time"
+            },
+            "note": {
+              "ru": "От заказа до двери: медиана и p90; быстрее — выше повтор.",
+              "en": "Order to door: median and p90; faster means more repeats."
+            },
+            "children": [
+              {
+                "id": "ontime",
+                "level": 3,
+                "title": {
+                  "ru": "Доля вовремя",
+                  "en": "On-time share"
+                },
+                "note": {
+                  "ru": "Выполнение обещанного срока: опоздания убивают повторные заказы.",
+                  "en": "Keeping the promised window: lateness kills repeat orders."
+                },
+                "children": [
+                  {
+                    "id": "kitchen-time",
+                    "level": 4,
+                    "title": {
+                      "ru": "Время кухни",
+                      "en": "Kitchen time"
+                    },
+                    "note": {
+                      "ru": "Готовка — половина срока доставки, и платформа управляет ею хуже всего.",
+                      "en": "Cooking is half the delivery time — and the part the platform controls least."
+                    },
+                    "children": [
+                      {
+                        "id": "problem-orders",
+                        "level": 5,
+                        "metricId": "complaint-rate",
+                        "title": {
+                          "ru": "Проблемные заказы",
+                          "en": "Problem orders"
+                        },
+                        "note": {
+                          "ru": "Опоздал, остыл, недовоз: агрегированный guardrail качества доставки.",
+                          "en": "Late, cold, missing items: the aggregate delivery-quality guardrail."
+                        }
+                      }
+                    ],
+                    "metricId": "delivery-time"
+                  }
+                ],
+                "metricId": "on-time-delivery"
+              }
+            ]
+          },
+          {
+            "id": "courier-supply",
+            "level": 2,
+            "title": {
+              "ru": "Доступность курьеров",
+              "en": "Courier availability"
+            },
+            "note": {
+              "ru": "Хватает ли мощности в обеденный и вечерний пик.",
+              "en": "Whether capacity covers lunch and dinner peaks."
+            },
+            "children": [
+              {
+                "id": "courier-utilization",
+                "level": 3,
+                "title": {
+                  "ru": "Утилизация курьера",
+                  "en": "Courier utilization"
+                },
+                "formula": {
+                  "ru": "заказы / час онлайн",
+                  "en": "orders / online hour"
+                },
+                "note": {
+                  "ru": "Заказов на час на линии: баланс между зарплатой курьера и скоростью доставки.",
+                  "en": "Orders per online hour: the balance between courier pay and delivery speed."
+                },
+                "children": [
+                  {
+                    "id": "batching",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Батчинг заказов",
+                      "en": "Order batching"
+                    },
+                    "note": {
+                      "ru": "Рычаг: два заказа в одну сторону — дешевле на заказ, но дольше для второго едока.",
+                      "en": "Lever: two orders one way — cheaper per order, slower for the second eater."
+                    }
+                  }
+                ],
+                "metricId": "utilization"
+              }
+            ],
+            "metricId": "provider-availability"
+          }
+        ]
+      }
     ]
   },
   "pyramid": {
-    "note": "От юнит-экономики заказа (вершина) к логистике последней мили (основание).",
+    "note": {
+      "ru": "От юнит-экономики заказа (вершина) к логистике последней мили (основание).",
+      "en": "From order unit economics (top) to last-mile logistics (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка/GMV", "Completed Orders", "Contribution margin/заказ"] },
-      { "label": "Продуктовые", "role": "продакты", "items": ["Активные едоки", "Частота", "Selection", "Активные рестораны"] },
-      { "label": "Операционные", "role": "операции", "items": ["Время доставки", "Доля вовремя", "Доступность курьеров"] },
-      { "label": "Платформенные", "role": "инженеры", "items": ["Матчинг курьера", "Точность ETA", "Аптайм приложения"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "руководство",
+          "en": "leadership"
+        },
+        "items": [
+          {
+            "ru": "Выручка/GMV",
+            "en": "Revenue/GMV"
+          },
+          "Completed Orders",
+          {
+            "ru": "Contribution margin/заказ",
+            "en": "Contribution margin/order"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "продакты",
+          "en": "product"
+        },
+        "items": [
+          {
+            "ru": "Активные едоки",
+            "en": "Active eaters"
+          },
+          {
+            "ru": "Частота",
+            "en": "Frequency"
+          },
+          "Selection",
+          {
+            "ru": "Активные рестораны",
+            "en": "Active restaurants"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": {
+          "ru": "операции",
+          "en": "operations"
+        },
+        "items": [
+          {
+            "ru": "Время доставки",
+            "en": "Delivery time"
+          },
+          {
+            "ru": "Доля вовремя",
+            "en": "On-time share"
+          },
+          {
+            "ru": "Доступность курьеров",
+            "en": "Courier availability"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "инженеры",
+          "en": "engineers"
+        },
+        "items": [
+          {
+            "ru": "Матчинг курьера",
+            "en": "Courier matching"
+          },
+          {
+            "ru": "Точность ETA",
+            "en": "ETA accuracy"
+          },
+          {
+            "ru": "Аптайм приложения",
+            "en": "App uptime"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Доля проблемных заказов", "note": "опоздания, холодная еда, недовоз — бьют по повтору" },
-    { "title": "Маржа на заказ", "note": "рост заказов на субсидиях — путь в убыток" },
-    { "title": "Отток ресторанов", "note": "высокая комиссия выдавливает партнёров" }
+    {
+      "title": {
+        "ru": "Доля проблемных заказов",
+        "en": "Problem-order share"
+      },
+      "note": {
+        "ru": "опоздания, холодная еда, недовоз — бьют по повтору",
+        "en": "lateness, cold food, missing items — they kill repeats"
+      }
+    },
+    {
+      "title": {
+        "ru": "Маржа на заказ",
+        "en": "Margin per order"
+      },
+      "note": {
+        "ru": "рост заказов на субсидиях — путь в убыток",
+        "en": "subsidy-driven order growth is a road to losses"
+      }
+    },
+    {
+      "title": {
+        "ru": "Отток ресторанов",
+        "en": "Restaurant churn"
+      },
+      "note": {
+        "ru": "высокая комиссия выдавливает партнёров",
+        "en": "high commission squeezes partners out"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "yandexeda", "name": "Яндекс Еда", "northStar": "Completed Orders (плотность городов + dark kitchens)",
-      "note": "ставка на плотность РФ-городов, экосистему Плюс и собственные dark kitchens для скорости.",
+      "id": "yandexeda",
+      "name": {
+        "ru": "Яндекс Еда",
+        "en": "Yandex Eats"
+      },
+      "northStar": {
+        "ru": "Completed Orders (плотность городов + dark kitchens)",
+        "en": "Completed orders (city density + dark kitchens)"
+      },
+      "note": {
+        "ru": "ставка на плотность РФ-городов, экосистему Плюс и собственные dark kitchens для скорости.",
+        "en": "a bet on Russian city density, the Plus ecosystem and own dark kitchens for speed."
+      },
       "root": {
-        "id": "ye-orders", "level": 0, "title": "Completed Orders", "formula": "Едоки × Частота × Fulfilment",
-        "note": "Плотность + экосистема Плюс + собственная логистика и виртуальные кухни.",
+        "id": "ye-orders",
+        "level": 0,
+        "metricId": "completed-orders",
+        "title": "Completed Orders",
+        "formula": {
+          "ru": "Едоки × Частота × Fulfilment",
+          "en": "Eaters × Frequency × Fulfilment"
+        },
+        "note": {
+          "ru": "Плотность + экосистема Плюс + собственная логистика и виртуальные кухни.",
+          "en": "Density + the Plus ecosystem + own logistics and virtual kitchens."
+        },
         "children": [
-          { "id": "ye-eaters", "level": 1, "title": "Едоки", "note": "Спрос внутри экосистемы.", "children": [
-            { "id": "ye-plus", "level": 2, "title": "Плюс (подписка)", "note": "Кэшбэк и бесплатная доставка.", "children": [
-              { "id": "ye-freq", "level": 3, "title": "Частота заказов", "note": "Растёт у участников Плюса.", "children": [
-                { "id": "ye-retail", "level": 4, "title": "Кросс с Лавкой/продуктами", "note": "Один курьерский слой на сервисы." }
-              ] }
-            ] }
-          ] },
-          { "id": "ye-supply", "level": 1, "title": "Рестораны + кухни", "note": "Предложение.", "children": [
-            { "id": "ye-rest", "level": 2, "title": "Активные рестораны", "note": "Selection в городе.", "children": [
-              { "id": "ye-dark", "level": 3, "title": "Dark kitchens", "note": "Свои кухни закрывают пробелы меню." }
-            ] }
-          ] },
-          { "id": "ye-logi", "level": 1, "title": "Логистика", "note": "Скорость доставки.", "children": [
-            { "id": "ye-time", "level": 2, "title": "Время доставки", "note": "Конкурентное преимущество.", "children": [
-              { "id": "ye-courier", "level": 3, "title": "Доступность курьеров", "note": "Пеший+авто пул." }
-            ] }
-          ] }
+          {
+            "id": "ye-eaters",
+            "level": 1,
+            "title": {
+              "ru": "Едоки",
+              "en": "Eaters"
+            },
+            "note": {
+              "ru": "Спрос внутри экосистемы Яндекса.",
+              "en": "Demand inside the Yandex ecosystem."
+            },
+            "children": [
+              {
+                "id": "ye-plus",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Плюс (подписка)",
+                  "en": "Plus (subscription)"
+                },
+                "note": {
+                  "ru": "Рычаг: кэшбэк и бесплатная доставка из общей подписки экосистемы.",
+                  "en": "Lever: cashback and free delivery from the ecosystem-wide subscription."
+                },
+                "children": [
+                  {
+                    "id": "ye-freq",
+                    "level": 3,
+                    "metricId": "purchase-frequency",
+                    "title": {
+                      "ru": "Частота заказов",
+                      "en": "Order frequency"
+                    },
+                    "note": {
+                      "ru": "Растёт у участников Плюса.",
+                      "en": "Higher among Plus members."
+                    },
+                    "children": [
+                      {
+                        "id": "ye-retail",
+                        "level": 4,
+                        "title": {
+                          "ru": "Кросс с Лавкой/продуктами",
+                          "en": "Cross-use with groceries"
+                        },
+                        "note": {
+                          "ru": "Один курьерский слой на еду и продукты — выше утилизация.",
+                          "en": "One courier layer for food and groceries — higher utilization."
+                        },
+                        "children": [
+                          {
+                            "id": "ye-eco-ltv",
+                            "level": 5,
+                            "metricId": "ltv",
+                            "title": {
+                              "ru": "LTV в экосистеме",
+                              "en": "Ecosystem LTV"
+                            },
+                            "note": {
+                              "ru": "Ценность едока с учётом всех сервисов экосистемы, а не одной Еды.",
+                              "en": "Eater value across all ecosystem services, not food delivery alone."
+                            }
+                          }
+                        ],
+                        "metricId": "products-per-customer"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "ye-supply",
+            "level": 1,
+            "title": {
+              "ru": "Рестораны + кухни",
+              "en": "Restaurants + kitchens"
+            },
+            "note": {
+              "ru": "Предложение: партнёры и собственные виртуальные кухни.",
+              "en": "Supply: partners plus own virtual kitchens."
+            },
+            "children": [
+              {
+                "id": "ye-rest",
+                "level": 2,
+                "metricId": "active-listings",
+                "title": {
+                  "ru": "Активные рестораны",
+                  "en": "Active restaurants"
+                },
+                "note": {
+                  "ru": "Selection в каждом городе.",
+                  "en": "Selection in every city."
+                },
+                "children": [
+                  {
+                    "id": "ye-dark",
+                    "level": 3,
+                    "kind": "lever",
+                    "title": "Dark kitchens",
+                    "note": {
+                      "ru": "Рычаг: свои кухни закрывают пробелы меню и дают управляемую скорость.",
+                      "en": "Lever: own kitchens fill menu gaps and give controllable speed."
+                    },
+                    "children": [
+                      {
+                        "id": "ye-dark-margin",
+                        "level": 4,
+                        "metricId": "contribution-margin",
+                        "title": {
+                          "ru": "Маржа dark kitchen",
+                          "en": "Dark-kitchen margin"
+                        },
+                        "note": {
+                          "ru": "Собственная кухня — это уже ресторанная юнит-экономика, а не комиссия.",
+                          "en": "An own kitchen means restaurant unit economics, not a commission."
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "ye-logi",
+            "level": 1,
+            "title": {
+              "ru": "Логистика",
+              "en": "Logistics"
+            },
+            "note": {
+              "ru": "Скорость — главное конкурентное преимущество.",
+              "en": "Speed is the main competitive edge."
+            },
+            "children": [
+              {
+                "id": "ye-time",
+                "level": 2,
+                "metricId": "time-to-match",
+                "title": {
+                  "ru": "Время доставки",
+                  "en": "Delivery time"
+                },
+                "note": {
+                  "ru": "Медиана и p90 до двери.",
+                  "en": "Median and p90 to the door."
+                },
+                "children": [
+                  {
+                    "id": "ye-courier",
+                    "level": 3,
+                    "title": {
+                      "ru": "Доступность курьеров",
+                      "en": "Courier availability"
+                    },
+                    "note": {
+                      "ru": "Пеший + авто пул под разные зоны.",
+                      "en": "A walking + driving pool for different zones."
+                    },
+                    "children": [
+                      {
+                        "id": "ye-peak",
+                        "level": 4,
+                        "title": {
+                          "ru": "Покрытие пиков",
+                          "en": "Peak coverage"
+                        },
+                        "note": {
+                          "ru": "Хватает ли курьеров в обед и вечер: провал в пик = отмены и опоздания.",
+                          "en": "Whether couriers cover lunch and dinner: a peak gap = cancellations and lateness."
+                        },
+                        "metricId": "provider-availability"
+                      }
+                    ],
+                    "metricId": "provider-availability"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["GMV", "Completed Orders", "Маржа/заказ"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Плюс", "Частота", "Selection"] },
-        { "label": "Операционные", "role": "операции", "items": ["Время доставки", "Dark kitchens", "Доступность курьеров"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Матчинг", "ETA", "Аптайм"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              "GMV",
+              "Completed Orders",
+              {
+                "ru": "Маржа/заказ",
+                "en": "Margin/order"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Плюс",
+                "en": "Plus"
+              },
+              {
+                "ru": "Частота",
+                "en": "Frequency"
+              },
+              "Selection"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "операции",
+              "en": "operations"
+            },
+            "items": [
+              {
+                "ru": "Время доставки",
+                "en": "Delivery time"
+              },
+              "Dark kitchens",
+              {
+                "ru": "Доступность курьеров",
+                "en": "Courier availability"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Матчинг",
+                "en": "Matching"
+              },
+              "ETA",
+              {
+                "ru": "Аптайм",
+                "en": "Uptime"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Опоздания в пик", "note": "нехватка курьеров бьёт по повтору" },
-        { "title": "Субсидии на заказ", "note": "рост на скидках убивает маржу" }
+        {
+          "title": {
+            "ru": "Опоздания в пик",
+            "en": "Peak lateness"
+          },
+          "note": {
+            "ru": "нехватка курьеров бьёт по повтору",
+            "en": "courier shortage hits repeats"
+          }
+        },
+        {
+          "title": {
+            "ru": "Субсидии на заказ",
+            "en": "Per-order subsidies"
+          },
+          "note": {
+            "ru": "рост на скидках убивает маржу",
+            "en": "discount-driven growth kills margin"
+          }
+        }
       ]
     },
     {
-      "id": "doordash", "name": "DoorDash", "northStar": "Completed Orders (пригороды + DashPass)",
-      "note": "лидер США: ставка на пригороды (меньше конкуренции), подписку DashPass и логистику Drive для ресторанов.",
+      "id": "doordash",
+      "name": "DoorDash",
+      "northStar": {
+        "ru": "Completed Orders (пригороды + DashPass)",
+        "en": "Completed orders (suburbs + DashPass)"
+      },
+      "note": {
+        "ru": "лидер США: ставка на пригороды (меньше конкуренции), подписку DashPass и логистику Drive для ресторанов.",
+        "en": "the US leader: a bet on suburbs (less competition), the DashPass membership and Drive logistics for restaurants."
+      },
       "root": {
-        "id": "dd-orders", "level": 0, "title": "Completed Orders", "formula": "Едоки × Частота × Fulfilment",
-        "note": "Сильны в пригородах, где плотность ниже, а лояльность и частота — выше.",
+        "id": "dd-orders",
+        "level": 0,
+        "metricId": "completed-orders",
+        "title": "Completed Orders",
+        "formula": {
+          "ru": "Едоки × Частота × Fulfilment",
+          "en": "Eaters × Frequency × Fulfilment"
+        },
+        "note": {
+          "ru": "Сильны в пригородах, где плотность ниже, а лояльность и частота — выше.",
+          "en": "Strong in suburbs, where density is lower but loyalty and frequency are higher."
+        },
         "children": [
-          { "id": "dd-eaters", "level": 1, "title": "Едоки", "note": "Спрос, в т.ч. в пригородах.", "children": [
-            { "id": "dd-pass", "level": 2, "title": "DashPass", "note": "Подписка повышает частоту и удержание.", "children": [
-              { "id": "dd-freq", "level": 3, "title": "Заказов в месяц", "note": "Частота на подписчика.", "children": [
-                { "id": "dd-suburb", "level": 4, "title": "Доля пригородных рынков", "note": "Меньше конкуренции — выше маржа." }
-              ] }
-            ] }
-          ] },
-          { "id": "dd-supply", "level": 1, "title": "Рестораны", "note": "Эксклюзивы и крупные сети.", "children": [
-            { "id": "dd-rest", "level": 2, "title": "Активные рестораны", "note": "Selection.", "children": [
-              { "id": "dd-drive", "level": 3, "title": "DoorDash Drive (white-label)", "note": "Логистика как услуга ресторанам." }
-            ] }
-          ] },
-          { "id": "dd-logi", "level": 1, "title": "Dasher-логистика", "note": "Сеть курьеров.", "children": [
-            { "id": "dd-time", "level": 2, "title": "Время доставки", "note": "Скорость и точность.", "children": [
-              { "id": "dd-dasher", "level": 3, "title": "Доступность Dasher'ов", "note": "Мощность доставки." }
-            ] }
-          ] }
+          {
+            "id": "dd-eaters",
+            "level": 1,
+            "title": {
+              "ru": "Едоки",
+              "en": "Eaters"
+            },
+            "note": {
+              "ru": "Спрос, в том числе пригородный.",
+              "en": "Demand, suburban included."
+            },
+            "children": [
+              {
+                "id": "dd-pass",
+                "level": 2,
+                "kind": "lever",
+                "title": "DashPass",
+                "note": {
+                  "ru": "Рычаг: подписка повышает частоту и удержание.",
+                  "en": "Lever: the membership lifts frequency and retention."
+                },
+                "children": [
+                  {
+                    "id": "dd-freq",
+                    "level": 3,
+                    "metricId": "purchase-frequency",
+                    "title": {
+                      "ru": "Заказов в месяц",
+                      "en": "Orders per month"
+                    },
+                    "note": {
+                      "ru": "Частота на подписчика.",
+                      "en": "Frequency per member."
+                    },
+                    "children": [
+                      {
+                        "id": "dd-suburb",
+                        "level": 4,
+                        "title": {
+                          "ru": "Доля пригородных рынков",
+                          "en": "Suburban market share"
+                        },
+                        "note": {
+                          "ru": "Меньше конкуренции — выше маржа и лояльность.",
+                          "en": "Less competition — higher margin and loyalty."
+                        },
+                        "children": [
+                          {
+                            "id": "dd-pass-churn",
+                            "level": 5,
+                            "metricId": "churn-rate",
+                            "title": {
+                              "ru": "Отток DashPass",
+                              "en": "DashPass churn"
+                            },
+                            "note": {
+                              "ru": "Продление подписки — проверка её реальной ценности для едока.",
+                              "en": "Membership renewal — the test of its real value to the eater."
+                            }
+                          }
+                        ],
+                        "metricId": "contribution-margin"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "dd-supply",
+            "level": 1,
+            "title": {
+              "ru": "Рестораны",
+              "en": "Restaurants"
+            },
+            "note": {
+              "ru": "Эксклюзивы и крупные сети.",
+              "en": "Exclusives and big chains."
+            },
+            "children": [
+              {
+                "id": "dd-rest",
+                "level": 2,
+                "metricId": "active-listings",
+                "title": {
+                  "ru": "Активные рестораны",
+                  "en": "Active restaurants"
+                },
+                "note": "Selection.",
+                "children": [
+                  {
+                    "id": "dd-drive",
+                    "level": 3,
+                    "title": "DoorDash Drive (white-label)",
+                    "note": {
+                      "ru": "Логистика как услуга ресторанам — выручка без витрины.",
+                      "en": "Logistics-as-a-service for restaurants — revenue without the storefront."
+                    },
+                    "children": [
+                      {
+                        "id": "dd-exclusive",
+                        "level": 4,
+                        "title": {
+                          "ru": "Доля эксклюзивных сетей",
+                          "en": "Exclusive chain share"
+                        },
+                        "note": {
+                          "ru": "Эксклюзивные партнёрства — selection, которого нет у конкурента.",
+                          "en": "Exclusive partnerships — selection a competitor doesn't have."
+                        },
+                        "metricId": "selection"
+                      }
+                    ],
+                    "metricId": "take-rate"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "dd-logi",
+            "level": 1,
+            "title": {
+              "ru": "Dasher-логистика",
+              "en": "Dasher logistics"
+            },
+            "note": {
+              "ru": "Сеть курьеров под пригородные расстояния.",
+              "en": "A courier network built for suburban distances."
+            },
+            "children": [
+              {
+                "id": "dd-time",
+                "level": 2,
+                "metricId": "time-to-match",
+                "title": {
+                  "ru": "Время доставки",
+                  "en": "Delivery time"
+                },
+                "note": {
+                  "ru": "Скорость и точность обещания.",
+                  "en": "Speed and promise accuracy."
+                },
+                "children": [
+                  {
+                    "id": "dd-dasher",
+                    "level": 3,
+                    "title": {
+                      "ru": "Доступность Dasher'ов",
+                      "en": "Dasher availability"
+                    },
+                    "note": {
+                      "ru": "Мощность доставки по зонам.",
+                      "en": "Delivery capacity by zone."
+                    },
+                    "children": [
+                      {
+                        "id": "dd-dasher-earn",
+                        "level": 4,
+                        "title": {
+                          "ru": "Заработок Dasher'а",
+                          "en": "Dasher earnings"
+                        },
+                        "note": {
+                          "ru": "Удержание курьеров: заработок в час против альтернатив gig-рынка.",
+                          "en": "Courier retention: hourly earnings versus gig-market alternatives."
+                        },
+                        "metricId": "hourly-earnings"
+                      }
+                    ],
+                    "metricId": "provider-availability"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Completed Orders", "Contribution profit"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["DashPass", "Частота", "Selection"] },
-        { "label": "Операционные", "role": "операции", "items": ["Время доставки", "Доступность Dasher'ов", "Пригородный охват"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Матчинг", "ETA", "Аптайм"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              "Completed Orders",
+              "Contribution profit"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              "DashPass",
+              {
+                "ru": "Частота",
+                "en": "Frequency"
+              },
+              "Selection"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "операции",
+              "en": "operations"
+            },
+            "items": [
+              {
+                "ru": "Время доставки",
+                "en": "Delivery time"
+              },
+              {
+                "ru": "Доступность Dasher'ов",
+                "en": "Dasher availability"
+              },
+              {
+                "ru": "Пригородный охват",
+                "en": "Suburban coverage"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Матчинг",
+                "en": "Matching"
+              },
+              "ETA",
+              {
+                "ru": "Аптайм",
+                "en": "Uptime"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Качество доставки", "note": "ошибки заказа и опоздания" },
-        { "title": "Жалобы ресторанов на комиссию", "note": "давление на партнёров" }
+        {
+          "title": {
+            "ru": "Качество доставки",
+            "en": "Delivery quality"
+          },
+          "note": {
+            "ru": "ошибки заказа и опоздания",
+            "en": "order errors and lateness"
+          }
+        },
+        {
+          "title": {
+            "ru": "Жалобы ресторанов на комиссию",
+            "en": "Restaurant fee complaints"
+          },
+          "note": {
+            "ru": "давление на партнёров",
+            "en": "pressure on partners"
+          }
+        }
       ]
     }
   ]

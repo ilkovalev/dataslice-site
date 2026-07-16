@@ -1,127 +1,1023 @@
 {
   "id": "edtech",
-  "archetype": "Образовательный результат",
-  "industry": "EdTech (онлайн-образование)",
-  "northStar": "Completed Courses / активные ученики",
+  "archetype": {
+    "ru": "Образовательный результат",
+    "en": "Educational outcome"
+  },
+  "industry": {
+    "ru": "EdTech (онлайн-образование)",
+    "en": "EdTech (online education)"
+  },
+  "northStar": {
+    "ru": "Completed Courses / активные ученики",
+    "en": "Completed courses / active learners"
+  },
   "root": {
-    "id": "learn", "level": 0, "title": "Образовательный результат", "formula": "Ученики × Доходимость × Результат",
-    "note": "EdTech продаёт не доступ, а результат. Реальная ценность — дошедший до конца и получивший навык ученик: он платит, продлевает и рекомендует.",
+    "id": "learn",
+    "level": 0,
+    "title": {
+      "ru": "Образовательный результат",
+      "en": "Educational outcome"
+    },
+    "formula": {
+      "ru": "Ученики × Доходимость × Результат",
+      "en": "Learners × Completion × Outcome"
+    },
+    "note": {
+      "ru": "EdTech продаёт не доступ, а результат. Реальная ценность — дошедший до конца и получивший навык ученик: он платит, продлевает и рекомендует.",
+      "en": "EdTech sells outcomes, not access. The real value is a learner who finishes and gains the skill: they pay, renew and recommend."
+    },
     "children": [
-      { "id": "acq", "level": 1, "title": "Привлечение учеников", "formula": "трафик × CR", "note": "Приток новых.", "children": [
-        { "id": "traffic", "level": 2, "title": "Трафик/лиды", "note": "Каналы привлечения.", "children": [
-          { "id": "cr", "level": 3, "title": "Конверсия в ученика", "note": "Лид → старт обучения.", "children": [
-            { "id": "cac", "level": 4, "title": "CAC", "note": "Стоимость привлечения ученика." }
-          ] }
-        ] }
-      ] },
-      { "id": "engagement", "level": 1, "title": "Вовлечённость и доходимость", "formula": "completion rate", "note": "Главная боль EdTech — доходимость.", "children": [
-        { "id": "activation", "level": 2, "title": "Активация (первые уроки)", "note": "Дошёл ли до первого «получилось».", "children": [
-          { "id": "habit", "level": 3, "title": "Учебная привычка", "note": "Регулярность занятий.", "children": [
-            { "id": "completion", "level": 4, "title": "Completion Rate курса", "note": "Доля дошедших до конца." }
-          ] }
-        ] }
-      ] },
-      { "id": "outcome", "level": 1, "title": "Результат и удержание", "note": "Навык → ценность → деньги.", "children": [
-        { "id": "result", "level": 2, "title": "Достигнутый результат", "note": "Сертификат, навык, трудоустройство.", "children": [
-          { "id": "nps", "level": 3, "title": "NPS / рекомендации", "note": "Довольные приводят новых." }
-        ] },
-        { "id": "monet", "level": 2, "title": "Монетизация (LTV)", "note": "Подписка/допкурсы.", "children": [
-          { "id": "repeat", "level": 3, "title": "Повторные покупки курсов", "note": "Возврат за следующей программой." }
-        ] }
-      ] }
-    ]
+      {
+        "id": "acq",
+        "level": 1,
+        "title": {
+          "ru": "Привлечение учеников",
+          "en": "Learner acquisition"
+        },
+        "formula": {
+          "ru": "трафик × CR",
+          "en": "traffic × CR"
+        },
+        "note": {
+          "ru": "Приток новых учеников.",
+          "en": "The inflow of new learners."
+        },
+        "children": [
+          {
+            "id": "traffic",
+            "level": 2,
+            "title": {
+              "ru": "Трафик/лиды",
+              "en": "Traffic/leads"
+            },
+            "note": {
+              "ru": "Каналы привлечения: контент, платный трафик, рекомендации.",
+              "en": "Acquisition channels: content, paid traffic, referrals."
+            },
+            "children": [
+              {
+                "id": "cr",
+                "level": 3,
+                "metricId": "conversion-rate",
+                "title": {
+                  "ru": "Конверсия в ученика",
+                  "en": "Learner conversion"
+                },
+                "note": {
+                  "ru": "Лид → старт обучения.",
+                  "en": "Lead → started learning."
+                },
+                "children": [
+                  {
+                    "id": "cac",
+                    "level": 4,
+                    "metricId": "cac",
+                    "title": "CAC",
+                    "note": {
+                      "ru": "Стоимость привлечения ученика против его чека и LTV.",
+                      "en": "Learner acquisition cost against their ticket and LTV."
+                    },
+                    "children": [
+                      {
+                        "id": "referral-share",
+                        "level": 5,
+                        "title": {
+                          "ru": "Доля пришедших по рекомендации",
+                          "en": "Referral share"
+                        },
+                        "note": {
+                          "ru": "Выпускники приводят новых — самый дешёвый и качественный канал.",
+                          "en": "Graduates bring newcomers — the cheapest and best-quality channel."
+                        },
+                        "metricId": "viral-coefficient"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "engagement",
+        "level": 1,
+        "title": {
+          "ru": "Вовлечённость и доходимость",
+          "en": "Engagement & completion"
+        },
+        "formula": "completion rate",
+        "note": {
+          "ru": "Главная боль EdTech — доходимость: купленный курс ещё не пройденный.",
+          "en": "EdTech's main pain is completion: a bought course is not a finished one."
+        },
+        "children": [
+          {
+            "id": "activation",
+            "level": 2,
+            "metricId": "activation-rate",
+            "title": {
+              "ru": "Активация (первые уроки)",
+              "en": "Activation (first lessons)"
+            },
+            "note": {
+              "ru": "Дошёл ли до первого «получилось» в первые дни.",
+              "en": "Did they reach the first \"it worked\" within days."
+            },
+            "children": [
+              {
+                "id": "habit",
+                "level": 3,
+                "title": {
+                  "ru": "Учебная привычка",
+                  "en": "The study habit"
+                },
+                "note": {
+                  "ru": "Регулярность занятий: заброшенный на неделю курс почти не возобновляют.",
+                  "en": "Study regularity: a course dropped for a week rarely resumes."
+                },
+                "children": [
+                  {
+                    "id": "completion",
+                    "level": 4,
+                    "title": {
+                      "ru": "Completion Rate курса",
+                      "en": "Course completion rate"
+                    },
+                    "note": {
+                      "ru": "Доля дошедших до конца — North Star в миниатюре.",
+                      "en": "The share who finish — the North Star in miniature."
+                    },
+                    "children": [
+                      {
+                        "id": "drop-points",
+                        "level": 5,
+                        "title": {
+                          "ru": "Точки отвала по модулям",
+                          "en": "Module drop-off points"
+                        },
+                        "note": {
+                          "ru": "Где именно бросают: сложный модуль чинится контентом, скучный — форматом.",
+                          "en": "Exactly where learners quit: a hard module is fixed with content, a boring one with format."
+                        },
+                        "metricId": "course-completion"
+                      }
+                    ],
+                    "metricId": "course-completion"
+                  }
+                ],
+                "metricId": "active-days"
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "outcome",
+        "level": 1,
+        "title": {
+          "ru": "Результат и удержание",
+          "en": "Outcome & retention"
+        },
+        "note": {
+          "ru": "Навык → ценность → деньги: результат кормит и повторные продажи, и репутацию.",
+          "en": "Skill → value → money: outcomes feed both repeat sales and reputation."
+        },
+        "children": [
+          {
+            "id": "result",
+            "level": 2,
+            "title": {
+              "ru": "Достигнутый результат",
+              "en": "Achieved outcome"
+            },
+            "note": {
+              "ru": "Сертификат, навык, трудоустройство — то, что обещали.",
+              "en": "Certificate, skill, employment — what was promised."
+            },
+            "children": [
+              {
+                "id": "nps",
+                "level": 3,
+                "metricId": "nps-csat",
+                "title": {
+                  "ru": "NPS / рекомендации",
+                  "en": "NPS / referrals"
+                },
+                "note": {
+                  "ru": "Довольные выпускники приводят новых учеников.",
+                  "en": "Happy graduates bring new learners."
+                }
+              }
+            ],
+            "metricId": "course-completion"
+          },
+          {
+            "id": "monet",
+            "level": 2,
+            "metricId": "ltv",
+            "title": {
+              "ru": "Монетизация (LTV)",
+              "en": "Monetization (LTV)"
+            },
+            "note": {
+              "ru": "Подписка или следующие курсы.",
+              "en": "Subscription or the next courses."
+            },
+            "children": [
+              {
+                "id": "repeat",
+                "level": 3,
+                "metricId": "repeat-rate",
+                "title": {
+                  "ru": "Повторные покупки курсов",
+                  "en": "Repeat course purchases"
+                },
+                "note": {
+                  "ru": "Возврат за следующей программой — главный признак реальной ценности.",
+                  "en": "Coming back for the next program — the main sign of real value."
+                }
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      }
+    ],
+    "kind": "group"
   },
   "pyramid": {
-    "note": "От экономики обучения (вершина) к стабильности платформы уроков (основание).",
+    "note": {
+      "ru": "От экономики обучения (вершина) к стабильности платформы уроков (основание).",
+      "en": "From learning economics (top) to lesson-platform stability (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Активные ученики", "LTV / CAC"] },
-      { "label": "Продуктовые", "role": "продакты/методисты", "items": ["Конверсия в ученика", "Completion Rate", "Повторные покупки"] },
-      { "label": "Операционные", "role": "контент/поддержка", "items": ["Активация", "Учебная привычка", "NPS"] },
-      { "label": "Платформенные", "role": "инженеры", "items": ["Аптайм платформы", "Скорость загрузки уроков", "Качество видео"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "руководство",
+          "en": "leadership"
+        },
+        "items": [
+          {
+            "ru": "Выручка",
+            "en": "Revenue"
+          },
+          {
+            "ru": "Активные ученики",
+            "en": "Active learners"
+          },
+          "LTV / CAC"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "продакты/методисты",
+          "en": "product/instruction"
+        },
+        "items": [
+          {
+            "ru": "Конверсия в ученика",
+            "en": "Learner conversion"
+          },
+          "Completion Rate",
+          {
+            "ru": "Повторные покупки",
+            "en": "Repeat purchases"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": {
+          "ru": "контент/поддержка",
+          "en": "content/support"
+        },
+        "items": [
+          {
+            "ru": "Активация",
+            "en": "Activation"
+          },
+          {
+            "ru": "Учебная привычка",
+            "en": "Study habit"
+          },
+          "NPS"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "инженеры",
+          "en": "engineers"
+        },
+        "items": [
+          {
+            "ru": "Аптайм платформы",
+            "en": "Platform uptime"
+          },
+          {
+            "ru": "Скорость загрузки уроков",
+            "en": "Lesson load speed"
+          },
+          {
+            "ru": "Качество видео",
+            "en": "Video quality"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Доля «купил, но не учится»", "note": "выручка без результата — отток и плохие отзывы впереди" },
-    { "title": "Возвраты и жалобы", "note": "обещали результат, не дали" }
+    {
+      "title": {
+        "ru": "Доля «купил, но не учится»",
+        "en": "\"Bought but not learning\" share"
+      },
+      "note": {
+        "ru": "выручка без результата — отток и плохие отзывы впереди",
+        "en": "revenue without outcomes — churn and bad reviews ahead"
+      }
+    },
+    {
+      "title": {
+        "ru": "Возвраты и жалобы",
+        "en": "Refunds & complaints"
+      },
+      "note": {
+        "ru": "обещали результат, не дали",
+        "en": "an outcome was promised and not delivered"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "duolingo", "name": "Duolingo", "northStar": "DAU (ежедневная привычка) → подписки",
-      "note": "массовый self-serve язык: ставка на геймификацию и ежедневную привычку (streak); монетизация — реклама и подписка.",
+      "id": "duolingo",
+      "name": "Duolingo",
+      "northStar": {
+        "ru": "DAU (ежедневная привычка) → подписки",
+        "en": "DAU (daily habit) → subscriptions"
+      },
+      "note": {
+        "ru": "массовый self-serve язык: ставка на геймификацию и ежедневную привычку (streak); монетизация — реклама и подписка.",
+        "en": "mass self-serve language learning: a bet on gamification and the daily streak habit; monetized with ads and a subscription."
+      },
       "root": {
-        "id": "du-dau", "level": 0, "title": "DAU (привычка) → Bookings", "formula": "Установки × Retention × Конверсия в Plus",
-        "note": "B2C-маховик: бесплатно и весело каждый день → огромный DAU → реклама и подписка Super.",
+        "id": "du-root",
+        "level": 0,
+        "title": {
+          "ru": "DAU (привычка) → Bookings",
+          "en": "DAU (habit) → Bookings"
+        },
+        "formula": {
+          "ru": "Установки × Retention × Конверсия в Super",
+          "en": "Installs × Retention × Super conversion"
+        },
+        "note": {
+          "ru": "B2C-маховик: бесплатно и весело каждый день → огромный DAU → реклама и подписка Super.",
+          "en": "The B2C flywheel: free and fun daily → huge DAU → ads and the Super subscription."
+        },
         "children": [
-          { "id": "du-acq", "level": 1, "title": "Привлечение", "note": "Виральность и бренд.", "children": [
-            { "id": "du-installs", "level": 2, "title": "Установки", "note": "Органика + мемный маркетинг.", "children": [
-              { "id": "du-k", "level": 3, "title": "Виральный коэффициент", "note": "Лидерборды и шеринг стрика.", "children": [
-                { "id": "du-referral", "level": 4, "title": "Реферралы друзей", "note": "Соц-давление учиться вместе." }
-              ] }
-            ] }
-          ] },
-          { "id": "du-habit", "level": 1, "title": "Ежедневная привычка", "note": "Сердце продукта — геймификация.", "children": [
-            { "id": "du-streak", "level": 2, "title": "Streak (серия дней)", "note": "Главный механизм удержания.", "children": [
-              { "id": "du-dau", "level": 3, "title": "DAU / MAU", "note": "Насколько ежедневный продукт.", "children": [
-                { "id": "du-notif", "level": 4, "title": "Эффективность напоминаний", "note": "Возвращают без раздражения." }
-              ] }
-            ] }
-          ] },
-          { "id": "du-monet", "level": 1, "title": "Монетизация", "note": "Реклама + Super.", "children": [
-            { "id": "du-sub", "level": 2, "title": "Конверсия в Super", "note": "Без рекламы и доп-фичи.", "children": [
-              { "id": "du-ads", "level": 3, "title": "Рекламная выручка (free)", "note": "Монетизация неплатящих." }
-            ] }
-          ] }
+          {
+            "id": "du-acq",
+            "level": 1,
+            "title": {
+              "ru": "Привлечение",
+              "en": "Acquisition"
+            },
+            "note": {
+              "ru": "Виральность и бренд вместо платного трафика.",
+              "en": "Virality and brand instead of paid traffic."
+            },
+            "children": [
+              {
+                "id": "du-installs",
+                "level": 2,
+                "title": {
+                  "ru": "Установки",
+                  "en": "Installs"
+                },
+                "note": {
+                  "ru": "Органика + мемный маркетинг.",
+                  "en": "Organic + meme marketing."
+                },
+                "children": [
+                  {
+                    "id": "du-k",
+                    "level": 3,
+                    "title": {
+                      "ru": "Виральный коэффициент",
+                      "en": "Viral coefficient"
+                    },
+                    "note": {
+                      "ru": "Лидерборды и шеринг стрика приводят друзей.",
+                      "en": "Leaderboards and streak sharing bring friends."
+                    },
+                    "children": [
+                      {
+                        "id": "du-referral",
+                        "level": 4,
+                        "title": {
+                          "ru": "Реферралы друзей",
+                          "en": "Friend referrals"
+                        },
+                        "note": {
+                          "ru": "Социальное давление учиться вместе.",
+                          "en": "The social pressure to learn together."
+                        },
+                        "metricId": "viral-coefficient"
+                      }
+                    ],
+                    "metricId": "viral-coefficient"
+                  }
+                ],
+                "metricId": "installs"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "du-habit",
+            "level": 1,
+            "title": {
+              "ru": "Ежедневная привычка",
+              "en": "The daily habit"
+            },
+            "note": {
+              "ru": "Сердце продукта — геймификация.",
+              "en": "The product's heart is gamification."
+            },
+            "children": [
+              {
+                "id": "du-streak",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Streak (серия дней)",
+                  "en": "Streak"
+                },
+                "note": {
+                  "ru": "Рычаг: главный механизм удержания — жалко терять серию.",
+                  "en": "Lever: the main retention mechanic — losing the streak hurts."
+                },
+                "children": [
+                  {
+                    "id": "du-daumau",
+                    "level": 3,
+                    "metricId": "stickiness",
+                    "title": "DAU / MAU",
+                    "note": {
+                      "ru": "Насколько ежедневный продукт.",
+                      "en": "How daily the product is."
+                    },
+                    "children": [
+                      {
+                        "id": "du-notif",
+                        "level": 4,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Эффективность напоминаний",
+                          "en": "Reminder effectiveness"
+                        },
+                        "note": {
+                          "ru": "Рычаг: вернуть без раздражения — тон и тайминг пушей.",
+                          "en": "Lever: bring back without annoying — push tone and timing."
+                        },
+                        "children": [
+                          {
+                            "id": "du-d30",
+                            "level": 5,
+                            "metricId": "retention-n-day",
+                            "title": "Retention D30",
+                            "note": {
+                              "ru": "Задержалась ли привычка через месяц — итог всей геймификации.",
+                              "en": "Did the habit survive a month — the sum of all gamification."
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "du-monet",
+            "level": 1,
+            "title": {
+              "ru": "Монетизация",
+              "en": "Monetization"
+            },
+            "note": {
+              "ru": "Реклама + Super.",
+              "en": "Ads + Super."
+            },
+            "children": [
+              {
+                "id": "du-sub",
+                "level": 2,
+                "metricId": "paying-share",
+                "title": {
+                  "ru": "Конверсия в Super",
+                  "en": "Super conversion"
+                },
+                "note": {
+                  "ru": "Без рекламы и доп-фичи; конвертируется маленькая доля огромного DAU.",
+                  "en": "Ad-free plus perks; a small share of a huge DAU converts."
+                },
+                "children": [
+                  {
+                    "id": "du-ads",
+                    "level": 3,
+                    "title": {
+                      "ru": "Рекламная выручка (free)",
+                      "en": "Ad revenue (free)"
+                    },
+                    "note": {
+                      "ru": "Монетизация неплатящих.",
+                      "en": "Monetizing non-payers."
+                    },
+                    "metricId": "ad-coverage"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          }
+        ],
+        "kind": "group"
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              "Bookings",
+              "DAU",
+              {
+                "ru": "Конверсия в Super",
+                "en": "Super conversion"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              "Retention",
+              "Streak",
+              {
+                "ru": "Виральность",
+                "en": "Virality"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": "growth",
+            "items": [
+              "DAU/MAU",
+              {
+                "ru": "Напоминания",
+                "en": "Reminders"
+              },
+              {
+                "ru": "Реферралы",
+                "en": "Referrals"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Аптайм приложения",
+                "en": "App uptime"
+              },
+              {
+                "ru": "Скорость уроков",
+                "en": "Lesson speed"
+              },
+              {
+                "ru": "A/B-инфраструктура",
+                "en": "A/B infrastructure"
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Bookings", "DAU", "Конверсия в Super"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Retention", "Streak", "Виральность"] },
-        { "label": "Операционные", "role": "growth", "items": ["DAU/MAU", "Напоминания", "Реферралы"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Аптайм приложения", "Скорость уроков", "A/B-инфраструктура"] }
-      ] },
       "counterMetrics": [
-        { "title": "Streak-тревожность", "note": "давление серии может выжигать и раздражать" },
-        { "title": "Иллюзия прогресса", "note": "очки растут, реальный навык — нет" }
+        {
+          "title": {
+            "ru": "Streak-тревожность",
+            "en": "Streak anxiety"
+          },
+          "note": {
+            "ru": "давление серии может выжигать и раздражать",
+            "en": "streak pressure can burn users out"
+          }
+        },
+        {
+          "title": {
+            "ru": "Иллюзия прогресса",
+            "en": "The illusion of progress"
+          },
+          "note": {
+            "ru": "очки растут, реальный навык — нет",
+            "en": "points grow, the actual skill doesn't"
+          }
+        }
       ]
     },
     {
-      "id": "skillbox", "name": "Skillbox", "northStar": "Завершившие + трудоустроенные ученики",
-      "note": "длинные профессии с высоким чеком: ставка на доходимость, поддержку кураторов и трудоустройство как доказательство результата.",
+      "id": "skillbox",
+      "name": "Skillbox",
+      "northStar": {
+        "ru": "Завершившие + трудоустроенные ученики",
+        "en": "Completed + employed learners"
+      },
+      "note": {
+        "ru": "длинные профессии с высоким чеком: ставка на доходимость, поддержку кураторов и трудоустройство как доказательство результата.",
+        "en": "long high-ticket profession programs: a bet on completion, curator support and employment as proof of outcome."
+      },
       "root": {
-        "id": "sk-out", "level": 0, "title": "Образовательный результат", "formula": "Ученики × Доходимость × Трудоустройство",
-        "note": "Дорогие длинные программы: продаётся карьерный результат, поэтому всё держится на доходимости и поддержке.",
+        "id": "sk-out",
+        "level": 0,
+        "title": {
+          "ru": "Образовательный результат",
+          "en": "Educational outcome"
+        },
+        "formula": {
+          "ru": "Ученики × Доходимость × Трудоустройство",
+          "en": "Learners × Completion × Employment"
+        },
+        "note": {
+          "ru": "Дорогие длинные программы: продаётся карьерный результат, поэтому всё держится на доходимости и поддержке.",
+          "en": "Expensive long programs: a career outcome is what's sold, so everything rests on completion and support."
+        },
         "children": [
-          { "id": "sk-acq", "level": 1, "title": "Привлечение (sales-driven)", "note": "Лиды + отдел продаж.", "children": [
-            { "id": "sk-lead", "level": 2, "title": "Лиды и квалификация", "note": "Платный трафик, вебинары.", "children": [
-              { "id": "sk-sale", "level": 3, "title": "Конверсия отдела продаж", "note": "Лид → оплата (часто в рассрочку).", "children": [
-                { "id": "sk-cac", "level": 4, "title": "CAC vs средний чек", "note": "Окупаемость дорогого привлечения." }
-              ] }
-            ] }
-          ] },
-          { "id": "sk-completion", "level": 1, "title": "Доходимость", "note": "Ключевая проблема длинных курсов.", "children": [
-            { "id": "sk-curator", "level": 2, "title": "Поддержка кураторов", "note": "Проверка работ, обратная связь.", "children": [
-              { "id": "sk-progress", "level": 3, "title": "Прогресс по модулям", "note": "Где ученики застревают/отваливаются.", "children": [
-                { "id": "sk-complete", "level": 4, "title": "Completion Rate программы", "note": "Доля завершивших." }
-              ] }
-            ] }
-          ] },
-          { "id": "sk-result", "level": 1, "title": "Результат и LTV", "note": "Трудоустройство → репутация → новые ученики.", "children": [
-            { "id": "sk-job", "level": 2, "title": "Трудоустройство", "note": "Главное доказательство ценности.", "children": [
-              { "id": "sk-nps", "level": 3, "title": "NPS выпускников", "note": "Рекомендации и отзывы." }
-            ] },
-            { "id": "sk-repeat", "level": 2, "title": "Повторные/смежные курсы", "note": "Возврат за новой профессией." }
-          ] }
+          {
+            "id": "sk-acq",
+            "level": 1,
+            "title": {
+              "ru": "Привлечение (sales-driven)",
+              "en": "Acquisition (sales-driven)"
+            },
+            "note": {
+              "ru": "Лиды + отдел продаж.",
+              "en": "Leads + the sales team."
+            },
+            "children": [
+              {
+                "id": "sk-lead",
+                "level": 2,
+                "title": {
+                  "ru": "Лиды и квалификация",
+                  "en": "Leads & qualification"
+                },
+                "note": {
+                  "ru": "Платный трафик, вебинары.",
+                  "en": "Paid traffic, webinars."
+                },
+                "children": [
+                  {
+                    "id": "sk-sale",
+                    "level": 3,
+                    "metricId": "conversion-rate",
+                    "title": {
+                      "ru": "Конверсия отдела продаж",
+                      "en": "Sales conversion"
+                    },
+                    "note": {
+                      "ru": "Лид → оплата (часто в рассрочку).",
+                      "en": "Lead → payment (often installments)."
+                    },
+                    "children": [
+                      {
+                        "id": "sk-cac",
+                        "level": 4,
+                        "metricId": "ltv-cac",
+                        "title": {
+                          "ru": "CAC vs средний чек",
+                          "en": "CAC vs ticket"
+                        },
+                        "note": {
+                          "ru": "Окупаемость дорогого привлечения дорогим чеком.",
+                          "en": "Expensive acquisition paid back by an expensive ticket."
+                        },
+                        "children": [
+                          {
+                            "id": "sk-installment-risk",
+                            "level": 5,
+                            "title": {
+                              "ru": "Дефолты рассрочек",
+                              "en": "Installment defaults"
+                            },
+                            "note": {
+                              "ru": "Недоплаченные рассрочки бросивших учёбу — скрытая дыра в выручке.",
+                              "en": "Unpaid installments of dropouts — a hidden revenue hole."
+                            },
+                            "metricId": "cost-of-risk"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "kind": "group"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "sk-completion",
+            "level": 1,
+            "title": {
+              "ru": "Доходимость",
+              "en": "Completion"
+            },
+            "note": {
+              "ru": "Ключевая проблема длинных курсов.",
+              "en": "The key problem of long programs."
+            },
+            "children": [
+              {
+                "id": "sk-curator",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Поддержка кураторов",
+                  "en": "Curator support"
+                },
+                "note": {
+                  "ru": "Рычаг: проверка работ и обратная связь удерживают в программе.",
+                  "en": "Lever: assignment review and feedback keep learners in the program."
+                },
+                "children": [
+                  {
+                    "id": "sk-progress",
+                    "level": 3,
+                    "title": {
+                      "ru": "Прогресс по модулям",
+                      "en": "Module progress"
+                    },
+                    "note": {
+                      "ru": "Где ученики застревают и отваливаются.",
+                      "en": "Where learners get stuck and drop."
+                    },
+                    "children": [
+                      {
+                        "id": "sk-complete",
+                        "level": 4,
+                        "title": {
+                          "ru": "Completion Rate программы",
+                          "en": "Program completion rate"
+                        },
+                        "note": {
+                          "ru": "Доля завершивших длинную программу.",
+                          "en": "The share who finish the long program."
+                        },
+                        "children": [
+                          {
+                            "id": "sk-review-speed",
+                            "level": 5,
+                            "title": {
+                              "ru": "Скорость проверки работ",
+                              "en": "Review turnaround"
+                            },
+                            "note": {
+                              "ru": "Долгое ожидание фидбека — главный операционный предиктор отвала.",
+                              "en": "Slow feedback is the main operational dropout predictor."
+                            },
+                            "metricId": "complaint-rate"
+                          }
+                        ],
+                        "metricId": "course-completion"
+                      }
+                    ],
+                    "metricId": "course-completion"
+                  }
+                ]
+              }
+            ],
+            "metricId": "course-completion"
+          },
+          {
+            "id": "sk-result",
+            "level": 1,
+            "title": {
+              "ru": "Результат и LTV",
+              "en": "Outcome & LTV"
+            },
+            "note": {
+              "ru": "Трудоустройство → репутация → новые ученики.",
+              "en": "Employment → reputation → new learners."
+            },
+            "children": [
+              {
+                "id": "sk-job",
+                "level": 2,
+                "title": {
+                  "ru": "Трудоустройство",
+                  "en": "Employment"
+                },
+                "note": {
+                  "ru": "Главное доказательство ценности программы.",
+                  "en": "The program's main proof of value."
+                },
+                "children": [
+                  {
+                    "id": "sk-nps",
+                    "level": 3,
+                    "metricId": "nps-csat",
+                    "title": {
+                      "ru": "NPS выпускников",
+                      "en": "Graduate NPS"
+                    },
+                    "note": {
+                      "ru": "Рекомендации и отзывы.",
+                      "en": "Referrals and reviews."
+                    }
+                  }
+                ],
+                "metricId": "course-completion"
+              },
+              {
+                "id": "sk-repeat",
+                "level": 2,
+                "metricId": "repeat-rate",
+                "title": {
+                  "ru": "Повторные/смежные курсы",
+                  "en": "Repeat/adjacent courses"
+                },
+                "note": {
+                  "ru": "Возврат за новой профессией.",
+                  "en": "Coming back for a new profession."
+                }
+              }
+            ],
+            "kind": "group"
+          }
+        ],
+        "kind": "group"
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              {
+                "ru": "Завершившие+трудоустроенные",
+                "en": "Completed+employed"
+              },
+              {
+                "ru": "CAC vs чек",
+                "en": "CAC vs ticket"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продукт/методология",
+              "en": "product/instruction"
+            },
+            "items": [
+              {
+                "ru": "Конверсия продаж",
+                "en": "Sales conversion"
+              },
+              "Completion Rate",
+              {
+                "ru": "Трудоустройство",
+                "en": "Employment"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "кураторы/поддержка",
+              "en": "curators/support"
+            },
+            "items": [
+              {
+                "ru": "Прогресс по модулям",
+                "en": "Module progress"
+              },
+              {
+                "ru": "Скорость проверки работ",
+                "en": "Review turnaround"
+              },
+              "NPS"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Аптайм LMS",
+                "en": "LMS uptime"
+              },
+              {
+                "ru": "Скорость видео",
+                "en": "Video speed"
+              },
+              {
+                "ru": "Стабильность вебинаров",
+                "en": "Webinar stability"
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Завершившие+трудоустроенные", "CAC vs чек"] },
-        { "label": "Продуктовые", "role": "продукт/методология", "items": ["Конверсия продаж", "Completion Rate", "Трудоустройство"] },
-        { "label": "Операционные", "role": "кураторы/поддержка", "items": ["Прогресс по модулям", "Скорость проверки работ", "NPS"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Аптайм LMS", "Скорость видео", "Стабильность вебинаров"] }
-      ] },
       "counterMetrics": [
-        { "title": "Разрыв обещаний и трудоустройства", "note": "продали мечту, не дали работу — возвраты и репутация" },
-        { "title": "Давление продаж/рассрочек", "note": "агрессивные продажи дорогих курсов бьют по доверию" }
+        {
+          "title": {
+            "ru": "Разрыв обещаний и трудоустройства",
+            "en": "Promise/employment gap"
+          },
+          "note": {
+            "ru": "продали мечту, не дали работу — возвраты и репутация",
+            "en": "a dream sold without a job — refunds and reputation"
+          }
+        },
+        {
+          "title": {
+            "ru": "Давление продаж/рассрочек",
+            "en": "Sales/installment pressure"
+          },
+          "note": {
+            "ru": "агрессивные продажи дорогих курсов бьют по доверию",
+            "en": "aggressive selling of expensive programs hits trust"
+          }
+        }
       ]
     }
   ]

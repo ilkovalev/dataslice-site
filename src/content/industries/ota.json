@@ -1,124 +1,1100 @@
 {
   "id": "ota",
-  "archetype": "Транзакционные платформы",
-  "industry": "Путешествия / OTA",
-  "northStar": "Booked Nights / GMV бронирований",
+  "archetype": {
+    "ru": "Транзакционные платформы",
+    "en": "Transactional platforms"
+  },
+  "industry": {
+    "ru": "Путешествия / OTA",
+    "en": "Travel / OTA"
+  },
+  "northStar": {
+    "ru": "Booked Nights / GMV бронирований",
+    "en": "Booked nights / bookings GMV"
+  },
   "root": {
-    "id": "nights", "level": 0, "title": "Booked Nights", "formula": "Путешественники × Бронирования × Ночей",
-    "note": "Платформа путешествий зарабатывает комиссию с забронированных ночей.",
+    "id": "nights",
+    "level": 0,
+    "metricId": "gmv",
+    "title": "Booked Nights",
+    "formula": {
+      "ru": "Путешественники × Бронирования × Ночей",
+      "en": "Travelers × Bookings × Nights"
+    },
+    "note": {
+      "ru": "Платформа путешествий зарабатывает комиссию с забронированных ночей. Покупка редкая и дорогая, поэтому решает конверсия дорогого трафика и доверие.",
+      "en": "A travel platform earns commission on booked nights. Purchases are rare and expensive, so conversion of costly traffic and trust decide the game."
+    },
     "children": [
-      { "id": "travelers", "level": 1, "title": "Спрос (путешественники)", "formula": "трафик × CR", "note": "Сторона спроса.", "children": [
-        { "id": "traffic", "level": 2, "title": "Трафик", "note": "Дорогой канал — SEO/SEM.", "children": [
-          { "id": "cr", "level": 3, "title": "Look-to-Book", "note": "Доля поисков с бронью.", "children": [
-            { "id": "trust", "level": 4, "title": "Отзывы и фото", "note": "Доверие повышает конверсию." }
-          ] }
-        ] },
-        { "id": "repeat", "level": 2, "title": "Повторные бронирования", "note": "Прямые заходы вместо платного трафика." }
-      ] },
-      { "id": "supply", "level": 1, "title": "Предложение (объекты)", "formula": "объекты × доступность", "note": "Сторона размещения.", "children": [
-        { "id": "listings", "level": 2, "title": "Активные объекты", "note": "Ширина выбора.", "children": [
-          { "id": "availability", "level": 3, "title": "Доступность (свободные даты)", "note": "Есть ли что бронировать.", "children": [
-            { "id": "price-comp", "level": 4, "title": "Конкурентность цены", "note": "Не дешевле ли напрямую." }
-          ] }
-        ] }
-      ] },
-      { "id": "conversion", "level": 1, "title": "Бронирование и удержание", "note": "Связывает спрос и предложение.", "children": [
-        { "id": "cancel", "level": 2, "title": "Доля отмен", "note": "Брони, которые не состоялись.", "children": [
-          { "id": "completed", "level": 3, "title": "Состоявшиеся заезды", "note": "Реальные ночи, а не брони на бумаге." }
-        ] },
-        { "id": "take", "level": 2, "title": "Take rate", "note": "Комиссия с брони." }
-      ] }
+      {
+        "id": "travelers",
+        "level": 1,
+        "title": {
+          "ru": "Спрос (путешественники)",
+          "en": "Demand (travelers)"
+        },
+        "formula": {
+          "ru": "трафик × CR",
+          "en": "traffic × CR"
+        },
+        "note": {
+          "ru": "Сторона спроса: редкие, но дорогие покупки с длинным выбором.",
+          "en": "The demand side: rare but expensive purchases with a long consideration phase."
+        },
+        "children": [
+          {
+            "id": "traffic",
+            "level": 2,
+            "title": {
+              "ru": "Трафик",
+              "en": "Traffic"
+            },
+            "note": {
+              "ru": "Дорогой канал: SEM и метапоиск съедают заметную долю комиссии.",
+              "en": "An expensive channel: SEM and metasearch eat a big share of the commission."
+            },
+            "children": [
+              {
+                "id": "sem-roas",
+                "level": 3,
+                "metricId": "roas",
+                "title": {
+                  "ru": "ROAS перформанса",
+                  "en": "Performance ROAS"
+                },
+                "note": {
+                  "ru": "Окупаемость SEM/метапоиска по направлениям.",
+                  "en": "SEM/metasearch payback by destination."
+                },
+                "children": [
+                  {
+                    "id": "direct-share",
+                    "level": 4,
+                    "title": {
+                      "ru": "Доля прямого трафика",
+                      "en": "Direct traffic share"
+                    },
+                    "note": {
+                      "ru": "Приложение и бренд-заходы — трафик без платы за клик.",
+                      "en": "App and brand visits — traffic with no per-click cost."
+                    },
+                    "children": [
+                      {
+                        "id": "app-bookings",
+                        "level": 5,
+                        "title": {
+                          "ru": "Брони из приложения",
+                          "en": "App bookings"
+                        },
+                        "note": {
+                          "ru": "Доля броней в приложении: лояльный канал с бесплатными повторными.",
+                          "en": "Share of bookings in the app: the loyal channel with free repeats."
+                        },
+                        "metricId": "app-share"
+                      }
+                    ],
+                    "metricId": "traffic"
+                  }
+                ]
+              },
+              {
+                "id": "cr",
+                "level": 3,
+                "metricId": "conversion-rate",
+                "title": "Look-to-Book",
+                "note": {
+                  "ru": "Доля поисков, закончившихся бронью, — конверсия OTA.",
+                  "en": "Share of searches ending in a booking — the OTA's conversion."
+                },
+                "children": [
+                  {
+                    "id": "trust",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Отзывы и фото",
+                      "en": "Reviews & photos"
+                    },
+                    "note": {
+                      "ru": "Рычаг: доверие к незнакомому объекту строится контентом.",
+                      "en": "Lever: trust in an unfamiliar property is built with content."
+                    },
+                    "children": [
+                      {
+                        "id": "search-relevance",
+                        "level": 5,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Релевантность выдачи",
+                          "en": "Search relevance"
+                        },
+                        "note": {
+                          "ru": "Рычаг: ранжирование под запрос и даты — чтобы подходящее было на первом экране.",
+                          "en": "Lever: ranking for the query and dates — the right options on the first screen."
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "metricId": "traffic"
+          },
+          {
+            "id": "repeat",
+            "level": 2,
+            "metricId": "repeat-rate",
+            "title": {
+              "ru": "Повторные бронирования",
+              "en": "Repeat bookings"
+            },
+            "note": {
+              "ru": "Прямые повторные заходы вместо повторной платы за трафик — экономика лояльности.",
+              "en": "Direct repeat visits instead of paying for traffic again — the loyalty economics."
+            },
+            "children": [
+              {
+                "id": "loyalty-program",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "Программа лояльности",
+                  "en": "Loyalty program"
+                },
+                "note": {
+                  "ru": "Рычаг: скидки уровня и бонусы за повторные брони.",
+                  "en": "Lever: tier discounts and perks for repeat bookings."
+                }
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "supply",
+        "level": 1,
+        "title": {
+          "ru": "Предложение (объекты)",
+          "en": "Supply (properties)"
+        },
+        "formula": {
+          "ru": "объекты × доступность",
+          "en": "properties × availability"
+        },
+        "note": {
+          "ru": "Сторона размещения: без выбора и свободных дат нечего конвертировать.",
+          "en": "The accommodation side: with no choice and open dates there's nothing to convert."
+        },
+        "children": [
+          {
+            "id": "listings",
+            "level": 2,
+            "metricId": "active-listings",
+            "title": {
+              "ru": "Активные объекты",
+              "en": "Active properties"
+            },
+            "note": {
+              "ru": "Ширина выбора по направлениям.",
+              "en": "Choice width by destination."
+            },
+            "children": [
+              {
+                "id": "availability",
+                "level": 3,
+                "metricId": "oos-rate",
+                "title": {
+                  "ru": "Доступность (свободные даты)",
+                  "en": "Availability (open dates)"
+                },
+                "note": {
+                  "ru": "Есть ли что бронировать в пиковые даты — тревел-версия out-of-stock.",
+                  "en": "Anything bookable on peak dates — the travel version of out-of-stock."
+                },
+                "children": [
+                  {
+                    "id": "price-comp",
+                    "level": 4,
+                    "title": {
+                      "ru": "Конкурентность цены",
+                      "en": "Price competitiveness"
+                    },
+                    "note": {
+                      "ru": "Не дешевле ли напрямую у отеля: паритет цен — условие доверия к платформе.",
+                      "en": "Is it cheaper direct with the hotel: rate parity is a trust condition."
+                    },
+                    "children": [
+                      {
+                        "id": "supplier-retention",
+                        "level": 5,
+                        "title": {
+                          "ru": "Удержание объектов",
+                          "en": "Property retention"
+                        },
+                        "note": {
+                          "ru": "Отели и хосты остаются, пока платформа приносит брони дешевле собственных продаж.",
+                          "en": "Hotels and hosts stay while the platform delivers bookings cheaper than their own sales."
+                        },
+                        "metricId": "seller-retention"
+                      }
+                    ],
+                    "metricId": "price-competitiveness"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "conversion",
+        "level": 1,
+        "title": {
+          "ru": "Бронирование и удержание",
+          "en": "Booking & retention"
+        },
+        "note": {
+          "ru": "Связывает спрос и предложение: бронь должна стать заездом.",
+          "en": "Connects demand and supply: a booking has to become a stay."
+        },
+        "children": [
+          {
+            "id": "cancel",
+            "level": 2,
+            "metricId": "cancellation-rate",
+            "title": {
+              "ru": "Доля отмен",
+              "en": "Cancellation rate"
+            },
+            "note": {
+              "ru": "Брони, которые не состоялись: бесплатная отмена растит и брони, и отмены.",
+              "en": "Bookings that never happened: free cancellation grows both bookings and cancellations."
+            },
+            "children": [
+              {
+                "id": "completed",
+                "level": 3,
+                "metricId": "completed-orders",
+                "title": {
+                  "ru": "Состоявшиеся заезды",
+                  "en": "Completed stays"
+                },
+                "note": {
+                  "ru": "Реальные ночи, а не брони на бумаге, — по ним приходит комиссия.",
+                  "en": "Real nights, not paper bookings — commission arrives on these."
+                },
+                "children": [
+                  {
+                    "id": "stay-quality",
+                    "level": 4,
+                    "metricId": "complaint-rate",
+                    "title": {
+                      "ru": "Проблемные заезды",
+                      "en": "Problem stays"
+                    },
+                    "note": {
+                      "ru": "Несоответствие объекта, овербукинг: удары по доверию, жалобы и рефанды.",
+                      "en": "Property mismatch, overbooking: trust damage, complaints and refunds."
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "take",
+            "level": 2,
+            "metricId": "take-rate",
+            "title": "Take rate",
+            "note": {
+              "ru": "Комиссия с брони; балансирует маржу платформы против паритета цен.",
+              "en": "Commission per booking; balances platform margin against rate parity."
+            }
+          }
+        ],
+        "kind": "group"
+      }
     ]
   },
   "pyramid": {
-    "note": "От комиссии с бронирований (вершина) к надёжности поиска и платежей (основание).",
+    "note": {
+      "ru": "От комиссии с бронирований (вершина) к надёжности поиска и платежей (основание).",
+      "en": "From booking commission (top) to search and payment reliability (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка (комиссия)", "Booked Nights / GMV", "Marketing efficiency"] },
-      { "label": "Продуктовые", "role": "продакты", "items": ["Look-to-Book", "Повторные брони", "Активные объекты"] },
-      { "label": "Операционные", "role": "операции", "items": ["Доступность", "Доля отмен", "Конкурентность цены"] },
-      { "label": "Платформенные", "role": "инженеры", "items": ["Скорость поиска/выдачи", "Аптайм платежей", "Точность доступности"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "руководство",
+          "en": "leadership"
+        },
+        "items": [
+          {
+            "ru": "Выручка (комиссия)",
+            "en": "Revenue (commission)"
+          },
+          "Booked Nights / GMV",
+          "Marketing efficiency"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "продакты",
+          "en": "product"
+        },
+        "items": [
+          "Look-to-Book",
+          {
+            "ru": "Повторные брони",
+            "en": "Repeat bookings"
+          },
+          {
+            "ru": "Активные объекты",
+            "en": "Active properties"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": {
+          "ru": "операции",
+          "en": "operations"
+        },
+        "items": [
+          {
+            "ru": "Доступность",
+            "en": "Availability"
+          },
+          {
+            "ru": "Доля отмен",
+            "en": "Cancellation rate"
+          },
+          {
+            "ru": "Конкурентность цены",
+            "en": "Price competitiveness"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "инженеры",
+          "en": "engineers"
+        },
+        "items": [
+          {
+            "ru": "Скорость поиска/выдачи",
+            "en": "Search speed"
+          },
+          {
+            "ru": "Аптайм платежей",
+            "en": "Payment uptime"
+          },
+          {
+            "ru": "Точность доступности",
+            "en": "Availability accuracy"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Доля отмен/неявок", "note": "брони раздувают GMV, но не дают ночей" },
-    { "title": "Зависимость от платного трафика", "note": "рост на покупке кликов съедает маржу" },
-    { "title": "Жалобы на несоответствие объекта", "note": "доверие к платформе" }
+    {
+      "title": {
+        "ru": "Доля отмен/неявок",
+        "en": "Cancellations / no-shows"
+      },
+      "note": {
+        "ru": "брони раздувают GMV, но не дают ночей",
+        "en": "bookings inflate GMV but deliver no nights"
+      }
+    },
+    {
+      "title": {
+        "ru": "Зависимость от платного трафика",
+        "en": "Paid-traffic dependence"
+      },
+      "note": {
+        "ru": "рост на покупке кликов съедает маржу",
+        "en": "click-bought growth eats the margin"
+      }
+    },
+    {
+      "title": {
+        "ru": "Жалобы на несоответствие объекта",
+        "en": "Property mismatch complaints"
+      },
+      "note": {
+        "ru": "доверие к платформе",
+        "en": "platform trust"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "booking", "name": "Booking", "northStar": "Booked Nights (отели + перформанс-маркетинг)",
-      "note": "отельная OTA-машина: ставка на огромное предложение отелей и эффективный платный трафик (SEM).",
+      "id": "booking",
+      "name": "Booking",
+      "northStar": {
+        "ru": "Booked Nights (отели + перформанс-маркетинг)",
+        "en": "Booked nights (hotels + performance marketing)"
+      },
+      "note": {
+        "ru": "отельная OTA-машина: ставка на огромное предложение отелей и эффективный платный трафик (SEM).",
+        "en": "the hotel OTA machine: a bet on a huge hotel supply and efficient paid traffic (SEM)."
+      },
       "root": {
-        "id": "bk-nights", "level": 0, "title": "Booked Nights", "formula": "Трафик × Look-to-Book × Ночей",
-        "note": "Лидер по отелям; маховик: больше отелей → выше конверсия → больше бюджет на трафик.",
+        "id": "bk-nights",
+        "level": 0,
+        "metricId": "gmv",
+        "title": "Booked Nights",
+        "formula": {
+          "ru": "Трафик × Look-to-Book × Ночей",
+          "en": "Traffic × Look-to-Book × Nights"
+        },
+        "note": {
+          "ru": "Лидер по отелям; маховик: больше отелей → выше конверсия → больше бюджет на трафик.",
+          "en": "The hotel leader; the flywheel: more hotels → higher conversion → a bigger traffic budget."
+        },
         "children": [
-          { "id": "bk-demand", "level": 1, "title": "Спрос", "note": "Платный + прямой трафик.", "children": [
-            { "id": "bk-sem", "level": 2, "title": "Перформанс-маркетинг", "note": "Эффективность SEM/метапоиска.", "children": [
-              { "id": "bk-roas", "level": 3, "title": "ROAS канала", "note": "Окупаемость рекламы.", "children": [
-                { "id": "bk-direct", "level": 4, "title": "Доля прямых заходов", "note": "Genius/приложение снижают зависимость от рекламы." }
-              ] }
-            ] }
-          ] },
-          { "id": "bk-supply", "level": 1, "title": "Отели", "note": "Главная сила — широта.", "children": [
-            { "id": "bk-hotels", "level": 2, "title": "Активные отели", "note": "Покрытие направлений.", "children": [
-              { "id": "bk-avail", "level": 3, "title": "Доступность номеров", "note": "Свободные даты и цены." }
-            ] }
-          ] },
-          { "id": "bk-conv", "level": 1, "title": "Конверсия и лояльность", "note": "Genius-программа.", "children": [
-            { "id": "bk-l2b", "level": 2, "title": "Look-to-Book", "note": "Скидки и urgency повышают.", "children": [
-              { "id": "bk-cancel", "level": 3, "title": "Бесплатная отмена", "note": "Растит брони, но и отмены." }
-            ] }
-          ] }
+          {
+            "id": "bk-demand",
+            "level": 1,
+            "title": {
+              "ru": "Спрос",
+              "en": "Demand"
+            },
+            "note": {
+              "ru": "Платный + прямой трафик.",
+              "en": "Paid + direct traffic."
+            },
+            "children": [
+              {
+                "id": "bk-sem",
+                "level": 2,
+                "title": {
+                  "ru": "Перформанс-маркетинг",
+                  "en": "Performance marketing"
+                },
+                "note": {
+                  "ru": "Эффективность SEM и метапоиска — крупнейшая статья расходов.",
+                  "en": "SEM and metasearch efficiency — the biggest cost line."
+                },
+                "children": [
+                  {
+                    "id": "bk-roas",
+                    "level": 3,
+                    "metricId": "roas",
+                    "title": {
+                      "ru": "ROAS канала",
+                      "en": "Channel ROAS"
+                    },
+                    "note": {
+                      "ru": "Окупаемость рекламы по направлениям и запросам.",
+                      "en": "Ad payback by destination and query."
+                    },
+                    "children": [
+                      {
+                        "id": "bk-direct",
+                        "level": 4,
+                        "title": {
+                          "ru": "Доля прямых заходов",
+                          "en": "Direct visit share"
+                        },
+                        "note": {
+                          "ru": "Genius и приложение снижают зависимость от рекламы.",
+                          "en": "Genius and the app reduce ad dependence."
+                        },
+                        "children": [
+                          {
+                            "id": "bk-genius-repeat",
+                            "level": 5,
+                            "metricId": "repeat-rate",
+                            "title": {
+                              "ru": "Повторные брони Genius",
+                              "en": "Genius repeat bookings"
+                            },
+                            "note": {
+                              "ru": "Возвращаемость участников программы — окупаемость скидок Genius.",
+                              "en": "Member returns — the payback of Genius discounts."
+                            }
+                          }
+                        ],
+                        "metricId": "traffic"
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "roas"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "bk-supply",
+            "level": 1,
+            "title": {
+              "ru": "Отели",
+              "en": "Hotels"
+            },
+            "note": {
+              "ru": "Главная сила — широта покрытия.",
+              "en": "The main strength — coverage width."
+            },
+            "children": [
+              {
+                "id": "bk-hotels",
+                "level": 2,
+                "metricId": "active-listings",
+                "title": {
+                  "ru": "Активные отели",
+                  "en": "Active hotels"
+                },
+                "note": {
+                  "ru": "Покрытие направлений.",
+                  "en": "Destination coverage."
+                },
+                "children": [
+                  {
+                    "id": "bk-avail",
+                    "level": 3,
+                    "metricId": "oos-rate",
+                    "title": {
+                      "ru": "Доступность номеров",
+                      "en": "Room availability"
+                    },
+                    "note": {
+                      "ru": "Свободные даты и актуальные цены.",
+                      "en": "Open dates and current prices."
+                    },
+                    "children": [
+                      {
+                        "id": "bk-parity",
+                        "level": 4,
+                        "title": {
+                          "ru": "Паритет цен",
+                          "en": "Rate parity"
+                        },
+                        "note": {
+                          "ru": "Цена не выше, чем у отеля напрямую, — иначе платформа лишь витрина.",
+                          "en": "No pricier than the hotel direct — otherwise the platform is just a showroom."
+                        },
+                        "metricId": "price-competitiveness"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "bk-conv",
+            "level": 1,
+            "title": {
+              "ru": "Конверсия и лояльность",
+              "en": "Conversion & loyalty"
+            },
+            "note": {
+              "ru": "Genius-программа и механика срочности.",
+              "en": "The Genius program and urgency mechanics."
+            },
+            "children": [
+              {
+                "id": "bk-l2b",
+                "level": 2,
+                "metricId": "conversion-rate",
+                "title": "Look-to-Book",
+                "note": {
+                  "ru": "Скидки и «осталось 2 номера» повышают конверсию.",
+                  "en": "Discounts and \"2 rooms left\" lift conversion."
+                },
+                "children": [
+                  {
+                    "id": "bk-cancel",
+                    "level": 3,
+                    "metricId": "cancellation-rate",
+                    "title": {
+                      "ru": "Бесплатная отмена",
+                      "en": "Free cancellation"
+                    },
+                    "note": {
+                      "ru": "Растит брони — и отмены; смотрится в паре с состоявшимися заездами.",
+                      "en": "Grows bookings — and cancellations; read together with completed stays."
+                    },
+                    "children": [
+                      {
+                        "id": "bk-net-nights",
+                        "level": 4,
+                        "title": {
+                          "ru": "Чистые ночи (после отмен)",
+                          "en": "Net nights (after cancels)"
+                        },
+                        "note": {
+                          "ru": "Ночи, дожившие до заезда, — реальная база комиссии.",
+                          "en": "Nights surviving to check-in — the real commission base."
+                        },
+                        "metricId": "completed-orders"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Booked Nights", "Marketing ROI"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Look-to-Book", "Genius-лояльность", "Активные отели"] },
-        { "label": "Операционные", "role": "маркетинг/операции", "items": ["ROAS", "Доля прямых", "Доступность"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Скорость поиска", "Аптайм платежей", "Актуальность цен"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              "Booked Nights",
+              "Marketing ROI"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              "Look-to-Book",
+              {
+                "ru": "Genius-лояльность",
+                "en": "Genius loyalty"
+              },
+              {
+                "ru": "Активные отели",
+                "en": "Active hotels"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "маркетинг/операции",
+              "en": "marketing/ops"
+            },
+            "items": [
+              "ROAS",
+              {
+                "ru": "Доля прямых",
+                "en": "Direct share"
+              },
+              {
+                "ru": "Доступность",
+                "en": "Availability"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Скорость поиска",
+                "en": "Search speed"
+              },
+              {
+                "ru": "Аптайм платежей",
+                "en": "Payment uptime"
+              },
+              {
+                "ru": "Актуальность цен",
+                "en": "Price freshness"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Зависимость от Google-рекламы", "note": "маржа уходит в трафик" },
-        { "title": "Отмены", "note": "бесплатная отмена раздувает брони" }
+        {
+          "title": {
+            "ru": "Зависимость от Google-рекламы",
+            "en": "Google-ads dependence"
+          },
+          "note": {
+            "ru": "маржа уходит в трафик",
+            "en": "margin flows into traffic"
+          }
+        },
+        {
+          "title": {
+            "ru": "Отмены",
+            "en": "Cancellations"
+          },
+          "note": {
+            "ru": "бесплатная отмена раздувает брони",
+            "en": "free cancellation inflates bookings"
+          }
+        }
       ]
     },
     {
-      "id": "airbnb", "name": "Airbnb", "northStar": "Booked Nights (хосты + бренд/прямой трафик)",
-      "note": "уникальное жильё от хостов: ставка на бренд и прямой трафик (мало платной рекламы) и качество хостов.",
+      "id": "airbnb",
+      "name": "Airbnb",
+      "northStar": {
+        "ru": "Booked Nights (хосты + бренд/прямой трафик)",
+        "en": "Booked nights (hosts + brand/direct traffic)"
+      },
+      "note": {
+        "ru": "уникальное жильё от хостов: ставка на бренд и прямой трафик (мало платной рекламы) и качество хостов.",
+        "en": "unique host-listed homes: a bet on brand and direct traffic (little paid advertising) and host quality."
+      },
       "root": {
-        "id": "ab-nights", "level": 0, "title": "Booked Nights", "formula": "Гости × Бронирования × Ночей",
-        "note": "Двусторонняя сеть хост↔гость; бренд приводит трафик напрямую, без дорогой рекламы.",
+        "id": "ab-nights",
+        "level": 0,
+        "metricId": "gmv",
+        "title": "Booked Nights",
+        "formula": {
+          "ru": "Гости × Бронирования × Ночей",
+          "en": "Guests × Bookings × Nights"
+        },
+        "note": {
+          "ru": "Двусторонняя сеть хост↔гость; бренд приводит трафик напрямую, без дорогой рекламы.",
+          "en": "A two-sided host↔guest network; the brand brings traffic directly, without expensive ads."
+        },
         "children": [
-          { "id": "ab-demand", "level": 1, "title": "Гости (спрос)", "note": "Прямой и брендовый трафик.", "children": [
-            { "id": "ab-brand", "level": 2, "title": "Прямой/брендовый трафик", "note": "Низкая зависимость от платной рекламы.", "children": [
-              { "id": "ab-repeat", "level": 3, "title": "Повторные гости", "note": "Лояльность к платформе.", "children": [
-                { "id": "ab-app", "level": 4, "title": "Доля бронирований из приложения", "note": "Прямой канал." }
-              ] }
-            ] }
-          ] },
-          { "id": "ab-supply", "level": 1, "title": "Хосты (предложение)", "note": "Уникальное жильё.", "children": [
-            { "id": "ab-hosts", "level": 2, "title": "Активные хосты", "note": "Здоровье предложения.", "children": [
-              { "id": "ab-quality", "level": 3, "title": "Качество листингов", "note": "Рейтинги и Superhost.", "children": [
-                { "id": "ab-newhost", "level": 4, "title": "Активация новых хостов", "note": "Первое бронирование хоста." }
-              ] }
-            ] }
-          ] },
-          { "id": "ab-conv", "level": 1, "title": "Конверсия и доверие", "note": "Качество опыта.", "children": [
-            { "id": "ab-l2b", "level": 2, "title": "Search→Book", "note": "Доверие, фото, отзывы.", "children": [
-              { "id": "ab-issues", "level": 3, "title": "Доля проблемных заездов", "note": "Несоответствие, отмены хостом." }
-            ] }
-          ] }
+          {
+            "id": "ab-demand",
+            "level": 1,
+            "title": {
+              "ru": "Гости (спрос)",
+              "en": "Guests (demand)"
+            },
+            "note": {
+              "ru": "Прямой и брендовый трафик.",
+              "en": "Direct and brand traffic."
+            },
+            "children": [
+              {
+                "id": "ab-brand",
+                "level": 2,
+                "title": {
+                  "ru": "Прямой/брендовый трафик",
+                  "en": "Direct/brand traffic"
+                },
+                "note": {
+                  "ru": "Низкая зависимость от платной рекламы — структурное преимущество маржи.",
+                  "en": "Low paid-ads dependence — a structural margin advantage."
+                },
+                "children": [
+                  {
+                    "id": "ab-repeat",
+                    "level": 3,
+                    "metricId": "repeat-rate",
+                    "title": {
+                      "ru": "Повторные гости",
+                      "en": "Repeat guests"
+                    },
+                    "note": {
+                      "ru": "Лояльность к платформе между редкими поездками.",
+                      "en": "Platform loyalty between rare trips."
+                    },
+                    "children": [
+                      {
+                        "id": "ab-app",
+                        "level": 4,
+                        "title": {
+                          "ru": "Брони из приложения",
+                          "en": "App bookings"
+                        },
+                        "note": {
+                          "ru": "Прямой канал без комиссии посредников.",
+                          "en": "The direct channel with no middleman fees."
+                        },
+                        "metricId": "app-share"
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "traffic"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "ab-supply",
+            "level": 1,
+            "title": {
+              "ru": "Хосты (предложение)",
+              "en": "Hosts (supply)"
+            },
+            "note": {
+              "ru": "Уникальное жильё, которого нет у отельных OTA.",
+              "en": "Unique homes hotel OTAs don't have."
+            },
+            "children": [
+              {
+                "id": "ab-hosts",
+                "level": 2,
+                "metricId": "active-listings",
+                "title": {
+                  "ru": "Активные хосты",
+                  "en": "Active hosts"
+                },
+                "note": {
+                  "ru": "Здоровье предложения по направлениям.",
+                  "en": "Supply health by destination."
+                },
+                "children": [
+                  {
+                    "id": "ab-quality",
+                    "level": 3,
+                    "title": {
+                      "ru": "Качество листингов",
+                      "en": "Listing quality"
+                    },
+                    "note": {
+                      "ru": "Рейтинги, фото, Superhost-статусы.",
+                      "en": "Ratings, photos, Superhost statuses."
+                    },
+                    "children": [
+                      {
+                        "id": "ab-newhost",
+                        "level": 4,
+                        "metricId": "activation-rate",
+                        "title": {
+                          "ru": "Активация новых хостов",
+                          "en": "New-host activation"
+                        },
+                        "note": {
+                          "ru": "Первое бронирование нового хоста — его aha-момент.",
+                          "en": "A new host's first booking — their aha moment."
+                        },
+                        "children": [
+                          {
+                            "id": "ab-host-retention",
+                            "level": 5,
+                            "metricId": "churn-rate",
+                            "title": {
+                              "ru": "Удержание хостов",
+                              "en": "Host retention"
+                            },
+                            "note": {
+                              "ru": "Хост без броней и с проблемными гостями снимает листинг.",
+                              "en": "A host with no bookings and problem guests delists."
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "metricId": "seller-retention"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "ab-conv",
+            "level": 1,
+            "title": {
+              "ru": "Конверсия и доверие",
+              "en": "Conversion & trust"
+            },
+            "note": {
+              "ru": "Качество опыта в чужом доме держится на доверии.",
+              "en": "The experience of staying in a stranger's home runs on trust."
+            },
+            "children": [
+              {
+                "id": "ab-l2b",
+                "level": 2,
+                "metricId": "conversion-rate",
+                "title": "Search→Book",
+                "note": {
+                  "ru": "Доверие, фото, отзывы двигают конверсию.",
+                  "en": "Trust, photos and reviews move conversion."
+                },
+                "children": [
+                  {
+                    "id": "ab-issues",
+                    "level": 3,
+                    "metricId": "complaint-rate",
+                    "title": {
+                      "ru": "Доля проблемных заездов",
+                      "en": "Problem-stay share"
+                    },
+                    "note": {
+                      "ru": "Несоответствие, отмены хостом — сильнейшие удары по доверию.",
+                      "en": "Mismatches and host cancellations — the hardest trust hits."
+                    },
+                    "children": [
+                      {
+                        "id": "ab-resolution",
+                        "level": 4,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Скорость разрешения проблем",
+                          "en": "Issue resolution speed"
+                        },
+                        "note": {
+                          "ru": "Рычаг: рефанд и пересъём за часы спасают гостя для платформы.",
+                          "en": "Lever: a refund and rebooking within hours save the guest for the platform."
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Booked Nights / GBV", "Доля прямого трафика"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Search→Book", "Повторные гости", "Активные хосты"] },
-        { "label": "Операционные", "role": "trust & safety", "items": ["Качество листингов", "Проблемные заезды", "Активация хостов"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Скорость поиска", "Аптайм платежей", "Качество матчинга"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              "Booked Nights / GBV",
+              {
+                "ru": "Доля прямого трафика",
+                "en": "Direct traffic share"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              "Search→Book",
+              {
+                "ru": "Повторные гости",
+                "en": "Repeat guests"
+              },
+              {
+                "ru": "Активные хосты",
+                "en": "Active hosts"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": "trust & safety",
+            "items": [
+              {
+                "ru": "Качество листингов",
+                "en": "Listing quality"
+              },
+              {
+                "ru": "Проблемные заезды",
+                "en": "Problem stays"
+              },
+              {
+                "ru": "Активация хостов",
+                "en": "Host activation"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Скорость поиска",
+                "en": "Search speed"
+              },
+              {
+                "ru": "Аптайм платежей",
+                "en": "Payment uptime"
+              },
+              {
+                "ru": "Качество матчинга",
+                "en": "Matching quality"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Отмены хостом", "note": "ломают доверие гостей сильнее всего" },
-        { "title": "Скрытые сборы", "note": "итоговая цена выше ожиданий — отток" }
+        {
+          "title": {
+            "ru": "Отмены хостом",
+            "en": "Host cancellations"
+          },
+          "note": {
+            "ru": "ломают доверие гостей сильнее всего",
+            "en": "they break guest trust hardest"
+          }
+        },
+        {
+          "title": {
+            "ru": "Скрытые сборы",
+            "en": "Hidden fees"
+          },
+          "note": {
+            "ru": "итоговая цена выше ожиданий — отток",
+            "en": "a final price above expectations — churn"
+          }
+        }
       ]
     }
   ]

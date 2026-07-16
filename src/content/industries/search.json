@@ -1,129 +1,1062 @@
 {
   "id": "search",
-  "archetype": "Экономика внимания",
-  "industry": "Поисковые сервисы",
-  "northStar": "Successful Sessions (доля сессий с найденным ответом)",
+  "archetype": {
+    "ru": "Экономика внимания",
+    "en": "Attention economy"
+  },
+  "industry": {
+    "ru": "Поисковые сервисы",
+    "en": "Search services"
+  },
+  "northStar": {
+    "ru": "Successful Sessions (доля сессий с найденным ответом)",
+    "en": "Successful sessions (share of sessions with an answer found)"
+  },
   "root": {
-    "id": "ss", "level": 0, "title": "Successful Sessions", "formula": "Сессии × Success Rate",
-    "note": "Нашёл ответ → вернётся → больше рекламных показов в выдаче.",
+    "id": "ss",
+    "level": 0,
+    "metricId": "search-success",
+    "title": "Successful Sessions",
+    "formula": {
+      "ru": "Сессии × Success Rate",
+      "en": "Sessions × Success rate"
+    },
+    "note": {
+      "ru": "Парадокс поиска: ценность — в быстро закрытой потребности, а не во времени в продукте. Нашёл ответ → вернётся завтра → больше рекламных показов в выдаче.",
+      "en": "The search paradox: value is a need closed fast, not time in product. Found the answer → comes back tomorrow → more ad impressions in results."
+    },
     "children": [
-      { "id": "demand", "level": 1, "title": "Спрос (запросы)", "formula": "польз. × запросы/польз.", "note": "Сколько вообще ищут.", "children": [
-        { "id": "users", "level": 2, "title": "Активные пользователи", "note": "База ищущих.", "children": [
-          { "id": "default", "level": 3, "title": "Доля «поиск по умолчанию»", "note": "Браузеры/устройства с этим поиском.", "children": [
-            { "id": "deals", "level": 4, "title": "Дистрибуционные сделки", "note": "Договоры с вендорами устройств." }
-          ] }
-        ] },
-        { "id": "qpu", "level": 2, "title": "Запросов на пользователя", "note": "Глубина привычки искать." }
-      ] },
-      { "id": "quality", "level": 1, "title": "Качество выдачи", "formula": "Success Rate", "note": "Решает, вернётся ли юзер.", "children": [
-        { "id": "relevance", "level": 2, "title": "Релевантность", "note": "Попал ли в намерение.", "children": [
-          { "id": "ctr-top", "level": 3, "title": "CTR верхних результатов", "note": "Кликают ли по первым ссылкам.", "children": [
-            { "id": "dwell", "level": 4, "title": "Dwell time", "note": "Долго ли на странице — не вернулся ли искать дальше." }
-          ] },
-          { "id": "reformulate", "level": 3, "title": "Доля переформулировок", "note": "Пришлось ли переспрашивать — плохой сигнал." }
-        ] },
-        { "id": "speed", "level": 2, "title": "Скорость выдачи", "note": "Быстро ли пришёл ответ." }
-      ] },
-      { "id": "monet", "level": 1, "title": "Монетизация", "formula": "запросы × Ad Coverage × CPC", "note": "Реклама в выдаче.", "children": [
-        { "id": "coverage", "level": 2, "title": "Ad Coverage", "note": "Доля запросов с рекламой.", "children": [
-          { "id": "ad-ctr", "level": 3, "title": "CTR рекламы", "note": "Кликают ли по объявлениям." }
-        ] },
-        { "id": "cpc", "level": 2, "title": "CPC (цена клика)", "note": "Аукционная ставка." }
-      ] }
+      {
+        "id": "demand",
+        "level": 1,
+        "title": {
+          "ru": "Спрос (запросы)",
+          "en": "Demand (queries)"
+        },
+        "formula": {
+          "ru": "пользователи × запросы/пользователя",
+          "en": "users × queries/user"
+        },
+        "note": {
+          "ru": "Сколько вообще ищут: база пользователей × глубина привычки.",
+          "en": "How much searching happens at all: user base × habit depth."
+        },
+        "children": [
+          {
+            "id": "users",
+            "level": 2,
+            "metricId": "dau-mau",
+            "title": {
+              "ru": "Активные пользователи",
+              "en": "Active users"
+            },
+            "note": {
+              "ru": "База ищущих.",
+              "en": "The searching base."
+            },
+            "children": [
+              {
+                "id": "default",
+                "level": 3,
+                "title": {
+                  "ru": "Доля «поиск по умолчанию»",
+                  "en": "Default-search share"
+                },
+                "note": {
+                  "ru": "Браузеры и устройства с этим поиском из коробки — главный канал дистрибуции.",
+                  "en": "Browsers and devices shipping with this search — the main distribution channel."
+                },
+                "children": [
+                  {
+                    "id": "deals",
+                    "level": 4,
+                    "title": {
+                      "ru": "Дистрибуционные сделки",
+                      "en": "Distribution deals"
+                    },
+                    "note": {
+                      "ru": "Договоры с вендорами устройств: покупка позиции по умолчанию.",
+                      "en": "Deals with device vendors: buying the default slot."
+                    },
+                    "children": [
+                      {
+                        "id": "tac-cost",
+                        "level": 5,
+                        "title": {
+                          "ru": "Стоимость дистрибуции",
+                          "en": "Distribution cost"
+                        },
+                        "note": {
+                          "ru": "Плата за трафик: дистрибуция — самая дорогая статья расходов поисковика.",
+                          "en": "Traffic acquisition cost: distribution is a search engine's most expensive line."
+                        },
+                        "metricId": "cac"
+                      }
+                    ],
+                    "metricId": "traffic"
+                  }
+                ],
+                "metricId": "traffic"
+              }
+            ]
+          },
+          {
+            "id": "qpu",
+            "level": 2,
+            "metricId": "sessions-per-user",
+            "title": {
+              "ru": "Запросов на пользователя",
+              "en": "Queries per user"
+            },
+            "note": {
+              "ru": "Глубина привычки искать именно здесь.",
+              "en": "How deep the habit of searching here runs."
+            }
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "quality",
+        "level": 1,
+        "title": {
+          "ru": "Качество выдачи",
+          "en": "Result quality"
+        },
+        "formula": "Success Rate",
+        "note": {
+          "ru": "Решает, вернётся ли пользователь: поиск без качества теряет привычку за недели.",
+          "en": "It decides whether the user returns: search without quality loses the habit in weeks."
+        },
+        "children": [
+          {
+            "id": "relevance",
+            "level": 2,
+            "kind": "lever",
+            "title": {
+              "ru": "Релевантность",
+              "en": "Relevance"
+            },
+            "note": {
+              "ru": "Рычаг: попал ли ранжировщик в намерение пользователя.",
+              "en": "Lever: did ranking hit the user's intent."
+            },
+            "children": [
+              {
+                "id": "ctr-top",
+                "level": 3,
+                "metricId": "ctr",
+                "title": {
+                  "ru": "CTR верхних результатов",
+                  "en": "Top-result CTR"
+                },
+                "note": {
+                  "ru": "Кликают ли по первым ссылкам — первый признак попадания.",
+                  "en": "Do people click the first links — the first sign of a hit."
+                },
+                "children": [
+                  {
+                    "id": "dwell",
+                    "level": 4,
+                    "title": "Dwell time",
+                    "note": {
+                      "ru": "Долго ли на странице: короткий клик и возврат = выдача обманула.",
+                      "en": "How long they stay: a short click and a bounce back means the results lied."
+                    },
+                    "children": [
+                      {
+                        "id": "zero-click",
+                        "level": 5,
+                        "title": {
+                          "ru": "Ответ без клика",
+                          "en": "Zero-click answers"
+                        },
+                        "note": {
+                          "ru": "Ответ прямо в выдаче: успех, который ломает все клик-метрики — считайте отдельно.",
+                          "en": "The answer right on the page: a success that breaks every click metric — count it separately."
+                        },
+                        "metricId": "dwell-time"
+                      }
+                    ],
+                    "metricId": "dwell-time"
+                  }
+                ]
+              },
+              {
+                "id": "reformulate",
+                "level": 3,
+                "title": {
+                  "ru": "Доля переформулировок",
+                  "en": "Reformulation rate"
+                },
+                "note": {
+                  "ru": "Пришлось переспрашивать — плохой сигнал: с первого раза не нашли.",
+                  "en": "They had to ask again — a bad sign: the first try failed."
+                },
+                "metricId": "search-success"
+              }
+            ]
+          },
+          {
+            "id": "speed",
+            "level": 2,
+            "metricId": "latency-p95",
+            "title": {
+              "ru": "Скорость выдачи",
+              "en": "Result speed"
+            },
+            "note": {
+              "ru": "Быстро ли пришёл ответ: в поиске задержка ощущается сильнее, чем где-либо.",
+              "en": "How fast the answer came: in search, latency is felt more sharply than anywhere else."
+            }
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "monet",
+        "level": 1,
+        "title": {
+          "ru": "Монетизация",
+          "en": "Monetization"
+        },
+        "formula": {
+          "ru": "запросы × Ad Coverage × CPC",
+          "en": "queries × Ad coverage × CPC"
+        },
+        "note": {
+          "ru": "Реклама в выдаче: платят за коммерческое намерение, а не за внимание.",
+          "en": "Ads in results: advertisers pay for commercial intent, not attention."
+        },
+        "children": [
+          {
+            "id": "coverage",
+            "level": 2,
+            "kind": "lever",
+            "title": "Ad Coverage",
+            "note": {
+              "ru": "Рычаг: доля запросов с рекламой; перебор выжигает доверие к выдаче.",
+              "en": "Lever: the share of queries with ads; overdoing it burns trust in results."
+            },
+            "children": [
+              {
+                "id": "ad-ctr",
+                "level": 3,
+                "metricId": "ctr",
+                "title": {
+                  "ru": "CTR рекламы",
+                  "en": "Ad CTR"
+                },
+                "note": {
+                  "ru": "Кликают ли по объявлениям — релевантность работает и здесь.",
+                  "en": "Do ads get clicked — relevance matters here too."
+                },
+                "children": [
+                  {
+                    "id": "ad-relevance",
+                    "level": 4,
+                    "title": {
+                      "ru": "Релевантность объявлений",
+                      "en": "Ad relevance"
+                    },
+                    "note": {
+                      "ru": "Хорошая реклама на коммерческий запрос — тоже успех сессии, а не помеха.",
+                      "en": "A good ad on a commercial query is a session success too, not an obstacle."
+                    },
+                    "metricId": "quality-score"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "cpc",
+            "level": 2,
+            "title": {
+              "ru": "CPC (цена клика)",
+              "en": "CPC (cost per click)"
+            },
+            "note": {
+              "ru": "Аукционная ставка: цену задаёт конкуренция рекламодателей за намерение.",
+              "en": "The auction bid: price is set by advertisers competing for intent."
+            },
+            "metricId": "cpc"
+          }
+        ],
+        "kind": "group"
+      }
     ]
   },
   "pyramid": {
-    "note": "От денег (вершина) к инженерии ранжирования (основание).",
+    "note": {
+      "ru": "От денег (вершина) к инженерии ранжирования (основание).",
+      "en": "From money (top) to ranking engineering (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "руководство", "items": ["Рекламная выручка", "Successful Sessions", "MAU"] },
-      { "label": "Продуктовые", "role": "продакты", "items": ["Спрос (запросы)", "Success Rate", "Ad Coverage"] },
-      { "label": "Операционные", "role": "аналитики качества", "items": ["CTR топа", "Доля переформулировок", "Dwell time"] },
-      { "label": "Платформенные", "role": "инженеры", "items": ["Латентность выдачи", "Свежесть индекса", "Аптайм"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "руководство",
+          "en": "leadership"
+        },
+        "items": [
+          {
+            "ru": "Рекламная выручка",
+            "en": "Ad revenue"
+          },
+          "Successful Sessions",
+          "MAU"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "продакты",
+          "en": "product"
+        },
+        "items": [
+          {
+            "ru": "Спрос (запросы)",
+            "en": "Demand (queries)"
+          },
+          "Success Rate",
+          "Ad Coverage"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": {
+          "ru": "аналитики качества",
+          "en": "quality analysts"
+        },
+        "items": [
+          {
+            "ru": "CTR топа",
+            "en": "Top CTR"
+          },
+          {
+            "ru": "Доля переформулировок",
+            "en": "Reformulation rate"
+          },
+          "Dwell time"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "инженеры",
+          "en": "engineers"
+        },
+        "items": [
+          {
+            "ru": "Латентность выдачи",
+            "en": "Result latency"
+          },
+          {
+            "ru": "Свежесть индекса",
+            "en": "Index freshness"
+          },
+          {
+            "ru": "Аптайм",
+            "en": "Uptime"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Доля «плохих» кликов", "note": "клик и сразу назад — выдача обманула" },
-    { "title": "Доля рекламы над органикой", "note": "перебор рекламы выжигает доверие" }
+    {
+      "title": {
+        "ru": "Доля «плохих» кликов",
+        "en": "\"Bad click\" share"
+      },
+      "note": {
+        "ru": "клик и сразу назад — выдача обманула",
+        "en": "a click and an instant bounce — the results lied"
+      }
+    },
+    {
+      "title": {
+        "ru": "Доля рекламы над органикой",
+        "en": "Ads-above-organic share"
+      },
+      "note": {
+        "ru": "перебор рекламы выжигает доверие",
+        "en": "too many ads burn trust"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "google", "name": "Google", "northStar": "Successful Sessions (веб-поиск)",
-      "note": "глобальный веб-поиск, ставка на дистрибуцию по умолчанию и рекламный аукцион.",
+      "id": "google",
+      "name": "Google",
+      "northStar": {
+        "ru": "Successful Sessions (веб-поиск)",
+        "en": "Successful sessions (web search)"
+      },
+      "note": {
+        "ru": "глобальный веб-поиск, ставка на дистрибуцию по умолчанию и рекламный аукцион.",
+        "en": "global web search, a bet on default distribution and the ad auction."
+      },
       "root": {
-        "id": "g-ss", "level": 0, "title": "Successful Sessions", "formula": "Запросы × Success Rate",
-        "note": "Масштаб запросов × качество ранжирования по всему вебу.",
+        "id": "g-ss",
+        "level": 0,
+        "metricId": "search-success",
+        "title": "Successful Sessions",
+        "formula": {
+          "ru": "Запросы × Success Rate",
+          "en": "Queries × Success rate"
+        },
+        "note": {
+          "ru": "Масштаб запросов × качество ранжирования по всему вебу.",
+          "en": "Query scale × ranking quality across the whole web."
+        },
         "children": [
-          { "id": "g-dist", "level": 1, "title": "Дистрибуция", "note": "Откуда берутся запросы.", "children": [
-            { "id": "g-default", "level": 2, "title": "Поиск по умолчанию", "note": "Сделки с Apple, Android, браузерами.", "children": [
-              { "id": "g-deal", "level": 3, "title": "Доля устройств с Google", "note": "Покрытие дистрибуции.", "children": [
-                { "id": "g-tac", "level": 4, "title": "TAC (плата за трафик)", "note": "Цена дистрибуции." }
-              ] }
-            ] }
-          ] },
-          { "id": "g-quality", "level": 1, "title": "Качество ранжирования", "note": "Сердце продукта.", "children": [
-            { "id": "g-rel", "level": 2, "title": "Релевантность", "note": "Сигналы ранжирования.", "children": [
-              { "id": "g-ctr", "level": 3, "title": "CTR топа", "note": "Клики по первым результатам.", "children": [
-                { "id": "g-short", "level": 4, "title": "Доля коротких кликов", "note": "Вернулся искать — плохо." }
-              ] }
-            ] },
-            { "id": "g-snippet", "level": 2, "title": "Featured snippets / AI-обзоры", "note": "Ответ прямо в выдаче." }
-          ] },
-          { "id": "g-ads", "level": 1, "title": "Рекламный аукцион", "note": "Основная выручка.", "children": [
-            { "id": "g-cov", "level": 2, "title": "Ad Coverage", "note": "Доля коммерческих запросов с рекламой." },
-            { "id": "g-cpc", "level": 2, "title": "CPC × Ad CTR", "note": "Доход с показа.", "children": [
-              { "id": "g-qs", "level": 3, "title": "Quality Score", "note": "Качество объявления влияет на цену." }
-            ] }
-          ] }
+          {
+            "id": "g-dist",
+            "level": 1,
+            "title": {
+              "ru": "Дистрибуция",
+              "en": "Distribution"
+            },
+            "note": {
+              "ru": "Откуда берутся запросы: поиск по умолчанию — это купленная привычка.",
+              "en": "Where queries come from: default search is a purchased habit."
+            },
+            "children": [
+              {
+                "id": "g-default",
+                "level": 2,
+                "title": {
+                  "ru": "Поиск по умолчанию",
+                  "en": "Default search"
+                },
+                "note": {
+                  "ru": "Сделки с Apple, Android, браузерами.",
+                  "en": "Deals with Apple, Android, browsers."
+                },
+                "children": [
+                  {
+                    "id": "g-deal",
+                    "level": 3,
+                    "title": {
+                      "ru": "Доля устройств с Google",
+                      "en": "Google-default device share"
+                    },
+                    "note": {
+                      "ru": "Покрытие дистрибуции по платформам.",
+                      "en": "Distribution coverage across platforms."
+                    },
+                    "children": [
+                      {
+                        "id": "g-tac",
+                        "level": 4,
+                        "title": {
+                          "ru": "TAC (плата за трафик)",
+                          "en": "TAC (traffic acquisition cost)"
+                        },
+                        "note": {
+                          "ru": "Цена дистрибуции: десятки миллиардов в год за позицию по умолчанию.",
+                          "en": "The price of distribution: tens of billions a year for the default slot."
+                        },
+                        "children": [
+                          {
+                            "id": "g-tac-share",
+                            "level": 5,
+                            "title": {
+                              "ru": "TAC к выручке",
+                              "en": "TAC as share of revenue"
+                            },
+                            "note": {
+                              "ru": "Какая доля поисковой выручки уходит за дистрибуцию — риск концентрации на одной сделке.",
+                              "en": "What share of search revenue goes to distribution — concentration risk on a single deal."
+                            },
+                            "metricId": "cac"
+                          }
+                        ],
+                        "metricId": "cac"
+                      }
+                    ],
+                    "metricId": "traffic"
+                  }
+                ],
+                "metricId": "traffic"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "g-quality",
+            "level": 1,
+            "title": {
+              "ru": "Качество ранжирования",
+              "en": "Ranking quality"
+            },
+            "note": {
+              "ru": "Сердце продукта: то, ради чего дистрибуцию вообще имеет смысл покупать.",
+              "en": "The product's heart: the reason buying distribution makes sense at all."
+            },
+            "children": [
+              {
+                "id": "g-rel",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Релевантность",
+                  "en": "Relevance"
+                },
+                "note": {
+                  "ru": "Рычаг: сигналы ранжирования и борьба с SEO-накруткой.",
+                  "en": "Lever: ranking signals and the fight against SEO manipulation."
+                },
+                "children": [
+                  {
+                    "id": "g-ctr",
+                    "level": 3,
+                    "metricId": "ctr",
+                    "title": {
+                      "ru": "CTR топа",
+                      "en": "Top CTR"
+                    },
+                    "note": {
+                      "ru": "Клики по первым результатам.",
+                      "en": "Clicks on the first results."
+                    },
+                    "children": [
+                      {
+                        "id": "g-short",
+                        "level": 4,
+                        "title": {
+                          "ru": "Доля коротких кликов",
+                          "en": "Short-click share"
+                        },
+                        "note": {
+                          "ru": "Вернулся искать дальше — значит, результат не решил задачу.",
+                          "en": "Back to searching means the result didn't solve the task."
+                        },
+                        "metricId": "dwell-time"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "g-snippet",
+                "level": 2,
+                "title": {
+                  "ru": "Featured snippets / AI-обзоры",
+                  "en": "Featured snippets / AI overviews"
+                },
+                "note": {
+                  "ru": "Ответ прямо в выдаче: удобно пользователю, но убивает клики — и по органике, и по рекламе.",
+                  "en": "The answer right in results: convenient for users, but it kills clicks — organic and paid alike."
+                },
+                "metricId": "dwell-time"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "g-ads",
+            "level": 1,
+            "title": {
+              "ru": "Рекламный аукцион",
+              "en": "Ad auction"
+            },
+            "note": {
+              "ru": "Основная выручка компании.",
+              "en": "The company's main revenue."
+            },
+            "children": [
+              {
+                "id": "g-cov",
+                "level": 2,
+                "title": "Ad Coverage",
+                "note": {
+                  "ru": "Доля коммерческих запросов с рекламой.",
+                  "en": "The share of commercial queries carrying ads."
+                },
+                "metricId": "ad-coverage"
+              },
+              {
+                "id": "g-cpc",
+                "level": 2,
+                "title": {
+                  "ru": "CPC × Ad CTR",
+                  "en": "CPC × Ad CTR"
+                },
+                "note": {
+                  "ru": "Доход с показа выдачи.",
+                  "en": "Revenue per results page."
+                },
+                "children": [
+                  {
+                    "id": "g-qs",
+                    "level": 3,
+                    "title": "Quality Score",
+                    "note": {
+                      "ru": "Качество объявления влияет на цену: релевантная реклама дешевле для рекламодателя.",
+                      "en": "Ad quality affects price: relevant ads cost the advertiser less."
+                    },
+                    "metricId": "quality-score"
+                  }
+                ],
+                "metricId": "cpc"
+              }
+            ],
+            "kind": "group"
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Ads-выручка", "Successful Sessions"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Дистрибуция", "Качество ранжирования", "Ad Coverage"] },
-        { "label": "Операционные", "role": "Search Quality", "items": ["CTR топа", "Короткие клики", "Quality Score"] },
-        { "label": "Платформенные", "role": "инфраструктура", "items": ["Латентность", "Свежесть индекса веба", "Аптайм"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Ads-выручка",
+                "en": "Ads revenue"
+              },
+              "Successful Sessions"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Дистрибуция",
+                "en": "Distribution"
+              },
+              {
+                "ru": "Качество ранжирования",
+                "en": "Ranking quality"
+              },
+              "Ad Coverage"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": "Search Quality",
+            "items": [
+              {
+                "ru": "CTR топа",
+                "en": "Top CTR"
+              },
+              {
+                "ru": "Короткие клики",
+                "en": "Short clicks"
+              },
+              "Quality Score"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инфраструктура",
+              "en": "infrastructure"
+            },
+            "items": [
+              {
+                "ru": "Латентность",
+                "en": "Latency"
+              },
+              {
+                "ru": "Свежесть индекса веба",
+                "en": "Web index freshness"
+              },
+              {
+                "ru": "Аптайм",
+                "en": "Uptime"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Доля спам-сайтов в топе", "note": "SEO-накрутка портит выдачу" },
-        { "title": "Перегруз рекламой", "note": "много объявлений над органикой — отток доверия" }
+        {
+          "title": {
+            "ru": "Доля спам-сайтов в топе",
+            "en": "Spam-site share in top results"
+          },
+          "note": {
+            "ru": "SEO-накрутка портит выдачу",
+            "en": "SEO manipulation degrades results"
+          }
+        },
+        {
+          "title": {
+            "ru": "Перегруз рекламой",
+            "en": "Ad overload"
+          },
+          "note": {
+            "ru": "много объявлений над органикой — отток доверия",
+            "en": "too many ads above organic — trust erodes"
+          }
+        }
       ]
     },
     {
-      "id": "yandex", "name": "Яндекс", "northStar": "Successful Sessions (поиск + экосистема)",
-      "note": "локальный поиск внутри экосистемы; ключ — локальная релевантность и переходы в сервисы.",
+      "id": "yandex",
+      "name": {
+        "ru": "Яндекс",
+        "en": "Yandex"
+      },
+      "northStar": {
+        "ru": "Successful Sessions (поиск + экосистема)",
+        "en": "Successful sessions (search + ecosystem)"
+      },
+      "note": {
+        "ru": "локальный поиск внутри экосистемы; ключ — локальная релевантность и переходы в сервисы.",
+        "en": "local search inside an ecosystem; local relevance and hand-offs into services are the keys."
+      },
       "root": {
-        "id": "y-ss", "level": 0, "title": "Successful Sessions", "formula": "Запросы × Success Rate",
-        "note": "Локальная релевантность + втягивание в сервисы экосистемы.",
+        "id": "y-ss",
+        "level": 0,
+        "metricId": "search-success",
+        "title": "Successful Sessions",
+        "formula": {
+          "ru": "Запросы × Success Rate",
+          "en": "Queries × Success rate"
+        },
+        "note": {
+          "ru": "Локальная релевантность + втягивание в сервисы экосистемы.",
+          "en": "Local relevance + pulling users into ecosystem services."
+        },
         "children": [
-          { "id": "y-eco", "level": 1, "title": "Экосистемная дистрибуция", "note": "Поиск как вход в сервисы.", "children": [
-            { "id": "y-portal", "level": 2, "title": "Трафик с Главной/Браузера", "note": "Свои точки входа.", "children": [
-              { "id": "y-plus", "level": 3, "title": "Подписка Плюс", "note": "Связывает сервисы.", "children": [
-                { "id": "y-cross", "level": 4, "title": "Сервисов на пользователя", "note": "Глубина экосистемы." }
-              ] }
-            ] }
-          ] },
-          { "id": "y-quality", "level": 1, "title": "Локальное качество", "note": "Русскоязычная морфология и гео.", "children": [
-            { "id": "y-rel", "level": 2, "title": "Релевантность", "note": "Учёт языка и региона.", "children": [
-              { "id": "y-ctr", "level": 3, "title": "CTR топа", "note": "Клики по первым результатам.", "children": [
-                { "id": "y-reform", "level": 4, "title": "Переформулировки", "note": "Переспросы — плохой сигнал." }
-              ] }
-            ] },
-            { "id": "y-vertical", "level": 2, "title": "Колдунщики (вертикали)", "note": "Погода, карты, маркет прямо в выдаче." }
-          ] },
-          { "id": "y-monet", "level": 1, "title": "Монетизация", "note": "Директ-аукцион.", "children": [
-            { "id": "y-cov", "level": 2, "title": "Ad Coverage", "note": "Доля запросов с рекламой." },
-            { "id": "y-cpc", "level": 2, "title": "CPC × CTR", "note": "Доход с показа." }
-          ] }
+          {
+            "id": "y-eco",
+            "level": 1,
+            "title": {
+              "ru": "Экосистемная дистрибуция",
+              "en": "Ecosystem distribution"
+            },
+            "note": {
+              "ru": "Поиск как вход в сервисы: свои точки входа вместо покупки чужих.",
+              "en": "Search as the door to services: owning entry points instead of buying others'."
+            },
+            "children": [
+              {
+                "id": "y-portal",
+                "level": 2,
+                "title": {
+                  "ru": "Трафик с Главной/Браузера",
+                  "en": "Portal/browser traffic"
+                },
+                "note": {
+                  "ru": "Свои точки входа — дистрибуция без платы вендорам.",
+                  "en": "Owned entry points — distribution without paying vendors."
+                },
+                "children": [
+                  {
+                    "id": "y-plus",
+                    "level": 3,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Подписка Плюс",
+                      "en": "Plus subscription"
+                    },
+                    "note": {
+                      "ru": "Рычаг: кэшбэк связывает сервисы и удерживает в экосистеме.",
+                      "en": "Lever: cashback binds the services and locks users into the ecosystem."
+                    },
+                    "children": [
+                      {
+                        "id": "y-cross",
+                        "level": 4,
+                        "title": {
+                          "ru": "Сервисов на пользователя",
+                          "en": "Services per user"
+                        },
+                        "note": {
+                          "ru": "Глубина экосистемы: каждый сервис снижает отток из остальных.",
+                          "en": "Ecosystem depth: each service lowers churn from the others."
+                        },
+                        "children": [
+                          {
+                            "id": "y-search-share",
+                            "level": 5,
+                            "title": {
+                              "ru": "Доля поиска у экосистемных",
+                              "en": "Search share among ecosystem users"
+                            },
+                            "note": {
+                              "ru": "Пользователи Плюса ищут здесь чаще — измеримый эффект экосистемы на ядро.",
+                              "en": "Plus users search here more often — the ecosystem's measurable effect on the core."
+                            },
+                            "metricId": "traffic"
+                          }
+                        ],
+                        "metricId": "products-per-customer"
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "traffic"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "y-quality",
+            "level": 1,
+            "title": {
+              "ru": "Локальное качество",
+              "en": "Local quality"
+            },
+            "note": {
+              "ru": "Русскоязычная морфология и гео — там, где глобальный поиск слабее.",
+              "en": "Russian morphology and geo — where global search is weaker."
+            },
+            "children": [
+              {
+                "id": "y-rel",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Релевантность",
+                  "en": "Relevance"
+                },
+                "note": {
+                  "ru": "Рычаг: учёт языка и региона в ранжировании.",
+                  "en": "Lever: language and region factored into ranking."
+                },
+                "children": [
+                  {
+                    "id": "y-ctr",
+                    "level": 3,
+                    "metricId": "ctr",
+                    "title": {
+                      "ru": "CTR топа",
+                      "en": "Top CTR"
+                    },
+                    "note": {
+                      "ru": "Клики по первым результатам.",
+                      "en": "Clicks on the first results."
+                    },
+                    "children": [
+                      {
+                        "id": "y-reform",
+                        "level": 4,
+                        "title": {
+                          "ru": "Переформулировки",
+                          "en": "Reformulations"
+                        },
+                        "note": {
+                          "ru": "Переспросы — плохой сигнал качества выдачи.",
+                          "en": "Re-asking is a bad quality signal."
+                        },
+                        "metricId": "search-success"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "y-vertical",
+                "level": 2,
+                "title": {
+                  "ru": "Колдунщики (вертикали)",
+                  "en": "Vertical blocks"
+                },
+                "note": {
+                  "ru": "Погода, карты, маркет прямо в выдаче: ответ без клика и вход в свои сервисы.",
+                  "en": "Weather, maps, marketplace right in results: a zero-click answer and a door to own services."
+                },
+                "metricId": "dwell-time"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "y-monet",
+            "level": 1,
+            "title": {
+              "ru": "Монетизация",
+              "en": "Monetization"
+            },
+            "note": {
+              "ru": "Рекламный аукцион.",
+              "en": "The ad auction."
+            },
+            "children": [
+              {
+                "id": "y-cov",
+                "level": 2,
+                "title": "Ad Coverage",
+                "note": {
+                  "ru": "Доля запросов с рекламой.",
+                  "en": "The share of queries with ads."
+                },
+                "metricId": "ad-coverage"
+              },
+              {
+                "id": "y-cpc",
+                "level": 2,
+                "title": {
+                  "ru": "CPC × CTR",
+                  "en": "CPC × CTR"
+                },
+                "note": {
+                  "ru": "Доход с показа.",
+                  "en": "Revenue per impression."
+                },
+                "metricId": "cpc"
+              }
+            ],
+            "kind": "group"
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка Поиска", "Successful Sessions", "Доля рынка РФ"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Экосистемный трафик", "Локальная релевантность", "Колдунщики"] },
-        { "label": "Операционные", "role": "качество", "items": ["CTR топа", "Переформулировки", "Cross-use сервисов"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Латентность", "Свежесть индекса", "Аптайм"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Выручка Поиска",
+                "en": "Search revenue"
+              },
+              "Successful Sessions",
+              {
+                "ru": "Доля рынка РФ",
+                "en": "Russian market share"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Экосистемный трафик",
+                "en": "Ecosystem traffic"
+              },
+              {
+                "ru": "Локальная релевантность",
+                "en": "Local relevance"
+              },
+              {
+                "ru": "Колдунщики",
+                "en": "Vertical blocks"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "качество",
+              "en": "quality"
+            },
+            "items": [
+              {
+                "ru": "CTR топа",
+                "en": "Top CTR"
+              },
+              {
+                "ru": "Переформулировки",
+                "en": "Reformulations"
+              },
+              {
+                "ru": "Cross-use сервисов",
+                "en": "Service cross-use"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Латентность",
+                "en": "Latency"
+              },
+              {
+                "ru": "Свежесть индекса",
+                "en": "Index freshness"
+              },
+              {
+                "ru": "Аптайм",
+                "en": "Uptime"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Перекос в свои сервисы", "note": "продвижение себя в ущерб релевантности" },
-        { "title": "Доля спама в топе", "note": "качество выдачи" }
+        {
+          "title": {
+            "ru": "Перекос в свои сервисы",
+            "en": "Self-preferencing"
+          },
+          "note": {
+            "ru": "продвижение себя в ущерб релевантности",
+            "en": "promoting your own at relevance's expense"
+          }
+        },
+        {
+          "title": {
+            "ru": "Доля спама в топе",
+            "en": "Spam share in top results"
+          },
+          "note": {
+            "ru": "качество выдачи",
+            "en": "result quality"
+          }
+        }
       ]
     }
   ]

@@ -1,0 +1,152 @@
+[
+  {
+    "id": "nps-csat",
+    "category": "quality",
+    "title": { "ru": "NPS / CSAT — лояльность и удовлетворённость", "en": "NPS / CSAT — loyalty and satisfaction" },
+    "aliases": ["nps", "csat", "лояльность"],
+    "tex": { "ru": "\\mathrm{NPS}=\\%\\text{промоутеров}-\\%\\text{критиков}", "en": "\\mathrm{NPS}=\\%\\text{promoters}-\\%\\text{detractors}" },
+    "desc": {
+      "ru": "Опросные метрики отношения: NPS («порекомендуете ли?», шкала 0–10: 9–10 промоутеры, 0–6 критики) меряет лояльность, CSAT («насколько довольны?») — удовлетворённость конкретным опытом. Дополняют поведенческие метрики стороной «что человек чувствует».",
+      "en": "Survey-based attitude metrics: NPS (\"would you recommend?\", 0–10 scale: 9–10 promoters, 0–6 detractors) measures loyalty, CSAT (\"how satisfied were you?\") measures satisfaction with a specific experience. They complement behavioral metrics with \"how it felt\"."
+    },
+    "pitfalls": {
+      "ru": [
+        "Отвечают не все — и не случайные: смещение выборки (survivorship + selection) закладывается в саму цифру.",
+        "NPS чувствителен к моменту опроса: после успешной доставки и после инцидента — разные вселенные.",
+        "Абсолютное значение малоинформативно; работают тренд и сравнение сегментов при одинаковой методике."
+      ],
+      "en": [
+        "Not everyone answers — and not at random: sampling bias (survivorship + selection) is baked into the number.",
+        "NPS is timing-sensitive: after a successful delivery vs after an incident are different universes.",
+        "The absolute value says little; the trend and segment comparison under an identical methodology do the work."
+      ]
+    },
+    "sql": "-- NPS from survey events (score in props)\nSELECT date_trunc('month', ts) AS month,\n       COUNT(*) AS responses,\n       ROUND(100.0 * (COUNT(*) FILTER (WHERE (props->>'score')::int >= 9)\n         - COUNT(*) FILTER (WHERE (props->>'score')::int <= 6))\n         / COUNT(*), 1) AS nps\nFROM events\nWHERE event_name = 'nps_response'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["complaint-rate", "search-success", "retention-n-day"]
+  },
+  {
+    "id": "return-rate",
+    "category": "quality",
+    "title": { "ru": "Доля возвратов", "en": "Return rate" },
+    "aliases": ["возвраты"],
+    "tex": { "ru": "\\text{Return Rate}=\\dfrac{\\text{возвращённые заказы (или деньги)}}{\\text{все заказы (или выручка)}}", "en": "\\text{Return rate}=\\dfrac{\\text{returned orders (or money)}}{\\text{all orders (or revenue)}}" },
+    "desc": {
+      "ru": "Какая доля проданного возвращается. Классическая контр-метрика e-commerce: выручка с последующим возвратом — фиктивная, а обратная логистика съедает маржу. В fashion с примеркой возврат — часть модели, и тогда важна не сама доля, а её динамика.",
+      "en": "What share of what's sold comes back. The classic e-commerce counter-metric: revenue that later returns is fictitious, and reverse logistics eats the margin. In try-on fashion returns are part of the model — then the trend matters more than the level."
+    },
+    "pitfalls": {
+      "ru": [
+        "Возвраты приходят с лагом недель — свежие месяцы всегда выглядят лучше, чем окажутся.",
+        "Доля по заказам и по деньгам расходится: возвращают чаще дорогое.",
+        "Ужесточение правил возврата снижает метрику и одновременно LTV — проверяйте эффект на повторных покупках."
+      ],
+      "en": [
+        "Returns arrive with weeks of lag — recent months always look better than they'll end up.",
+        "Order-based and money-based shares diverge: expensive items get returned more.",
+        "Tightening return policy lowers the metric and LTV at the same time — check the effect on repeat purchases."
+      ]
+    },
+    "sql": "-- Return rate by cohort month of the order (accounting for lag)\nSELECT date_trunc('month', created_at) AS order_month,\n       COUNT(*) AS orders,\n       COUNT(*) FILTER (WHERE status = 'returned') AS returned,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE status = 'returned') / COUNT(*), 1) AS return_rate_pct,\n       ROUND(100.0 * SUM(amount) FILTER (WHERE status = 'returned')\n             / NULLIF(SUM(amount), 0), 1) AS return_rate_money_pct\nFROM orders\nGROUP BY 1\nORDER BY 1;",
+    "related": ["gross-margin", "complaint-rate", "gmv"]
+  },
+  {
+    "id": "complaint-rate",
+    "category": "quality",
+    "title": { "ru": "Доля жалоб / тикетов", "en": "Complaint / ticket rate" },
+    "aliases": ["жалобы", "contact rate"],
+    "tex": { "ru": "\\text{Complaint Rate}=\\dfrac{\\text{обращения с проблемой}}{\\text{заказы (или сессии)}}", "en": "\\text{Complaint rate}=\\dfrac{\\text{problem contacts}}{\\text{orders (or sessions)}}" },
+    "desc": {
+      "ru": "Сколько заказов заканчивается обращением в поддержку с проблемой. Guardrail операционного качества: главная метрика может расти, пока клиентский опыт тихо разваливается — жалобы ловят это первыми.",
+      "en": "How many orders end in a support contact about a problem. An operational-quality guardrail: the headline metric can grow while customer experience quietly falls apart — complaints catch it first."
+    },
+    "pitfalls": {
+      "ru": [
+        "Молчаливое большинство не жалуется — просто уходит; жалобы это нижняя оценка проблем.",
+        "Спрятали кнопку поддержки — жалоб «стало меньше»; следите за доступностью канала.",
+        "Смешивать вопросы («где заказ?») и проблемы («привезли не то») — терять сигнал; классифицируйте обращения."
+      ],
+      "en": [
+        "The silent majority doesn't complain — it just leaves; complaints are a lower bound on problems.",
+        "Hide the support button and complaints \"drop\"; watch channel accessibility.",
+        "Mixing questions (\"where is my order?\") with problems (\"wrong item\") destroys the signal; classify contacts."
+      ]
+    },
+    "sql": "-- Complaints per 100 orders by month and top categories\nWITH tickets AS (\n  SELECT date_trunc('month', ts) AS month,\n         props->>'category' AS category,\n         COUNT(*) AS cnt\n  FROM events\n  WHERE event_name = 'support_ticket' AND props->>'type' = 'problem'\n  GROUP BY 1, 2\n),\nord AS (\n  SELECT date_trunc('month', created_at) AS month, COUNT(*) AS orders\n  FROM orders GROUP BY 1\n)\nSELECT t.month, t.category, t.cnt,\n       ROUND(100.0 * t.cnt / NULLIF(o.orders, 0), 2) AS per_100_orders\nFROM tickets t\nJOIN ord o USING (month)\nORDER BY t.month, t.cnt DESC;",
+    "related": ["nps-csat", "return-rate", "cancellation-rate"]
+  },
+  {
+    "id": "cancellation-rate",
+    "category": "quality",
+    "title": { "ru": "Доля отмен", "en": "Cancellation rate" },
+    "aliases": ["отмены"],
+    "tex": { "ru": "\\text{Cancel Rate}=\\dfrac{\\text{отменённые заказы}}{\\text{созданные заказы}}", "en": "\\text{Cancel rate}=\\dfrac{\\text{cancelled orders}}{\\text{created orders}}" },
+    "desc": {
+      "ru": "Какая доля созданных заказов не доживает до выполнения. Для on-demand платформ — метрика операционного здоровья номер один: отмена значит, что платформа пообещала и не выполнила, и бьёт сразу по обеим сторонам.",
+      "en": "What share of created orders never reaches completion. For on-demand platforms the number-one operational health metric: a cancellation means the platform promised and failed, hurting both sides at once."
+    },
+    "pitfalls": {
+      "ru": [
+        "Отмены пользователем, исполнителем и системой — три разные болезни; лечите их раздельно.",
+        "Ранняя отмена (передумал за минуту) и поздняя (курьер не приехал) несравнимы по ущербу — взвешивайте по стадии.",
+        "Снижение отмен запретом отменять — накрутка: недовольство уйдёт в жалобы и отток."
+      ],
+      "en": [
+        "User, provider and system cancellations are three different diseases; treat them separately.",
+        "An early cancel (changed mind in a minute) and a late one (courier never came) are incomparable in damage — weight by stage.",
+        "Cutting cancellations by forbidding them is gaming: the frustration resurfaces as complaints and churn."
+      ]
+    },
+    "sql": "-- Cancellation rate by initiator and stage\nSELECT date_trunc('week', created_at) AS week,\n       props->>'cancelled_by' AS cancelled_by,\n       COUNT(*) FILTER (WHERE status = 'cancelled') AS cancelled,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE status = 'cancelled')\n             / SUM(COUNT(*)) OVER (PARTITION BY date_trunc('week', created_at)), 2) AS share_of_created_pct\nFROM orders\nGROUP BY 1, 2\nORDER BY 1, 3 DESC;",
+    "related": ["completed-orders", "liquidity", "complaint-rate"]
+  },
+  {
+    "id": "oos-rate",
+    "category": "quality",
+    "title": { "ru": "Out-of-Stock — доступность товара", "en": "Out-of-stock rate" },
+    "aliases": ["oos", "доступность товара"],
+    "tex": { "ru": "\\mathrm{OOS}=\\dfrac{\\text{товары (или показы) без наличия}}{\\text{все товары (показы)}}", "en": "\\mathrm{OOS}=\\dfrac{\\text{items (or views) without stock}}{\\text{all items (views)}}" },
+    "desc": {
+      "ru": "Доля спроса, упирающегося в отсутствие товара: нет размера, позиция закончилась, слот занят. Тихий убийца конверсии: пользователь ничего не скажет — просто уйдёт туда, где есть.",
+      "en": "The share of demand hitting missing stock: no size, item sold out, slot taken. A silent conversion killer: users won't say anything — they'll just go where it's in stock."
+    },
+    "pitfalls": {
+      "ru": [
+        "OOS по каталогу и OOS, взвешенный по спросу, — разные метрики: важно отсутствие ходовых позиций, а не хвоста.",
+        "Перезаклад против OOS — замороженные деньги и списания; оптимум ищется вместе с оборачиваемостью.",
+        "Виртуальный сток (система думает, что есть, а на складе нет) не виден в метрике до жалоб — сверяйте с инвентаризацией."
+      ],
+      "en": [
+        "Catalog OOS and demand-weighted OOS are different metrics: what matters is missing bestsellers, not the tail.",
+        "Overstocking against OOS freezes cash and causes write-offs; the optimum is found together with inventory turnover.",
+        "Phantom stock (system says yes, warehouse says no) is invisible until complaints — reconcile with stocktakes."
+      ]
+    },
+    "sql": "-- Demand-weighted OOS: product views that hit \"out of stock\"\nSELECT date_trunc('day', ts) AS day,\n       COUNT(*) FILTER (WHERE event_name = 'product_view') AS views,\n       COUNT(*) FILTER (WHERE event_name = 'oos_view') AS oos_views,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE event_name = 'oos_view')\n             / NULLIF(COUNT(*) FILTER (WHERE event_name IN ('product_view', 'oos_view')), 0), 2) AS oos_pct\nFROM events\nGROUP BY 1\nORDER BY 1;",
+    "related": ["conversion-rate", "active-listings", "return-rate"]
+  },
+  {
+    "id": "fraud-rate",
+    "category": "quality",
+    "title": { "ru": "Fraud Rate — доля фрода", "en": "Fraud rate" },
+    "aliases": ["фрод", "мошенничество"],
+    "tex": { "ru": "\\text{Fraud Rate}=\\dfrac{\\text{мошеннические операции (или деньги)}}{\\text{все операции}}", "en": "\\text{Fraud rate}=\\dfrac{\\text{fraudulent transactions (or money)}}{\\text{all transactions}}" },
+    "desc": {
+      "ru": "Доля мошеннических операций в объёме. Guardrail финтеха и платёжных платформ: рост TPV с ростом фрода — это рост будущих чарджбэков, штрафов и блокировок со стороны платёжных систем.",
+      "en": "The share of fraudulent operations in the volume. The guardrail of fintech and payment platforms: TPV growth with rising fraud is growth of future chargebacks, fines and card-network penalties."
+    },
+    "pitfalls": {
+      "ru": [
+        "Фрод виден с лагом чарджбэков (до 120 дней) — текущий месяц всегда «чистый»; смотрите по когортам транзакций.",
+        "Пережатый антифрод режет честных (false positives) — держите рядом долю ложных отклонений.",
+        "Мошенники адаптируются: стабильная метрика при растущем объёме может значить, что вы просто перестали ловить."
+      ],
+      "en": [
+        "Fraud shows up with chargeback lag (up to 120 days) — the current month always looks \"clean\"; use transaction cohorts.",
+        "An over-tightened antifraud cuts honest users (false positives) — track the false-decline share next to it.",
+        "Fraudsters adapt: a flat metric on growing volume may mean you simply stopped catching them."
+      ]
+    },
+    "sql": "-- Fraud rate by transaction cohort month (chargeback lag aware)\nSELECT date_trunc('month', created_at) AS txn_month,\n       COUNT(*) AS transactions,\n       COUNT(*) FILTER (WHERE props->>'fraud_flag' = 'true') AS fraud_txns,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE props->>'fraud_flag' = 'true') / COUNT(*), 3) AS fraud_rate_pct,\n       ROUND(100.0 * SUM(amount) FILTER (WHERE props->>'fraud_flag' = 'true')\n             / NULLIF(SUM(amount), 0), 3) AS fraud_money_pct\nFROM orders\nGROUP BY 1\nORDER BY 1;",
+    "related": ["cancellation-rate", "complaint-rate"]
+  }
+]

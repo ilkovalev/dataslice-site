@@ -1,0 +1,277 @@
+[
+  {
+    "id": "nim",
+    "category": "finance",
+    "title": { "ru": "NIM — процентная маржа", "en": "NIM — net interest margin" },
+    "aliases": ["процентный доход", "чистая процентная маржа"],
+    "tex": { "ru": "\\mathrm{NIM}=\\dfrac{\\text{процентные доходы}-\\text{процентные расходы}}{\\text{работающие активы}}", "en": "\\mathrm{NIM}=\\dfrac{\\text{interest income}-\\text{interest expense}}{\\text{earning assets}}" },
+    "desc": {
+      "ru": "Разница между тем, сколько банк зарабатывает на кредитах, и тем, сколько платит за деньги (вклады, фондирование). Основной источник дохода классического банка: остатки клиентов — это дешёвое сырьё, кредиты — продукт, а NIM — маржа между ними.",
+      "en": "The gap between what the bank earns on loans and what it pays for money (deposits, funding). The classic bank's main income source: customer balances are cheap raw material, loans are the product, and NIM is the margin between them."
+    },
+    "pitfalls": {
+      "ru": [
+        "NIM без стоимости риска обманывает: выдать под высокий процент легко, вопрос — вернут ли.",
+        "Метрика чувствительна к ключевой ставке: рост NIM может быть заслугой ЦБ, а не банка.",
+        "Дешёвые остатки на текущих счетах — конкурентное преимущество, которое исчезает, когда клиент перестаёт считать банк основным."
+      ],
+      "en": [
+        "NIM without the cost of risk deceives: lending at a high rate is easy — the question is repayment.",
+        "It's rate-sensitive: rising NIM can be the central bank's doing, not the bank's.",
+        "Cheap current-account balances are an advantage that vanishes once the customer stops treating you as their primary bank."
+      ]
+    },
+    "sql": "-- NIM and risk-adjusted margin by month\nSELECT date_trunc('month', ts) AS month,\n       SUM((props->>'interest_income')::numeric) AS interest_income,\n       SUM((props->>'interest_expense')::numeric) AS interest_expense,\n       ROUND(100.0 * (SUM((props->>'interest_income')::numeric)\n                    - SUM((props->>'interest_expense')::numeric))\n             / NULLIF(SUM((props->>'earning_assets')::numeric), 0), 2) AS nim_pct,\n       ROUND(100.0 * (SUM((props->>'interest_income')::numeric)\n                    - SUM((props->>'interest_expense')::numeric)\n                    - SUM((props->>'provisions')::numeric))\n             / NULLIF(SUM((props->>'earning_assets')::numeric), 0), 2) AS risk_adjusted_nim_pct\nFROM events\nWHERE event_name = 'bank_monthly_pnl'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["cost-of-risk", "deposits", "tpv"]
+  },
+  {
+    "id": "deposits",
+    "category": "finance",
+    "title": { "ru": "Остатки на счетах", "en": "Account balances (deposits)" },
+    "aliases": ["остатки", "депозиты", "предоплаченный баланс"],
+    "tex": { "ru": "\\text{Остатки}=\\text{средний дневной баланс клиентов}", "en": "\\text{Balances}=\\text{average daily customer balance}" },
+    "desc": {
+      "ru": "Сколько денег клиенты держат на счетах. Для банка это сырьё: чем больше дешёвых остатков, тем дешевле фондировать кредиты. Тот же механизм работает и вне банков — предоплаченный баланс на картах лояльности это беспроцентный кредит от клиентов бизнесу.",
+      "en": "How much money customers keep on their accounts. For a bank it's raw material: the more cheap balances, the cheaper it is to fund loans. The same mechanism works outside banks — preloaded loyalty-card balances are an interest-free loan from customers to the business."
+    },
+    "pitfalls": {
+      "ru": [
+        "Средний остаток прячет концентрацию: несколько крупных клиентов могут держать треть пассивов — риск при их уходе.",
+        "Срочные вклады дороже текущих счетов: рост остатков за счёт депозитов под высокий процент ухудшает NIM.",
+        "Остатки уходят быстрее, чем приходят: отток пассивов — самый быстрый риск в банке."
+      ],
+      "en": [
+        "The average balance hides concentration: a few large clients can hold a third of liabilities — a risk when they leave.",
+        "Term deposits cost more than current accounts: balance growth from high-rate deposits worsens NIM.",
+        "Balances leave faster than they arrive: deposit outflow is a bank's fastest-moving risk."
+      ]
+    },
+    "sql": "-- Average balances by product type and concentration\nSELECT props->>'account_type' AS account_type,\n       COUNT(DISTINCT user_id) AS customers,\n       ROUND(AVG((props->>'balance')::numeric), 0) AS avg_balance,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY (props->>'balance')::numeric) AS median_balance,\n       ROUND(100.0 * SUM((props->>'balance')::numeric) FILTER (\n         WHERE (props->>'balance')::numeric > 1000000)\n         / NULLIF(SUM((props->>'balance')::numeric), 0), 1) AS top_clients_share_pct\nFROM events\nWHERE event_name = 'account_daily_snapshot'\n  AND ts = (SELECT MAX(ts) FROM events WHERE event_name = 'account_daily_snapshot')\nGROUP BY 1;",
+    "related": ["nim", "tpv", "products-per-customer"]
+  },
+  {
+    "id": "products-per-customer",
+    "category": "finance",
+    "title": { "ru": "Продуктов на клиента", "en": "Products per customer" },
+    "aliases": ["кросс-продажи", "сервисов на пользователя"],
+    "tex": { "ru": "\\text{Продуктов}=\\dfrac{\\text{активные продукты}}{\\text{активные клиенты}}", "en": "\\text{Products}=\\dfrac{\\text{active products}}{\\text{active customers}}" },
+    "desc": {
+      "ru": "Сколько продуктов экосистемы использует средний клиент. Прокси глубины отношений: каждый следующий продукт повышает LTV и одновременно снижает отток из всех остальных — уходить становится дорого, потому что переносить надо всё сразу.",
+      "en": "How many ecosystem products an average customer uses. A proxy for relationship depth: each additional product raises LTV and simultaneously lowers churn from all the others — leaving gets expensive because everything has to move at once."
+    },
+    "pitfalls": {
+      "ru": [
+        "Навязанные продукты считаются, но не используются: смотрите активные продукты, а не открытые.",
+        "Корреляция путается с причинностью: лояльные берут больше продуктов, а не продукты делают лояльным — проверяется экспериментом.",
+        "Перебор с офферами раздражает и бьёт по NPS быстрее, чем растит кросс-продажи."
+      ],
+      "en": [
+        "Pushed products count but go unused: track active products, not opened ones.",
+        "Correlation gets mistaken for causation: loyal customers take more products, rather than products creating loyalty — test it with an experiment.",
+        "Offer overload annoys and hits NPS faster than it grows cross-sell."
+      ]
+    },
+    "sql": "-- Products per customer and the retention link\nWITH per_user AS (\n  SELECT user_id,\n         COUNT(DISTINCT props->>'product') FILTER (\n           WHERE (props->>'active')::boolean) AS products\n  FROM events\n  WHERE event_name = 'product_snapshot'\n  GROUP BY 1\n)\nSELECT products,\n       COUNT(*) AS customers,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE EXISTS (\n         SELECT 1 FROM events e WHERE e.user_id = per_user.user_id\n           AND e.ts >= now() - INTERVAL '30 days')) / COUNT(*), 1) AS active_30d_pct\nFROM per_user\nGROUP BY 1\nORDER BY 1;",
+    "related": ["deposits", "ltv", "churn-rate", "arpu"]
+  },
+  {
+    "id": "unit-payback",
+    "category": "finance",
+    "title": { "ru": "Окупаемость точки", "en": "Location payback" },
+    "aliases": ["юнит-экономика франчайзи", "окупаемость пиццерии"],
+    "tex": { "ru": "\\text{Payback}=\\dfrac{\\text{инвестиции в точку}}{\\text{месячная прибыль точки}}", "en": "\\text{Payback}=\\dfrac{\\text{investment per location}}{\\text{monthly location profit}}" },
+    "desc": {
+      "ru": "За сколько месяцев точка возвращает вложенное в её открытие. Двигатель франшизной модели: пока окупаемость короткая и предсказуемая, франчайзи выстраиваются в очередь и сеть растёт их деньгами; как только она растягивается — экспансия останавливается сама собой.",
+      "en": "How many months a location takes to repay its opening investment. The engine of the franchise model: while payback is short and predictable, franchisees queue up and the chain grows on their money; once it stretches, expansion stops by itself."
+    },
+    "pitfalls": {
+      "ru": [
+        "Средняя окупаемость по сети бесполезна для решения: она зависит от локации, и решение принимается по конкретному адресу.",
+        "Каннибализация не попадает в расчёт новой точки: она окупается, отняв выручку у соседней.",
+        "Окупаемость на бумаге считают по плановой выручке — сверяйте с фактом когорт открытий."
+      ],
+      "en": [
+        "A chain-average payback is useless for decisions: it depends on the site, and the decision is made per address.",
+        "Cannibalization doesn't enter the new location's math: it pays back by taking a neighbor's revenue.",
+        "Paper payback uses planned revenue — reconcile it with actual opening cohorts."
+      ]
+    },
+    "sql": "-- Payback by opening cohort, actual vs plan\nWITH monthly AS (\n  SELECT props->>'location_id' AS location_id,\n         date_trunc('month', created_at) AS month,\n         SUM(amount) - SUM((props->>'location_costs')::numeric) AS profit\n  FROM orders WHERE status = 'paid'\n  GROUP BY 1, 2\n),\ncum AS (\n  SELECT location_id, month,\n         SUM(profit) OVER (PARTITION BY location_id ORDER BY month) AS cum_profit,\n         ROW_NUMBER() OVER (PARTITION BY location_id ORDER BY month) AS month_n\n  FROM monthly\n)\nSELECT PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY month_n) AS median_payback_months\nFROM cum\nWHERE cum_profit >= 5000000;",
+    "related": ["payback-period", "total-sales", "contribution-margin", "same-store-sales"]
+  },
+  {
+    "id": "hourly-earnings",
+    "category": "finance",
+    "title": { "ru": "Заработок исполнителя в час", "en": "Provider hourly earnings" },
+    "aliases": ["заработок в час", "earnings per hour"],
+    "tex": { "ru": "\\text{Заработок/час}=\\dfrac{\\text{выплаты за смену}}{\\text{часы онлайн}}", "en": "\\text{Earnings/hour}=\\dfrac{\\text{shift payouts}}{\\text{online hours}}" },
+    "desc": {
+      "ru": "Сколько зарабатывает водитель или курьер за час на линии. Метрика второй стороны платформы, которую легко забыть, оптимизируя клиентский опыт: упадёт заработок — уйдут исполнители, вырастет ETA, уйдут клиенты.",
+      "en": "How much a driver or courier earns per hour online. The platform's supply-side metric, easily forgotten while optimizing customer experience: earnings fall, providers leave, ETA rises, customers leave."
+    },
+    "pitfalls": {
+      "ru": [
+        "Считать надо после расходов исполнителя (бензин, амортизация, комиссия) — «грязный» заработок вводит в заблуждение.",
+        "Среднее прячет разброс по часам: заработок в пик и в мёртвый день отличается кратно.",
+        "Бонусы и гарантии временно поднимают метрику: смотрите базовый заработок отдельно от субсидий."
+      ],
+      "en": [
+        "Compute it after the provider's costs (fuel, wear, commission) — gross earnings mislead.",
+        "The average hides hourly spread: peak and dead-hour earnings differ several-fold.",
+        "Bonuses and guarantees lift the metric temporarily: track base earnings separately from subsidies."
+      ]
+    },
+    "sql": "-- Net hourly earnings by week, base vs bonuses\nSELECT date_trunc('week', ts) AS week,\n       COUNT(DISTINCT user_id) AS providers,\n       ROUND(SUM((props->>'base_pay')::numeric)\n             / NULLIF(SUM((props->>'online_sec')::int) / 3600.0, 0), 0) AS base_per_hour,\n       ROUND(SUM((props->>'bonus')::numeric)\n             / NULLIF(SUM((props->>'online_sec')::int) / 3600.0, 0), 0) AS bonus_per_hour,\n       ROUND((SUM((props->>'base_pay')::numeric) + SUM((props->>'bonus')::numeric)\n              - SUM((props->>'provider_costs')::numeric))\n             / NULLIF(SUM((props->>'online_sec')::int) / 3600.0, 0), 0) AS net_per_hour\nFROM events\nWHERE event_name = 'provider_shift_tick'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["utilization", "churn-rate", "liquidity"]
+  },
+  {
+    "id": "cost-of-risk",
+    "category": "finance",
+    "title": { "ru": "Стоимость риска (дефолты)", "en": "Cost of risk (defaults)" },
+    "aliases": ["дефолты", "просрочка", "npl"],
+    "tex": { "ru": "\\text{CoR}=\\dfrac{\\text{резервы и списания}}{\\text{средний портфель}}", "en": "\\text{CoR}=\\dfrac{\\text{provisions and write-offs}}{\\text{average portfolio}}" },
+    "desc": {
+      "ru": "Какая доля кредитного портфеля съедается невозвратами. Обязательная контр-метрика к процентному доходу: выдать больше кредитов легко, а расплата приходит через месяцы — поэтому доход всегда читается вместе со стоимостью риска.",
+      "en": "What share of the loan portfolio is eaten by defaults. A mandatory counter-metric to interest income: issuing more loans is easy, but the bill arrives months later — so income is always read together with the cost of risk."
+    },
+    "pitfalls": {
+      "ru": [
+        "В растущем портфеле метрика занижена: свежие кредиты ещё не успели уйти в просрочку — знаменатель растёт быстрее числителя.",
+        "Считайте по винтажам (когортам выдач), иначе рост скроет ухудшение качества.",
+        "Реструктуризация прячет дефолт: заёмщик не платит, но формально не в просрочке."
+      ],
+      "en": [
+        "In a growing portfolio the metric is understated: fresh loans haven't had time to default — the denominator grows faster than the numerator.",
+        "Compute it by vintage (issuance cohorts), or growth will hide quality decay.",
+        "Restructuring hides defaults: the borrower isn't paying but formally isn't delinquent."
+      ]
+    },
+    "sql": "-- Cost of risk by issuance vintage (90+ days past due)\nSELECT date_trunc('month', (props->>'issued_at')::date) AS vintage,\n       COUNT(*) AS loans,\n       SUM((props->>'principal')::numeric) AS portfolio,\n       ROUND(100.0 * SUM((props->>'principal')::numeric)\n         FILTER (WHERE (props->>'days_past_due')::int >= 90)\n         / NULLIF(SUM((props->>'principal')::numeric), 0), 2) AS npl90_pct\nFROM events\nWHERE event_name = 'loan_snapshot'\n  AND ts = (SELECT MAX(ts) FROM events WHERE event_name = 'loan_snapshot')\nGROUP BY 1\nORDER BY 1;",
+    "related": ["tpv", "fraud-rate", "gross-margin"]
+  },
+  {
+    "id": "ltv-cac",
+    "category": "finance",
+    "title": { "ru": "LTV / CAC — окупаемость привлечения", "en": "LTV / CAC ratio" },
+    "aliases": ["ltv cac ratio"],
+    "tex": "\\dfrac{\\mathrm{LTV}}{\\mathrm{CAC}}",
+    "desc": {
+      "ru": "Сколько маржи приносит клиент на каждый рубль, потраченный на его привлечение. Главный агрегат юнит-экономики: меньше 1 — каждый новый клиент углубляет убыток; здоровым ориентиром обычно называют 3+.",
+      "en": "How much margin a customer generates per unit of money spent acquiring them. The headline unit-economics ratio: below 1, every new customer deepens the loss; 3+ is the commonly quoted healthy benchmark."
+    },
+    "pitfalls": {
+      "ru": [
+        "LTV по выручке вместо маржи завышает отношение в разы — сравнивать с CAC можно только маржу.",
+        "Очень высокий LTV/CAC (10+) — тоже сигнал: возможно, вы недоинвестируете в рост.",
+        "Отношение прячет срок: LTV/CAC = 3 с окупаемостью за 3 года — совсем не то же, что за 3 месяца; смотрите вместе с payback."
+      ],
+      "en": [
+        "Revenue-based LTV instead of margin inflates the ratio several-fold — only margin is comparable to CAC.",
+        "A very high LTV/CAC (10+) is also a signal: you may be under-investing in growth.",
+        "The ratio hides time: LTV/CAC of 3 with a 3-year payback is nothing like 3 months; read it with payback."
+      ]
+    },
+    "sql": "-- LTV/CAC by acquisition channel (margin-based, 12-month LTV)\nWITH cac AS (\n  SELECT u.acq_channel AS channel,\n         SUM(s.spend) / NULLIF(COUNT(DISTINCT u.user_id), 0) AS cac\n  FROM marketing_spend s\n  JOIN users u ON u.acq_channel = s.channel\n  GROUP BY 1\n),\nltv AS (\n  SELECT u.acq_channel AS channel,\n         SUM(o.amount * 0.3) / NULLIF(COUNT(DISTINCT u.user_id), 0) AS ltv_margin_12m\n  FROM users u\n  LEFT JOIN orders o ON o.user_id = u.user_id AND o.status = 'paid'\n   AND o.created_at <= u.created_at + INTERVAL '12 months'\n  GROUP BY 1\n)\nSELECT c.channel, ROUND(l.ltv_margin_12m, 0) AS ltv_margin,\n       ROUND(c.cac, 0) AS cac,\n       ROUND(l.ltv_margin_12m / NULLIF(c.cac, 0), 2) AS ltv_to_cac\nFROM cac c JOIN ltv l USING (channel)\nORDER BY ltv_to_cac DESC;",
+    "related": ["ltv", "cac", "payback-period", "gross-margin"]
+  },
+  {
+    "id": "gross-margin",
+    "category": "finance",
+    "title": { "ru": "Валовая маржа", "en": "Gross margin" },
+    "aliases": ["маржа", "валовая прибыль"],
+    "tex": { "ru": "\\text{Маржа}=\\dfrac{\\text{выручка}-\\text{себестоимость}}{\\text{выручка}}\\times 100\\%", "en": "\\text{Margin}=\\dfrac{\\text{revenue}-\\mathrm{COGS}}{\\text{revenue}}\\times 100\\%" },
+    "desc": {
+      "ru": "Какая доля выручки остаётся после прямой себестоимости (закупка, производство, у AI-продуктов — инференс). Переводит разговор с «сколько продали» на «сколько заработали»: одинаковая выручка при марже 60% и 15% — два разных бизнеса.",
+      "en": "What share of revenue survives direct costs (procurement, production, inference for AI products). Turns \"how much we sold\" into \"how much we earned\": the same revenue at 60% vs 15% margin is two different businesses."
+    },
+    "pitfalls": {
+      "ru": [
+        "Что входит в себестоимость — вопрос учётной политики: доставку, эквайринг и поддержку кладут по-разному; фиксируйте состав.",
+        "Средняя маржа прячет разброс по категориям: рост выручки в низкомаржинальной категории роняет общую маржу при «хороших» продажах.",
+        "Промо и скидки часто учитываются вне COGS и маржа выглядит стабильной, пока промо съедает прибыль."
+      ],
+      "en": [
+        "What counts as COGS is accounting policy: delivery, acquiring and support are placed differently; fix the composition.",
+        "Average margin hides category spread: revenue growth in a low-margin category drops blended margin despite \"good\" sales.",
+        "Promos and discounts often live outside COGS, so margin looks stable while promo eats the profit."
+      ]
+    },
+    "sql": "-- Gross margin by category\nSELECT props->>'category' AS category,\n       SUM(amount) AS revenue,\n       SUM((props->>'cogs')::numeric) AS cogs,\n       ROUND(100.0 * (SUM(amount) - SUM((props->>'cogs')::numeric))\n             / NULLIF(SUM(amount), 0), 1) AS gross_margin_pct\nFROM orders\nWHERE status = 'paid'\nGROUP BY 1\nORDER BY revenue DESC;",
+    "related": ["contribution-margin", "roas", "ltv-cac"]
+  },
+  {
+    "id": "contribution-margin",
+    "category": "finance",
+    "title": { "ru": "Contribution Margin — маржа вклада", "en": "Contribution margin" },
+    "aliases": ["юнит-экономика", "маржа вклада"],
+    "tex": { "ru": "\\mathrm{CM}=\\text{выручка юнита}-\\text{все переменные затраты юнита}", "en": "\\mathrm{CM}=\\text{unit revenue}-\\text{all variable unit costs}" },
+    "desc": {
+      "ru": "Сколько остаётся с одного заказа/клиента после всех переменных затрат: себестоимость, доставка, эквайринг, промо, поддержка. Ядро юнит-экономики: положительная CM означает, что каждый следующий заказ приближает к прибыли, отрицательная — что рост масштабирует убыток.",
+      "en": "What's left from one order/customer after all variable costs: COGS, delivery, acquiring, promo, support. The core of unit economics: positive CM means every next order moves you toward profit; negative CM means growth scales the loss."
+    },
+    "pitfalls": {
+      "ru": [
+        "Граница «переменных» затрат размыта (склад? колл-центр?) — договоритесь об уровнях CM1/CM2/CM3 и не двигайте их.",
+        "Средняя CM по компании прячет убыточные сегменты: считайте по когортам, городам, категориям.",
+        "CM без стоимости привлечения — только половина картины: юнит может быть прибыльным, а клиент с учётом CAC — нет."
+      ],
+      "en": [
+        "The \"variable\" boundary is fuzzy (warehouse? call center?) — agree on CM1/CM2/CM3 levels and don't move them.",
+        "Company-average CM hides loss-making segments: compute by cohort, city, category.",
+        "CM without acquisition cost is half the picture: the unit can be profitable while the customer, counting CAC, is not."
+      ]
+    },
+    "sql": "-- Contribution margin per order by city\nSELECT props->>'city' AS city,\n       COUNT(*) AS orders,\n       ROUND(AVG(amount), 0) AS avg_revenue,\n       ROUND(AVG(amount\n         - (props->>'cogs')::numeric\n         - (props->>'delivery_cost')::numeric\n         - (props->>'promo_cost')::numeric), 0) AS avg_cm,\n       ROUND(100.0 * SUM(amount\n         - (props->>'cogs')::numeric\n         - (props->>'delivery_cost')::numeric\n         - (props->>'promo_cost')::numeric) / NULLIF(SUM(amount), 0), 1) AS cm_pct\nFROM orders\nWHERE status IN ('delivered', 'completed')\nGROUP BY 1\nORDER BY orders DESC;",
+    "related": ["gross-margin", "ltv-cac", "aov"]
+  },
+  {
+    "id": "payback-period",
+    "category": "finance",
+    "title": { "ru": "Payback Period — срок окупаемости", "en": "CAC payback period" },
+    "aliases": ["окупаемость cac"],
+    "tex": { "ru": "\\text{Payback}=\\text{месяцы до }\\sum\\text{маржи с клиента}\\geq \\mathrm{CAC}", "en": "\\text{Payback}=\\text{months until }\\sum\\text{customer margin}\\geq \\mathrm{CAC}" },
+    "desc": {
+      "ru": "Через сколько месяцев накопленная маржа с клиента покрывает стоимость его привлечения. Метрика скорости оборота денег: при payback 6 месяцев бюджет на рост можно прокрутить дважды в год, при 24 — деньги заморожены.",
+      "en": "How many months until a customer's cumulative margin covers their acquisition cost. A cash-velocity metric: with a 6-month payback you can recycle the growth budget twice a year; at 24 months the money is frozen."
+    },
+    "pitfalls": {
+      "ru": [
+        "Payback по выручке вместо маржи — самообман, окупаются только маржинальные деньги.",
+        "Средний payback прячет каналы-вампиры: считайте по каналам и когортам.",
+        "Игнорирование оттока: «окупится за 14 месяцев» бессмысленно, если медианный клиент живёт 8."
+      ],
+      "en": [
+        "Revenue-based payback is self-deception — only margin money pays anything back.",
+        "Average payback hides vampire channels: compute per channel and cohort.",
+        "Ignoring churn: \"pays back in 14 months\" is meaningless if the median customer lives 8."
+      ]
+    },
+    "sql": "-- Median months to CAC payback by channel (margin ~30%)\nWITH cac AS (\n  SELECT u.acq_channel AS channel,\n         SUM(s.spend) / NULLIF(COUNT(DISTINCT u.user_id), 0) AS cac\n  FROM marketing_spend s JOIN users u ON u.acq_channel = s.channel\n  GROUP BY 1\n),\ncum AS (\n  SELECT u.user_id, u.acq_channel AS channel,\n         EXTRACT(month FROM age(o.created_at, u.created_at)) AS month_n,\n         SUM(o.amount * 0.3) OVER (PARTITION BY u.user_id ORDER BY o.created_at) AS cum_margin\n  FROM users u JOIN orders o ON o.user_id = u.user_id AND o.status = 'paid'\n)\nSELECT c.channel,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY p.first_payback_month) AS median_payback_months\nFROM cac c\nJOIN LATERAL (\n  SELECT cm.user_id, MIN(cm.month_n) AS first_payback_month\n  FROM cum cm WHERE cm.channel = c.channel AND cm.cum_margin >= c.cac\n  GROUP BY cm.user_id\n) p ON true\nGROUP BY c.channel;",
+    "related": ["ltv-cac", "cac", "gross-margin"]
+  },
+  {
+    "id": "tpv",
+    "category": "finance",
+    "title": { "ru": "TPV — платёжный оборот", "en": "TPV — total payment volume" },
+    "aliases": ["total payment volume", "платёжный оборот"],
+    "tex": { "ru": "\\mathrm{TPV}=\\sum \\text{сумма обработанных платежей}", "en": "\\mathrm{TPV}=\\sum \\text{value of processed payments}" },
+    "desc": {
+      "ru": "Суммарный объём платежей, прошедших через финтех-платформу. Аналог GMV для платёжного бизнеса: выручка = TPV × средняя комиссия (net take rate), поэтому TPV × активные платящие раскладывают рост финтеха на понятные рычаги.",
+      "en": "The total volume of payments processed by a fintech platform. The payments analog of GMV: revenue = TPV × net take rate, so TPV × active paying users decompose fintech growth into tractable levers."
+    },
+    "pitfalls": {
+      "ru": [
+        "TPV ≠ выручка: переток в низкомаржинальные типы операций (p2p вместо карт) роняет выручку при растущем TPV.",
+        "Один клиент-гигант может давать треть TPV — метрика без разбивки по сегментам скрывает риск концентрации.",
+        "Возвраты и отменённые платежи: считаете gross или net — зафиксируйте."
+      ],
+      "en": [
+        "TPV ≠ revenue: a shift toward low-margin operation types (p2p instead of cards) drops revenue on growing TPV.",
+        "One giant client can contribute a third of TPV — without segment breakdown the metric hides concentration risk.",
+        "Refunds and cancelled payments: gross or net — fix it."
+      ]
+    },
+    "sql": "-- TPV, net take rate and concentration\nSELECT date_trunc('month', created_at) AS month,\n       SUM(amount) AS tpv,\n       ROUND(100.0 * SUM((props->>'fee')::numeric) / NULLIF(SUM(amount), 0), 3) AS net_take_rate_pct,\n       ROUND(100.0 * MAX(client_tpv.tpv) / NULLIF(SUM(amount), 0), 1) AS top_client_share_pct\nFROM orders o\nJOIN LATERAL (\n  SELECT SUM(amount) AS tpv FROM orders o2\n  WHERE date_trunc('month', o2.created_at) = date_trunc('month', o.created_at)\n  GROUP BY o2.user_id ORDER BY 1 DESC LIMIT 1\n) client_tpv ON true\nWHERE status = 'paid'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["take-rate", "gmv", "fraud-rate"]
+  }
+]

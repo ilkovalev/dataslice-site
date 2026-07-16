@@ -1,126 +1,1506 @@
 {
   "id": "ecommerce",
-  "archetype": "Прямая коммерция",
-  "industry": "Интернет-магазин (свой склад)",
-  "northStar": "Выручка",
+  "archetype": {
+    "ru": "Прямая коммерция",
+    "en": "Direct commerce"
+  },
+  "industry": {
+    "ru": "Интернет-магазин (свой склад)",
+    "en": "E-commerce (own inventory)"
+  },
+  "northStar": {
+    "ru": "Выручка",
+    "en": "Revenue"
+  },
   "root": {
-    "id": "rev", "level": 0, "title": "Выручка", "formula": "Трафик × Конверсия × Чек × Повторные",
-    "note": "Прямая коммерция: магазин закупает и продаёт сам, зарабатывая маржу. Рычаги классической воронки.",
+    "id": "rev",
+    "level": 0,
+    "title": {
+      "ru": "Выручка",
+      "en": "Revenue"
+    },
+    "formula": {
+      "ru": "Трафик × CR × Чек × Повторные",
+      "en": "Traffic × CR × AOV × Repeats"
+    },
+    "note": {
+      "ru": "Прямая коммерция: магазин закупает и продаёт сам, зарабатывая маржу. Четыре рычага классической воронки — привести, сконвертировать, увеличить чек, вернуть.",
+      "en": "Direct commerce: the store buys and sells inventory itself, earning the margin. Four classic funnel levers — bring, convert, grow the basket, bring back."
+    },
     "children": [
-      { "id": "traffic", "level": 1, "title": "Трафик", "formula": "каналы × визиты", "note": "Сколько привели.", "children": [
-        { "id": "channels", "level": 2, "title": "Каналы привлечения", "note": "Платный/органика/CRM.", "children": [
-          { "id": "cac", "level": 3, "title": "CAC по каналу", "note": "Стоимость привлечения.", "children": [
-            { "id": "roas", "level": 4, "title": "ROAS / ДРР", "note": "Окупаемость рекламы." }
-          ] }
-        ] }
-      ] },
-      { "id": "conversion", "level": 1, "title": "Конверсия", "formula": "заказы / визиты", "note": "Превращение трафика в заказы.", "children": [
-        { "id": "funnel", "level": 2, "title": "Воронка (карточка→корзина→оплата)", "note": "Где теряем покупателей.", "children": [
-          { "id": "pdp", "level": 3, "title": "Карточка товара (контент)", "note": "Фото, описания, отзывы.", "children": [
-            { "id": "checkout", "level": 4, "title": "Простота оформления", "note": "Чем меньше шагов, тем выше CR." }
-          ] }
-        ] }
-      ] },
-      { "id": "aov", "level": 1, "title": "Средний чек (AOV)", "formula": "выручка / заказы", "note": "Сколько в одном заказе.", "children": [
-        { "id": "cross", "level": 2, "title": "Кросс-сейл / апсейл", "note": "Сопутствующие товары.", "children": [
-          { "id": "bundle", "level": 3, "title": "Комплекты и пороги бесплатной доставки", "note": "Стимул добрать корзину." }
-        ] }
-      ] },
-      { "id": "retention", "level": 1, "title": "Повторные покупки (LTV)", "note": "Главный рычаг прибыльности.", "children": [
-        { "id": "crm", "level": 2, "title": "CRM / удержание", "note": "Email, push, программа лояльности.", "children": [
-          { "id": "repeat-rate", "level": 3, "title": "Repeat Rate", "note": "Доля вернувшихся покупателей." }
-        ] }
-      ] }
-    ]
+      {
+        "id": "traffic",
+        "level": 1,
+        "title": {
+          "ru": "Трафик",
+          "en": "Traffic"
+        },
+        "formula": {
+          "ru": "визиты по каналам",
+          "en": "visits by channel"
+        },
+        "note": {
+          "ru": "Сколько людей пришло в магазин. Смотрим не общую цифру, а состав: платный, органический, CRM — у них разная цена и качество.",
+          "en": "How many people reached the store. Watch the mix, not the total: paid, organic and CRM traffic differ in cost and quality."
+        },
+        "children": [
+          {
+            "id": "paid",
+            "level": 2,
+            "title": {
+              "ru": "Платные каналы",
+              "en": "Paid channels"
+            },
+            "note": {
+              "ru": "Перформанс-реклама: поиск, соцсети, маркетплейсы трафика. Быстро масштабируется — и быстро сжигает деньги.",
+              "en": "Performance ads: search, social, traffic networks. Scales fast — and burns money just as fast."
+            },
+            "children": [
+              {
+                "id": "cac",
+                "level": 3,
+                "metricId": "cac",
+                "title": {
+                  "ru": "CAC по каналу",
+                  "en": "CAC by channel"
+                },
+                "note": {
+                  "ru": "Сколько стоит новый покупатель из каждого канала. Blended CAC для решений не годится.",
+                  "en": "What a new buyer costs in each channel. Blended CAC won't do for decisions."
+                },
+                "children": [
+                  {
+                    "id": "roas",
+                    "level": 4,
+                    "metricId": "roas",
+                    "title": {
+                      "ru": "ROAS / ДРР",
+                      "en": "ROAS"
+                    },
+                    "note": {
+                      "ru": "Окупаемость рекламных денег внутри канала и кампании.",
+                      "en": "Payback of ad money within a channel and campaign."
+                    },
+                    "children": [
+                      {
+                        "id": "ctr-creative",
+                        "level": 5,
+                        "metricId": "ctr",
+                        "title": {
+                          "ru": "CTR креативов",
+                          "en": "Creative CTR"
+                        },
+                        "note": {
+                          "ru": "Первый множитель ROAS: не кликнули — дальше ничего не будет. Тестируется связками креатив × аудитория.",
+                          "en": "The first ROAS factor: no click — nothing else happens. Tested as creative × audience pairs."
+                        }
+                      },
+                      {
+                        "id": "landing-cr",
+                        "level": 5,
+                        "title": {
+                          "ru": "CR посадочной",
+                          "en": "Landing page CR"
+                        },
+                        "note": {
+                          "ru": "Второй множитель: соответствие обещания в объявлении и посадочной страницы.",
+                          "en": "The second factor: how well the landing page matches the ad's promise."
+                        },
+                        "metricId": "conversion-rate"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "bids",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Ставки и аукцион",
+                      "en": "Bids & auction"
+                    },
+                    "note": {
+                      "ru": "Рычаг: управление ставками, минус-слова, расписание показов — оптимизация цены клика при том же трафике.",
+                      "en": "Lever: bid management, negative keywords, ad scheduling — cheaper clicks for the same traffic."
+                    }
+                  }
+                ]
+              }
+            ],
+            "metricId": "cac"
+          },
+          {
+            "id": "organic",
+            "level": 2,
+            "title": {
+              "ru": "Органика и бренд",
+              "en": "Organic & brand"
+            },
+            "note": {
+              "ru": "SEO, прямые заходы, брендовый спрос. Медленно растёт, зато почти бесплатно и устойчиво.",
+              "en": "SEO, direct visits, brand demand. Grows slowly but costs almost nothing and compounds."
+            },
+            "children": [
+              {
+                "id": "seo",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "SEO-видимость",
+                  "en": "SEO visibility"
+                },
+                "note": {
+                  "ru": "Рычаг: позиции по коммерческим запросам, индексация каталога, скорость страниц.",
+                  "en": "Lever: rankings for commercial queries, catalog indexation, page speed."
+                },
+                "children": [
+                  {
+                    "id": "seo-traffic",
+                    "level": 4,
+                    "title": {
+                      "ru": "Органические визиты",
+                      "en": "Organic visits"
+                    },
+                    "note": {
+                      "ru": "Итог SEO-работы: визиты из поиска без оплаты за клик.",
+                      "en": "The output of SEO work: search visits with no per-click cost."
+                    },
+                    "metricId": "seo-visibility"
+                  }
+                ]
+              },
+              {
+                "id": "brand-demand",
+                "level": 3,
+                "title": {
+                  "ru": "Брендовый спрос",
+                  "en": "Brand demand"
+                },
+                "note": {
+                  "ru": "Прямые заходы и поиск по названию магазина — накопленный эффект рекламы и клиентского опыта.",
+                  "en": "Direct visits and searches for the store's name — the accumulated effect of ads and customer experience."
+                },
+                "metricId": "traffic"
+              }
+            ],
+            "metricId": "seo-visibility"
+          },
+          {
+            "id": "crm-traffic",
+            "level": 2,
+            "title": {
+              "ru": "CRM-трафик",
+              "en": "CRM traffic"
+            },
+            "note": {
+              "ru": "Email, push, мессенджеры по своей базе. Самый дешёвый канал — но только если есть кого возвращать.",
+              "en": "Email, push, messengers to your own base. The cheapest channel — if you have anyone to bring back."
+            },
+            "children": [
+              {
+                "id": "crm-ctr",
+                "level": 3,
+                "metricId": "ctr",
+                "title": {
+                  "ru": "CTR рассылок",
+                  "en": "Campaign CTR"
+                },
+                "note": {
+                  "ru": "Кликабельность писем и пушей; падает при выгорании базы.",
+                  "en": "Click rate of emails and pushes; drops as the base burns out."
+                }
+              }
+            ],
+            "metricId": "traffic"
+          }
+        ],
+        "metricId": "traffic"
+      },
+      {
+        "id": "conversion",
+        "level": 1,
+        "metricId": "conversion-rate",
+        "title": {
+          "ru": "Конверсия",
+          "en": "Conversion"
+        },
+        "formula": {
+          "ru": "заказы / визиты",
+          "en": "orders / visits"
+        },
+        "note": {
+          "ru": "Превращение визитов в заказы. Раскладывается на воронку — и чинится по шагам, а не «в среднем».",
+          "en": "Turning visits into orders. Decomposes into a funnel — and gets fixed step by step, not \"on average\"."
+        },
+        "children": [
+          {
+            "id": "funnel",
+            "level": 2,
+            "metricId": "funnel-dropoff",
+            "title": {
+              "ru": "Воронка покупки",
+              "en": "Purchase funnel"
+            },
+            "note": {
+              "ru": "Карточка → корзина → чекаут → оплата: где именно теряем покупателей.",
+              "en": "Product page → cart → checkout → payment: where exactly buyers leak out."
+            },
+            "children": [
+              {
+                "id": "pdp",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "Карточка товара",
+                  "en": "Product page"
+                },
+                "note": {
+                  "ru": "Рычаг: фото, описание, отзывы, цена и наличие — всё, что убеждает положить в корзину.",
+                  "en": "Lever: photos, copy, reviews, price and availability — everything that earns the add-to-cart."
+                },
+                "children": [
+                  {
+                    "id": "reviews",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Отзывы и рейтинг",
+                      "en": "Reviews & rating"
+                    },
+                    "note": {
+                      "ru": "Социальное доказательство: карточки с отзывами конвертируют заметно лучше.",
+                      "en": "Social proof: pages with reviews convert notably better."
+                    },
+                    "children": [
+                      {
+                        "id": "review-share",
+                        "level": 5,
+                        "title": {
+                          "ru": "Доля товаров с отзывами",
+                          "en": "Share of items with reviews"
+                        },
+                        "note": {
+                          "ru": "Операционная цель контент-команды: закрыть «немые» карточки.",
+                          "en": "The content team's operational target: fix \"mute\" product pages."
+                        },
+                        "metricId": "conversion-rate"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "pdp-oos",
+                    "level": 4,
+                    "metricId": "oos-rate",
+                    "title": {
+                      "ru": "Наличие (OOS)",
+                      "en": "Availability (OOS)"
+                    },
+                    "note": {
+                      "ru": "Показы карточек без товара в наличии — потерянная конверсия до всякого UX.",
+                      "en": "Product views hitting empty stock — conversion lost before any UX matters."
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "cart",
+                "level": 3,
+                "title": {
+                  "ru": "Корзина → чекаут",
+                  "en": "Cart → checkout"
+                },
+                "note": {
+                  "ru": "Половина корзин бросается. Что мешает: доставка, цена, регистрация?",
+                  "en": "Half of all carts get abandoned. What's in the way: shipping, price, forced sign-up?"
+                },
+                "children": [
+                  {
+                    "id": "cart-abandon",
+                    "level": 4,
+                    "title": {
+                      "ru": "Брошенные корзины",
+                      "en": "Abandoned carts"
+                    },
+                    "formula": {
+                      "ru": "брошенные / созданные",
+                      "en": "abandoned / created"
+                    },
+                    "note": {
+                      "ru": "Доля корзин, не дошедших до оплаты; каждая — почти готовый покупатель.",
+                      "en": "Share of carts that never reach payment; each one is an almost-ready buyer."
+                    },
+                    "children": [
+                      {
+                        "id": "cart-recovery",
+                        "level": 5,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Триггерные письма возврата",
+                          "en": "Cart recovery emails"
+                        },
+                        "note": {
+                          "ru": "Рычаг: письмо/пуш через час и через сутки возвращает часть бросивших.",
+                          "en": "Lever: an email/push after an hour and a day recovers a share of abandoners."
+                        }
+                      }
+                    ],
+                    "metricId": "cart-abandonment"
+                  },
+                  {
+                    "id": "checkout-ux",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Простота оформления",
+                      "en": "Checkout simplicity"
+                    },
+                    "note": {
+                      "ru": "Рычаг: меньше полей и шагов, гостевой чекаут, автозаполнение адреса.",
+                      "en": "Lever: fewer fields and steps, guest checkout, address autofill."
+                    }
+                  }
+                ],
+                "kind": "group"
+              },
+              {
+                "id": "payment",
+                "level": 3,
+                "title": {
+                  "ru": "Оплата",
+                  "en": "Payment"
+                },
+                "note": {
+                  "ru": "Последний шаг воронки: каждый неуспешный платёж — потерянный заказ на самом дорогом этапе.",
+                  "en": "The funnel's last step: every failed payment is an order lost at the most expensive stage."
+                },
+                "children": [
+                  {
+                    "id": "payment-success",
+                    "level": 4,
+                    "title": {
+                      "ru": "Успешность платежей",
+                      "en": "Payment success rate"
+                    },
+                    "formula": {
+                      "ru": "успешные / попытки",
+                      "en": "successful / attempts"
+                    },
+                    "note": {
+                      "ru": "Доля платёжных попыток, дошедших до денег; проседает по банкам и методам.",
+                      "en": "Share of payment attempts that end in money; dips by bank and method."
+                    },
+                    "children": [
+                      {
+                        "id": "payment-methods",
+                        "level": 5,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Методы оплаты и ретраи",
+                          "en": "Payment methods & retries"
+                        },
+                        "note": {
+                          "ru": "Рычаг: локальные методы, каскад провайдеров, автоповтор неуспешных списаний.",
+                          "en": "Lever: local methods, provider cascading, automatic retries of failed charges."
+                        }
+                      }
+                    ],
+                    "metricId": "payment-success"
+                  }
+                ],
+                "kind": "group"
+              }
+            ]
+          },
+          {
+            "id": "site-speed",
+            "level": 2,
+            "metricId": "latency-p95",
+            "title": {
+              "ru": "Скорость сайта",
+              "en": "Site speed"
+            },
+            "note": {
+              "ru": "Невидимый налог на конверсию: каждые лишние полсекунды загрузки — минус процент к CR, особенно на мобильных.",
+              "en": "An invisible tax on conversion: every extra half-second of load time shaves conversion, especially on mobile."
+            }
+          }
+        ]
+      },
+      {
+        "id": "aov",
+        "level": 1,
+        "metricId": "aov",
+        "title": {
+          "ru": "Средний чек (AOV)",
+          "en": "Average order (AOV)"
+        },
+        "formula": {
+          "ru": "выручка / заказы",
+          "en": "revenue / orders"
+        },
+        "note": {
+          "ru": "Сколько денег в одном заказе. Растится составом корзины, а не повышением цен «в лоб».",
+          "en": "How much money one order carries. Grown via basket composition, not blunt price hikes."
+        },
+        "children": [
+          {
+            "id": "cross-sell",
+            "level": 2,
+            "kind": "lever",
+            "title": {
+              "ru": "Кросс-сейл / апсейл",
+              "en": "Cross-sell / upsell"
+            },
+            "note": {
+              "ru": "Рычаг: сопутствующие товары и более дорогие альтернативы в нужный момент пути.",
+              "en": "Lever: complementary items and pricier alternatives at the right moment of the journey."
+            },
+            "children": [
+              {
+                "id": "reco-block",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "Блок рекомендаций",
+                  "en": "Recommendations block"
+                },
+                "note": {
+                  "ru": "«С этим покупают» на карточке и в корзине; качество зависит от модели рекомендаций.",
+                  "en": "\"Bought together\" on the product page and in the cart; quality depends on the reco model."
+                },
+                "children": [
+                  {
+                    "id": "reco-ctr",
+                    "level": 4,
+                    "metricId": "ctr",
+                    "title": {
+                      "ru": "CTR рекомендаций",
+                      "en": "Reco CTR"
+                    },
+                    "note": {
+                      "ru": "Кликают ли по рекомендациям — первая проверка их уместности.",
+                      "en": "Whether recos get clicked — the first test of their relevance."
+                    },
+                    "children": [
+                      {
+                        "id": "reco-attach",
+                        "level": 5,
+                        "title": {
+                          "ru": "Доля заказов с рекомендованным",
+                          "en": "Orders with a reco item"
+                        },
+                        "note": {
+                          "ru": "Финальная мера пользы блока: рекомендация дошла до корзины и до денег.",
+                          "en": "The block's final utility: the recommendation made it to the cart and to money."
+                        },
+                        "metricId": "conversion-rate"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "bundles",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "Комплекты и наборы",
+                  "en": "Bundles & kits"
+                },
+                "note": {
+                  "ru": "Рычаг: готовые наборы со скидкой против поштучной цены.",
+                  "en": "Lever: ready-made kits discounted against per-item prices."
+                }
+              }
+            ]
+          },
+          {
+            "id": "shipping-threshold",
+            "level": 2,
+            "kind": "lever",
+            "title": {
+              "ru": "Порог бесплатной доставки",
+              "en": "Free-shipping threshold"
+            },
+            "note": {
+              "ru": "Рычаг: стимул «добрать корзину» до порога; ставится чуть выше текущего медианного чека.",
+              "en": "Lever: an incentive to top the cart up to the threshold; set slightly above the current median order."
+            },
+            "children": [
+              {
+                "id": "above-threshold",
+                "level": 3,
+                "title": {
+                  "ru": "Доля заказов выше порога",
+                  "en": "Orders above threshold"
+                },
+                "note": {
+                  "ru": "Проверка, что порог работает, а не просто дарит доставку тем, кто и так купил бы много.",
+                  "en": "Checks the threshold works instead of gifting shipping to those who'd buy big anyway."
+                },
+                "metricId": "aov"
+              }
+            ]
+          },
+          {
+            "id": "basket-mix",
+            "level": 2,
+            "title": {
+              "ru": "Состав корзины",
+              "en": "Basket mix"
+            },
+            "formula": {
+              "ru": "позиций × средняя цена",
+              "en": "items × avg price"
+            },
+            "note": {
+              "ru": "Чек = число позиций × средняя цена позиции; два разных рычага с разной механикой.",
+              "en": "Basket = item count × average item price; two different levers with different mechanics."
+            },
+            "metricId": "aov"
+          }
+        ]
+      },
+      {
+        "id": "retention",
+        "level": 1,
+        "metricId": "ltv",
+        "title": {
+          "ru": "Повторные покупки (LTV)",
+          "en": "Repeat purchases (LTV)"
+        },
+        "note": {
+          "ru": "Главный рычаг прибыльности: повторный заказ не несёт CAC, вся маржа остаётся в бизнесе.",
+          "en": "The main profitability lever: a repeat order carries no CAC, all the margin stays in the business."
+        },
+        "children": [
+          {
+            "id": "repeat-rate",
+            "level": 2,
+            "metricId": "repeat-rate",
+            "title": {
+              "ru": "Repeat Rate",
+              "en": "Repeat rate"
+            },
+            "note": {
+              "ru": "Доля покупателей, вернувшихся за второй покупкой в разумном окне.",
+              "en": "Share of buyers returning for a second purchase within a sensible window."
+            },
+            "children": [
+              {
+                "id": "crm-program",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "CRM-коммуникации",
+                  "en": "CRM communications"
+                },
+                "note": {
+                  "ru": "Рычаг: цепочки писем и пушей по жизненному циклу — от «спасибо за заказ» до реактивации.",
+                  "en": "Lever: lifecycle email/push flows — from \"thanks for your order\" to reactivation."
+                },
+                "children": [
+                  {
+                    "id": "segmentation",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Сегментация базы",
+                      "en": "Base segmentation"
+                    },
+                    "note": {
+                      "ru": "Рычаг: RFM-сегменты вместо «ковровых» рассылок по всем.",
+                      "en": "Lever: RFM segments instead of carpet-bombing the whole base."
+                    },
+                    "children": [
+                      {
+                        "id": "campaign-cr",
+                        "level": 5,
+                        "title": {
+                          "ru": "CR кампаний по сегментам",
+                          "en": "Campaign CR by segment"
+                        },
+                        "note": {
+                          "ru": "Конверсия кампаний в заказ по сегментам — обратная связь для настройки сегментации.",
+                          "en": "Campaign-to-order conversion per segment — the feedback loop for tuning segmentation."
+                        },
+                        "metricId": "conversion-rate"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "loyalty",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "Программа лояльности",
+                  "en": "Loyalty program"
+                },
+                "note": {
+                  "ru": "Рычаг: баллы и статусы делают следующий заказ у вас выгоднее, чем у конкурента.",
+                  "en": "Lever: points and tiers make the next order cheaper with you than with a competitor."
+                },
+                "children": [
+                  {
+                    "id": "loyalty-share",
+                    "level": 4,
+                    "title": {
+                      "ru": "Доля заказов с баллами",
+                      "en": "Orders using points"
+                    },
+                    "note": {
+                      "ru": "Проникновение программы в заказы; мёртвая программа не влияет на повторные.",
+                      "en": "Program penetration into orders; a dead program moves no repeats."
+                    },
+                    "metricId": "repeat-rate"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "frequency",
+            "level": 2,
+            "metricId": "purchase-frequency",
+            "title": {
+              "ru": "Частота покупок",
+              "en": "Purchase frequency"
+            },
+            "note": {
+              "ru": "Заказы на покупателя за период; вместе с repeat rate определяет форму LTV-кривой.",
+              "en": "Orders per buyer per period; together with repeat rate it shapes the LTV curve."
+            }
+          },
+          {
+            "id": "first-experience",
+            "level": 2,
+            "kind": "lever",
+            "title": {
+              "ru": "Качество первого заказа",
+              "en": "First-order experience"
+            },
+            "note": {
+              "ru": "Рычаг: повторная покупка решается в первый раз — скоростью и точностью доставки.",
+              "en": "Lever: the repeat decision is made during the first order — by delivery speed and accuracy."
+            },
+            "children": [
+              {
+                "id": "on-time",
+                "level": 3,
+                "title": {
+                  "ru": "Доставка вовремя",
+                  "en": "On-time delivery"
+                },
+                "formula": {
+                  "ru": "вовремя / все доставки",
+                  "en": "on-time / all deliveries"
+                },
+                "note": {
+                  "ru": "Доля заказов, доставленных в обещанный срок, — сильнейший предиктор второй покупки.",
+                  "en": "Share of orders delivered within the promised window — the strongest predictor of a second purchase."
+                },
+                "metricId": "on-time-delivery"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "metricId": "revenue"
   },
   "pyramid": {
-    "note": "От P&L магазина (вершина) к скорости сайта и складу (основание).",
+    "note": {
+      "ru": "От P&L магазина (вершина) к скорости сайта и складу (основание).",
+      "en": "From the store's P&L (top) down to site speed and the warehouse (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Валовая маржа", "LTV / CAC"] },
-      { "label": "Продуктовые", "role": "продакты/маркетинг", "items": ["Конверсия", "AOV", "Repeat Rate", "ROAS"] },
-      { "label": "Операционные", "role": "merchandising/логистика", "items": ["Воронка чекаута", "Кросс-сейл", "Доля возвратов"] },
-      { "label": "Платформенные", "role": "инженеры", "items": ["Скорость сайта", "Аптайм", "Точность стока/сборки"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "руководство",
+          "en": "leadership"
+        },
+        "items": [
+          {
+            "ru": "Выручка",
+            "en": "Revenue"
+          },
+          {
+            "ru": "Валовая маржа",
+            "en": "Gross margin"
+          },
+          "LTV / CAC"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "продакты/маркетинг",
+          "en": "product/marketing"
+        },
+        "items": [
+          {
+            "ru": "Конверсия",
+            "en": "Conversion"
+          },
+          "AOV",
+          "Repeat Rate",
+          "ROAS"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": {
+          "ru": "merchandising/логистика",
+          "en": "merchandising/logistics"
+        },
+        "items": [
+          {
+            "ru": "Воронка чекаута",
+            "en": "Checkout funnel"
+          },
+          {
+            "ru": "Кросс-сейл",
+            "en": "Cross-sell"
+          },
+          {
+            "ru": "Доля возвратов",
+            "en": "Return rate"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "инженеры",
+          "en": "engineers"
+        },
+        "items": [
+          {
+            "ru": "Скорость сайта",
+            "en": "Site speed"
+          },
+          {
+            "ru": "Аптайм",
+            "en": "Uptime"
+          },
+          {
+            "ru": "Точность стока/сборки",
+            "en": "Stock/picking accuracy"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Доля возвратов", "note": "выручка с возвратами фиктивна и съедает маржу логистикой" },
-    { "title": "Маржинальность промо", "note": "рост продаж на скидках в убыток" },
-    { "title": "Out-of-stock", "note": "нет товара — потерянная конверсия и доверие" }
+    {
+      "title": {
+        "ru": "Доля возвратов",
+        "en": "Return rate"
+      },
+      "note": {
+        "ru": "выручка с возвратами фиктивна и съедает маржу логистикой",
+        "en": "revenue that returns is fictitious and eats margin via logistics"
+      }
+    },
+    {
+      "title": {
+        "ru": "Маржинальность промо",
+        "en": "Promo margin"
+      },
+      "note": {
+        "ru": "рост продаж на скидках в убыток",
+        "en": "discount-driven sales growth at a loss"
+      }
+    },
+    {
+      "title": "Out-of-stock",
+      "note": {
+        "ru": "нет товара — потерянная конверсия и доверие",
+        "en": "no stock — lost conversion and trust"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "lamoda", "name": "Lamoda", "northStar": "Выручка (fashion + примерка-доставка)",
-      "note": "fashion-ритейл: ставка на собственную логистику с примеркой и широкий бренд-ассортимент; отсюда высокий возврат.",
+      "id": "lamoda",
+      "name": "Lamoda",
+      "northStar": {
+        "ru": "Выручка (fashion + примерка-доставка)",
+        "en": "Revenue (fashion + try-on delivery)"
+      },
+      "note": {
+        "ru": "fashion-ритейл: ставка на собственную логистику с примеркой и широкий бренд-ассортимент; отсюда высокий возврат.",
+        "en": "fashion retail: a bet on own logistics with try-on and a wide brand assortment; hence high returns."
+      },
       "root": {
-        "id": "la-rev", "level": 0, "title": "Выручка", "formula": "Трафик × CR × Чек × Выкуп",
-        "note": "Одежда с примеркой при курьере: заказывают много, выкупают часть — выкуп критичен для маржи.",
+        "id": "la-rev",
+        "level": 0,
+        "title": {
+          "ru": "Выручка",
+          "en": "Revenue"
+        },
+        "formula": {
+          "ru": "Трафик × CR × Чек × Выкуп",
+          "en": "Traffic × CR × Basket × Buyout"
+        },
+        "note": {
+          "ru": "Одежда с примеркой при курьере: заказывают много, выкупают часть — выкуп критичен для маржи.",
+          "en": "Clothes tried on at the courier's arrival: people order a lot and keep part — buyout is critical for margin."
+        },
         "children": [
-          { "id": "la-traffic", "level": 1, "title": "Трафик", "note": "Платный + бренд + приложение.", "children": [
-            { "id": "la-cac", "level": 2, "title": "CAC / ROAS", "note": "Эффективность привлечения.", "children": [
-              { "id": "la-app", "level": 3, "title": "Доля заказов из приложения", "note": "Дешевле и лояльнее.", "children": [
-                { "id": "la-crm", "level": 4, "title": "CRM-возвраты покупателей", "note": "Повторные без рекламы." }
-              ] }
-            ] }
-          ] },
-          { "id": "la-conv", "level": 1, "title": "Конверсия и выкуп", "note": "Fashion-специфика.", "children": [
-            { "id": "la-pdp", "level": 2, "title": "Качество карточки (фото/размер)", "note": "Снижает неподходящие заказы.", "children": [
-              { "id": "la-buyout", "level": 3, "title": "Доля выкупа", "note": "Что из примеренного купили." }
-            ] }
-          ] },
-          { "id": "la-supply", "level": 1, "title": "Ассортимент брендов", "note": "Ширина и эксклюзивы.", "children": [
-            { "id": "la-instock", "level": 2, "title": "Доступность размеров", "note": "Нужный размер в наличии.", "children": [
-              { "id": "la-own", "level": 3, "title": "Доля собственных торговых марок", "note": "Выше маржа." }
-            ] }
-          ] }
+          {
+            "id": "la-traffic",
+            "level": 1,
+            "title": {
+              "ru": "Трафик",
+              "en": "Traffic"
+            },
+            "note": {
+              "ru": "Платный + брендовый + приложение; у fashion высока доля повторных заходов «посмотреть новое».",
+              "en": "Paid + brand + app; fashion has a high share of repeat \"browse the new drops\" visits."
+            },
+            "children": [
+              {
+                "id": "la-cac",
+                "level": 2,
+                "metricId": "cac",
+                "title": {
+                  "ru": "CAC / ROAS",
+                  "en": "CAC / ROAS"
+                },
+                "note": {
+                  "ru": "Эффективность привлечения по каналам.",
+                  "en": "Acquisition efficiency by channel."
+                },
+                "children": [
+                  {
+                    "id": "la-app",
+                    "level": 3,
+                    "title": {
+                      "ru": "Доля заказов из приложения",
+                      "en": "App order share"
+                    },
+                    "note": {
+                      "ru": "Приложение дешевле в ретаргетинге и лояльнее в повторных.",
+                      "en": "The app is cheaper to retarget and more loyal on repeats."
+                    },
+                    "children": [
+                      {
+                        "id": "la-push",
+                        "level": 4,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Push-коммуникации",
+                          "en": "Push communications"
+                        },
+                        "note": {
+                          "ru": "Рычаг: новинки любимых брендов и снижение цены на просмотренное.",
+                          "en": "Lever: favorite-brand drops and price-drop alerts on viewed items."
+                        },
+                        "children": [
+                          {
+                            "id": "la-push-ctr",
+                            "level": 5,
+                            "metricId": "ctr",
+                            "title": {
+                              "ru": "CTR пушей",
+                              "en": "Push CTR"
+                            },
+                            "note": {
+                              "ru": "Кликабельность пушей до выгорания базы.",
+                              "en": "Push click rate before the base burns out."
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "metricId": "app-share"
+                  }
+                ]
+              }
+            ],
+            "metricId": "traffic"
+          },
+          {
+            "id": "la-conv",
+            "level": 1,
+            "title": {
+              "ru": "Конверсия и выкуп",
+              "en": "Conversion & buyout"
+            },
+            "note": {
+              "ru": "Fashion-специфика: конверсия в заказ — только половина, вторая половина решается в прихожей у клиента.",
+              "en": "Fashion twist: order conversion is half the story — the other half is decided in the customer's hallway."
+            },
+            "children": [
+              {
+                "id": "la-pdp",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Качество карточки (фото/размер)",
+                  "en": "Product page (photos/size)"
+                },
+                "note": {
+                  "ru": "Рычаг: честные фото и таблицы размеров снижают заказы «не то».",
+                  "en": "Lever: honest photos and size charts cut \"not what I wanted\" orders."
+                },
+                "children": [
+                  {
+                    "id": "la-size-reco",
+                    "level": 3,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Подбор размера",
+                      "en": "Size recommendation"
+                    },
+                    "note": {
+                      "ru": "Рычаг: рекомендация размера по прошлым выкупам снижает возврат по размеру.",
+                      "en": "Lever: size suggestions from past buyouts cut size-related returns."
+                    },
+                    "children": [
+                      {
+                        "id": "la-buyout",
+                        "level": 4,
+                        "title": {
+                          "ru": "Доля выкупа",
+                          "en": "Buyout rate"
+                        },
+                        "formula": {
+                          "ru": "выкуплено / доставлено",
+                          "en": "kept / delivered"
+                        },
+                        "note": {
+                          "ru": "Что из примеренного оставили себе; каждый пункт выкупа — прямые деньги.",
+                          "en": "What people keep after trying on; every buyout point is direct money."
+                        },
+                        "children": [
+                          {
+                            "id": "la-size-return",
+                            "level": 5,
+                            "title": {
+                              "ru": "Возвраты по причине «размер»",
+                              "en": "Size-reason returns"
+                            },
+                            "note": {
+                              "ru": "Доля невыкупа из-за размера — обратная связь для подбора размера и карточек.",
+                              "en": "Share of non-buyout due to sizing — the feedback loop for size reco and product pages."
+                            },
+                            "metricId": "return-rate"
+                          }
+                        ],
+                        "metricId": "buyout-rate"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "la-supply",
+            "level": 1,
+            "title": {
+              "ru": "Ассортимент брендов",
+              "en": "Brand assortment"
+            },
+            "note": {
+              "ru": "Ширина и эксклюзивы: в fashion ассортимент — это трафик.",
+              "en": "Width and exclusives: in fashion, assortment is traffic."
+            },
+            "children": [
+              {
+                "id": "la-instock",
+                "level": 2,
+                "metricId": "oos-rate",
+                "title": {
+                  "ru": "Доступность размеров",
+                  "en": "Size availability"
+                },
+                "note": {
+                  "ru": "Нужный размер в наличии — fashion-версия out-of-stock.",
+                  "en": "The right size in stock — the fashion version of out-of-stock."
+                },
+                "children": [
+                  {
+                    "id": "la-own-brands",
+                    "level": 3,
+                    "title": {
+                      "ru": "Доля собственных марок",
+                      "en": "Private-label share"
+                    },
+                    "note": {
+                      "ru": "Собственные торговые марки: выше маржа, полный контроль размерной сетки.",
+                      "en": "Private labels: higher margin, full control of the size grid."
+                    },
+                    "metricId": "gross-margin"
+                  }
+                ]
+              }
+            ],
+            "metricId": "assortment-width"
+          }
+        ],
+        "metricId": "revenue"
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              {
+                "ru": "Маржа после возвратов",
+                "en": "Post-return margin"
+              },
+              "LTV/CAC"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Конверсия",
+                "en": "Conversion"
+              },
+              {
+                "ru": "Доля выкупа",
+                "en": "Buyout rate"
+              },
+              "Repeat Rate"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "merchandising/логистика",
+              "en": "merchandising/logistics"
+            },
+            "items": [
+              {
+                "ru": "Карточка/размеры",
+                "en": "Page/sizes"
+              },
+              {
+                "ru": "Доступность размеров",
+                "en": "Size availability"
+              },
+              {
+                "ru": "Стоимость возврата",
+                "en": "Return cost"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Скорость приложения",
+                "en": "App speed"
+              },
+              {
+                "ru": "Аптайм",
+                "en": "Uptime"
+              },
+              {
+                "ru": "Точность сборки",
+                "en": "Picking accuracy"
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Маржа после возвратов", "LTV/CAC"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Конверсия", "Доля выкупа", "Repeat Rate"] },
-        { "label": "Операционные", "role": "merchandising/логистика", "items": ["Карточка/размеры", "Доступность размеров", "Стоимость возврата"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Скорость приложения", "Аптайм", "Точность сборки"] }
-      ] },
       "counterMetrics": [
-        { "title": "Доля возврата/невыкупа", "note": "примерка раздувает заказы и логистические косты" },
-        { "title": "Маржа на промо", "note": "распродажи fashion бьют по прибыли" }
+        {
+          "title": {
+            "ru": "Доля возврата/невыкупа",
+            "en": "Return / non-buyout rate"
+          },
+          "note": {
+            "ru": "примерка раздувает заказы и логистические косты",
+            "en": "try-on inflates orders and logistics costs"
+          }
+        },
+        {
+          "title": {
+            "ru": "Маржа на промо",
+            "en": "Promo margin"
+          },
+          "note": {
+            "ru": "распродажи fashion бьют по прибыли",
+            "en": "fashion sales seasons hit profit"
+          }
+        }
       ]
     },
     {
-      "id": "d2c", "name": "D2C-бренд", "northStar": "Выручка (LTV-driven, один продукт)",
-      "note": "прямой бренд без посредников: узкая линейка, ставка на повторные покупки/подписку и контентный маркетинг.",
+      "id": "d2c",
+      "name": {
+        "ru": "D2C-бренд",
+        "en": "D2C brand"
+      },
+      "northStar": {
+        "ru": "Выручка (LTV-driven, один продукт)",
+        "en": "Revenue (LTV-driven, single product)"
+      },
+      "note": {
+        "ru": "прямой бренд без посредников: узкая линейка, ставка на повторные покупки/подписку и контентный маркетинг.",
+        "en": "a direct brand with no middlemen: a narrow line, a bet on repeat purchases/subscription and content marketing."
+      },
       "root": {
-        "id": "d2c-rev", "level": 0, "title": "Выручка", "formula": "Покупатели × LTV",
-        "note": "Маленький ассортимент, вся экономика держится на повторных покупках и удержании.",
+        "id": "d2c-rev",
+        "level": 0,
+        "title": {
+          "ru": "Выручка",
+          "en": "Revenue"
+        },
+        "formula": {
+          "ru": "Покупатели × LTV",
+          "en": "Buyers × LTV"
+        },
+        "note": {
+          "ru": "Маленький ассортимент: вся экономика держится на повторных покупках и удержании.",
+          "en": "A tiny assortment: the whole economics rests on repeats and retention."
+        },
         "children": [
-          { "id": "d2c-acq", "level": 1, "title": "Привлечение", "note": "Соцсети, инфлюенсеры, контент.", "children": [
-            { "id": "d2c-cac", "level": 2, "title": "CAC", "note": "Дорогой платный трафик.", "children": [
-              { "id": "d2c-first", "level": 3, "title": "CR первого заказа", "note": "Лендинг и оффер.", "children": [
-                { "id": "d2c-aov1", "level": 4, "title": "Чек первого заказа", "note": "Окупает ли привлечение сразу." }
-              ] }
-            ] }
-          ] },
-          { "id": "d2c-ltv", "level": 1, "title": "LTV / повторные", "note": "Сердце D2C-экономики.", "children": [
-            { "id": "d2c-sub", "level": 2, "title": "Подписка/автодоставка", "note": "Предсказуемые повторные.", "children": [
-              { "id": "d2c-repeat", "level": 3, "title": "Repeat Rate", "note": "Доля вернувшихся.", "children": [
-                { "id": "d2c-churn", "level": 4, "title": "Отток подписки", "note": "Удержание автодоставки." }
-              ] }
-            ] }
-          ] },
-          { "id": "d2c-margin", "level": 1, "title": "Маржа и бренд", "note": "Контроль цепочки.", "children": [
-            { "id": "d2c-cogs", "level": 2, "title": "Себестоимость продукта", "note": "Производство и упаковка." },
-            { "id": "d2c-brand", "level": 2, "title": "Сила бренда (NPS)", "note": "Снижает зависимость от платного трафика." }
-          ] }
+          {
+            "id": "d2c-acq",
+            "level": 1,
+            "title": {
+              "ru": "Привлечение",
+              "en": "Acquisition"
+            },
+            "note": {
+              "ru": "Соцсети, инфлюенсеры, контент: дорогой платный трафик надо окупать быстро.",
+              "en": "Social, influencers, content: expensive paid traffic must pay back fast."
+            },
+            "children": [
+              {
+                "id": "d2c-cac",
+                "level": 2,
+                "metricId": "cac",
+                "title": "CAC",
+                "note": {
+                  "ru": "Стоимость покупателя в перегретых аукционах соцсетей.",
+                  "en": "Buyer cost in overheated social ad auctions."
+                },
+                "children": [
+                  {
+                    "id": "d2c-first-cr",
+                    "level": 3,
+                    "title": {
+                      "ru": "CR первого заказа",
+                      "en": "First-order CR"
+                    },
+                    "note": {
+                      "ru": "Лендинг и оффер: превращение подписчика в покупателя.",
+                      "en": "Landing and offer: turning a follower into a buyer."
+                    },
+                    "children": [
+                      {
+                        "id": "d2c-aov1",
+                        "level": 4,
+                        "title": {
+                          "ru": "Чек первого заказа",
+                          "en": "First-order value"
+                        },
+                        "note": {
+                          "ru": "Окупает ли первый заказ привлечение сразу или экономика ждёт повторных.",
+                          "en": "Whether the first order pays back acquisition immediately or the economics waits for repeats."
+                        },
+                        "children": [
+                          {
+                            "id": "d2c-payback",
+                            "level": 5,
+                            "metricId": "payback-period",
+                            "title": {
+                              "ru": "Payback привлечения",
+                              "en": "CAC payback"
+                            },
+                            "note": {
+                              "ru": "Месяцы до окупаемости покупателя — скорость оборота маркетингового бюджета.",
+                              "en": "Months to buyer payback — the velocity of the marketing budget."
+                            }
+                          }
+                        ],
+                        "metricId": "aov"
+                      }
+                    ],
+                    "metricId": "conversion-rate"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "d2c-ltv",
+            "level": 1,
+            "metricId": "ltv",
+            "title": {
+              "ru": "LTV / повторные",
+              "en": "LTV / repeats"
+            },
+            "note": {
+              "ru": "Сердце D2C-экономики: сколько раз клиент вернётся за тем же продуктом.",
+              "en": "The heart of D2C economics: how many times the customer returns for the same product."
+            },
+            "children": [
+              {
+                "id": "d2c-sub",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Подписка / автодоставка",
+                  "en": "Subscription / auto-refill"
+                },
+                "note": {
+                  "ru": "Рычаг: перевод повторных в предсказуемую подписку со скидкой.",
+                  "en": "Lever: converting repeats into a predictable discounted subscription."
+                },
+                "children": [
+                  {
+                    "id": "d2c-repeat",
+                    "level": 3,
+                    "metricId": "repeat-rate",
+                    "title": "Repeat Rate",
+                    "note": {
+                      "ru": "Доля вернувшихся за второй покупкой.",
+                      "en": "Share coming back for a second purchase."
+                    },
+                    "children": [
+                      {
+                        "id": "d2c-churn",
+                        "level": 4,
+                        "metricId": "churn-rate",
+                        "title": {
+                          "ru": "Отток подписки",
+                          "en": "Subscription churn"
+                        },
+                        "note": {
+                          "ru": "Удержание автодоставки; вынужденный отток чинится ретраями платежей.",
+                          "en": "Auto-refill retention; involuntary churn is fixed with payment retries."
+                        },
+                        "children": [
+                          {
+                            "id": "d2c-pause",
+                            "level": 5,
+                            "kind": "lever",
+                            "title": {
+                              "ru": "Пауза вместо отмены",
+                              "en": "Pause instead of cancel"
+                            },
+                            "note": {
+                              "ru": "Рычаг: предложить паузу и смену интервала на форме отмены.",
+                              "en": "Lever: offer a pause and interval change on the cancellation form."
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "d2c-margin",
+            "level": 1,
+            "metricId": "gross-margin",
+            "title": {
+              "ru": "Маржа и бренд",
+              "en": "Margin & brand"
+            },
+            "note": {
+              "ru": "Контроль всей цепочки — главное преимущество D2C перед полкой ритейлера.",
+              "en": "Controlling the whole chain is D2C's main edge over the retailer's shelf."
+            },
+            "children": [
+              {
+                "id": "d2c-cogs",
+                "level": 2,
+                "title": {
+                  "ru": "Себестоимость продукта",
+                  "en": "Product COGS"
+                },
+                "note": {
+                  "ru": "Производство и упаковка; эффект масштаба при росте тиража.",
+                  "en": "Production and packaging; scale effects as volumes grow."
+                },
+                "metricId": "gross-margin"
+              },
+              {
+                "id": "d2c-brand",
+                "level": 2,
+                "metricId": "nps-csat",
+                "title": {
+                  "ru": "Сила бренда (NPS)",
+                  "en": "Brand strength (NPS)"
+                },
+                "note": {
+                  "ru": "Рекомендации снижают зависимость от платного трафика.",
+                  "en": "Recommendations reduce the dependence on paid traffic."
+                }
+              }
+            ]
+          }
+        ],
+        "metricId": "revenue"
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "основатели",
+              "en": "founders"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              "LTV / CAC",
+              {
+                "ru": "Валовая маржа",
+                "en": "Gross margin"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "рост",
+              "en": "growth"
+            },
+            "items": [
+              {
+                "ru": "CR первого заказа",
+                "en": "First-order CR"
+              },
+              "Repeat Rate",
+              {
+                "ru": "Подписка",
+                "en": "Subscription"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "бренд/CRM",
+              "en": "brand/CRM"
+            },
+            "items": [
+              {
+                "ru": "Чек первого заказа",
+                "en": "First-order value"
+              },
+              {
+                "ru": "Отток подписки",
+                "en": "Subscription churn"
+              },
+              "NPS"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Скорость лендинга",
+                "en": "Landing speed"
+              },
+              {
+                "ru": "Аптайм чекаута",
+                "en": "Checkout uptime"
+              },
+              {
+                "ru": "Фулфилмент",
+                "en": "Fulfillment"
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "основатели", "items": ["Выручка", "LTV / CAC", "Валовая маржа"] },
-        { "label": "Продуктовые", "role": "рост", "items": ["CR первого заказа", "Repeat Rate", "Подписка"] },
-        { "label": "Операционные", "role": "бренд/CRM", "items": ["Чек первого заказа", "Отток подписки", "NPS"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Скорость лендинга", "Аптайм чекаута", "Фулфилмент"] }
-      ] },
       "counterMetrics": [
-        { "title": "CAC > первого чека", "note": "если не окупает сразу, всё держится на удержании — рискованно" },
-        { "title": "Возвраты/качество", "note": "узкая линейка: один плохой отзыв бьёт сильнее" }
+        {
+          "title": {
+            "ru": "CAC > первого чека",
+            "en": "CAC > first order"
+          },
+          "note": {
+            "ru": "если не окупает сразу, всё держится на удержании — рискованно",
+            "en": "if it doesn't pay back immediately, everything rests on retention — risky"
+          }
+        },
+        {
+          "title": {
+            "ru": "Возвраты/качество",
+            "en": "Returns / quality"
+          },
+          "note": {
+            "ru": "узкая линейка: один плохой отзыв бьёт сильнее",
+            "en": "a narrow line: one bad review hits harder"
+          }
+        }
       ]
     }
   ]

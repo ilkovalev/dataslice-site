@@ -9,6 +9,10 @@ export function useLocale() {
 
 export const prefix = (locale) => (locale === 'en' ? '/en' : '')
 
+// Локализуемое значение: либо строка (одинакова в обеих локалях),
+// либо объект { ru, en }. Используется контентом метрик и деревьев.
+export const loc = (v, locale) => (v && typeof v === 'object' && !Array.isArray(v) ? v[locale] ?? v.ru : v)
+
 // Ссылка на ту же страницу в другой локали (для переключателя языка).
 export function switchLocalePath(pathname, target) {
   const bare = pathname.startsWith('/en') ? pathname.slice(3) || '/' : pathname
@@ -73,6 +77,24 @@ export const STR = {
     glossaryLesson: '→ разобрано в уроке',
     metricsH1: 'Метрики и их иерархии',
     metricsNotice: null,
+    metricCardFormula: 'Формула',
+    metricCardSql: 'Как посчитать (SQL)',
+    metricCardSchema: 'Схема-пример: events(user_id, ts, event_name), orders(order_id, user_id, amount, created_at, status), users(user_id, created_at, plan), marketing_spend(dt, channel, spend), sessions(session_id, user_id, started_at, duration_sec), subscriptions(user_id, started_at, cancelled_at, mrr), listings(listing_id, seller_id, created_at, status)',
+    metricCardPitfalls: 'Подводные камни',
+    metricCardCopy: 'копировать',
+    metricCardCopied: '✓ скопировано',
+    metricCardLever: 'Это рычаг, а не метрика: на него влияют напрямую (дизайном, процессом, контентом), а эффект измеряют через родительскую метрику.',
+    metricCardGroup: 'Это ветка дерева, а не отдельная метрика: своей формулы у неё нет, значение складывается из дочерних узлов. Кликните на них — там формулы и SQL.',
+    metricCardInTree: 'В этом дереве',
+    metricCardRelated: 'Связанные метрики',
+    metricCardClose: 'Закрыть',
+    treeExpandAll: 'Развернуть всё',
+    treeCollapseAll: 'Свернуть',
+    treeHintClick: 'Кликните на узел — откроется карточка метрики с формулой и SQL.',
+    treeHintScroll: 'дерево шире экрана — прокрутите вбок →',
+    treeCounterMetrics: 'Контр-метрики:',
+    metricsBase: 'Базовая',
+    metricsBaseModel: 'базовая модель',
     docTitle: '«Кусочек пиццы» — интерактивная статистика и метрики',
     modules: {
       1: 'Описательная статистика', 2: 'Вероятность', 3: 'Распределения', 4: 'От выборки к миру',
@@ -136,7 +158,25 @@ export const STR = {
     glossaryEmptyLink: 'metric trees "Basics" tab',
     glossaryLesson: '→ covered in a lesson',
     metricsH1: 'Metrics and their hierarchies',
-    metricsNotice: 'Industry trees are not translated yet: node names are mostly English, but notes and the "Basics" tab are in Russian for now.',
+    metricsNotice: null,
+    metricCardFormula: 'Formula',
+    metricCardSql: 'How to compute (SQL)',
+    metricCardSchema: 'Example schema: events(user_id, ts, event_name), orders(order_id, user_id, amount, created_at, status), users(user_id, created_at, plan), marketing_spend(dt, channel, spend), sessions(session_id, user_id, started_at, duration_sec), subscriptions(user_id, started_at, cancelled_at, mrr), listings(listing_id, seller_id, created_at, status)',
+    metricCardPitfalls: 'Pitfalls',
+    metricCardCopy: 'copy',
+    metricCardCopied: '✓ copied',
+    metricCardLever: 'This is a lever, not a metric: you act on it directly (via design, process, content) and measure the effect through its parent metric.',
+    metricCardGroup: 'This is a branch of the tree, not a metric of its own: it has no formula — its value adds up from the child nodes. Click those for formulas and SQL.',
+    metricCardInTree: 'In this tree',
+    metricCardRelated: 'Related metrics',
+    metricCardClose: 'Close',
+    treeExpandAll: 'Expand all',
+    treeCollapseAll: 'Collapse',
+    treeHintClick: 'Click a node to open the metric card with its formula and SQL.',
+    treeHintScroll: 'the tree is wider than the screen — scroll sideways →',
+    treeCounterMetrics: 'Counter-metrics:',
+    metricsBase: 'Base',
+    metricsBaseModel: 'base model',
     docTitle: 'DataSlice — interactive statistics and metric trees',
     modules: {
       1: 'Descriptive statistics', 2: 'Probability', 3: 'Distributions', 4: 'From sample to world',

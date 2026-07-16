@@ -1,123 +1,1028 @@
 {
   "id": "streaming",
-  "archetype": "Подписки",
-  "industry": "Стриминг и подписки",
-  "northStar": "Retained Paying Subscribers (удерживаемые платящие)",
+  "archetype": {
+    "ru": "Подписки",
+    "en": "Subscriptions"
+  },
+  "industry": {
+    "ru": "Стриминг и подписки",
+    "en": "Streaming & subscriptions"
+  },
+  "northStar": {
+    "ru": "Retained Paying Subscribers (удерживаемые платящие)",
+    "en": "Retained paying subscribers"
+  },
   "root": {
-    "id": "subs", "level": 0, "title": "Retained Paying Subscribers", "formula": "Привлечение − Отток",
-    "note": "Бизнес подписки живёт удержанием платящих: важнее не привлечь, а не потерять.",
+    "id": "subs",
+    "level": 0,
+    "title": "Retained Paying Subscribers",
+    "formula": {
+      "ru": "Привлечение − Отток",
+      "en": "Acquisition − Churn"
+    },
+    "note": {
+      "ru": "Бизнес подписки живёт удержанием платящих: важнее не привлечь, а не потерять. База = приток − отток, и на зрелом рынке отток решает всё.",
+      "en": "A subscription business lives on retaining payers: keeping matters more than acquiring. Base = inflow − churn, and in a mature market churn decides everything."
+    },
     "children": [
-      { "id": "acq", "level": 1, "title": "Привлечение", "formula": "трафик × CR в подписку", "note": "Приток новых платящих.", "children": [
-        { "id": "trial", "level": 2, "title": "Trial → Paid", "note": "Доходят ли с пробного до оплаты.", "children": [
-          { "id": "onb", "level": 3, "title": "Активация в онбординге", "note": "Дошёл ли до первой ценности.", "children": [
-            { "id": "ttfv", "level": 4, "title": "Time to First Value", "note": "Как быстро получил пользу." }
-          ] }
-        ] },
-        { "id": "cac", "level": 2, "title": "CAC канала", "note": "Стоимость привлечения." }
-      ] },
-      { "id": "ret", "level": 1, "title": "Удержание", "formula": "1 − Churn", "note": "Главный рычаг подписки.", "children": [
-        { "id": "engage", "level": 2, "title": "Вовлечённость", "note": "Пользуются → продлевают.", "children": [
-          { "id": "active-days", "level": 3, "title": "Активные дни в месяц", "note": "Регулярность потребления.", "children": [
-            { "id": "content-fit", "level": 4, "title": "Нашёл, что смотреть/слушать", "note": "Совпал ли каталог с вкусом." }
-          ] }
-        ] },
-        { "id": "involuntary", "level": 2, "title": "Вынужденный отток", "note": "Слетел платёж.", "children": [
-          { "id": "dunning", "level": 3, "title": "Recovery платежей", "note": "Удалось ли восстановить списание." }
-        ] }
-      ] },
-      { "id": "arpu", "level": 1, "title": "ARPU", "formula": "выручка / польз.", "note": "Доход с подписчика.", "children": [
-        { "id": "tier", "level": 2, "title": "Микс тарифов", "note": "Доля дорогих планов." },
-        { "id": "addon", "level": 2, "title": "Доп-продукты", "note": "Апсейлы поверх подписки." }
-      ] }
-    ]
+      {
+        "id": "acq",
+        "level": 1,
+        "title": {
+          "ru": "Привлечение",
+          "en": "Acquisition"
+        },
+        "formula": {
+          "ru": "трафик × CR в подписку",
+          "en": "traffic × subscribe CR"
+        },
+        "note": {
+          "ru": "Приток новых платящих.",
+          "en": "The inflow of new payers."
+        },
+        "children": [
+          {
+            "id": "trial",
+            "level": 2,
+            "metricId": "conversion-rate",
+            "title": "Trial → Paid",
+            "note": {
+              "ru": "Доходят ли с пробного периода до первой оплаты.",
+              "en": "Do trials reach the first payment."
+            },
+            "children": [
+              {
+                "id": "onb",
+                "level": 3,
+                "metricId": "activation-rate",
+                "title": {
+                  "ru": "Активация в онбординге",
+                  "en": "Onboarding activation"
+                },
+                "note": {
+                  "ru": "Дошёл ли новичок до первой ценности за пробный период.",
+                  "en": "Did the newcomer reach first value within the trial."
+                },
+                "children": [
+                  {
+                    "id": "ttfv",
+                    "level": 4,
+                    "title": "Time to First Value",
+                    "note": {
+                      "ru": "Как быстро получил пользу: первый удачный фильм/плейлист.",
+                      "en": "How fast value arrived: the first good movie/playlist."
+                    },
+                    "children": [
+                      {
+                        "id": "taste-onb",
+                        "level": 5,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Настройка вкуса на старте",
+                          "en": "Taste setup at start"
+                        },
+                        "note": {
+                          "ru": "Рычаг: выбор жанров/артистов в онбординге ускоряет первое попадание рекомендаций.",
+                          "en": "Lever: picking genres/artists during onboarding speeds up the first recommendation hit."
+                        }
+                      }
+                    ],
+                    "metricId": "ttv"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "cac",
+            "level": 2,
+            "metricId": "cac",
+            "title": {
+              "ru": "CAC канала",
+              "en": "Channel CAC"
+            },
+            "note": {
+              "ru": "Стоимость привлечения платящего по каналам.",
+              "en": "Payer acquisition cost by channel."
+            }
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "ret",
+        "level": 1,
+        "metricId": "retention-n-day",
+        "title": {
+          "ru": "Удержание",
+          "en": "Retention"
+        },
+        "formula": "1 − Churn",
+        "note": {
+          "ru": "Главный рычаг подписки: продление держится на использовании.",
+          "en": "The subscription's main lever: renewal rests on usage."
+        },
+        "children": [
+          {
+            "id": "engage",
+            "level": 2,
+            "title": {
+              "ru": "Вовлечённость",
+              "en": "Engagement"
+            },
+            "note": {
+              "ru": "Пользуются → продлевают; неиспользуемая подписка живёт до ревизии трат.",
+              "en": "Use leads to renewal; an unused subscription lives until the next spending review."
+            },
+            "children": [
+              {
+                "id": "active-days",
+                "level": 3,
+                "metricId": "stickiness",
+                "title": {
+                  "ru": "Активные дни в месяц",
+                  "en": "Active days per month"
+                },
+                "note": {
+                  "ru": "Регулярность потребления — предиктор продления.",
+                  "en": "Consumption regularity — the renewal predictor."
+                },
+                "children": [
+                  {
+                    "id": "content-fit",
+                    "level": 4,
+                    "title": {
+                      "ru": "Нашёл, что смотреть/слушать",
+                      "en": "Found something to watch/listen"
+                    },
+                    "note": {
+                      "ru": "Совпал ли каталог с вкусом: сессии, закончившиеся потреблением.",
+                      "en": "Did the catalog match the taste: sessions that end in consumption."
+                    },
+                    "children": [
+                      {
+                        "id": "reco-quality",
+                        "level": 5,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Качество рекомендаций",
+                          "en": "Recommendation quality"
+                        },
+                        "note": {
+                          "ru": "Рычаг: доля запусков из рекомендаций и «пустых» сессий без просмотра.",
+                          "en": "Lever: share of plays from recommendations and \"empty\" sessions with no playback."
+                        }
+                      }
+                    ],
+                    "metricId": "search-success"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "involuntary",
+            "level": 2,
+            "title": {
+              "ru": "Вынужденный отток",
+              "en": "Involuntary churn"
+            },
+            "note": {
+              "ru": "Слетел платёж: карта истекла, лимит, банк отклонил.",
+              "en": "A failed payment: expired card, limit, bank decline."
+            },
+            "children": [
+              {
+                "id": "dunning",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "Recovery платежей",
+                  "en": "Payment recovery"
+                },
+                "note": {
+                  "ru": "Рычаг: ретраи, обновление карты, grace-период возвращают часть слетевших.",
+                  "en": "Lever: retries, card updates and grace periods recover part of the failed."
+                }
+              }
+            ],
+            "metricId": "churn-rate"
+          }
+        ]
+      },
+      {
+        "id": "arpu",
+        "level": 1,
+        "metricId": "arpu",
+        "title": "ARPU",
+        "formula": {
+          "ru": "выручка / подписчики",
+          "en": "revenue / subscribers"
+        },
+        "note": {
+          "ru": "Доход с подписчика: второй множитель выручки после размера базы.",
+          "en": "Revenue per subscriber: the second revenue factor after base size."
+        },
+        "children": [
+          {
+            "id": "tier",
+            "level": 2,
+            "kind": "lever",
+            "title": {
+              "ru": "Микс тарифов",
+              "en": "Plan mix"
+            },
+            "note": {
+              "ru": "Рычаг: доля дорогих планов и лестница «дешёвый с рекламой → премиум».",
+              "en": "Lever: the share of premium plans and the \"cheap ad tier → premium\" ladder."
+            },
+            "children": [
+              {
+                "id": "tier-migration",
+                "level": 3,
+                "title": {
+                  "ru": "Миграции между планами",
+                  "en": "Plan migrations"
+                },
+                "note": {
+                  "ru": "Апгрейды минус даунгрейды — денежное выражение микса.",
+                  "en": "Upgrades minus downgrades — the mix in money terms."
+                },
+                "metricId": "mrr"
+              }
+            ]
+          },
+          {
+            "id": "addon",
+            "level": 2,
+            "title": {
+              "ru": "Доп-продукты",
+              "en": "Add-ons"
+            },
+            "note": {
+              "ru": "Апсейлы поверх подписки.",
+              "en": "Upsells on top of the subscription."
+            },
+            "metricId": "mrr"
+          }
+        ]
+      }
+    ],
+    "metricId": "retained-subscribers"
   },
   "pyramid": {
-    "note": "От финансов подписки (вершина) к надёжности доставки контента (основание).",
+    "note": {
+      "ru": "От финансов подписки (вершина) к надёжности доставки контента (основание).",
+      "en": "From subscription finance (top) to content delivery reliability (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "руководство", "items": ["MRR / выручка", "Удерживаемые платящие", "LTV / CAC"] },
-      { "label": "Продуктовые", "role": "продакты", "items": ["Trial→Paid", "Churn", "ARPU", "Вовлечённость"] },
-      { "label": "Операционные", "role": "аналитики", "items": ["Активные дни", "Time to First Value", "Recovery платежей"] },
-      { "label": "Платформенные", "role": "инженеры", "items": ["Буферизация / старт потока", "Качество стрима", "Аптайм"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "руководство",
+          "en": "leadership"
+        },
+        "items": [
+          {
+            "ru": "MRR / выручка",
+            "en": "MRR / revenue"
+          },
+          {
+            "ru": "Удерживаемые платящие",
+            "en": "Retained payers"
+          },
+          "LTV / CAC"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "продакты",
+          "en": "product"
+        },
+        "items": [
+          "Trial→Paid",
+          "Churn",
+          "ARPU",
+          {
+            "ru": "Вовлечённость",
+            "en": "Engagement"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": {
+          "ru": "аналитики",
+          "en": "analysts"
+        },
+        "items": [
+          {
+            "ru": "Активные дни",
+            "en": "Active days"
+          },
+          "Time to First Value",
+          {
+            "ru": "Recovery платежей",
+            "en": "Payment recovery"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "инженеры",
+          "en": "engineers"
+        },
+        "items": [
+          {
+            "ru": "Буферизация / старт потока",
+            "en": "Buffering / stream start"
+          },
+          {
+            "ru": "Качество стрима",
+            "en": "Stream quality"
+          },
+          {
+            "ru": "Аптайм",
+            "en": "Uptime"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Доля «спящих» платящих", "note": "платят, но не пользуются — отменят при первой ревизии трат" },
-    { "title": "Жалобы на качество стрима", "note": "техническое раздражение ведёт к оттоку" }
+    {
+      "title": {
+        "ru": "Доля «спящих» платящих",
+        "en": "Dormant-payer share"
+      },
+      "note": {
+        "ru": "платят, но не пользуются — отменят при первой ревизии трат",
+        "en": "they pay but don't use — cancelled at the first spending review"
+      }
+    },
+    {
+      "title": {
+        "ru": "Жалобы на качество стрима",
+        "en": "Stream quality complaints"
+      },
+      "note": {
+        "ru": "техническое раздражение ведёт к оттоку",
+        "en": "technical irritation leads to churn"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "netflix", "name": "Netflix", "northStar": "Retained Subscribers (вовлечённость контентом)",
-      "note": "видео-подписка: удержание тянет каталог и оригиналы; ключ — «нашёл что посмотреть».",
+      "id": "netflix",
+      "name": "Netflix",
+      "northStar": {
+        "ru": "Retained Subscribers (вовлечённость контентом)",
+        "en": "Retained subscribers (content engagement)"
+      },
+      "note": {
+        "ru": "видео-подписка: удержание тянет каталог и оригиналы; ключ — «нашёл что посмотреть».",
+        "en": "video subscription: catalog and originals carry retention; the key is \"found something to watch\"."
+      },
       "root": {
-        "id": "n-subs", "level": 0, "title": "Retained Subscribers", "formula": "Привлечение − Отток",
-        "note": "Удержание держится на вовлечённости в контент и силе оригиналов.",
+        "id": "n-subs",
+        "level": 0,
+        "title": "Retained Subscribers",
+        "formula": {
+          "ru": "Привлечение − Отток",
+          "en": "Acquisition − Churn"
+        },
+        "note": {
+          "ru": "Удержание держится на вовлечённости в контент и силе оригиналов.",
+          "en": "Retention rests on content engagement and the strength of originals."
+        },
         "children": [
-          { "id": "n-content", "level": 1, "title": "Сила контента", "note": "Каталог и оригиналы — главный драйвер.", "children": [
-            { "id": "n-orig", "level": 2, "title": "Оригиналы-хиты", "note": "Эксклюзив, ради которого подписываются.", "children": [
-              { "id": "n-watch", "level": 3, "title": "Часы просмотра релиза", "note": "Зашёл ли тайтл.", "children": [
-                { "id": "n-complete", "level": 4, "title": "Доля досмотревших сезон", "note": "Качество, а не только старт." }
-              ] }
-            ] },
-            { "id": "n-reco", "level": 2, "title": "Рекомендации", "note": "Помогают найти своё в каталоге." }
-          ] },
-          { "id": "n-engage", "level": 1, "title": "Вовлечённость", "note": "Смотрит → продлевает.", "children": [
-            { "id": "n-days", "level": 2, "title": "Активные дни", "note": "Регулярность просмотров.", "children": [
-              { "id": "n-find", "level": 3, "title": "Нашёл что посмотреть", "note": "Не ушёл с пустыми руками." }
-            ] }
-          ] },
-          { "id": "n-monet", "level": 1, "title": "Монетизация", "note": "Планы и борьба с шарингом.", "children": [
-            { "id": "n-tier", "level": 2, "title": "Микс планов + Ads-tier", "note": "Дешёвый план с рекламой расширяет базу." },
-            { "id": "n-sharing", "level": 2, "title": "Paid sharing", "note": "Монетизация общих аккаунтов." }
-          ] }
+          {
+            "id": "n-content",
+            "level": 1,
+            "title": {
+              "ru": "Сила контента",
+              "en": "Content strength"
+            },
+            "note": {
+              "ru": "Каталог и оригиналы — главный драйвер и главная статья затрат.",
+              "en": "Catalog and originals — the main driver and the main cost line."
+            },
+            "children": [
+              {
+                "id": "n-orig",
+                "level": 2,
+                "title": {
+                  "ru": "Оригиналы-хиты",
+                  "en": "Hit originals"
+                },
+                "note": {
+                  "ru": "Эксклюзив, ради которого подписываются.",
+                  "en": "The exclusives people subscribe for."
+                },
+                "children": [
+                  {
+                    "id": "n-watch",
+                    "level": 3,
+                    "metricId": "time-spent",
+                    "title": {
+                      "ru": "Часы просмотра релиза",
+                      "en": "Release watch hours"
+                    },
+                    "note": {
+                      "ru": "Зашёл ли тайтл аудитории.",
+                      "en": "Did the title land with the audience."
+                    },
+                    "children": [
+                      {
+                        "id": "n-complete",
+                        "level": 4,
+                        "title": {
+                          "ru": "Доля досмотревших сезон",
+                          "en": "Season completion share"
+                        },
+                        "note": {
+                          "ru": "Качество, а не только громкий старт.",
+                          "en": "Quality, not just a loud premiere."
+                        },
+                        "children": [
+                          {
+                            "id": "n-cost-per-hour",
+                            "level": 5,
+                            "title": {
+                              "ru": "Стоимость часа просмотра",
+                              "en": "Cost per watch hour"
+                            },
+                            "note": {
+                              "ru": "Бюджет тайтла на час просмотра — юнит-экономика контента.",
+                              "en": "Title budget per watch hour — content unit economics."
+                            },
+                            "metricId": "royalty-cost"
+                          }
+                        ],
+                        "metricId": "video-completion"
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "time-spent"
+              },
+              {
+                "id": "n-reco",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Рекомендации",
+                  "en": "Recommendations"
+                },
+                "note": {
+                  "ru": "Рычаг: помогают найти своё в огромном каталоге.",
+                  "en": "Lever: they help find your thing in a vast catalog."
+                }
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "n-engage",
+            "level": 1,
+            "title": {
+              "ru": "Вовлечённость",
+              "en": "Engagement"
+            },
+            "note": {
+              "ru": "Смотрит → продлевает.",
+              "en": "Watching leads to renewing."
+            },
+            "children": [
+              {
+                "id": "n-days",
+                "level": 2,
+                "metricId": "stickiness",
+                "title": {
+                  "ru": "Активные дни",
+                  "en": "Active days"
+                },
+                "note": {
+                  "ru": "Регулярность просмотров.",
+                  "en": "Viewing regularity."
+                },
+                "children": [
+                  {
+                    "id": "n-find",
+                    "level": 3,
+                    "metricId": "search-success",
+                    "title": {
+                      "ru": "Нашёл что посмотреть",
+                      "en": "Found something to watch"
+                    },
+                    "note": {
+                      "ru": "Сессии, закончившиеся просмотром, а не листанием.",
+                      "en": "Sessions ending in playback, not browsing."
+                    },
+                    "children": [
+                      {
+                        "id": "n-browse-abandon",
+                        "level": 4,
+                        "title": {
+                          "ru": "Пустые сессии (листал и ушёл)",
+                          "en": "Empty sessions (browsed & left)"
+                        },
+                        "note": {
+                          "ru": "Доля сессий без запуска — ранний сигнал будущего оттока.",
+                          "en": "The no-playback session share — an early churn signal."
+                        },
+                        "metricId": "search-success"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "n-monet",
+            "level": 1,
+            "title": {
+              "ru": "Монетизация",
+              "en": "Monetization"
+            },
+            "note": {
+              "ru": "Планы и борьба с шарингом.",
+              "en": "Plans and the sharing crackdown."
+            },
+            "children": [
+              {
+                "id": "n-tier",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Микс планов + Ads-tier",
+                  "en": "Plan mix + ads tier"
+                },
+                "note": {
+                  "ru": "Рычаг: дешёвый план с рекламой расширяет базу и добавляет рекламную выручку.",
+                  "en": "Lever: a cheap ad plan widens the base and adds ad revenue."
+                }
+              },
+              {
+                "id": "n-sharing",
+                "level": 2,
+                "title": "Paid sharing",
+                "note": {
+                  "ru": "Монетизация общих аккаунтов: из «дыры» в источник роста.",
+                  "en": "Monetizing shared accounts: from a leak into a growth source."
+                },
+                "kind": "group"
+              }
+            ],
+            "kind": "group"
+          }
+        ],
+        "metricId": "retained-subscribers"
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              "Retained Subscribers"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Сила контента",
+                "en": "Content strength"
+              },
+              {
+                "ru": "Вовлечённость",
+                "en": "Engagement"
+              },
+              {
+                "ru": "Микс планов",
+                "en": "Plan mix"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "контент-аналитика",
+              "en": "content analytics"
+            },
+            "items": [
+              {
+                "ru": "Часы на релиз",
+                "en": "Hours per release"
+              },
+              {
+                "ru": "Досматриваемость",
+                "en": "Completion"
+              },
+              {
+                "ru": "Нашёл что посмотреть",
+                "en": "Found something"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Старт воспроизведения",
+                "en": "Playback start"
+              },
+              {
+                "ru": "Качество видео",
+                "en": "Video quality"
+              },
+              {
+                "ru": "Аптайм CDN",
+                "en": "CDN uptime"
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Retained Subscribers"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Сила контента", "Вовлечённость", "Микс планов"] },
-        { "label": "Операционные", "role": "контент-аналитика", "items": ["Часы на релиз", "Досматриваемость", "Нашёл что посмотреть"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Старт воспроизведения", "Качество видео", "Аптайм CDN"] }
-      ] },
       "counterMetrics": [
-        { "title": "Отписки после хита", "note": "подписался ради одного сериала и ушёл" },
-        { "title": "Усталость от рекомендаций", "note": "одно и то же в подборках" }
+        {
+          "title": {
+            "ru": "Отписки после хита",
+            "en": "Post-hit cancellations"
+          },
+          "note": {
+            "ru": "подписался ради одного сериала и ушёл",
+            "en": "subscribed for one show and left"
+          }
+        },
+        {
+          "title": {
+            "ru": "Усталость от рекомендаций",
+            "en": "Recommendation fatigue"
+          },
+          "note": {
+            "ru": "одно и то же в подборках",
+            "en": "the same titles in every row"
+          }
+        }
       ]
     },
     {
-      "id": "spotify", "name": "Spotify", "northStar": "Retained Subscribers (ежедневное прослушивание)",
-      "note": "аудио-подписка: ставка на ежедневную привычку и персональные плейлисты; маржа зависит от роялти лейблам.",
+      "id": "spotify",
+      "name": "Spotify",
+      "northStar": {
+        "ru": "Retained Subscribers (ежедневное прослушивание)",
+        "en": "Retained subscribers (daily listening)"
+      },
+      "note": {
+        "ru": "аудио-подписка: ставка на ежедневную привычку и персональные плейлисты; маржа зависит от роялти лейблам.",
+        "en": "audio subscription: a bet on the daily habit and personal playlists; margin depends on label royalties."
+      },
       "root": {
-        "id": "s-subs", "level": 0, "title": "Retained Subscribers", "formula": "Привлечение − Отток",
-        "note": "Удержание держится на ежедневной привычке слушать и персонализации.",
+        "id": "s-subs",
+        "level": 0,
+        "title": "Retained Subscribers",
+        "formula": {
+          "ru": "Привлечение − Отток",
+          "en": "Acquisition − Churn"
+        },
+        "note": {
+          "ru": "Удержание держится на ежедневной привычке слушать и персонализации.",
+          "en": "Retention rests on the daily listening habit and personalization."
+        },
         "children": [
-          { "id": "s-habit", "level": 1, "title": "Ежедневная привычка", "note": "Музыку слушают каждый день.", "children": [
-            { "id": "s-dau", "level": 2, "title": "DAU / MAU (липкость)", "note": "Насколько ежедневный продукт.", "children": [
-              { "id": "s-minutes", "level": 3, "title": "Минуты прослушивания", "note": "Глубина привычки.", "children": [
-                { "id": "s-context", "level": 4, "title": "Сценарии (спорт, дорога, фон)", "note": "Чем больше контекстов, тем липче." }
-              ] }
-            ] }
-          ] },
-          { "id": "s-disc", "level": 1, "title": "Открытие музыки", "note": "Персональные плейлисты — суперсила.", "children": [
-            { "id": "s-playlist", "level": 2, "title": "Discover Weekly / радио", "note": "Алгоритмические подборки.", "children": [
-              { "id": "s-save", "level": 3, "title": "Доля сохранённых треков", "note": "Попал ли в вкус." }
-            ] }
-          ] },
-          { "id": "s-monet", "level": 1, "title": "Монетизация и маржа", "note": "Подписка + реклама free-tier.", "children": [
-            { "id": "s-free2paid", "level": 2, "title": "Free → Premium", "note": "Воронка из бесплатного." },
-            { "id": "s-royalty", "level": 2, "title": "Роялти-косты", "note": "Платежи лейблам — давят маржу.", "children": [
-              { "id": "s-own", "level": 3, "title": "Доля своего контента (подкасты)", "note": "Контент без роялти улучшает маржу." }
-            ] }
-          ] }
+          {
+            "id": "s-habit",
+            "level": 1,
+            "title": {
+              "ru": "Ежедневная привычка",
+              "en": "The daily habit"
+            },
+            "note": {
+              "ru": "Музыку слушают каждый день — редкое преимущество среди подписок.",
+              "en": "Music is consumed daily — a rare advantage among subscriptions."
+            },
+            "children": [
+              {
+                "id": "s-dau",
+                "level": 2,
+                "metricId": "stickiness",
+                "title": {
+                  "ru": "DAU / MAU (липкость)",
+                  "en": "DAU / MAU (stickiness)"
+                },
+                "note": {
+                  "ru": "Насколько ежедневный продукт.",
+                  "en": "How daily the product is."
+                },
+                "children": [
+                  {
+                    "id": "s-minutes",
+                    "level": 3,
+                    "metricId": "time-spent",
+                    "title": {
+                      "ru": "Минуты прослушивания",
+                      "en": "Listening minutes"
+                    },
+                    "note": {
+                      "ru": "Глубина привычки.",
+                      "en": "The habit's depth."
+                    },
+                    "children": [
+                      {
+                        "id": "s-context",
+                        "level": 4,
+                        "title": {
+                          "ru": "Сценарии (спорт, дорога, фон)",
+                          "en": "Contexts (workout, commute, background)"
+                        },
+                        "note": {
+                          "ru": "Чем больше контекстов, тем липче продукт.",
+                          "en": "More contexts make the product stickier."
+                        },
+                        "children": [
+                          {
+                            "id": "s-devices",
+                            "level": 5,
+                            "title": {
+                              "ru": "Подключённые устройства",
+                              "en": "Connected devices"
+                            },
+                            "note": {
+                              "ru": "Машина, колонка, ТВ: каждое устройство — ещё один контекст и барьер к уходу.",
+                              "en": "Car, speaker, TV: each device is another context and a switching barrier."
+                            },
+                            "metricId": "active-days"
+                          }
+                        ],
+                        "metricId": "active-days"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "s-disc",
+            "level": 1,
+            "title": {
+              "ru": "Открытие музыки",
+              "en": "Music discovery"
+            },
+            "note": {
+              "ru": "Персональные плейлисты — суперсила против каталога конкурентов.",
+              "en": "Personal playlists — the superpower against identical catalogs."
+            },
+            "children": [
+              {
+                "id": "s-playlist",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Discover Weekly / радио",
+                  "en": "Discover Weekly / radio"
+                },
+                "note": {
+                  "ru": "Рычаг: алгоритмические подборки под вкус.",
+                  "en": "Lever: algorithmic playlists tuned to taste."
+                },
+                "children": [
+                  {
+                    "id": "s-save",
+                    "level": 3,
+                    "title": {
+                      "ru": "Доля сохранённых треков",
+                      "en": "Track save rate"
+                    },
+                    "note": {
+                      "ru": "Попадание рекомендаций в вкус — сохранил значит зашло.",
+                      "en": "Recommendation accuracy — a save means a hit."
+                    },
+                    "metricId": "model-quality"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "s-monet",
+            "level": 1,
+            "title": {
+              "ru": "Монетизация и маржа",
+              "en": "Monetization & margin"
+            },
+            "note": {
+              "ru": "Подписка + реклама free-tier.",
+              "en": "Subscription + free-tier ads."
+            },
+            "children": [
+              {
+                "id": "s-free2paid",
+                "level": 2,
+                "metricId": "paying-share",
+                "title": "Free → Premium",
+                "note": {
+                  "ru": "Воронка из бесплатного тарифа в платный.",
+                  "en": "The free-to-paid funnel."
+                }
+              },
+              {
+                "id": "s-royalty",
+                "level": 2,
+                "title": {
+                  "ru": "Роялти-косты",
+                  "en": "Royalty costs"
+                },
+                "note": {
+                  "ru": "Платежи лейблам давят маржу на каждом прослушивании.",
+                  "en": "Label payouts squeeze margin on every stream."
+                },
+                "children": [
+                  {
+                    "id": "s-own",
+                    "level": 3,
+                    "title": {
+                      "ru": "Доля своего контента (подкасты)",
+                      "en": "Owned-content share (podcasts)"
+                    },
+                    "note": {
+                      "ru": "Контент без роялти улучшает маржу каждого часа.",
+                      "en": "Royalty-free content improves every hour's margin."
+                    },
+                    "metricId": "royalty-cost"
+                  }
+                ],
+                "metricId": "royalty-cost"
+              }
+            ],
+            "kind": "group"
+          }
+        ],
+        "metricId": "retained-subscribers"
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              "Retained Subscribers",
+              {
+                "ru": "Валовая маржа",
+                "en": "Gross margin"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Ежедневная привычка",
+                "en": "Daily habit"
+              },
+              {
+                "ru": "Открытие музыки",
+                "en": "Discovery"
+              },
+              "Free→Premium"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "аналитики",
+              "en": "analysts"
+            },
+            "items": [
+              {
+                "ru": "Минуты прослушивания",
+                "en": "Listening minutes"
+              },
+              {
+                "ru": "Сохранённые треки",
+                "en": "Saved tracks"
+              },
+              {
+                "ru": "Сценарии",
+                "en": "Contexts"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Старт трека",
+                "en": "Track start"
+              },
+              {
+                "ru": "Офлайн-кэш",
+                "en": "Offline cache"
+              },
+              {
+                "ru": "Аптайм",
+                "en": "Uptime"
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Retained Subscribers", "Валовая маржа"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Ежедневная привычка", "Открытие музыки", "Free→Premium"] },
-        { "label": "Операционные", "role": "аналитики", "items": ["Минуты прослушивания", "Сохранённые треки", "Сценарии"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Старт трека", "Офлайн-кэш", "Аптайм"] }
-      ] },
       "counterMetrics": [
-        { "title": "Рост роялти-косты", "note": "выручка растёт, маржа падает" },
-        { "title": "Раздражение от рекламы (free)", "note": "перебор гонит из бесплатного, но не в подписку" }
+        {
+          "title": {
+            "ru": "Рост роялти-костов",
+            "en": "Royalty cost growth"
+          },
+          "note": {
+            "ru": "выручка растёт, маржа падает",
+            "en": "revenue grows, margin falls"
+          }
+        },
+        {
+          "title": {
+            "ru": "Раздражение от рекламы (free)",
+            "en": "Ad irritation (free tier)"
+          },
+          "note": {
+            "ru": "перебор гонит из бесплатного, но не в подписку",
+            "en": "overload drives users out of free — but not into paid"
+          }
+        }
       ]
     }
   ]

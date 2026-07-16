@@ -1,124 +1,1267 @@
 {
   "id": "marketplace",
-  "archetype": "Транзакционные платформы",
-  "industry": "Маркетплейсы товаров",
+  "archetype": {
+    "ru": "Транзакционные платформы",
+    "en": "Transactional platforms"
+  },
+  "industry": {
+    "ru": "Маркетплейсы товаров",
+    "en": "Goods marketplaces"
+  },
   "northStar": "GMV (Gross Merchandise Value)",
   "root": {
-    "id": "gmv", "level": 0, "title": "GMV", "formula": "Покупатели × Заказы × Средний чек",
-    "note": "Оборот платформы. Маркетплейс зарабатывает комиссию (take rate) с GMV.",
+    "id": "gmv",
+    "level": 0,
+    "metricId": "gmv",
+    "title": "GMV",
+    "formula": {
+      "ru": "Покупатели × Частота × Чек",
+      "en": "Buyers × Frequency × Basket"
+    },
+    "note": {
+      "ru": "Оборот платформы: сумма всего, что продано через маркетплейс. Сама платформа зарабатывает комиссию — Revenue = GMV × take rate, поэтому GMV раскладывают на спрос, предложение и связывающую их ликвидность.",
+      "en": "Platform flow: the value of everything sold through the marketplace. The platform itself earns commission — Revenue = GMV × take rate, so GMV decomposes into demand, supply and the liquidity connecting them."
+    },
     "children": [
-      { "id": "demand", "level": 1, "title": "Спрос (покупатели)", "formula": "трафик × CR", "note": "Сторона покупателей.", "children": [
-        { "id": "traffic", "level": 2, "title": "Трафик", "note": "Откуда приходят за покупками.", "children": [
-          { "id": "cr", "level": 3, "title": "Конверсия в заказ", "note": "Доля визитов с покупкой.", "children": [
-            { "id": "search-find", "level": 4, "title": "Нашёл товар (search→cart)", "note": "Качество поиска и каталога." }
-          ] }
-        ] },
-        { "id": "repeat", "level": 2, "title": "Повторные покупки", "note": "Возвращаемость — дешевле привлечения." }
-      ] },
-      { "id": "supply", "level": 1, "title": "Предложение (продавцы)", "formula": "SKU × селлеры", "note": "Сторона предложения.", "children": [
-        { "id": "sellers", "level": 2, "title": "Активные селлеры", "note": "Кто реально торгует.", "children": [
-          { "id": "assortment", "level": 3, "title": "Ширина ассортимента", "note": "Сколько уникальных SKU.", "children": [
-            { "id": "instock", "level": 4, "title": "Доступность (in-stock)", "note": "Есть ли товар в наличии." }
-          ] }
-        ] },
-        { "id": "price", "level": 2, "title": "Конкурентность цен", "note": "Дешевле ли, чем у конкурентов." }
-      ] },
-      { "id": "liquidity", "level": 1, "title": "Ликвидность и логистика", "note": "Связывает спрос и предложение.", "children": [
-        { "id": "delivery", "level": 2, "title": "Скорость доставки", "note": "Быстрее → больше заказов.", "children": [
-          { "id": "fulfil", "level": 3, "title": "Доля FBO (склад платформы)", "note": "Управляемая логистика." }
-        ] },
-        { "id": "takerate", "level": 2, "title": "Take rate", "note": "Комиссия с оборота." }
-      ] }
+      {
+        "id": "demand",
+        "level": 1,
+        "title": {
+          "ru": "Спрос (покупатели)",
+          "en": "Demand (buyers)"
+        },
+        "formula": {
+          "ru": "трафик × CR × повторные",
+          "en": "traffic × CR × repeats"
+        },
+        "note": {
+          "ru": "Покупательская сторона: привести, сконвертировать, вернуть.",
+          "en": "The buyer side: bring, convert, bring back."
+        },
+        "children": [
+          {
+            "id": "traffic",
+            "level": 2,
+            "title": {
+              "ru": "Трафик",
+              "en": "Traffic"
+            },
+            "note": {
+              "ru": "Платный, органический и прямой (бренд-привычка «сразу открыть приложение»).",
+              "en": "Paid, organic and direct (the brand habit of \"just open the app\")."
+            },
+            "children": [
+              {
+                "id": "cac",
+                "level": 3,
+                "metricId": "cac",
+                "title": {
+                  "ru": "CAC покупателя",
+                  "en": "Buyer CAC"
+                },
+                "note": {
+                  "ru": "Стоимость нового покупателя по каналам.",
+                  "en": "Cost of a new buyer by channel."
+                },
+                "children": [
+                  {
+                    "id": "first-order-payback",
+                    "level": 4,
+                    "metricId": "payback-period",
+                    "title": {
+                      "ru": "Окупаемость покупателя",
+                      "en": "Buyer payback"
+                    },
+                    "note": {
+                      "ru": "Через сколько заказов комиссия с покупателя окупает его привлечение.",
+                      "en": "After how many orders the buyer's commissions cover their acquisition."
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "cr",
+                "level": 3,
+                "metricId": "conversion-rate",
+                "title": {
+                  "ru": "Конверсия в заказ",
+                  "en": "Order conversion"
+                },
+                "note": {
+                  "ru": "Доля визитов, закончившихся заказом.",
+                  "en": "Share of visits ending in an order."
+                },
+                "children": [
+                  {
+                    "id": "search-quality",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Поиск и каталог",
+                      "en": "Search & catalog"
+                    },
+                    "note": {
+                      "ru": "Рычаг: релевантность выдачи, фильтры, ранжирование — «нашёл → положил».",
+                      "en": "Lever: result relevance, filters, ranking — \"found it → added it\"."
+                    },
+                    "children": [
+                      {
+                        "id": "search-to-cart",
+                        "level": 5,
+                        "title": {
+                          "ru": "Search → Cart",
+                          "en": "Search → cart"
+                        },
+                        "note": {
+                          "ru": "Доля поисков, закончившихся добавлением в корзину, — метрика качества поиска.",
+                          "en": "Share of searches ending in an add-to-cart — the search quality metric."
+                        },
+                        "metricId": "search-to-cart"
+                      },
+                      {
+                        "id": "zero-results",
+                        "level": 5,
+                        "title": {
+                          "ru": "Доля пустых выдач",
+                          "en": "Zero-result rate"
+                        },
+                        "note": {
+                          "ru": "Поиски без результатов: сигнал дыр в ассортименте или в матчинге запросов.",
+                          "en": "Searches with no results: a signal of assortment or query-matching gaps."
+                        },
+                        "metricId": "search-to-cart"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "metricId": "traffic"
+          },
+          {
+            "id": "repeat",
+            "level": 2,
+            "metricId": "repeat-rate",
+            "title": {
+              "ru": "Повторные покупки",
+              "en": "Repeat purchases"
+            },
+            "note": {
+              "ru": "Возвращаемость покупателей — дешевле любого привлечения.",
+              "en": "Buyer returns — cheaper than any acquisition."
+            },
+            "children": [
+              {
+                "id": "frequency",
+                "level": 3,
+                "metricId": "purchase-frequency",
+                "title": {
+                  "ru": "Частота заказов",
+                  "en": "Order frequency"
+                },
+                "note": {
+                  "ru": "Заказы на активного покупателя; растёт с привычкой и подпиской.",
+                  "en": "Orders per active buyer; grows with habit and membership."
+                },
+                "children": [
+                  {
+                    "id": "membership",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Подписка покупателя",
+                      "en": "Buyer membership"
+                    },
+                    "note": {
+                      "ru": "Рычаг: бесплатная доставка и бонусы по подписке повышают частоту.",
+                      "en": "Lever: free delivery and perks in a membership raise frequency."
+                    },
+                    "children": [
+                      {
+                        "id": "member-share",
+                        "level": 5,
+                        "title": {
+                          "ru": "Доля заказов подписчиков",
+                          "en": "Member order share"
+                        },
+                        "note": {
+                          "ru": "Проникновение подписки в заказы — насколько программа реально двигает GMV.",
+                          "en": "Membership penetration into orders — how much the program actually moves GMV."
+                        },
+                        "metricId": "purchase-frequency"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "supply",
+        "level": 1,
+        "title": {
+          "ru": "Предложение (селлеры)",
+          "en": "Supply (sellers)"
+        },
+        "formula": {
+          "ru": "селлеры × SKU × наличие",
+          "en": "sellers × SKUs × availability"
+        },
+        "note": {
+          "ru": "Сторона продавцов: без живого ассортимента спрос уходит к конкуренту.",
+          "en": "The seller side: without living assortment, demand walks to a competitor."
+        },
+        "children": [
+          {
+            "id": "sellers",
+            "level": 2,
+            "metricId": "active-listings",
+            "title": {
+              "ru": "Активные селлеры",
+              "en": "Active sellers"
+            },
+            "note": {
+              "ru": "Кто реально торгует, а не просто зарегистрировался.",
+              "en": "Who actually trades, not just signed up."
+            },
+            "children": [
+              {
+                "id": "seller-onboarding",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "Онбординг селлера",
+                  "en": "Seller onboarding"
+                },
+                "note": {
+                  "ru": "Рычаг: время и трение от регистрации до первой продажи.",
+                  "en": "Lever: time and friction from sign-up to first sale."
+                },
+                "children": [
+                  {
+                    "id": "time-to-first-sale",
+                    "level": 4,
+                    "title": {
+                      "ru": "Время до первой продажи",
+                      "en": "Time to first sale"
+                    },
+                    "note": {
+                      "ru": "Селлер без продаж в первый месяц почти наверняка уйдёт.",
+                      "en": "A seller with no sales in month one is almost certain to churn."
+                    },
+                    "children": [
+                      {
+                        "id": "seller-retention",
+                        "level": 5,
+                        "title": {
+                          "ru": "Retention селлеров",
+                          "en": "Seller retention"
+                        },
+                        "note": {
+                          "ru": "Доля селлеров, продолжающих торговать через 3/6 месяцев.",
+                          "en": "Share of sellers still trading after 3/6 months."
+                        },
+                        "metricId": "seller-retention"
+                      }
+                    ],
+                    "metricId": "seller-retention"
+                  }
+                ]
+              },
+              {
+                "id": "assortment",
+                "level": 3,
+                "title": {
+                  "ru": "Ширина ассортимента",
+                  "en": "Assortment width"
+                },
+                "note": {
+                  "ru": "Уникальные SKU по категориям; смотрится взвешенно по спросу.",
+                  "en": "Unique SKUs per category; weighted by demand."
+                },
+                "children": [
+                  {
+                    "id": "instock",
+                    "level": 4,
+                    "metricId": "oos-rate",
+                    "title": {
+                      "ru": "Доступность (in-stock)",
+                      "en": "In-stock availability"
+                    },
+                    "note": {
+                      "ru": "Товар есть в наличии в момент спроса — иначе ассортимент бумажный.",
+                      "en": "The item is in stock at the moment of demand — otherwise assortment is on paper."
+                    }
+                  }
+                ],
+                "metricId": "assortment-width"
+              }
+            ]
+          },
+          {
+            "id": "price",
+            "level": 2,
+            "title": {
+              "ru": "Конкурентность цен",
+              "en": "Price competitiveness"
+            },
+            "note": {
+              "ru": "Индекс цен против конкурентов: дорогая полка убивает конверсию всей категории.",
+              "en": "Price index vs competitors: an expensive shelf kills the whole category's conversion."
+            },
+            "children": [
+              {
+                "id": "price-tools",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "Ценовые инструменты селлера",
+                  "en": "Seller pricing tools"
+                },
+                "note": {
+                  "ru": "Рычаг: автоцены, ко-финансируемые промо и рекомендации по цене.",
+                  "en": "Lever: auto-pricing, co-funded promos and price recommendations."
+                }
+              }
+            ],
+            "metricId": "price-competitiveness"
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "liquidity",
+        "level": 1,
+        "metricId": "liquidity",
+        "title": {
+          "ru": "Ликвидность и логистика",
+          "en": "Liquidity & logistics"
+        },
+        "note": {
+          "ru": "Связывает стороны: спрос встретил товар — и товар доехал.",
+          "en": "Connects the sides: demand met the item — and the item arrived."
+        },
+        "children": [
+          {
+            "id": "delivery",
+            "level": 2,
+            "title": {
+              "ru": "Скорость доставки",
+              "en": "Delivery speed"
+            },
+            "note": {
+              "ru": "Обещанный и фактический срок; быстрее — выше конверсия и частота.",
+              "en": "Promised vs actual time; faster means higher conversion and frequency."
+            },
+            "children": [
+              {
+                "id": "fulfilment",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "Модель фулфилмента (FBO/FBS)",
+                  "en": "Fulfillment model (FBO/FBS)"
+                },
+                "note": {
+                  "ru": "Рычаг: доля товара на складах платформы — управляемость сроков и качества сборки.",
+                  "en": "Lever: share of inventory in platform warehouses — control over timing and picking quality."
+                },
+                "children": [
+                  {
+                    "id": "on-time-delivery",
+                    "level": 4,
+                    "title": {
+                      "ru": "Доставка вовремя",
+                      "en": "On-time delivery"
+                    },
+                    "note": {
+                      "ru": "Доля заказов в обещанный срок — предиктор повторных заказов.",
+                      "en": "Share of orders within the promise — a predictor of repeat orders."
+                    },
+                    "children": [
+                      {
+                        "id": "picking-accuracy",
+                        "level": 5,
+                        "title": {
+                          "ru": "Точность сборки",
+                          "en": "Picking accuracy"
+                        },
+                        "note": {
+                          "ru": "Собрали то, что заказано: ошибки сборки → возвраты и жалобы.",
+                          "en": "Picked what was ordered: picking errors → returns and complaints."
+                        },
+                        "metricId": "on-time-delivery"
+                      }
+                    ],
+                    "metricId": "on-time-delivery"
+                  }
+                ]
+              }
+            ],
+            "metricId": "delivery-time"
+          },
+          {
+            "id": "takerate",
+            "level": 2,
+            "metricId": "take-rate",
+            "title": "Take rate",
+            "note": {
+              "ru": "Комиссия с оборота — монетизация ликвидности; задерёшь — селлеры уйдут.",
+              "en": "Commission on flow — monetizing liquidity; overdo it and sellers leave."
+            },
+            "children": [
+              {
+                "id": "seller-services",
+                "level": 3,
+                "title": {
+                  "ru": "Доп-услуги селлерам",
+                  "en": "Seller services"
+                },
+                "note": {
+                  "ru": "Реклама, логистика, финтех для селлеров — рост take rate без роста базовой комиссии.",
+                  "en": "Ads, logistics, fintech for sellers — take-rate growth without raising the base commission."
+                },
+                "children": [
+                  {
+                    "id": "ads-revenue",
+                    "level": 4,
+                    "title": {
+                      "ru": "Выручка рекламы селлеров",
+                      "en": "Seller ads revenue"
+                    },
+                    "note": {
+                      "ru": "Высокомаржинальный слой поверх комиссии: продвижение в поиске и карточках.",
+                      "en": "A high-margin layer on top of commission: promotion in search and product pages."
+                    },
+                    "metricId": "ad-coverage"
+                  }
+                ],
+                "metricId": "take-rate"
+              }
+            ]
+          }
+        ]
+      }
     ]
   },
   "pyramid": {
-    "note": "От оборота и комиссии (вершина) к складской логистике (основание).",
+    "note": {
+      "ru": "От оборота и комиссии (вершина) к складской логистике (основание).",
+      "en": "From flow and commission (top) to warehouse logistics (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "руководство", "items": ["GMV", "Выручка (take rate)", "Активные покупатели"] },
-      { "label": "Продуктовые", "role": "продакты", "items": ["Конверсия", "Повторные покупки", "Ширина ассортимента"] },
-      { "label": "Операционные", "role": "операции/категории", "items": ["Search→cart", "In-stock", "Скорость доставки"] },
-      { "label": "Платформенные", "role": "инженеры/логистика", "items": ["Аптайм каталога", "Загрузка карточки", "Точность сборки"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "руководство",
+          "en": "leadership"
+        },
+        "items": [
+          "GMV",
+          {
+            "ru": "Выручка (take rate)",
+            "en": "Revenue (take rate)"
+          },
+          {
+            "ru": "Активные покупатели",
+            "en": "Active buyers"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "продакты",
+          "en": "product"
+        },
+        "items": [
+          {
+            "ru": "Конверсия",
+            "en": "Conversion"
+          },
+          {
+            "ru": "Повторные покупки",
+            "en": "Repeat purchases"
+          },
+          {
+            "ru": "Ширина ассортимента",
+            "en": "Assortment width"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": {
+          "ru": "операции/категории",
+          "en": "ops/categories"
+        },
+        "items": [
+          "Search→cart",
+          "In-stock",
+          {
+            "ru": "Скорость доставки",
+            "en": "Delivery speed"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "инженеры/логистика",
+          "en": "engineers/logistics"
+        },
+        "items": [
+          {
+            "ru": "Аптайм каталога",
+            "en": "Catalog uptime"
+          },
+          {
+            "ru": "Загрузка карточки",
+            "en": "Page load"
+          },
+          {
+            "ru": "Точность сборки",
+            "en": "Picking accuracy"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Доля возвратов", "note": "рост GMV за счёт возвратов — фиктивный оборот" },
-    { "title": "Жалобы на брак/подделки", "note": "качество предложения" },
-    { "title": "Отток селлеров", "note": "слишком высокая комиссия выдавливает продавцов" }
+    {
+      "title": {
+        "ru": "Доля возвратов",
+        "en": "Return rate"
+      },
+      "note": {
+        "ru": "рост GMV за счёт возвратов — фиктивный оборот",
+        "en": "GMV growth via returns is fictitious flow"
+      }
+    },
+    {
+      "title": {
+        "ru": "Жалобы на брак/подделки",
+        "en": "Defect/counterfeit complaints"
+      },
+      "note": {
+        "ru": "качество предложения",
+        "en": "supply quality"
+      }
+    },
+    {
+      "title": {
+        "ru": "Отток селлеров",
+        "en": "Seller churn"
+      },
+      "note": {
+        "ru": "слишком высокая комиссия выдавливает продавцов",
+        "en": "too high a commission squeezes sellers out"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "ozon", "name": "Ozon", "northStar": "GMV (3P-маркетплейс + логистика)",
-      "note": "ставка на собственную логистику и широкий 3P-ассортимент; ключ — доступность и скорость доставки.",
+      "id": "ozon",
+      "name": "Ozon",
+      "northStar": {
+        "ru": "GMV (3P-маркетплейс + логистика)",
+        "en": "GMV (3P marketplace + logistics)"
+      },
+      "note": {
+        "ru": "ставка на собственную логистику и широкий 3P-ассортимент; ключ — доступность и скорость доставки.",
+        "en": "a bet on own logistics and wide 3P assortment; the key is availability and delivery speed."
+      },
       "root": {
-        "id": "oz-gmv", "level": 0, "title": "GMV", "formula": "Покупатели × Заказы × Чек",
-        "note": "Рост через 3P-селлеров и плотную логистическую сеть (ПВЗ, склады).",
+        "id": "oz-gmv",
+        "level": 0,
+        "metricId": "gmv",
+        "title": "GMV",
+        "formula": {
+          "ru": "Покупатели × Частота × Чек",
+          "en": "Buyers × Frequency × Basket"
+        },
+        "note": {
+          "ru": "Рост через 3P-селлеров и плотную логистическую сеть (ПВЗ, склады).",
+          "en": "Growth via 3P sellers and a dense logistics network (pickup points, warehouses)."
+        },
         "children": [
-          { "id": "oz-demand", "level": 1, "title": "Спрос", "note": "Покупательская сторона.", "children": [
-            { "id": "oz-traffic", "level": 2, "title": "Трафик + приложение", "note": "Доля заказов из приложения.", "children": [
-              { "id": "oz-cr", "level": 3, "title": "Конверсия", "note": "Визит → заказ.", "children": [
-                { "id": "oz-premium", "level": 4, "title": "Подписка Premium", "note": "Чаще и больше заказывают." }
-              ] }
-            ] }
-          ] },
-          { "id": "oz-supply", "level": 1, "title": "3P-селлеры", "note": "Маркетплейс-модель.", "children": [
-            { "id": "oz-sellers", "level": 2, "title": "Активные селлеры", "note": "Поставщики ассортимента.", "children": [
-              { "id": "oz-sku", "level": 3, "title": "SKU в наличии", "note": "Ширина × доступность." }
-            ] }
-          ] },
-          { "id": "oz-logi", "level": 1, "title": "Логистика", "note": "Конкурентное преимущество.", "children": [
-            { "id": "oz-pvz", "level": 2, "title": "Сеть ПВЗ", "note": "Точки выдачи рядом с покупателем.", "children": [
-              { "id": "oz-speed", "level": 3, "title": "Срок доставки", "note": "Время до получения." }
-            ] },
-            { "id": "oz-fintech", "level": 2, "title": "Ozon-финтех / реклама", "note": "Доп-выручка поверх торговли." }
-          ] }
+          {
+            "id": "oz-demand",
+            "level": 1,
+            "title": {
+              "ru": "Спрос",
+              "en": "Demand"
+            },
+            "note": {
+              "ru": "Покупательская сторона: приложение как главный канал.",
+              "en": "The buyer side: the app as the main channel."
+            },
+            "children": [
+              {
+                "id": "oz-app",
+                "level": 2,
+                "title": {
+                  "ru": "Доля заказов из приложения",
+                  "en": "App order share"
+                },
+                "note": {
+                  "ru": "Приложение дешевле в удержании и главный канал пушей.",
+                  "en": "The app is cheaper for retention and the main push channel."
+                },
+                "children": [
+                  {
+                    "id": "oz-cr",
+                    "level": 3,
+                    "metricId": "conversion-rate",
+                    "title": {
+                      "ru": "Конверсия",
+                      "en": "Conversion"
+                    },
+                    "note": {
+                      "ru": "Визит → заказ.",
+                      "en": "Visit → order."
+                    },
+                    "children": [
+                      {
+                        "id": "oz-premium",
+                        "level": 4,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Подписка Premium",
+                          "en": "Premium membership"
+                        },
+                        "note": {
+                          "ru": "Рычаг: подписчики заказывают чаще и больше.",
+                          "en": "Lever: members order more often and more."
+                        },
+                        "children": [
+                          {
+                            "id": "oz-premium-freq",
+                            "level": 5,
+                            "metricId": "purchase-frequency",
+                            "title": {
+                              "ru": "Частота Premium vs обычных",
+                              "en": "Premium vs regular frequency"
+                            },
+                            "note": {
+                              "ru": "Инкрементальная частота подписчиков — проверка, что подписка работает, а не собирает и так лояльных.",
+                              "en": "Members' incremental frequency — checks the membership works instead of collecting the already-loyal."
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "app-share"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "oz-supply",
+            "level": 1,
+            "title": {
+              "ru": "3P-селлеры",
+              "en": "3P sellers"
+            },
+            "note": {
+              "ru": "Маркетплейс-модель: ассортимент делают продавцы.",
+              "en": "The marketplace model: sellers build the assortment."
+            },
+            "children": [
+              {
+                "id": "oz-sellers",
+                "level": 2,
+                "metricId": "active-listings",
+                "title": {
+                  "ru": "Активные селлеры",
+                  "en": "Active sellers"
+                },
+                "note": {
+                  "ru": "Поставщики ассортимента.",
+                  "en": "The assortment suppliers."
+                },
+                "children": [
+                  {
+                    "id": "oz-sku",
+                    "level": 3,
+                    "metricId": "oos-rate",
+                    "title": {
+                      "ru": "SKU в наличии",
+                      "en": "SKUs in stock"
+                    },
+                    "note": {
+                      "ru": "Ширина × доступность.",
+                      "en": "Width × availability."
+                    },
+                    "children": [
+                      {
+                        "id": "oz-seller-ads",
+                        "level": 4,
+                        "title": {
+                          "ru": "Реклама селлеров",
+                          "en": "Seller ads"
+                        },
+                        "note": {
+                          "ru": "Высокомаржинальная выручка поверх комиссии.",
+                          "en": "High-margin revenue on top of commission."
+                        },
+                        "metricId": "ad-coverage"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "oz-logi",
+            "level": 1,
+            "title": {
+              "ru": "Логистика",
+              "en": "Logistics"
+            },
+            "note": {
+              "ru": "Конкурентное преимущество: сроки и сеть выдачи.",
+              "en": "The competitive edge: speed and the pickup network."
+            },
+            "children": [
+              {
+                "id": "oz-pvz",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Сеть ПВЗ",
+                  "en": "Pickup network"
+                },
+                "note": {
+                  "ru": "Рычаг: точка выдачи в шаговой доступности снижает трение получения.",
+                  "en": "Lever: a pickup point within walking distance cuts collection friction."
+                },
+                "children": [
+                  {
+                    "id": "oz-speed",
+                    "level": 3,
+                    "metricId": "time-to-match",
+                    "title": {
+                      "ru": "Срок доставки",
+                      "en": "Delivery time"
+                    },
+                    "note": {
+                      "ru": "Время от заказа до получения; медиана и p90.",
+                      "en": "Time from order to pickup; median and p90."
+                    },
+                    "children": [
+                      {
+                        "id": "oz-pvz-load",
+                        "level": 4,
+                        "title": {
+                          "ru": "Загрузка ПВЗ",
+                          "en": "Pickup point load"
+                        },
+                        "note": {
+                          "ru": "Очереди в точках выдачи портят последний шаг опыта.",
+                          "en": "Queues at pickup points spoil the last step of the experience."
+                        },
+                        "metricId": "provider-availability"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "oz-fintech",
+                "level": 2,
+                "title": {
+                  "ru": "Финтех и реклама",
+                  "en": "Fintech & ads"
+                },
+                "note": {
+                  "ru": "Доп-выручка поверх торговли: карта, рассрочка, продвижение.",
+                  "en": "Extra revenue on top of commerce: card, installments, promotion."
+                },
+                "metricId": "take-rate"
+              }
+            ],
+            "kind": "group"
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["GMV", "Выручка (комиссия+реклама+финтех)", "Активные покупатели"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Конверсия", "Premium-подписка", "Активные селлеры"] },
-        { "label": "Операционные", "role": "операции", "items": ["SKU в наличии", "Срок доставки", "Загрузка ПВЗ"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Аптайм", "Скорость карточки", "Точность сборки заказа"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              "GMV",
+              {
+                "ru": "Выручка (комиссия+реклама+финтех)",
+                "en": "Revenue (fees+ads+fintech)"
+              },
+              {
+                "ru": "Активные покупатели",
+                "en": "Active buyers"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Конверсия",
+                "en": "Conversion"
+              },
+              {
+                "ru": "Premium-подписка",
+                "en": "Premium membership"
+              },
+              {
+                "ru": "Активные селлеры",
+                "en": "Active sellers"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "операции",
+              "en": "operations"
+            },
+            "items": [
+              {
+                "ru": "SKU в наличии",
+                "en": "SKUs in stock"
+              },
+              {
+                "ru": "Срок доставки",
+                "en": "Delivery time"
+              },
+              {
+                "ru": "Загрузка ПВЗ",
+                "en": "Pickup load"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Аптайм",
+                "en": "Uptime"
+              },
+              {
+                "ru": "Скорость карточки",
+                "en": "Page speed"
+              },
+              {
+                "ru": "Точность сборки заказа",
+                "en": "Order picking accuracy"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Возвраты и невыкуп", "note": "раздувают GMV без реальной выручки" },
-        { "title": "Перегруз ПВЗ", "note": "очереди бьют по опыту получения" }
+        {
+          "title": {
+            "ru": "Возвраты и невыкуп",
+            "en": "Returns & non-buyout"
+          },
+          "note": {
+            "ru": "раздувают GMV без реальной выручки",
+            "en": "inflate GMV with no real revenue"
+          }
+        },
+        {
+          "title": {
+            "ru": "Перегруз ПВЗ",
+            "en": "Pickup overload"
+          },
+          "note": {
+            "ru": "очереди бьют по опыту получения",
+            "en": "queues hurt the collection experience"
+          }
+        }
       ]
     },
     {
-      "id": "wildberries", "name": "Wildberries", "northStar": "GMV (масштаб + fashion-примерка)",
-      "note": "лидер по масштабу и одежде; ставка на дешёвую доставку в ПВЗ и примерку, отсюда высокий невыкуп.",
+      "id": "wildberries",
+      "name": "Wildberries",
+      "northStar": {
+        "ru": "GMV (масштаб + fashion-примерка)",
+        "en": "GMV (scale + fashion try-on)"
+      },
+      "note": {
+        "ru": "лидер по масштабу и одежде; ставка на дешёвую доставку в ПВЗ и примерку, отсюда высокий невыкуп.",
+        "en": "the scale and apparel leader; a bet on cheap pickup delivery and try-on, hence high non-buyout."
+      },
       "root": {
-        "id": "wb-gmv", "level": 0, "title": "GMV", "formula": "Покупатели × Заказы × Чек",
-        "note": "Гигантский охват + модель «заказал много, примерил, выкупил часть».",
+        "id": "wb-gmv",
+        "level": 0,
+        "metricId": "gmv",
+        "title": "GMV",
+        "formula": {
+          "ru": "Покупатели × Частота × Чек × Выкуп",
+          "en": "Buyers × Frequency × Basket × Buyout"
+        },
+        "note": {
+          "ru": "Гигантский охват + модель «заказал много, примерил, выкупил часть».",
+          "en": "Huge reach + the \"order a lot, try on, keep some\" model."
+        },
         "children": [
-          { "id": "wb-demand", "level": 1, "title": "Массовый спрос", "note": "Огромная база покупателей.", "children": [
-            { "id": "wb-freq", "level": 2, "title": "Частота заказов", "note": "Привычка заказывать часто.", "children": [
-              { "id": "wb-basket", "level": 3, "title": "Размер корзины", "note": "Сколько кладут за раз (примерка).", "children": [
-                { "id": "wb-buyout", "level": 4, "title": "Доля выкупа", "note": "Что из заказанного реально купили." }
-              ] }
-            ] }
-          ] },
-          { "id": "wb-supply", "level": 1, "title": "Селлеры и ассортимент", "note": "Низкий порог входа продавца.", "children": [
-            { "id": "wb-sellers", "level": 2, "title": "Активные селлеры", "note": "Массовый поток поставщиков.", "children": [
-              { "id": "wb-fashion", "level": 3, "title": "Доля fashion-SKU", "note": "Одежда — ядро ассортимента." }
-            ] }
-          ] },
-          { "id": "wb-logi", "level": 1, "title": "Дешёвая логистика", "note": "Плотная сеть ПВЗ.", "children": [
-            { "id": "wb-pvz", "level": 2, "title": "Покрытие ПВЗ", "note": "Доступность точек выдачи.", "children": [
-              { "id": "wb-cost", "level": 3, "title": "Стоимость логистики на заказ", "note": "Давит маржу при высоком невыкупе." }
-            ] }
-          ] }
+          {
+            "id": "wb-demand",
+            "level": 1,
+            "title": {
+              "ru": "Массовый спрос",
+              "en": "Mass demand"
+            },
+            "note": {
+              "ru": "Огромная база покупателей с привычкой ежедневных заказов.",
+              "en": "A vast buyer base with a daily-order habit."
+            },
+            "children": [
+              {
+                "id": "wb-freq",
+                "level": 2,
+                "metricId": "purchase-frequency",
+                "title": {
+                  "ru": "Частота заказов",
+                  "en": "Order frequency"
+                },
+                "note": {
+                  "ru": "Привычка заказывать часто и мелкими партиями.",
+                  "en": "The habit of frequent small-batch orders."
+                },
+                "children": [
+                  {
+                    "id": "wb-basket",
+                    "level": 3,
+                    "title": {
+                      "ru": "Размер корзины",
+                      "en": "Basket size"
+                    },
+                    "note": {
+                      "ru": "Сколько кладут за раз — у fashion корзина раздута примеркой.",
+                      "en": "How much goes in at once — fashion baskets are inflated by try-on."
+                    },
+                    "children": [
+                      {
+                        "id": "wb-buyout",
+                        "level": 4,
+                        "title": {
+                          "ru": "Доля выкупа",
+                          "en": "Buyout rate"
+                        },
+                        "formula": {
+                          "ru": "выкуплено / доставлено",
+                          "en": "kept / delivered"
+                        },
+                        "note": {
+                          "ru": "Что из заказанного реально купили; главный fashion-рычаг маржи.",
+                          "en": "What people actually keep; the main fashion margin lever."
+                        },
+                        "children": [
+                          {
+                            "id": "wb-size-quality",
+                            "level": 5,
+                            "kind": "lever",
+                            "title": {
+                              "ru": "Размерные данные карточек",
+                              "en": "Size data quality"
+                            },
+                            "note": {
+                              "ru": "Рычаг: честные размерные сетки селлеров поднимают выкуп.",
+                              "en": "Lever: honest seller size charts raise buyout."
+                            }
+                          }
+                        ],
+                        "metricId": "buyout-rate"
+                      }
+                    ],
+                    "metricId": "aov"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "wb-supply",
+            "level": 1,
+            "title": {
+              "ru": "Селлеры и ассортимент",
+              "en": "Sellers & assortment"
+            },
+            "note": {
+              "ru": "Низкий порог входа продавца — массовый поток поставщиков.",
+              "en": "A low seller entry bar — a mass inflow of suppliers."
+            },
+            "children": [
+              {
+                "id": "wb-sellers",
+                "level": 2,
+                "metricId": "active-listings",
+                "title": {
+                  "ru": "Активные селлеры",
+                  "en": "Active sellers"
+                },
+                "note": {
+                  "ru": "Кто реально торгует; отток из-за штрафов — контр-метрика.",
+                  "en": "Who actually trades; churn from fines is the counter-metric."
+                },
+                "children": [
+                  {
+                    "id": "wb-fashion",
+                    "level": 3,
+                    "title": {
+                      "ru": "Доля fashion-SKU",
+                      "en": "Fashion SKU share"
+                    },
+                    "note": {
+                      "ru": "Одежда — ядро ассортимента и причина примерочной модели.",
+                      "en": "Apparel is the assortment core and the reason for the try-on model."
+                    },
+                    "children": [
+                      {
+                        "id": "wb-seller-nps",
+                        "level": 4,
+                        "metricId": "nps-csat",
+                        "title": {
+                          "ru": "NPS селлеров",
+                          "en": "Seller NPS"
+                        },
+                        "note": {
+                          "ru": "Отношение продавцов к платформе: предиктор оттока предложения.",
+                          "en": "Sellers' attitude to the platform: a supply-churn predictor."
+                        }
+                      }
+                    ],
+                    "metricId": "assortment-width"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "wb-logi",
+            "level": 1,
+            "title": {
+              "ru": "Дешёвая логистика",
+              "en": "Cheap logistics"
+            },
+            "note": {
+              "ru": "Плотная сеть ПВЗ и примерочные — фундамент модели.",
+              "en": "A dense pickup network with fitting rooms — the model's foundation."
+            },
+            "children": [
+              {
+                "id": "wb-pvz",
+                "level": 2,
+                "title": {
+                  "ru": "Покрытие ПВЗ",
+                  "en": "Pickup coverage"
+                },
+                "note": {
+                  "ru": "Доступность точки с примерочной в шаговой доступности.",
+                  "en": "A fitting-room pickup point within walking distance."
+                },
+                "children": [
+                  {
+                    "id": "wb-cost",
+                    "level": 3,
+                    "metricId": "contribution-margin",
+                    "title": {
+                      "ru": "Логистика на заказ",
+                      "en": "Logistics per order"
+                    },
+                    "note": {
+                      "ru": "Стоимость прямой и обратной логистики; невыкуп её удваивает.",
+                      "en": "Forward plus reverse logistics cost; non-buyout doubles it."
+                    },
+                    "children": [
+                      {
+                        "id": "wb-return-cost",
+                        "level": 4,
+                        "title": {
+                          "ru": "Стоимость обратного потока",
+                          "en": "Reverse-flow cost"
+                        },
+                        "note": {
+                          "ru": "Возврат невыкупленного на склад — цена примерочной модели.",
+                          "en": "Returning unkept items to the warehouse — the price of the try-on model."
+                        },
+                        "metricId": "contribution-margin"
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "provider-availability"
+              }
+            ],
+            "kind": "group"
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["GMV", "Выручка (комиссия+логистика)", "Активные покупатели"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Частота заказов", "Доля выкупа", "Активные селлеры"] },
-        { "label": "Операционные", "role": "операции", "items": ["Размер корзины", "Покрытие ПВЗ", "Стоимость логистики"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Аптайм приложения", "Скорость поиска", "Сборка/сортировка"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              "GMV",
+              {
+                "ru": "Выручка (комиссия+логистика)",
+                "en": "Revenue (fees+logistics)"
+              },
+              {
+                "ru": "Активные покупатели",
+                "en": "Active buyers"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Частота заказов",
+                "en": "Order frequency"
+              },
+              {
+                "ru": "Доля выкупа",
+                "en": "Buyout rate"
+              },
+              {
+                "ru": "Активные селлеры",
+                "en": "Active sellers"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "операции",
+              "en": "operations"
+            },
+            "items": [
+              {
+                "ru": "Размер корзины",
+                "en": "Basket size"
+              },
+              {
+                "ru": "Покрытие ПВЗ",
+                "en": "Pickup coverage"
+              },
+              {
+                "ru": "Стоимость логистики",
+                "en": "Logistics cost"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Аптайм приложения",
+                "en": "App uptime"
+              },
+              {
+                "ru": "Скорость поиска",
+                "en": "Search speed"
+              },
+              {
+                "ru": "Сборка/сортировка",
+                "en": "Picking/sorting"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Доля невыкупа", "note": "примерочная модель раздувает заказы и логистические косты" },
-        { "title": "Штрафы селлерам / отток", "note": "давление на продавцов" }
+        {
+          "title": {
+            "ru": "Доля невыкупа",
+            "en": "Non-buyout rate"
+          },
+          "note": {
+            "ru": "примерочная модель раздувает заказы и логистические косты",
+            "en": "the try-on model inflates orders and logistics costs"
+          }
+        },
+        {
+          "title": {
+            "ru": "Штрафы селлерам / отток",
+            "en": "Seller fines / churn"
+          },
+          "note": {
+            "ru": "давление на продавцов",
+            "en": "pressure on sellers"
+          }
+        }
       ]
     }
   ]

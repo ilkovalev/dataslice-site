@@ -1,0 +1,302 @@
+[
+  {
+    "id": "cart-abandonment",
+    "category": "acquisition",
+    "title": { "ru": "Брошенные корзины", "en": "Cart abandonment" },
+    "aliases": ["брошенная корзина"],
+    "tex": { "ru": "\\text{Abandonment}=1-\\dfrac{\\text{оплаченные корзины}}{\\text{созданные корзины}}", "en": "\\text{Abandonment}=1-\\dfrac{\\text{paid carts}}{\\text{created carts}}" },
+    "desc": {
+      "ru": "Доля корзин, не дошедших до оплаты. Самая обидная точка воронки: человек уже выбрал товар — то есть проделал всю работу — и остановился в шаге от денег. Типичные причины: неожиданная стоимость доставки, обязательная регистрация, мало способов оплаты.",
+      "en": "The share of carts that never reach payment. The funnel's most frustrating point: the shopper already chose the item — did all the work — and stopped one step from paying. Typical causes: surprise shipping costs, forced registration, too few payment methods."
+    },
+    "pitfalls": {
+      "ru": [
+        "Корзина как вишлист — нормальное поведение в маркетплейсах: часть «брошенных» никогда и не собирались покупать сегодня.",
+        "Окно имеет значение: корзина, оплаченная через два дня, в дневном отчёте выглядит брошенной.",
+        "Триггерные письма возвращают часть, но их эффект надо мерить на контрольной группе — многие вернулись бы сами."
+      ],
+      "en": [
+        "Using the cart as a wishlist is normal on marketplaces: some \"abandoned\" carts were never meant to convert today.",
+        "The window matters: a cart paid two days later looks abandoned in a daily report.",
+        "Recovery emails bring some back, but measure their effect against a control group — many would have returned anyway."
+      ]
+    },
+    "sql": "-- Cart abandonment and the drop-off reason mix\nWITH carts AS (\n  SELECT props->>'cart_id' AS cart_id,\n         MIN(ts) FILTER (WHERE event_name = 'add_to_cart') AS created_at,\n         MIN(ts) FILTER (WHERE event_name = 'checkout_start') AS checkout_at,\n         MIN(ts) FILTER (WHERE event_name = 'payment_success') AS paid_at\n  FROM events\n  GROUP BY 1\n)\nSELECT date_trunc('week', created_at) AS week,\n       COUNT(*) AS carts,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE paid_at IS NULL) / COUNT(*), 1) AS abandoned_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE checkout_at IS NULL) / COUNT(*), 1) AS left_before_checkout_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE checkout_at IS NOT NULL AND paid_at IS NULL)\n             / COUNT(*), 1) AS left_at_payment_pct\nFROM carts\nWHERE created_at IS NOT NULL\nGROUP BY 1\nORDER BY 1;",
+    "related": ["funnel-dropoff", "conversion-rate", "payment-success"]
+  },
+  {
+    "id": "payment-success",
+    "category": "acquisition",
+    "title": { "ru": "Успешность платежей", "en": "Payment success rate" },
+    "aliases": ["конверсия оплаты", "approval rate"],
+    "tex": { "ru": "\\text{Success}=\\dfrac{\\text{успешные списания}}{\\text{попытки оплаты}}", "en": "\\text{Success}=\\dfrac{\\text{successful charges}}{\\text{payment attempts}}" },
+    "desc": {
+      "ru": "Доля попыток оплаты, закончившихся деньгами. Последний шаг воронки — и самый дорогой: сюда доходят только те, кто уже решил купить, поэтому каждый процент здесь стоит дороже процента на входе.",
+      "en": "The share of payment attempts that end in money. The funnel's last step and the most expensive one: only people who already decided to buy get here, so every point of it is worth more than a point at the top."
+    },
+    "pitfalls": {
+      "ru": [
+        "Метрика проседает по банкам, странам и методам — среднее скрывает конкретную поломку у конкретного эквайера.",
+        "Отклонения антифрода тоже считаются неуспехом: ужесточили правила — «упала конверсия оплаты».",
+        "Ретраи: считать попытки или уникальные заказы — разные метрики; для воронки нужен второй вариант."
+      ],
+      "en": [
+        "It dips by bank, country and method — the average hides a specific break at a specific acquirer.",
+        "Anti-fraud declines count as failures too: tighten the rules and \"payment conversion drops\".",
+        "Retries: counting attempts or unique orders gives different metrics; the funnel needs the latter."
+      ]
+    },
+    "sql": "-- Payment success by method and decline-reason breakdown\nSELECT props->>'method' AS method,\n       COUNT(*) AS attempts,\n       COUNT(*) FILTER (WHERE props->>'result' = 'success') AS successes,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE props->>'result' = 'success') / COUNT(*), 1) AS success_pct,\n       COUNT(*) FILTER (WHERE props->>'decline_reason' = 'insufficient_funds') AS no_funds,\n       COUNT(*) FILTER (WHERE props->>'decline_reason' = 'antifraud') AS antifraud_declines\nFROM events\nWHERE event_name = 'payment_attempt'\n  AND ts >= now() - INTERVAL '7 days'\nGROUP BY 1\nORDER BY attempts DESC;",
+    "related": ["cart-abandonment", "funnel-dropoff", "fraud-rate"]
+  },
+  {
+    "id": "win-rate",
+    "category": "acquisition",
+    "title": { "ru": "Win Rate — конверсия сделок", "en": "Win rate" },
+    "aliases": ["конверсия продаж"],
+    "tex": { "ru": "\\text{Win Rate}=\\dfrac{\\text{выигранные сделки}}{\\text{закрытые сделки}}", "en": "\\text{Win rate}=\\dfrac{\\text{deals won}}{\\text{deals closed}}" },
+    "desc": {
+      "ru": "Доля сделок, закрытых в оплату. Ключевая метрика B2B-воронки: вместе с длиной цикла и средним чеком она определяет, сколько выручки принесёт пайплайн и когда.",
+      "en": "The share of deals closed as won. The key B2B funnel metric: together with cycle length and deal size it determines how much revenue the pipeline brings and when."
+    },
+    "pitfalls": {
+      "ru": [
+        "В знаменателе только закрытые сделки: открытые «висяки» не считаются, и win rate выглядит лучше реальности.",
+        "Ужесточили квалификацию лидов — win rate вырос, а выручка нет: метрику легко улучшить, просто отказываясь от сложных сделок.",
+        "Средний win rate по компании прячет разницу сегментов: enterprise и SMB — разные воронки."
+      ],
+      "en": [
+        "The denominator holds closed deals only: open stalled ones don't count, so win rate looks better than reality.",
+        "Tighten lead qualification and win rate rises while revenue doesn't: the metric is easily improved by refusing hard deals.",
+        "A company-average win rate hides segment differences: enterprise and SMB are different funnels."
+      ]
+    },
+    "sql": "-- Win rate and sales-cycle length by segment\nSELECT props->>'segment' AS segment,\n       COUNT(*) FILTER (WHERE props->>'stage' IN ('won', 'lost')) AS closed_deals,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE props->>'stage' = 'won')\n             / NULLIF(COUNT(*) FILTER (WHERE props->>'stage' IN ('won', 'lost')), 0), 1) AS win_rate_pct,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (\n         ORDER BY EXTRACT(day FROM (props->>'closed_at')::timestamp\n                                 - (props->>'created_at')::timestamp)\n       ) FILTER (WHERE props->>'stage' = 'won') AS median_cycle_days\nFROM events\nWHERE event_name = 'deal_snapshot'\nGROUP BY 1\nORDER BY closed_deals DESC;",
+    "related": ["conversion-rate", "mrr", "cac"]
+  },
+  {
+    "id": "traffic",
+    "category": "acquisition",
+    "title": { "ru": "Трафик по каналам", "en": "Traffic by channel" },
+    "aliases": ["визиты", "трафик"],
+    "tex": { "ru": "\\text{Трафик}=\\sum_{\\text{каналы}}\\text{визиты}", "en": "\\text{Traffic}=\\sum_{\\text{channels}}\\text{visits}" },
+    "desc": {
+      "ru": "Сколько визитов пришло в продукт и из каких источников. Смотреть надо не на общее число, а на состав: платный, органический, прямой и CRM-трафик отличаются и ценой, и качеством — рост за счёт платного канала при падающей органике означает, что бизнес становится дороже.",
+      "en": "How many visits arrive and from where. Watch the mix, not the total: paid, organic, direct and CRM traffic differ in both cost and quality — growth from paid while organic declines means the business is getting more expensive."
+    },
+    "pitfalls": {
+      "ru": [
+        "Атрибуция канала условна: last click отдаёт заслугу последнему касанию, хотя решение приняли раньше.",
+        "Прямой трафик — свалка: туда попадает всё, что не смогли атрибутировать (переходы из приложений, мессенджеров).",
+        "Боты и накрутка раздувают визиты, но не заказы — падение конверсии часто оказывается ростом мусорного трафика."
+      ],
+      "en": [
+        "Channel attribution is a convention: last click credits the final touch even though the decision came earlier.",
+        "Direct traffic is a dumping ground: everything unattributable lands there (in-app and messenger referrals).",
+        "Bots inflate visits but not orders — a conversion drop is often just junk traffic growth."
+      ]
+    },
+    "sql": "-- Traffic mix by channel, month over month\nSELECT date_trunc('month', started_at) AS month,\n       props->>'channel' AS channel,\n       COUNT(DISTINCT session_id) AS visits,\n       COUNT(DISTINCT user_id) AS users,\n       ROUND(100.0 * COUNT(DISTINCT session_id)\n             / SUM(COUNT(DISTINCT session_id)) OVER (\n                 PARTITION BY date_trunc('month', started_at)), 1) AS share_pct\nFROM sessions\nGROUP BY 1, 2\nORDER BY 1, visits DESC;",
+    "related": ["cac", "conversion-rate", "roas", "seo-visibility"]
+  },
+  {
+    "id": "seo-visibility",
+    "category": "acquisition",
+    "title": { "ru": "SEO-видимость и органический трафик", "en": "SEO visibility & organic traffic" },
+    "aliases": ["seo", "органика", "органические визиты"],
+    "tex": { "ru": "\\text{Видимость}=\\sum_{\\text{запросы}}\\text{частотность}\\times \\mathrm{CTR}(\\text{позиция})", "en": "\\text{Visibility}=\\sum_{\\text{queries}}\\text{volume}\\times \\mathrm{CTR}(\\text{position})" },
+    "desc": {
+      "ru": "Сколько органического трафика приносит поиск и какие позиции продукт занимает по целевым запросам. Медленный, но накопительный канал: в отличие от рекламы, он не выключается вместе с бюджетом — но и не включается по требованию.",
+      "en": "How much organic traffic search brings and what positions the product holds for target queries. A slow but compounding channel: unlike ads it doesn't switch off with the budget — and doesn't switch on when you need it either."
+    },
+    "pitfalls": {
+      "ru": [
+        "Позиции — не цель: трафик и заказы из органики важнее места в выдаче по случайному запросу.",
+        "Апдейты поисковика меняют трафик без ваших действий — привязывайте анализ к датам апдейтов.",
+        "Брендовый органический трафик — заслуга не SEO, а рекламы и продукта: считайте его отдельно."
+      ],
+      "en": [
+        "Rankings aren't the goal: organic traffic and orders matter more than a position on a random query.",
+        "Search-engine updates move traffic without any action from you — anchor analysis to update dates.",
+        "Branded organic traffic is earned by ads and the product, not SEO: count it separately."
+      ]
+    },
+    "sql": "-- Organic traffic split into branded and non-branded\nSELECT date_trunc('month', s.started_at) AS month,\n       COUNT(DISTINCT s.session_id) FILTER (\n         WHERE s.props->>'query' ILIKE '%brandname%') AS branded_visits,\n       COUNT(DISTINCT s.session_id) FILTER (\n         WHERE s.props->>'query' NOT ILIKE '%brandname%') AS non_branded_visits,\n       COUNT(DISTINCT o.order_id) AS orders\nFROM sessions s\nLEFT JOIN orders o ON o.user_id = s.user_id\n                  AND o.created_at BETWEEN s.started_at AND s.started_at + INTERVAL '1 day'\nWHERE s.props->>'channel' = 'organic'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["traffic", "conversion-rate", "cac"]
+  },
+  {
+    "id": "installs",
+    "category": "acquisition",
+    "title": { "ru": "Установки приложения", "en": "App installs" },
+    "aliases": ["установки", "инсталлы"],
+    "tex": { "ru": "\\text{Установки}=\\text{органические}+\\text{платные (UA)}", "en": "\\text{Installs}=\\text{organic}+\\text{paid (UA)}" },
+    "desc": {
+      "ru": "Сколько раз приложение установили. Верх мобильной воронки — и самая обманчивая метрика: установка ничего не стоит пользователю и ничего не значит для бизнеса, пока не превратилась в открытие, активацию и удержание.",
+      "en": "How many times the app was installed. The top of the mobile funnel — and the most deceptive metric: an install costs the user nothing and means nothing to the business until it turns into an open, an activation and retention."
+    },
+    "pitfalls": {
+      "ru": [
+        "Установка ≠ пользователь: часть никогда не открывает приложение после установки.",
+        "Фрод в UA: мотивированный трафик и подмена атрибуции надувают установки — сверяйте с retention когорт.",
+        "Органика и платные установки связаны: рост платных поднимает позицию в сторе и «бесплатно» добавляет органических — их легко приписать себе дважды."
+      ],
+      "en": [
+        "An install isn't a user: some never open the app afterwards.",
+        "UA fraud: incentivized traffic and attribution hijacking inflate installs — cross-check with cohort retention.",
+        "Organic and paid installs are linked: paid growth lifts store ranking and \"freely\" adds organic ones — easy to double-count."
+      ]
+    },
+    "sql": "-- Installs by source and the install-to-active funnel\nSELECT date_trunc('week', u.created_at) AS week,\n       u.acq_channel,\n       COUNT(*) AS installs,\n       COUNT(*) FILTER (WHERE EXISTS (\n         SELECT 1 FROM events e WHERE e.user_id = u.user_id\n           AND e.event_name = 'app_open')) AS opened,\n       COUNT(*) FILTER (WHERE EXISTS (\n         SELECT 1 FROM events e WHERE e.user_id = u.user_id\n           AND e.ts >= u.created_at + INTERVAL '7 days')) AS active_d7\nFROM users u\nGROUP BY 1, 2\nORDER BY 1, installs DESC;",
+    "related": ["cac", "activation-rate", "retention-n-day"]
+  },
+  {
+    "id": "cac",
+    "category": "acquisition",
+    "title": { "ru": "CAC — стоимость привлечения клиента", "en": "CAC — customer acquisition cost" },
+    "aliases": ["customer acquisition cost", "стоимость привлечения"],
+    "tex": { "ru": "\\mathrm{CAC}=\\dfrac{\\text{расходы на маркетинг}}{\\text{новые клиенты}}", "en": "\\mathrm{CAC}=\\dfrac{\\text{marketing spend}}{\\text{new customers}}" },
+    "desc": {
+      "ru": "Сколько денег в среднем уходит на одного нового клиента. Считается по каналу или суммарно (blended). Сравнивается с LTV: если клиент приносит меньше, чем стоило его привести, рост убыточен.",
+      "en": "How much you spend on average to win one new customer. Computed per channel or blended. Compare it against LTV: if a customer brings in less than it cost to acquire them, growth loses money."
+    },
+    "pitfalls": {
+      "ru": [
+        "Blended CAC прячет дорогие каналы за дешёвой органикой — для решений по бюджету нужен paid CAC по каналам.",
+        "Лаг атрибуции: расходы сегодня, клиенты конвертируются через недели — месячный CAC скачет.",
+        "«Новым клиентом» часто считают регистрацию, а не первую покупку — CAC выглядит ниже реального."
+      ],
+      "en": [
+        "Blended CAC hides expensive channels behind cheap organic traffic — budget decisions need paid CAC per channel.",
+        "Attribution lag: money is spent today, customers convert weeks later — monthly CAC jumps around.",
+        "Counting a sign-up instead of a first purchase as a \"new customer\" makes CAC look better than it is."
+      ]
+    },
+    "sql": "-- CAC by channel per month: spend / first-time customers\nWITH first_orders AS (\n  SELECT user_id,\n         MIN(created_at)::date AS first_order_dt\n  FROM orders\n  WHERE status = 'paid'\n  GROUP BY user_id\n)\nSELECT date_trunc('month', s.dt) AS month,\n       s.channel,\n       SUM(s.spend) AS spend,\n       COUNT(DISTINCT f.user_id) AS new_customers,\n       SUM(s.spend) / NULLIF(COUNT(DISTINCT f.user_id), 0) AS cac\nFROM marketing_spend s\nLEFT JOIN users u ON u.acq_channel = s.channel\nLEFT JOIN first_orders f\n  ON f.user_id = u.user_id\n AND date_trunc('month', f.first_order_dt) = date_trunc('month', s.dt)\nGROUP BY 1, 2\nORDER BY 1, 2;",
+    "related": ["ltv-cac", "roas", "conversion-rate", "payback-period"]
+  },
+  {
+    "id": "conversion-rate",
+    "category": "acquisition",
+    "title": { "ru": "Конверсия (CR)", "en": "Conversion rate (CR)" },
+    "aliases": ["cr", "конверсия"],
+    "tex": { "ru": "\\mathrm{CR}=\\dfrac{\\text{целевые действия}}{\\text{визиты}}\\times 100\\%", "en": "\\mathrm{CR}=\\dfrac{\\text{target actions}}{\\text{visits}}\\times 100\\%" },
+    "desc": {
+      "ru": "Доля посетителей, дошедших до целевого действия: заказа, регистрации, подписки. Главная метрика эффективности воронки — показывает, как хорошо продукт превращает интерес в результат.",
+      "en": "The share of visitors who complete the target action: an order, a sign-up, a subscription. The core funnel-efficiency metric — how well the product turns interest into results."
+    },
+    "pitfalls": {
+      "ru": [
+        "Конверсия «в среднем» смешивает трафик разного качества: рост доли холодного трафика уронит CR без изменений в продукте.",
+        "Числитель и знаменатель должны быть в одном окне: заказы за неделю на визиты за ту же неделю, а не «когда-нибудь потом».",
+        "Уникальные пользователи или сессии в знаменателе — два разных CR; фиксируйте определение."
+      ],
+      "en": [
+        "An \"overall\" CR mixes traffic of different quality: a larger share of cold traffic drops CR with zero product changes.",
+        "Numerator and denominator must share a window: this week's orders over this week's visits, not \"eventually\".",
+        "Unique users vs sessions in the denominator are two different CRs; pin the definition down."
+      ]
+    },
+    "sql": "-- Session-to-order conversion by week\nSELECT date_trunc('week', s.started_at) AS week,\n       COUNT(DISTINCT s.session_id) AS sessions,\n       COUNT(DISTINCT o.order_id) AS orders,\n       ROUND(100.0 * COUNT(DISTINCT o.order_id)\n             / NULLIF(COUNT(DISTINCT s.session_id), 0), 2) AS cr_pct\nFROM sessions s\nLEFT JOIN orders o\n  ON o.user_id = s.user_id\n AND o.created_at BETWEEN s.started_at AND s.started_at + INTERVAL '1 day'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["cac", "funnel-dropoff", "aov", "activation-rate"]
+  },
+  {
+    "id": "ctr",
+    "category": "acquisition",
+    "title": { "ru": "CTR — кликабельность", "en": "CTR — click-through rate" },
+    "aliases": ["click-through rate", "кликабельность"],
+    "tex": { "ru": "\\mathrm{CTR}=\\dfrac{\\text{клики}}{\\text{показы}}\\times 100\\%", "en": "\\mathrm{CTR}=\\dfrac{\\text{clicks}}{\\text{impressions}}\\times 100\\%" },
+    "desc": {
+      "ru": "Доля показов, закончившихся кликом. Измеряет привлекательность конкретного элемента — объявления, сниппета, карточки, баннера. Работает на самом верху воронки: до конверсии ещё далеко, но без клика её не будет.",
+      "en": "The share of impressions that end in a click. Measures how attractive a specific element is — an ad, a snippet, a card, a banner. Sits at the very top of the funnel: conversion is far away, but without the click it never happens."
+    },
+    "pitfalls": {
+      "ru": [
+        "Высокий CTR ≠ хороший трафик: кликбейт поднимает CTR и роняет конверсию дальше по воронке.",
+        "CTR сильно зависит от позиции показа — сравнивать креативы можно только на одинаковых позициях.",
+        "Накрутка показов ботами размывает знаменатель; фильтруйте невалидный трафик."
+      ],
+      "en": [
+        "High CTR ≠ good traffic: clickbait lifts CTR and kills conversion further down the funnel.",
+        "CTR depends heavily on display position — compare creatives only within the same slot.",
+        "Bot impressions inflate the denominator; filter invalid traffic."
+      ]
+    },
+    "sql": "-- CTR per creative from an events log\nSELECT props->>'creative_id' AS creative,\n       COUNT(*) FILTER (WHERE event_name = 'ad_impression') AS impressions,\n       COUNT(*) FILTER (WHERE event_name = 'ad_click') AS clicks,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE event_name = 'ad_click')\n             / NULLIF(COUNT(*) FILTER (WHERE event_name = 'ad_impression'), 0), 2) AS ctr_pct\nFROM events\nWHERE ts >= now() - INTERVAL '7 days'\nGROUP BY 1\nORDER BY impressions DESC;",
+    "related": ["conversion-rate", "roas"]
+  },
+  {
+    "id": "roas",
+    "category": "acquisition",
+    "title": { "ru": "ROAS / ДРР — окупаемость рекламы", "en": "ROAS — return on ad spend" },
+    "aliases": ["дрр", "romi", "return on ad spend"],
+    "tex": { "ru": "\\mathrm{ROAS}=\\dfrac{\\text{выручка с рекламы}}{\\text{расходы на рекламу}};\\quad \\text{ДРР}=\\dfrac{\\text{расходы}}{\\text{выручка}}", "en": "\\mathrm{ROAS}=\\dfrac{\\text{ad-attributed revenue}}{\\text{ad spend}}" },
+    "desc": {
+      "ru": "Сколько выручки приносит каждый рекламный рубль. ДРР (доля рекламных расходов) — та же дробь, перевёрнутая: расходы как процент от выручки; в русском e-commerce чаще пользуются ей. ROAS 5 и ДРР 20% — одно и то же.",
+      "en": "How much revenue each ad dollar brings back. Russian e-commerce often uses the inverse — ad spend as a share of revenue (\"ДРР\"): ROAS 5 and a 20% spend share are the same thing."
+    },
+    "pitfalls": {
+      "ru": [
+        "ROAS считается по выручке, а не по марже: ROAS 3 при марже 20% — это убыток.",
+        "Модель атрибуции (last click / first click / data-driven) меняет ROAS канала в разы — фиксируйте модель до сравнения.",
+        "Ретаргетинг приписывает себе покупателей, которые купили бы и так — инкрементальность проверяется только экспериментом."
+      ],
+      "en": [
+        "ROAS uses revenue, not margin: ROAS of 3 at a 20% margin is a loss.",
+        "The attribution model (last click / first click / data-driven) changes a channel's ROAS several-fold — fix the model before comparing.",
+        "Retargeting claims buyers who would have bought anyway — incrementality is only proven by an experiment."
+      ]
+    },
+    "sql": "-- ROAS by channel per month (last-click attribution assumed in orders.channel)\nSELECT date_trunc('month', o.created_at) AS month,\n       o.channel,\n       SUM(o.amount) AS revenue,\n       SUM(s.spend) AS spend,\n       ROUND(SUM(o.amount) / NULLIF(SUM(s.spend), 0), 2) AS roas,\n       ROUND(100.0 * SUM(s.spend) / NULLIF(SUM(o.amount), 0), 1) AS drr_pct\nFROM orders o\nJOIN marketing_spend s\n  ON s.channel = o.channel\n AND s.dt = o.created_at::date\nWHERE o.status = 'paid'\nGROUP BY 1, 2\nORDER BY 1, 2;",
+    "related": ["cac", "ctr", "gross-margin", "ltv-cac"]
+  },
+  {
+    "id": "activation-rate",
+    "category": "acquisition",
+    "title": { "ru": "Активация", "en": "Activation rate" },
+    "aliases": ["активация", "aha-moment"],
+    "tex": { "ru": "\\mathrm{Activation}=\\dfrac{\\text{дошедшие до aha-момента}}{\\text{новые пользователи}}", "en": "\\mathrm{Activation}=\\dfrac{\\text{users reaching the aha moment}}{\\text{new users}}" },
+    "desc": {
+      "ru": "Доля новых пользователей, добравшихся до первой ценности продукта — «aha-момента»: первый заказ, первый созданный документ, первый добавленный друг. Мост между привлечением и удержанием: неактивированные пользователи почти никогда не возвращаются.",
+      "en": "The share of new users who reach the product's first value — the \"aha moment\": first order, first document created, first friend added. The bridge between acquisition and retention: non-activated users almost never come back."
+    },
+    "pitfalls": {
+      "ru": [
+        "Aha-момент надо выбирать по данным (что предсказывает удержание), а не по интуиции.",
+        "Слишком мягкое определение (просто «открыл приложение») делает метрику бессмысленной.",
+        "Окно активации фиксируйте явно: «в первые 7 дней», иначе метрика растёт вечно."
+      ],
+      "en": [
+        "Pick the aha moment from data (what predicts retention), not intuition.",
+        "Too soft a definition (merely \"opened the app\") makes the metric meaningless.",
+        "Fix the activation window explicitly: \"within the first 7 days\", or the metric grows forever."
+      ]
+    },
+    "sql": "-- Share of signups that reach the aha event within 7 days\nSELECT date_trunc('week', u.created_at) AS signup_week,\n       COUNT(*) AS signups,\n       COUNT(*) FILTER (WHERE a.user_id IS NOT NULL) AS activated,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE a.user_id IS NOT NULL) / COUNT(*), 1) AS activation_pct\nFROM users u\nLEFT JOIN LATERAL (\n  SELECT e.user_id\n  FROM events e\n  WHERE e.user_id = u.user_id\n    AND e.event_name = 'aha_event'\n    AND e.ts <= u.created_at + INTERVAL '7 days'\n  LIMIT 1\n) a ON true\nGROUP BY 1\nORDER BY 1;",
+    "related": ["conversion-rate", "retention-n-day", "funnel-dropoff"]
+  },
+  {
+    "id": "funnel-dropoff",
+    "category": "acquisition",
+    "title": { "ru": "Воронка и потери по шагам", "en": "Funnel step drop-off" },
+    "aliases": ["воронка", "funnel"],
+    "tex": { "ru": "\\text{доля шага}=\\dfrac{\\text{дошли до шага }k+1}{\\text{дошли до шага }k}", "en": "\\text{step rate}=\\dfrac{\\text{reached step }k+1}{\\text{reached step }k}" },
+    "desc": {
+      "ru": "Конверсия, разложенная на последовательные шаги: карточка → корзина → чекаут → оплата. Показывает, где именно теряются пользователи, — общая конверсия отвечает «сколько», воронка отвечает «где чинить».",
+      "en": "Conversion broken into sequential steps: product page → cart → checkout → payment. Shows exactly where users leak out — overall CR says \"how much\", the funnel says \"where to fix\"."
+    },
+    "pitfalls": {
+      "ru": [
+        "Шаги должны идти в рамках одной сессии/попытки, иначе «воронка» смешивает разные заходы.",
+        "Пользователи ходят нелинейно (назад, мимо шагов) — решите заранее, как это считать.",
+        "Сравнение воронок разных сегментов без нормализации по типу устройства вводит в заблуждение: мобильная воронка почти всегда «хуже»."
+      ],
+      "en": [
+        "Steps must belong to one session/attempt, otherwise the \"funnel\" mixes separate visits.",
+        "Users move non-linearly (back, skipping steps) — decide upfront how to count that.",
+        "Comparing segments' funnels without normalizing by device misleads: mobile funnels are almost always \"worse\"."
+      ]
+    },
+    "sql": "-- Session-level funnel: view -> cart -> checkout -> payment\nWITH steps AS (\n  SELECT s.session_id,\n         MAX((e.event_name = 'product_view')::int) AS s1,\n         MAX((e.event_name = 'add_to_cart')::int) AS s2,\n         MAX((e.event_name = 'checkout_start')::int) AS s3,\n         MAX((e.event_name = 'payment_success')::int) AS s4\n  FROM sessions s\n  JOIN events e ON e.user_id = s.user_id\n   AND e.ts BETWEEN s.started_at AND s.started_at + INTERVAL '1 hour'\n  GROUP BY s.session_id\n)\nSELECT SUM(s1) AS product_view,\n       SUM(s1 * s2) AS add_to_cart,\n       SUM(s1 * s2 * s3) AS checkout,\n       SUM(s1 * s2 * s3 * s4) AS paid,\n       ROUND(100.0 * SUM(s1 * s2) / NULLIF(SUM(s1), 0), 1) AS view_to_cart_pct,\n       ROUND(100.0 * SUM(s1 * s2 * s3 * s4) / NULLIF(SUM(s1 * s2 * s3), 0), 1) AS checkout_to_paid_pct\nFROM steps;",
+    "related": ["conversion-rate", "activation-rate", "oos-rate"]
+  }
+]

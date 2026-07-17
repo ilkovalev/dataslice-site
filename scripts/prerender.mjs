@@ -53,7 +53,10 @@ const routes = [
     desc: truncate(l.intro || ''),
     alternates: enIds.has(l.id) ? alt(`/stats/${l.id}`, `/en/stats/${l.id}`) : undefined,
   })),
-  { url: '/en/stats', file: 'en/stats.html', canonical: `${SITE}/en/stats/${first}`, lang: 'en' },
+  // /en в приложении — клиентский redirect на /en/stats; без пререндера боты
+  // (LinkedIn, TG) получали бы 404-заглушку с русскими метатегами.
+  { url: '/en', file: 'en.html', canonical: `${SITE}/en/stats/${first}`, lang: 'en', title: 'Statistics you can touch — DataSlice', desc: 'Free interactive statistics course: 56 lessons from the mean to A/B tests and Bayes, plus metric trees for 15 industries. No sign-up.' },
+  { url: '/en/stats', file: 'en/stats.html', canonical: `${SITE}/en/stats/${first}`, lang: 'en', title: 'Statistics you can touch — DataSlice', desc: 'Free interactive statistics course: 56 lessons from the mean to A/B tests and Bayes, plus metric trees for 15 industries. No sign-up.' },
   { url: '/en/metrics', file: 'en/metrics.html', canonical: `${SITE}/en/metrics`, lang: 'en', title: 'Metric trees for 15 industries — DataSlice', desc: 'North Star → drivers → operational → guardrail metric trees for 15 industries, with real-company breakdowns. Free and interactive.', alternates: alt('/metrics', '/en/metrics') },
   { url: '/en/glossary', file: 'en/glossary.html', canonical: `${SITE}/en/glossary`, lang: 'en', title: 'Statistics and business-metrics glossary — DataSlice', desc: 'Statistics and business-metric terms in plain words, with search and links to interactive lessons.', alternates: alt('/glossary', '/en/glossary') },
   ...lessonsEn.map((l) => ({
@@ -80,6 +83,8 @@ function patchHead(html, r) {
   if (r.lang === 'en') {
     html = html.replace('<html lang="ru">', '<html lang="en">')
     html = html.replace(/(<meta property="og:locale" content=")[^"]*(")/, '$1en_US$2')
+    html = html.replace(/(<meta property="og:site_name" content=")[^"]*(")/, '$1DataSlice$2')
+    html = html.replace(/(<meta property="og:image" content=")[^"]*(")/, `$1${SITE}/og-en.png$2`)
   }
   let head = `  <link rel="canonical" href="${r.canonical}" />\n`
   for (const a of r.alternates ?? []) {

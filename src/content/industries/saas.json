@@ -1,121 +1,1062 @@
 {
   "id": "saas",
-  "archetype": "Подписки",
+  "archetype": {
+    "ru": "Подписки",
+    "en": "Subscriptions"
+  },
   "industry": "B2B SaaS",
   "northStar": "Net Revenue Retention (NRR)",
   "root": {
-    "id": "nrr", "level": 0, "title": "Net Revenue Retention", "formula": "(MRR + расширение − отток) / MRR",
-    "note": "Здоровье B2B SaaS — растёт ли выручка существующих клиентов сама. NRR > 100% = рост без новых продаж.",
+    "id": "nrr",
+    "level": 0,
+    "metricId": "nrr",
+    "title": "Net Revenue Retention",
+    "formula": {
+      "ru": "(MRR + расширение − отток) / MRR",
+      "en": "(MRR + expansion − churn) / MRR"
+    },
+    "note": {
+      "ru": "Здоровье B2B SaaS: растёт ли выручка существующих клиентов сама. NRR > 100% — рост даже без новых продаж; раскладывается на новый MRR, расширение и отток.",
+      "en": "B2B SaaS health: does existing-customer revenue grow by itself. NRR > 100% means growth even with zero new sales; decomposes into new MRR, expansion and churn."
+    },
     "children": [
-      { "id": "new", "level": 1, "title": "Новый MRR", "formula": "сделки × ACV", "note": "Приток выручки от новых клиентов.", "children": [
-        { "id": "pipeline", "level": 2, "title": "Воронка продаж", "note": "Лиды → сделки.", "children": [
-          { "id": "winrate", "level": 3, "title": "Win Rate", "note": "Доля закрытых сделок.", "children": [
-            { "id": "salescycle", "level": 4, "title": "Длина цикла сделки", "note": "Сколько идёт от лида до оплаты." }
-          ] }
-        ] },
-        { "id": "plg", "level": 2, "title": "Product-Led рост", "note": "Self-serve регистрации.", "children": [
-          { "id": "signup-active", "level": 3, "title": "Signup → Activated", "note": "Дошёл ли до aha-момента." }
-        ] }
-      ] },
-      { "id": "expansion", "level": 1, "title": "Расширение (Expansion)", "formula": "upsell + seats", "note": "Главный драйвер NRR.", "children": [
-        { "id": "seats", "level": 2, "title": "Рост числа мест", "note": "Команда клиента растёт в продукте.", "children": [
-          { "id": "adoption", "level": 3, "title": "Глубина внедрения", "note": "Сколько фич реально используют.", "children": [
-            { "id": "dau-seat", "level": 4, "title": "Активные на место", "note": "Места куплены и используются." }
-          ] }
-        ] },
-        { "id": "upsell", "level": 2, "title": "Апгрейд тарифа", "note": "Переход на старший план." }
-      ] },
-      { "id": "churn", "level": 1, "title": "Отток (Churn)", "formula": "ушедший MRR / MRR", "note": "То, что съедает NRR.", "children": [
-        { "id": "health", "level": 2, "title": "Health Score аккаунтов", "note": "Риск ухода по сигналам.", "children": [
-          { "id": "support", "level": 3, "title": "Скорость и качество саппорта", "note": "Нерешённые тикеты ведут к оттоку." }
-        ] }
-      ] }
+      {
+        "id": "new",
+        "level": 1,
+        "metricId": "mrr",
+        "title": {
+          "ru": "Новый MRR",
+          "en": "New MRR"
+        },
+        "formula": {
+          "ru": "сделки × ACV",
+          "en": "deals × ACV"
+        },
+        "note": {
+          "ru": "Приток выручки от новых клиентов: продажи + self-serve.",
+          "en": "Revenue inflow from new customers: sales plus self-serve."
+        },
+        "children": [
+          {
+            "id": "pipeline",
+            "level": 2,
+            "title": {
+              "ru": "Воронка продаж",
+              "en": "Sales pipeline"
+            },
+            "note": {
+              "ru": "Лиды → квалификация → демо → сделка.",
+              "en": "Leads → qualification → demo → deal."
+            },
+            "children": [
+              {
+                "id": "mql",
+                "level": 3,
+                "title": {
+                  "ru": "Квалифицированные лиды (MQL)",
+                  "en": "Qualified leads (MQL)"
+                },
+                "note": {
+                  "ru": "Вход воронки: сколько лидов маркетинг передаёт продажам.",
+                  "en": "The funnel's mouth: how many leads marketing hands to sales."
+                },
+                "children": [
+                  {
+                    "id": "winrate",
+                    "level": 4,
+                    "title": "Win Rate",
+                    "formula": {
+                      "ru": "выиграно / все сделки",
+                      "en": "won / all deals"
+                    },
+                    "note": {
+                      "ru": "Доля сделок, закрытых в оплату.",
+                      "en": "Share of deals closed-won."
+                    },
+                    "children": [
+                      {
+                        "id": "salescycle",
+                        "level": 5,
+                        "title": {
+                          "ru": "Длина цикла сделки",
+                          "en": "Sales cycle length"
+                        },
+                        "note": {
+                          "ru": "Дни от лида до оплаты; длинный цикл замораживает пайплайн и прогноз.",
+                          "en": "Days from lead to payment; a long cycle freezes pipeline and forecast."
+                        },
+                        "metricId": "win-rate"
+                      }
+                    ],
+                    "metricId": "win-rate"
+                  }
+                ],
+                "metricId": "win-rate"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "plg",
+            "level": 2,
+            "title": {
+              "ru": "Product-led рост",
+              "en": "Product-led growth"
+            },
+            "note": {
+              "ru": "Self-serve вход: продукт продаёт себя сам, продажи подключаются на расширении.",
+              "en": "Self-serve entry: the product sells itself, sales joins at expansion."
+            },
+            "children": [
+              {
+                "id": "signup-active",
+                "level": 3,
+                "metricId": "activation-rate",
+                "title": "Signup → Activated",
+                "note": {
+                  "ru": "Дошёл ли новый воркспейс до aha-момента.",
+                  "en": "Did the new workspace reach the aha moment."
+                },
+                "children": [
+                  {
+                    "id": "onboarding",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Онбординг",
+                      "en": "Onboarding"
+                    },
+                    "note": {
+                      "ru": "Рычаг: шаблоны, чек-листы, пустые состояния — путь к первой ценности.",
+                      "en": "Lever: templates, checklists, empty states — the path to first value."
+                    },
+                    "children": [
+                      {
+                        "id": "ttv",
+                        "level": 5,
+                        "title": {
+                          "ru": "Time-to-Value",
+                          "en": "Time to value"
+                        },
+                        "note": {
+                          "ru": "Время от регистрации до первой пользы; каждый лишний день режет конверсию в платящих.",
+                          "en": "Time from sign-up to first value; every extra day cuts paid conversion."
+                        },
+                        "metricId": "ttv"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          }
+        ]
+      },
+      {
+        "id": "expansion",
+        "level": 1,
+        "title": {
+          "ru": "Расширение (Expansion)",
+          "en": "Expansion"
+        },
+        "formula": {
+          "ru": "апсейл + места",
+          "en": "upsell + seats"
+        },
+        "note": {
+          "ru": "Главный драйвер NRR: существующие клиенты платят больше.",
+          "en": "The main NRR driver: existing customers paying more."
+        },
+        "children": [
+          {
+            "id": "seats",
+            "level": 2,
+            "title": {
+              "ru": "Рост числа мест",
+              "en": "Seat growth"
+            },
+            "note": {
+              "ru": "Команда клиента растёт внутри продукта.",
+              "en": "The customer's team grows inside the product."
+            },
+            "children": [
+              {
+                "id": "adoption",
+                "level": 3,
+                "title": {
+                  "ru": "Глубина внедрения",
+                  "en": "Adoption depth"
+                },
+                "note": {
+                  "ru": "Сколько фич и сценариев реально используют.",
+                  "en": "How many features and workflows are actually used."
+                },
+                "children": [
+                  {
+                    "id": "dau-seat",
+                    "level": 4,
+                    "metricId": "dau-mau",
+                    "title": {
+                      "ru": "Активные на место",
+                      "en": "Active per seat"
+                    },
+                    "note": {
+                      "ru": "Места куплены и используются — иначе их срежут на ревью бюджета.",
+                      "en": "Seats bought and used — otherwise they get cut at budget review."
+                    },
+                    "children": [
+                      {
+                        "id": "feature-breadth",
+                        "level": 5,
+                        "title": {
+                          "ru": "Ширина использования фич",
+                          "en": "Feature breadth"
+                        },
+                        "note": {
+                          "ru": "Число ключевых фич на аккаунт: чем глубже врос продукт, тем дороже его выключить.",
+                          "en": "Key features per account: the deeper the product is embedded, the costlier it is to switch off."
+                        },
+                        "metricId": "adoption-depth"
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "adoption-depth"
+              }
+            ],
+            "metricId": "adoption-depth"
+          },
+          {
+            "id": "upsell",
+            "level": 2,
+            "kind": "lever",
+            "title": {
+              "ru": "Апгрейд тарифа",
+              "en": "Plan upgrade"
+            },
+            "note": {
+              "ru": "Рычаг: лестница тарифов и триггеры апгрейда (лимиты, фичи, безопасность).",
+              "en": "Lever: the plan ladder and upgrade triggers (limits, features, security)."
+            },
+            "children": [
+              {
+                "id": "expansion-mrr",
+                "level": 3,
+                "title": "Expansion MRR",
+                "note": {
+                  "ru": "Денежное выражение расширения: апгрейды + места − downgrades.",
+                  "en": "Expansion in money: upgrades + seats − downgrades."
+                },
+                "metricId": "mrr"
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "churn",
+        "level": 1,
+        "metricId": "churn-rate",
+        "title": {
+          "ru": "Отток (Churn)",
+          "en": "Churn"
+        },
+        "formula": {
+          "ru": "ушедший MRR / MRR",
+          "en": "churned MRR / MRR"
+        },
+        "note": {
+          "ru": "То, что съедает NRR; лечится заранее, по сигналам здоровья аккаунта.",
+          "en": "What eats NRR; treated in advance, via account health signals."
+        },
+        "children": [
+          {
+            "id": "health",
+            "level": 2,
+            "title": {
+              "ru": "Health Score аккаунтов",
+              "en": "Account health score"
+            },
+            "note": {
+              "ru": "Составной риск ухода: активность, тикеты, оплаты, использование фич.",
+              "en": "A composite churn risk: activity, tickets, payments, feature usage."
+            },
+            "children": [
+              {
+                "id": "support",
+                "level": 3,
+                "metricId": "complaint-rate",
+                "title": {
+                  "ru": "Саппорт и инциденты",
+                  "en": "Support & incidents"
+                },
+                "note": {
+                  "ru": "Нерешённые тикеты и повторные обращения ведут к оттоку.",
+                  "en": "Unresolved and repeated tickets lead to churn."
+                },
+                "children": [
+                  {
+                    "id": "csm-coverage",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Покрытие CSM",
+                      "en": "CSM coverage"
+                    },
+                    "note": {
+                      "ru": "Рычаг: проактивная работа Customer Success с рисковыми аккаунтами.",
+                      "en": "Lever: proactive Customer Success work with at-risk accounts."
+                    },
+                    "children": [
+                      {
+                        "id": "save-rate",
+                        "level": 5,
+                        "title": {
+                          "ru": "Save Rate",
+                          "en": "Save rate"
+                        },
+                        "note": {
+                          "ru": "Доля «спасённых» из собравшихся уходить — эффективность работы с риском.",
+                          "en": "Share of would-be churners saved — the effectiveness of risk work."
+                        },
+                        "metricId": "health-score"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "metricId": "health-score"
+          }
+        ]
+      }
     ]
   },
   "pyramid": {
-    "note": "От финансов подписки (вершина) к надёжности сервиса (основание).",
+    "note": {
+      "ru": "От финансов подписки (вершина) к надёжности сервиса (основание).",
+      "en": "From subscription finance (top) to service reliability (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "C-level / борд", "items": ["ARR / MRR", "NRR", "LTV / CAC", "Magic Number"] },
-      { "label": "Продуктовые", "role": "продакты / Sales", "items": ["Win Rate", "Expansion", "Gross Churn", "Активация"] },
-      { "label": "Операционные", "role": "CS / аналитики", "items": ["Глубина внедрения", "Health Score", "Время до ценности"] },
-      { "label": "Платформенные", "role": "инженеры / SRE", "items": ["Аптайм по SLA", "p99 API", "Инциденты"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "C-level / борд",
+          "en": "C-level / board"
+        },
+        "items": [
+          "ARR / MRR",
+          "NRR",
+          "LTV / CAC",
+          "Magic Number"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "продакты / Sales",
+          "en": "product / sales"
+        },
+        "items": [
+          "Win Rate",
+          "Expansion",
+          "Gross Churn",
+          {
+            "ru": "Активация",
+            "en": "Activation"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": {
+          "ru": "CS / аналитики",
+          "en": "CS / analysts"
+        },
+        "items": [
+          {
+            "ru": "Глубина внедрения",
+            "en": "Adoption depth"
+          },
+          "Health Score",
+          "Time-to-Value"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "инженеры / SRE",
+          "en": "engineers / SRE"
+        },
+        "items": [
+          {
+            "ru": "Аптайм по SLA",
+            "en": "SLA uptime"
+          },
+          "p99 API",
+          {
+            "ru": "Инциденты",
+            "en": "Incidents"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Доля «купили, не внедрили»", "note": "места оплачены, но не используются — отменят на ревью бюджета" },
-    { "title": "Нагрузка на саппорт", "note": "рост тикетов на клиента — продукт сложен или ломается" }
+    {
+      "title": {
+        "ru": "Доля «купили, не внедрили»",
+        "en": "\"Bought, never adopted\" share"
+      },
+      "note": {
+        "ru": "места оплачены, но не используются — отменят на ревью бюджета",
+        "en": "seats paid for but unused — cancelled at budget review"
+      }
+    },
+    {
+      "title": {
+        "ru": "Нагрузка на саппорт",
+        "en": "Support load"
+      },
+      "note": {
+        "ru": "рост тикетов на клиента — продукт сложен или ломается",
+        "en": "growing tickets per customer — the product is confusing or breaking"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "slack", "name": "Slack", "northStar": "NRR (вирусное расширение по командам)",
-      "note": "коммуникационный продукт: ценность растёт с числом коллег; ключ — переход команды на «2000+ сообщений».",
+      "id": "slack",
+      "name": "Slack",
+      "northStar": {
+        "ru": "NRR (вирусное расширение по командам)",
+        "en": "NRR (viral team expansion)"
+      },
+      "note": {
+        "ru": "коммуникационный продукт: ценность растёт с числом коллег; ключ — переход команды за порог «2000+ сообщений».",
+        "en": "a communication product: value grows with colleague count; the key is a team crossing the \"2,000+ messages\" threshold."
+      },
       "root": {
-        "id": "sl-nrr", "level": 0, "title": "NRR", "formula": "Расширение − отток",
-        "note": "Растёт снизу вверх: команда втягивается, потом покупает вся компания.",
+        "id": "sl-nrr",
+        "level": 0,
+        "metricId": "nrr",
+        "title": "NRR",
+        "formula": {
+          "ru": "Расширение − отток",
+          "en": "Expansion − churn"
+        },
+        "note": {
+          "ru": "Растёт снизу вверх: команда втягивается, потом покупает вся компания.",
+          "en": "Grows bottom-up: a team gets hooked, then the whole company buys."
+        },
         "children": [
-          { "id": "sl-land", "level": 1, "title": "Land (заход команды)", "note": "Бесплатный вход одной команды.", "children": [
-            { "id": "sl-activate", "level": 2, "title": "Активация команды", "note": "Порог вовлечения.", "children": [
-              { "id": "sl-2000", "level": 3, "title": "2000+ сообщений", "note": "Известный порог удержания команды.", "children": [
-                { "id": "sl-integrations", "level": 4, "title": "Подключённые интеграции", "note": "Встроился в рабочие процессы." }
-              ] }
-            ] }
-          ] },
-          { "id": "sl-expand", "level": 1, "title": "Expand (вся компания)", "note": "От команды к организации.", "children": [
-            { "id": "sl-seats", "level": 2, "title": "Рост платных мест", "note": "Распространение по компании.", "children": [
-              { "id": "sl-viral", "level": 3, "title": "Внутренние приглашения", "note": "Коллеги зовут коллег." }
-            ] },
-            { "id": "sl-tier", "level": 2, "title": "Апгрейд на Enterprise", "note": "Безопасность, compliance." }
-          ] },
-          { "id": "sl-retain", "level": 1, "title": "Удержание", "note": "Привычка к ежедневному общению.", "children": [
-            { "id": "sl-dau", "level": 2, "title": "DAU / WAU", "note": "Ежедневная незаменимость." }
-          ] }
+          {
+            "id": "sl-land",
+            "level": 1,
+            "title": {
+              "ru": "Land (заход команды)",
+              "en": "Land (team entry)"
+            },
+            "note": {
+              "ru": "Бесплатный вход одной команды — начало воронки land-and-expand.",
+              "en": "One team's free entry — the start of the land-and-expand funnel."
+            },
+            "children": [
+              {
+                "id": "sl-activate",
+                "level": 2,
+                "metricId": "activation-rate",
+                "title": {
+                  "ru": "Активация команды",
+                  "en": "Team activation"
+                },
+                "note": {
+                  "ru": "Порог вовлечения, после которого команда остаётся.",
+                  "en": "The engagement threshold past which a team stays."
+                },
+                "children": [
+                  {
+                    "id": "sl-2000",
+                    "level": 3,
+                    "title": {
+                      "ru": "2000+ сообщений",
+                      "en": "2,000+ messages"
+                    },
+                    "note": {
+                      "ru": "Знаменитый порог Slack: команды, обменявшиеся 2000 сообщений, почти не уходят.",
+                      "en": "Slack's famous threshold: teams that exchange 2,000 messages barely ever churn."
+                    },
+                    "children": [
+                      {
+                        "id": "sl-integrations",
+                        "level": 4,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Подключённые интеграции",
+                          "en": "Connected integrations"
+                        },
+                        "note": {
+                          "ru": "Рычаг: встроиться в рабочие процессы — календарь, тикеты, CI.",
+                          "en": "Lever: embed into workflows — calendar, tickets, CI."
+                        },
+                        "children": [
+                          {
+                            "id": "sl-workflow-share",
+                            "level": 5,
+                            "title": {
+                              "ru": "Команды с 3+ интеграциями",
+                              "en": "Teams with 3+ integrations"
+                            },
+                            "note": {
+                              "ru": "Порог «вросли инструментами»: такие команды конвертируются в платные заметно чаще.",
+                              "en": "The \"tool-embedded\" threshold: such teams convert to paid notably more often."
+                            },
+                            "metricId": "adoption-depth"
+                          }
+                        ]
+                      }
+                    ],
+                    "metricId": "activation-rate"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "sl-expand",
+            "level": 1,
+            "title": {
+              "ru": "Expand (вся компания)",
+              "en": "Expand (whole company)"
+            },
+            "note": {
+              "ru": "От команды к организации: рост мест и Enterprise-план.",
+              "en": "From team to organization: seat growth and the enterprise plan."
+            },
+            "children": [
+              {
+                "id": "sl-seats",
+                "level": 2,
+                "title": {
+                  "ru": "Рост платных мест",
+                  "en": "Paid seat growth"
+                },
+                "note": {
+                  "ru": "Распространение по компании.",
+                  "en": "Spread across the company."
+                },
+                "children": [
+                  {
+                    "id": "sl-viral",
+                    "level": 3,
+                    "title": {
+                      "ru": "Внутренние приглашения",
+                      "en": "Internal invites"
+                    },
+                    "note": {
+                      "ru": "Коллеги зовут коллег — вирусная петля внутри организации.",
+                      "en": "Colleagues invite colleagues — the viral loop inside the org."
+                    },
+                    "children": [
+                      {
+                        "id": "sl-crossteam",
+                        "level": 4,
+                        "title": {
+                          "ru": "Межкомандные каналы",
+                          "en": "Cross-team channels"
+                        },
+                        "note": {
+                          "ru": "Каналы, связывающие отделы, — сигнал перехода от команды к компании.",
+                          "en": "Channels connecting departments — the signal of team-to-company spread."
+                        },
+                        "metricId": "adoption-depth"
+                      }
+                    ],
+                    "metricId": "viral-coefficient"
+                  }
+                ],
+                "metricId": "adoption-depth"
+              },
+              {
+                "id": "sl-tier",
+                "level": 2,
+                "title": {
+                  "ru": "Апгрейд на Enterprise",
+                  "en": "Enterprise upgrade"
+                },
+                "note": {
+                  "ru": "Безопасность, комплаенс, SSO — покупка уровня всей организации.",
+                  "en": "Security, compliance, SSO — an organization-level purchase."
+                },
+                "metricId": "mrr"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "sl-retain",
+            "level": 1,
+            "title": {
+              "ru": "Удержание",
+              "en": "Retention"
+            },
+            "note": {
+              "ru": "Привычка к ежедневному общению делает продукт незаменимым.",
+              "en": "The daily communication habit makes the product irreplaceable."
+            },
+            "children": [
+              {
+                "id": "sl-dau",
+                "level": 2,
+                "metricId": "dau-mau",
+                "title": "DAU / WAU",
+                "note": {
+                  "ru": "Ежедневная незаменимость рабочих коммуникаций.",
+                  "en": "The daily indispensability of work communication."
+                }
+              }
+            ],
+            "kind": "group"
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "борд", "items": ["ARR", "NRR", "Paid seats"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Активация команды", "Expansion", "DAU/WAU"] },
-        { "label": "Операционные", "role": "аналитики", "items": ["2000+ сообщений", "Интеграции", "Внутренние инвайты"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Доставка сообщений", "Аптайм", "Латентность"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "борд",
+              "en": "board"
+            },
+            "items": [
+              "ARR",
+              "NRR",
+              "Paid seats"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Активация команды",
+                "en": "Team activation"
+              },
+              "Expansion",
+              "DAU/WAU"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "аналитики",
+              "en": "analysts"
+            },
+            "items": [
+              {
+                "ru": "2000+ сообщений",
+                "en": "2,000+ messages"
+              },
+              {
+                "ru": "Интеграции",
+                "en": "Integrations"
+              },
+              {
+                "ru": "Внутренние инвайты",
+                "en": "Internal invites"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Доставка сообщений",
+                "en": "Message delivery"
+              },
+              {
+                "ru": "Аптайм",
+                "en": "Uptime"
+              },
+              {
+                "ru": "Латентность",
+                "en": "Latency"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Уведомительный шум", "note": "перегруз нотификациями выжигает команды" },
-        { "title": "Спящие платные места", "note": "куплены, не используются" }
+        {
+          "title": {
+            "ru": "Уведомительный шум",
+            "en": "Notification noise"
+          },
+          "note": {
+            "ru": "перегруз нотификациями выжигает команды",
+            "en": "notification overload burns teams out"
+          }
+        },
+        {
+          "title": {
+            "ru": "Спящие платные места",
+            "en": "Dormant paid seats"
+          },
+          "note": {
+            "ru": "куплены, не используются",
+            "en": "bought but unused"
+          }
+        }
       ]
     },
     {
-      "id": "notion", "name": "Notion", "northStar": "NRR (self-serve + командные воркспейсы)",
-      "note": "гибкий продукт «всё в одном»: рост от личного использования к командным базам; ключ — шаблоны и шеринг.",
+      "id": "notion",
+      "name": "Notion",
+      "northStar": {
+        "ru": "NRR (self-serve + командные воркспейсы)",
+        "en": "NRR (self-serve + team workspaces)"
+      },
+      "note": {
+        "ru": "гибкий продукт «всё в одном»: рост от личного использования к командным базам; ключ — шаблоны и шеринг.",
+        "en": "a flexible all-in-one product: growth from personal use to team bases; the keys are templates and sharing."
+      },
       "root": {
-        "id": "no-nrr", "level": 0, "title": "NRR", "formula": "Расширение − отток",
-        "note": "Растёт через личное использование, шаблоны и переход на командные воркспейсы.",
+        "id": "no-nrr",
+        "level": 0,
+        "metricId": "nrr",
+        "title": "NRR",
+        "formula": {
+          "ru": "Расширение − отток",
+          "en": "Expansion − churn"
+        },
+        "note": {
+          "ru": "Растёт через личное использование, шаблоны и переход на командные воркспейсы.",
+          "en": "Grows via personal use, templates and the move to team workspaces."
+        },
         "children": [
-          { "id": "no-plg", "level": 1, "title": "Self-serve привлечение", "note": "Бесплатный личный вход.", "children": [
-            { "id": "no-activate", "level": 2, "title": "Активация", "note": "Создал первую полезную страницу.", "children": [
-              { "id": "no-template", "level": 3, "title": "Использование шаблонов", "note": "Быстрый путь к ценности.", "children": [
-                { "id": "no-share", "level": 4, "title": "Шеринг страниц вовне", "note": "Виральная петля привлечения." }
-              ] }
-            ] }
-          ] },
-          { "id": "no-team", "level": 1, "title": "Командные воркспейсы", "note": "Из личного в командный продукт.", "children": [
-            { "id": "no-collab", "level": 2, "title": "Совместное редактирование", "note": "Команда работает вместе.", "children": [
-              { "id": "no-seats", "level": 3, "title": "Рост платных мест", "note": "Расширение по команде." }
-            ] }
-          ] },
-          { "id": "no-monet", "level": 1, "title": "Монетизация", "note": "Апсейлы и AI.", "children": [
-            { "id": "no-ai", "level": 2, "title": "Notion AI подписка", "note": "Доп-выручка поверх плана." },
-            { "id": "no-tier", "level": 2, "title": "Апгрейд плана", "note": "Business / Enterprise." }
-          ] }
+          {
+            "id": "no-plg",
+            "level": 1,
+            "title": {
+              "ru": "Self-serve привлечение",
+              "en": "Self-serve acquisition"
+            },
+            "note": {
+              "ru": "Бесплатный личный вход — верх воронки PLG.",
+              "en": "Free personal entry — the top of the PLG funnel."
+            },
+            "children": [
+              {
+                "id": "no-activate",
+                "level": 2,
+                "metricId": "activation-rate",
+                "title": {
+                  "ru": "Активация",
+                  "en": "Activation"
+                },
+                "note": {
+                  "ru": "Создал первую полезную страницу — aha-момент Notion.",
+                  "en": "Created the first useful page — Notion's aha moment."
+                },
+                "children": [
+                  {
+                    "id": "no-template",
+                    "level": 3,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Использование шаблонов",
+                      "en": "Template usage"
+                    },
+                    "note": {
+                      "ru": "Рычаг: шаблон — быстрый путь к ценности против «пустого листа».",
+                      "en": "Lever: a template is the fast path to value versus the \"blank page\"."
+                    },
+                    "children": [
+                      {
+                        "id": "no-share",
+                        "level": 4,
+                        "title": {
+                          "ru": "Шеринг страниц вовне",
+                          "en": "External page sharing"
+                        },
+                        "note": {
+                          "ru": "Расшаренная страница — вирусная петля привлечения.",
+                          "en": "A shared page is the viral acquisition loop."
+                        },
+                        "children": [
+                          {
+                            "id": "no-viral-signup",
+                            "level": 5,
+                            "title": {
+                              "ru": "Регистрации с шеринга",
+                              "en": "Signups from shares"
+                            },
+                            "note": {
+                              "ru": "Доля новых пользователей, пришедших по чужим страницам, — измеримая виральность.",
+                              "en": "Share of new users arriving via others' pages — measurable virality."
+                            },
+                            "metricId": "viral-coefficient"
+                          }
+                        ],
+                        "metricId": "share-rate"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "no-team",
+            "level": 1,
+            "title": {
+              "ru": "Командные воркспейсы",
+              "en": "Team workspaces"
+            },
+            "note": {
+              "ru": "Из личного инструмента в командный продукт — момент монетизации.",
+              "en": "From a personal tool to a team product — the monetization moment."
+            },
+            "children": [
+              {
+                "id": "no-collab",
+                "level": 2,
+                "title": {
+                  "ru": "Совместное редактирование",
+                  "en": "Collaborative editing"
+                },
+                "note": {
+                  "ru": "Команда работает вместе — предиктор перехода на платный план.",
+                  "en": "The team works together — a paid-plan predictor."
+                },
+                "children": [
+                  {
+                    "id": "no-seats",
+                    "level": 3,
+                    "title": {
+                      "ru": "Рост платных мест",
+                      "en": "Paid seat growth"
+                    },
+                    "note": {
+                      "ru": "Расширение по команде и отделам.",
+                      "en": "Expansion across the team and departments."
+                    },
+                    "children": [
+                      {
+                        "id": "no-db-usage",
+                        "level": 4,
+                        "title": {
+                          "ru": "Командные базы данных",
+                          "en": "Team databases"
+                        },
+                        "note": {
+                          "ru": "Базы с процессами команды — то, из-за чего сложно уйти.",
+                          "en": "Databases holding team processes — the thing that makes leaving hard."
+                        },
+                        "metricId": "adoption-depth"
+                      }
+                    ],
+                    "metricId": "adoption-depth"
+                  }
+                ],
+                "metricId": "adoption-depth"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "no-monet",
+            "level": 1,
+            "title": {
+              "ru": "Монетизация",
+              "en": "Monetization"
+            },
+            "note": {
+              "ru": "Апсейлы поверх базового плана.",
+              "en": "Upsells on top of the base plan."
+            },
+            "children": [
+              {
+                "id": "no-ai",
+                "level": 2,
+                "title": {
+                  "ru": "Notion AI подписка",
+                  "en": "Notion AI subscription"
+                },
+                "note": {
+                  "ru": "Доп-выручка поверх плана; следить за маржой инференса.",
+                  "en": "Extra revenue on top of the plan; watch inference margin."
+                },
+                "metricId": "mrr"
+              },
+              {
+                "id": "no-tier",
+                "level": 2,
+                "title": {
+                  "ru": "Апгрейд плана",
+                  "en": "Plan upgrade"
+                },
+                "note": {
+                  "ru": "Business / Enterprise: безопасность и админ-контроль.",
+                  "en": "Business / Enterprise: security and admin controls."
+                },
+                "metricId": "mrr"
+              }
+            ],
+            "kind": "group"
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "борд", "items": ["ARR", "NRR", "Платящие воркспейсы"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Активация", "Командное расширение", "AI-подписка"] },
-        { "label": "Операционные", "role": "аналитики", "items": ["Шаблоны", "Шеринг вовне", "Совместное редактирование"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Скорость загрузки страниц", "Синхронизация", "Аптайм"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "борд",
+              "en": "board"
+            },
+            "items": [
+              "ARR",
+              "NRR",
+              {
+                "ru": "Платящие воркспейсы",
+                "en": "Paying workspaces"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Активация",
+                "en": "Activation"
+              },
+              {
+                "ru": "Командное расширение",
+                "en": "Team expansion"
+              },
+              {
+                "ru": "AI-подписка",
+                "en": "AI subscription"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "аналитики",
+              "en": "analysts"
+            },
+            "items": [
+              {
+                "ru": "Шаблоны",
+                "en": "Templates"
+              },
+              {
+                "ru": "Шеринг вовне",
+                "en": "External sharing"
+              },
+              {
+                "ru": "Совместное редактирование",
+                "en": "Co-editing"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Скорость загрузки страниц",
+                "en": "Page load speed"
+              },
+              {
+                "ru": "Синхронизация",
+                "en": "Sync"
+              },
+              {
+                "ru": "Аптайм",
+                "en": "Uptime"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Сложность онбординга", "note": "гибкость пугает новичков — бросают на старте" },
-        { "title": "Заброшенные воркспейсы", "note": "создали и не вернулись" }
+        {
+          "title": {
+            "ru": "Сложность онбординга",
+            "en": "Onboarding complexity"
+          },
+          "note": {
+            "ru": "гибкость пугает новичков — бросают на старте",
+            "en": "flexibility scares newcomers — they quit at the start"
+          }
+        },
+        {
+          "title": {
+            "ru": "Заброшенные воркспейсы",
+            "en": "Abandoned workspaces"
+          },
+          "note": {
+            "ru": "создали и не вернулись",
+            "en": "created and never returned"
+          }
+        }
       ]
     }
   ]

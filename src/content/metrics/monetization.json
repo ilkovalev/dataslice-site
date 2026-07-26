@@ -1,0 +1,452 @@
+[
+  {
+    "id": "revenue",
+    "category": "monetization",
+    "title": { "ru": "Выручка", "en": "Revenue" },
+    "aliases": ["revenue", "выручка"],
+    "tex": { "ru": "\\text{Выручка}=\\text{Трафик}\\times \\mathrm{CR}\\times \\text{Чек}\\times \\text{Повторные}", "en": "\\text{Revenue}=\\text{Traffic}\\times \\mathrm{CR}\\times \\text{AOV}\\times \\text{Repeats}" },
+    "desc": {
+      "ru": "Деньги, полученные за период. Классически раскладывается на четыре рычага воронки, каждым из которых занимается своя команда. Как North Star подходит прямой коммерции, но плохо годится продуктам, где ценность и оплата разнесены во времени.",
+      "en": "Money received in a period. Classically decomposed into four funnel levers, each owned by a different team. Works as a North Star for direct commerce, but poorly for products where value and payment are far apart in time."
+    },
+    "pitfalls": {
+      "ru": [
+        "Выручка растёт и от повышения цен — она не отличает «стало лучше пользователю» от «мы дожали».",
+        "Признание выручки: заказ, оплата и отгрузка происходят в разные дни — договоритесь, что считаете.",
+        "Возвраты приходят с лагом: выручка свежего месяца всегда завышена."
+      ],
+      "en": [
+        "Revenue also grows from price hikes — it can't tell \"the user is better off\" from \"we squeezed harder\".",
+        "Revenue recognition: order, payment and shipment happen on different days — agree on what you count.",
+        "Returns arrive with a lag: the current month's revenue is always overstated."
+      ]
+    },
+    "sql": "-- Monthly revenue with the four-lever decomposition\nWITH sess AS (\n  SELECT date_trunc('month', started_at) AS month,\n         COUNT(DISTINCT session_id) AS visits\n  FROM sessions GROUP BY 1\n)\nSELECT date_trunc('month', o.created_at) AS month,\n       SUM(o.amount) AS revenue,\n       s.visits,\n       COUNT(*) AS orders,\n       ROUND(100.0 * COUNT(*) / NULLIF(s.visits, 0), 2) AS cr_pct,\n       ROUND(AVG(o.amount), 2) AS aov\nFROM orders o\nJOIN sess s ON s.month = date_trunc('month', o.created_at)\nWHERE o.status = 'paid'\nGROUP BY 1, s.visits\nORDER BY 1;",
+    "related": ["aov", "conversion-rate", "gross-margin", "ltv"]
+  },
+  {
+    "id": "bookings",
+    "category": "monetization",
+    "title": { "ru": "Bookings — платежи игроков", "en": "Bookings — player payments" },
+    "aliases": ["bookings"],
+    "tex": { "ru": "\\text{Bookings}=\\mathrm{DAU}\\times \\text{доля платящих}\\times \\mathrm{ARPPU}", "en": "\\text{Bookings}=\\mathrm{DAU}\\times \\text{paying share}\\times \\mathrm{ARPPU}" },
+    "desc": {
+      "ru": "Сумма, реально уплаченная игроками за период, — стандарт учёта в F2P. Отличается от признанной выручки: купленная валюта записывается в bookings сразу, а в выручку — по мере траты внутри игры.",
+      "en": "The amount players actually paid in a period — the F2P accounting standard. It differs from recognized revenue: purchased currency enters bookings immediately, but revenue only as it's spent in game."
+    },
+    "pitfalls": {
+      "ru": [
+        "Bookings ≠ выручка ≠ деньги на счёте: сторы удерживают комиссию до 30%, а признание растянуто во времени.",
+        "Экстремальная концентрация: десяток «китов» может заметно двигать месячную цифру.",
+        "Всплеск на релизе баннера или сезона — не тренд; сравнивайте одинаковые фазы LiveOps-цикла."
+      ],
+      "en": [
+        "Bookings ≠ revenue ≠ cash: stores keep up to 30%, and recognition is spread over time.",
+        "Extreme concentration: a dozen whales can visibly move the monthly figure.",
+        "A banner or season launch spike is not a trend; compare matching phases of the LiveOps cycle."
+      ]
+    },
+    "sql": "-- Bookings with the three-factor decomposition\nWITH dau AS (\n  SELECT date_trunc('month', ts) AS month, COUNT(DISTINCT user_id) AS players\n  FROM events GROUP BY 1\n)\nSELECT d.month,\n       SUM(o.amount) AS bookings,\n       d.players,\n       COUNT(DISTINCT o.user_id) AS payers,\n       ROUND(100.0 * COUNT(DISTINCT o.user_id) / NULLIF(d.players, 0), 2) AS paying_pct,\n       ROUND(SUM(o.amount) / NULLIF(COUNT(DISTINCT o.user_id), 0), 2) AS arppu\nFROM dau d\nLEFT JOIN orders o\n  ON date_trunc('month', o.created_at) = d.month AND o.status = 'paid'\nGROUP BY d.month, d.players\nORDER BY d.month;",
+    "related": ["arppu", "paying-share", "dau-mau", "ltv-cac"]
+  },
+  {
+    "id": "total-sales",
+    "category": "monetization",
+    "title": { "ru": "Total Sales — продажи сети", "en": "Total sales — chain sales" },
+    "aliases": ["продажи сети"],
+    "tex": { "ru": "\\text{Total Sales}=\\text{Точки}\\times \\text{Выручка с точки}", "en": "\\text{Total sales}=\\text{Locations}\\times \\text{Sales per location}" },
+    "desc": {
+      "ru": "Суммарные продажи сети физических точек. Раскладывается на два принципиально разных роста: экспансию (открыли новые точки) и same-store (существующие стали продавать больше). Смешивать их — главный способ обмануть себя в отчётности сети.",
+      "en": "Total sales of a physical-location chain. It splits into two fundamentally different growth types: expansion (new locations opened) and same-store (existing ones selling more). Blending them is the main way a chain fools itself in its own reporting."
+    },
+    "pitfalls": {
+      "ru": [
+        "Рост Total Sales при падающем same-store означает, что сеть растёт только стройкой и остановится вместе с ней.",
+        "Каннибализация: новая точка часто отъедает выручку у соседней — считайте прирост по району, а не по точке.",
+        "Инфляция: сравнение год к году без поправки на цены завышает «рост»."
+      ],
+      "en": [
+        "Total Sales growth with falling same-store means the chain only grows by building — and stops when building stops.",
+        "Cannibalization: a new location often eats a neighbor's sales — measure the gain per district, not per location.",
+        "Inflation: a year-over-year comparison without a price adjustment overstates \"growth\"."
+      ]
+    },
+    "sql": "-- Total sales split into expansion vs same-store growth\nWITH monthly AS (\n  SELECT date_trunc('month', created_at) AS month,\n         props->>'location_id' AS location_id,\n         SUM(amount) AS sales\n  FROM orders WHERE status = 'paid'\n  GROUP BY 1, 2\n),\nwith_prev AS (\n  SELECT m.*,\n         LAG(sales, 12) OVER (PARTITION BY location_id ORDER BY month) AS sales_ly\n  FROM monthly m\n)\nSELECT month,\n       SUM(sales) AS total_sales,\n       COUNT(*) AS locations,\n       ROUND(100.0 * (SUM(sales) FILTER (WHERE sales_ly IS NOT NULL)\n         - SUM(sales_ly)) / NULLIF(SUM(sales_ly), 0), 1) AS same_store_growth_pct\nFROM with_prev\nGROUP BY 1\nORDER BY 1;",
+    "related": ["same-store-sales", "aov", "contribution-margin"]
+  },
+  {
+    "id": "same-store-sales",
+    "category": "monetization",
+    "title": { "ru": "Same-store sales (LFL)", "en": "Same-store sales (LFL)" },
+    "aliases": ["lfl", "like-for-like"],
+    "tex": { "ru": "\\mathrm{LFL}=\\dfrac{\\text{продажи тех же точек сейчас}}{\\text{их же продажи год назад}}-1", "en": "\\mathrm{LFL}=\\dfrac{\\text{same locations' sales now}}{\\text{their sales a year ago}}-1" },
+    "desc": {
+      "ru": "Рост продаж только тех точек, которые работали и год назад. Очищает картину от эффекта новых открытий и показывает, становится ли сам бренд сильнее. Главная метрика здоровья ритейл-сети для инвестора.",
+      "en": "Sales growth of only those locations that were already open a year ago. It strips out the effect of new openings and shows whether the brand itself is getting stronger. The key retail-health metric for investors."
+    },
+    "pitfalls": {
+      "ru": [
+        "База сравнения должна быть честной: точка после ремонта или смены формата — уже не «та же точка».",
+        "Закрытые точки выпадают из базы и приукрашивают LFL (survivorship bias): худшие закрылись — среднее выросло.",
+        "Разделяйте рост от трафика и от чека: LFL за счёт повышения цен и за счёт новых гостей — разные истории."
+      ],
+      "en": [
+        "The comparison base must be honest: a location after a remodel or format change is no longer \"the same location\".",
+        "Closed locations drop out of the base and flatter LFL (survivorship bias): the worst closed, so the average rose.",
+        "Separate traffic growth from ticket growth: LFL from price hikes and from new guests are different stories."
+      ]
+    },
+    "sql": "-- Like-for-like: locations open for 12+ months only\nWITH first_sale AS (\n  SELECT props->>'location_id' AS location_id, MIN(created_at) AS opened_at\n  FROM orders GROUP BY 1\n),\nmonthly AS (\n  SELECT date_trunc('month', o.created_at) AS month,\n         o.props->>'location_id' AS location_id,\n         SUM(o.amount) AS sales\n  FROM orders o WHERE o.status = 'paid'\n  GROUP BY 1, 2\n)\nSELECT m.month,\n       ROUND(100.0 * (SUM(m.sales) - SUM(ly.sales)) / NULLIF(SUM(ly.sales), 0), 1) AS lfl_growth_pct,\n       COUNT(*) AS comparable_locations\nFROM monthly m\nJOIN monthly ly ON ly.location_id = m.location_id\n              AND ly.month = m.month - INTERVAL '12 months'\nJOIN first_sale f ON f.location_id = m.location_id\n                 AND f.opened_at <= m.month - INTERVAL '12 months'\nGROUP BY m.month\nORDER BY m.month;",
+    "related": ["total-sales", "aov", "purchase-frequency"]
+  },
+  {
+    "id": "retained-subscribers",
+    "category": "monetization",
+    "title": { "ru": "Retained Paying Subscribers", "en": "Retained paying subscribers" },
+    "aliases": ["удерживаемые платящие"],
+    "tex": { "ru": "\\text{База}_{t}=\\text{База}_{t-1}+\\text{новые}-\\text{ушедшие}", "en": "\\text{Base}_{t}=\\text{Base}_{t-1}+\\text{new}-\\text{churned}" },
+    "desc": {
+      "ru": "Число активных платящих подписчиков на конец периода. North Star подписочных продуктов: база — это накопленный итог всех прошлых решений о привлечении и удержании, и на зрелом рынке отток решает её судьбу сильнее притока.",
+      "en": "The count of active paying subscribers at period end. The North Star of subscription products: the base is the accumulated result of every past acquisition and retention decision, and in a mature market churn decides its fate more than inflow."
+    },
+    "pitfalls": {
+      "ru": [
+        "Подписчик на паузе или в grace-периоде — платящий или нет? Определение меняет цифру на проценты.",
+        "Годовые подписки маскируют проблему: отток виден только на продлении, через 12 месяцев после ошибки.",
+        "Рост базы на промо-тарифах откладывает отток, а не отменяет его."
+      ],
+      "en": [
+        "Is a paused or grace-period subscriber paying or not? The definition moves the number by percentage points.",
+        "Annual plans mask trouble: churn only surfaces at renewal, 12 months after the mistake.",
+        "Growing the base on promo pricing postpones churn rather than preventing it."
+      ]
+    },
+    "sql": "-- Active paying subscribers at each month end\nWITH months AS (\n  SELECT generate_series(date_trunc('month', now()) - INTERVAL '11 months',\n                         date_trunc('month', now()), '1 month') AS m\n)\nSELECT m::date AS month,\n       COUNT(*) FILTER (WHERE s.started_at < m + INTERVAL '1 month'\n         AND (s.cancelled_at IS NULL OR s.cancelled_at >= m + INTERVAL '1 month')) AS retained_subs,\n       COUNT(*) FILTER (WHERE date_trunc('month', s.started_at) = m) AS new_subs,\n       COUNT(*) FILTER (WHERE date_trunc('month', s.cancelled_at) = m) AS churned_subs\nFROM months\nCROSS JOIN subscriptions s\nGROUP BY 1\nORDER BY 1;",
+    "related": ["churn-rate", "mrr", "arpu", "nrr"]
+  },
+  {
+    "id": "ad-coverage",
+    "category": "monetization",
+    "title": { "ru": "Ad Coverage — доля запросов с рекламой", "en": "Ad coverage" },
+    "aliases": ["рекламное покрытие"],
+    "tex": { "ru": "\\text{Ad Coverage}=\\dfrac{\\text{показы с рекламой}}{\\text{все показы выдачи}}", "en": "\\text{Ad coverage}=\\dfrac{\\text{impressions with ads}}{\\text{all result impressions}}" },
+    "desc": {
+      "ru": "Какая доля показов выдачи содержит рекламу. Главный рычаг монетизации поиска и лент — и самый опасный: его можно поднять за день, а потерянное доверие возвращается годами.",
+      "en": "What share of result impressions carries ads. The main monetization lever for search and feeds — and the most dangerous: it can be raised in a day, while lost trust takes years to return."
+    },
+    "pitfalls": {
+      "ru": [
+        "Coverage растёт мгновенно, а вред виден в удержании через кварталы — соблазн «докрутить» перед отчётом.",
+        "Средняя доля бессмысленна: на коммерческих запросах реклама уместна, на информационных — раздражает.",
+        "Считать надо на показ выдачи, а не на запрос: несколько блоков на странице — это одно место контакта."
+      ],
+      "en": [
+        "Coverage rises instantly while the damage shows in retention quarters later — hence the temptation to squeeze it before a report.",
+        "The average share is meaningless: ads fit commercial queries and annoy on informational ones.",
+        "Count per results impression, not per query: several blocks on one page are still one point of contact."
+      ]
+    },
+    "sql": "-- Ad coverage by query intent\nSELECT props->>'intent' AS intent,\n       COUNT(*) AS serp_impressions,\n       COUNT(*) FILTER (WHERE (props->>'ads_shown')::int > 0) AS with_ads,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE (props->>'ads_shown')::int > 0)\n             / COUNT(*), 1) AS coverage_pct\nFROM events\nWHERE event_name = 'serp_view'\n  AND ts >= now() - INTERVAL '7 days'\nGROUP BY 1\nORDER BY serp_impressions DESC;",
+    "related": ["ctr", "search-success", "revenue"]
+  },
+  {
+    "id": "cpc",
+    "category": "monetization",
+    "title": { "ru": "CPC — цена клика", "en": "CPC — cost per click" },
+    "aliases": ["цена клика", "ставка"],
+    "tex": { "ru": "\\mathrm{CPC}=\\dfrac{\\text{расход}}{\\text{клики}}", "en": "\\mathrm{CPC}=\\dfrac{\\text{spend}}{\\text{clicks}}" },
+    "desc": {
+      "ru": "Сколько стоит один клик по объявлению. Для площадки — доход с показа (вместе с CTR), для рекламодателя — расход. Цену задаёт не площадка, а конкуренция рекламодателей за коммерческое намерение: чем выше готовность платить за клиента, тем дороже клик.",
+      "en": "What one ad click costs. For the platform it's revenue per impression (together with CTR); for the advertiser it's spend. The price is set not by the platform but by advertisers competing for commercial intent: the higher the willingness to pay for a customer, the pricier the click."
+    },
+    "pitfalls": {
+      "ru": [
+        "Средний CPC бесполезен: он смешивает брендовые запросы за копейки и конкурентные за большие деньги.",
+        "Рост CPC — не всегда плохо: если растёт и конверсия, стоимость клиента (CAC) может падать.",
+        "Quality Score: релевантное объявление выигрывает аукцион с меньшей ставкой — CPC зависит не только от денег."
+      ],
+      "en": [
+        "An average CPC is useless: it blends pennies-cheap brand queries with expensive competitive ones.",
+        "Rising CPC isn't always bad: if conversion rises too, the cost per customer (CAC) can fall.",
+        "Quality Score: a relevant ad wins the auction with a lower bid — CPC isn't driven by money alone."
+      ]
+    },
+    "sql": "-- CPC, revenue per impression and the CAC link\nSELECT props->>'query_intent' AS intent,\n       COUNT(*) FILTER (WHERE event_name = 'ad_click') AS clicks,\n       ROUND(SUM((props->>'bid_price')::numeric)\n             / NULLIF(COUNT(*) FILTER (WHERE event_name = 'ad_click'), 0), 2) AS cpc,\n       ROUND(SUM((props->>'bid_price')::numeric)\n             / NULLIF(COUNT(*) FILTER (WHERE event_name = 'ad_impression'), 0) * 1000, 2) AS rpm\nFROM events\nWHERE event_name IN ('ad_click', 'ad_impression')\n  AND ts >= now() - INTERVAL '7 days'\nGROUP BY 1\nORDER BY clicks DESC;",
+    "related": ["ctr", "ad-coverage", "cac", "quality-score"]
+  },
+  {
+    "id": "quality-score",
+    "category": "monetization",
+    "title": { "ru": "Quality Score — качество объявления", "en": "Quality score" },
+    "aliases": ["качество объявления"],
+    "tex": { "ru": "\\text{Ранг}=\\text{ставка}\\times \\text{Quality Score}", "en": "\\text{Ad rank}=\\text{bid}\\times \\text{quality score}" },
+    "desc": {
+      "ru": "Оценка релевантности объявления, которая умножается на ставку и определяет позицию в аукционе. Механизм, примиряющий деньги и пользу: релевантное объявление выигрывает у нерелевантного даже с меньшей ставкой, поэтому площадка не превращается в аукцион самых богатых.",
+      "en": "A relevance score multiplied by the bid to decide auction position. The mechanism that reconciles money and usefulness: a relevant ad beats an irrelevant one even with a lower bid, so the platform doesn't degrade into an auction of the richest."
+    },
+    "pitfalls": {
+      "ru": [
+        "Score считается по предсказанному CTR — а он предсказывается по историческим данным: новые объявления в невыгодном положении.",
+        "Рекламодатели оптимизируют Score кликбейтом — нужны сигналы после клика (dwell time, конверсия).",
+        "Непрозрачность: рекламодатель видит оценку, но не может её точно воспроизвести — источник конфликтов."
+      ],
+      "en": [
+        "The score is based on predicted CTR — predicted from history, so new ads start at a disadvantage.",
+        "Advertisers optimize the score with clickbait — you need post-click signals (dwell time, conversion).",
+        "Opacity: the advertiser sees the score but can't reproduce it exactly — a constant source of friction."
+      ]
+    },
+    "sql": "-- Quality score vs actual post-click behaviour\nSELECT width_bucket((props->>'quality_score')::numeric, 1, 10, 10) AS qs_bucket,\n       COUNT(*) AS impressions,\n       ROUND(AVG((props->>'predicted_ctr')::numeric), 4) AS predicted_ctr,\n       ROUND(AVG((props->>'actual_ctr')::numeric), 4) AS actual_ctr,\n       ROUND(AVG((props->>'dwell_sec')::numeric), 1) AS avg_dwell_sec\nFROM events\nWHERE event_name = 'ad_auction'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["cpc", "ctr", "dwell-time"]
+  },
+  {
+    "id": "creator-payout",
+    "category": "monetization",
+    "title": { "ru": "Доход авторов (RPM)", "en": "Creator payout (RPM)" },
+    "aliases": ["rpm", "роялти авторам"],
+    "tex": { "ru": "\\mathrm{RPM}=\\dfrac{\\text{выплаты автору}}{\\text{просмотры}}\\times 1000", "en": "\\mathrm{RPM}=\\dfrac{\\text{creator payout}}{\\text{views}}\\times 1000" },
+    "desc": {
+      "ru": "Сколько платформа платит автору за тысячу просмотров. Метрика второй стороны контентной платформы: аудитория приходит за контентом, контент делают авторы, а авторы уходят туда, где платят больше. Прямой аналог заработка водителя в такси.",
+      "en": "What the platform pays a creator per thousand views. The supply-side metric of a content platform: the audience comes for content, creators make it, and creators go where the pay is better. The direct analog of driver earnings in ride-hailing."
+    },
+    "pitfalls": {
+      "ru": [
+        "Средний RPM бессмыслен: он отличается в разы по тематикам и странам — рекламодатели платят за аудиторию, а не за просмотры.",
+        "Рост доли выручки автору снижает маржу платформы: это прямой размен, а не свободный рычаг.",
+        "Непредсказуемый RPM хуже низкого: авторы планируют производство контента, и скачки выплат гонят их к конкурентам."
+      ],
+      "en": [
+        "An average RPM is meaningless: it varies several-fold by topic and country — advertisers pay for the audience, not for views.",
+        "Raising the creator's revenue share cuts platform margin: a direct trade-off, not a free lever.",
+        "Unpredictable RPM is worse than low RPM: creators plan production, and payout swings push them to competitors."
+      ]
+    },
+    "sql": "-- Creator RPM and payout concentration\nWITH payouts AS (\n  SELECT props->>'creator_id' AS creator_id,\n         SUM((props->>'views')::int) AS views,\n         SUM((props->>'payout')::numeric) AS payout\n  FROM events\n  WHERE event_name = 'creator_monthly_stats'\n    AND ts >= date_trunc('month', now())\n  GROUP BY 1\n)\nSELECT COUNT(*) AS creators,\n       ROUND(SUM(payout) / NULLIF(SUM(views), 0) * 1000, 2) AS rpm,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY payout) AS median_payout,\n       ROUND(100.0 * SUM(payout) FILTER (WHERE payout >= (\n         SELECT PERCENTILE_CONT(0.99) WITHIN GROUP (ORDER BY payout) FROM payouts\n       )) / NULLIF(SUM(payout), 0), 1) AS top1pct_share\nFROM payouts;",
+    "related": ["time-spent", "royalty-cost", "gross-margin"]
+  },
+  {
+    "id": "royalty-cost",
+    "category": "monetization",
+    "title": { "ru": "Роялти-косты", "en": "Royalty costs" },
+    "aliases": ["роялти", "выплаты правообладателям"],
+    "tex": { "ru": "\\text{Доля роялти}=\\dfrac{\\text{выплаты правообладателям}}{\\text{выручка}}", "en": "\\text{Royalty share}=\\dfrac{\\text{rights-holder payouts}}{\\text{revenue}}" },
+    "desc": {
+      "ru": "Какая доля выручки уходит правообладателям контента. Определяет потолок маржи стриминга: в музыке роялти съедают около двух третей выручки, и этот процент фиксирован контрактами — то есть рост подписчиков не улучшает юнит-экономику сам по себе.",
+      "en": "What share of revenue goes to rights holders. It caps a streaming service's margin: in music, royalties eat roughly two-thirds of revenue, and the percentage is fixed by contract — so subscriber growth alone doesn't improve unit economics."
+    },
+    "pitfalls": {
+      "ru": [
+        "Роялти считаются от выручки, а не от прибыли: скидки и промо-тарифы бьют по марже вдвойне.",
+        "Собственный контент (подкасты, оригиналы) — единственный способ снизить долю; но он требует капзатрат заранее.",
+        "Пересмотр контрактов — событие, а не тренд: маржа скачком меняется в дату продления."
+      ],
+      "en": [
+        "Royalties are computed on revenue, not profit: discounts and promo plans hit margin twice.",
+        "Owned content (podcasts, originals) is the only way to cut the share — but it demands capex upfront.",
+        "Contract renegotiation is an event, not a trend: margin jumps on the renewal date."
+      ]
+    },
+    "sql": "-- Royalty share of revenue and the owned-content effect\nSELECT date_trunc('month', ts) AS month,\n       SUM((props->>'revenue')::numeric) AS revenue,\n       SUM((props->>'royalty')::numeric) AS royalties,\n       ROUND(100.0 * SUM((props->>'royalty')::numeric)\n             / NULLIF(SUM((props->>'revenue')::numeric), 0), 1) AS royalty_share_pct,\n       ROUND(100.0 * SUM((props->>'streams')::int) FILTER (WHERE props->>'owned' = 'true')\n             / NULLIF(SUM((props->>'streams')::int), 0), 1) AS owned_content_pct\nFROM events\nWHERE event_name = 'content_monthly_stats'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["gross-margin", "creator-payout", "retained-subscribers"]
+  },
+  {
+    "id": "aov",
+    "category": "monetization",
+    "title": { "ru": "AOV — средний чек", "en": "AOV — average order value" },
+    "aliases": ["средний чек", "average order value"],
+    "tex": { "ru": "\\mathrm{AOV}=\\dfrac{\\text{выручка}}{\\text{заказы}}", "en": "\\mathrm{AOV}=\\dfrac{\\text{revenue}}{\\text{orders}}" },
+    "desc": {
+      "ru": "Сколько денег в среднем приносит один заказ. Один из трёх классических рычагов выручки (трафик × конверсия × чек): растится кросс-сейлом, комплектами, порогами бесплатной доставки.",
+      "en": "How much money an average order brings. One of the three classic revenue levers (traffic × conversion × basket): grown via cross-sell, bundles and free-shipping thresholds."
+    },
+    "pitfalls": {
+      "ru": [
+        "Распределение чеков скошено вправо — пара оптовых заказов тянет среднее; сверяйте с медианой.",
+        "Рост AOV за счёт порога доставки может уронить конверсию — смотрите произведение, а не один множитель.",
+        "Возвраты: чек до и после возвратов — разные метрики, фиксируйте какую считаете."
+      ],
+      "en": [
+        "Order values are right-skewed — a couple of bulk orders drag the mean; check the median.",
+        "Raising AOV with a shipping threshold can depress conversion — watch the product of levers, not one factor.",
+        "Returns: AOV before vs after refunds are different metrics; fix which one you report."
+      ]
+    },
+    "sql": "-- AOV per month: mean and median\nSELECT date_trunc('month', created_at) AS month,\n       SUM(amount) AS revenue,\n       COUNT(*) AS orders,\n       ROUND(AVG(amount), 2) AS aov,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY amount) AS median_order\nFROM orders\nWHERE status = 'paid'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["conversion-rate", "arpu", "gmv"]
+  },
+  {
+    "id": "arpu",
+    "category": "monetization",
+    "title": { "ru": "ARPU — выручка на пользователя", "en": "ARPU — average revenue per user" },
+    "aliases": ["average revenue per user"],
+    "tex": { "ru": "\\mathrm{ARPU}=\\dfrac{\\text{выручка за период}}{\\text{активные пользователи}}", "en": "\\mathrm{ARPU}=\\dfrac{\\text{revenue in period}}{\\text{active users}}" },
+    "desc": {
+      "ru": "Средняя выручка со всех активных пользователей за период — и платящих, и бесплатных. Связывает монетизацию с размером аудитории: выручка = аудитория × ARPU.",
+      "en": "Average revenue across all active users in a period — paying and free alike. Ties monetization to audience size: revenue = audience × ARPU."
+    },
+    "pitfalls": {
+      "ru": [
+        "ARPU падает при быстром росте бесплатной аудитории — это не обязательно проблема монетизации.",
+        "Знаменатель «активные» зависит от определения активности; сверяйте с тем же определением, что в DAU/MAU.",
+        "Не путайте с ARPPU: там в знаменателе только платящие."
+      ],
+      "en": [
+        "ARPU drops when the free audience grows fast — not necessarily a monetization problem.",
+        "The \"active\" denominator depends on the activity definition; keep it consistent with DAU/MAU.",
+        "Don't confuse with ARPPU: its denominator is paying users only."
+      ]
+    },
+    "sql": "-- Monthly ARPU: revenue over monthly active users\nWITH mau AS (\n  SELECT date_trunc('month', ts) AS month, COUNT(DISTINCT user_id) AS users\n  FROM events GROUP BY 1\n),\nrev AS (\n  SELECT date_trunc('month', created_at) AS month, SUM(amount) AS revenue\n  FROM orders WHERE status = 'paid' GROUP BY 1\n)\nSELECT m.month,\n       r.revenue,\n       m.users,\n       ROUND(r.revenue / NULLIF(m.users, 0), 2) AS arpu\nFROM mau m\nJOIN rev r USING (month)\nORDER BY m.month;",
+    "related": ["arppu", "ltv", "paying-share", "dau-mau"]
+  },
+  {
+    "id": "arppu",
+    "category": "monetization",
+    "title": { "ru": "ARPPU — выручка на платящего", "en": "ARPPU — average revenue per paying user" },
+    "aliases": ["average revenue per paying user"],
+    "tex": { "ru": "\\mathrm{ARPPU}=\\dfrac{\\text{выручка за период}}{\\text{платящие пользователи}}", "en": "\\mathrm{ARPPU}=\\dfrac{\\text{revenue in period}}{\\text{paying users}}" },
+    "desc": {
+      "ru": "Средняя выручка с одного платящего. Вместе с долей платящих раскладывает ARPU на два независимых рычага: ARPU = доля платящих × ARPPU. Ключевая метрика F2P-игр и фримиума.",
+      "en": "Average revenue per paying user. Together with paying share it splits ARPU into two independent levers: ARPU = paying share × ARPPU. A key metric for F2P games and freemium."
+    },
+    "pitfalls": {
+      "ru": [
+        "Распределение платежей экстремально скошено: «киты» дают порядок величины — сегментируйте платящих.",
+        "Рост ARPPU при падении доли платящих может значить, что монетизация выдавливает всех, кроме китов.",
+        "Скидки и акции временно раздувают число платящих и роняют ARPPU — сравнивайте с прошлым годом, не с прошлым месяцем."
+      ],
+      "en": [
+        "Payment distributions are extremely skewed: \"whales\" contribute an order of magnitude — segment payers.",
+        "ARPPU rising while paying share falls may mean monetization squeezes out everyone but whales.",
+        "Sales and promos temporarily inflate payer counts and depress ARPPU — compare year-over-year, not month-over-month."
+      ]
+    },
+    "sql": "-- Monthly ARPPU and payer segmentation\nSELECT date_trunc('month', created_at) AS month,\n       COUNT(DISTINCT user_id) AS payers,\n       SUM(amount) AS revenue,\n       ROUND(SUM(amount) / NULLIF(COUNT(DISTINCT user_id), 0), 2) AS arppu,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY amount) AS median_payment\nFROM orders\nWHERE status = 'paid'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["arpu", "paying-share", "ltv"]
+  },
+  {
+    "id": "paying-share",
+    "category": "monetization",
+    "title": { "ru": "Доля платящих (конверсия в оплату)", "en": "Paying share (payer conversion)" },
+    "aliases": ["конверсия в платящих", "payer conversion"],
+    "tex": { "ru": "\\text{Доля платящих}=\\dfrac{\\text{платящие за период}}{\\text{активные за период}}", "en": "\\text{Paying share}=\\dfrac{\\text{payers in period}}{\\text{active users in period}}" },
+    "desc": {
+      "ru": "Какая доля активной аудитории платит. Во фримиуме и F2P обычно единицы процентов — и именно поэтому важна: сдвиг с 2% до 2.5% означает +25% выручки при той же аудитории.",
+      "en": "What share of the active audience pays. In freemium and F2P it's usually single-digit percent — which is exactly why it matters: moving from 2% to 2.5% means +25% revenue on the same audience."
+    },
+    "pitfalls": {
+      "ru": [
+        "Доля платящих за день, месяц и «за всю жизнь» — очень разные числа; фиксируйте окно.",
+        "Рост доли платящих при жёстком пейволле может маскировать отток бесплатной базы — знаменатель тоже живёт.",
+        "Первый платёж и повторный — разные события: конверсия в первый платёж отражает pricing, повторные — ценность."
+      ],
+      "en": [
+        "Daily, monthly and lifetime paying shares are very different numbers; fix the window.",
+        "A harder paywall can grow paying share while the free base churns away — the denominator moves too.",
+        "First and repeat payments are different events: first-payment conversion reflects pricing, repeats reflect value."
+      ]
+    },
+    "sql": "-- Monthly paying share of active users\nWITH active AS (\n  SELECT date_trunc('month', ts) AS month, COUNT(DISTINCT user_id) AS users\n  FROM events GROUP BY 1\n),\npayers AS (\n  SELECT date_trunc('month', created_at) AS month, COUNT(DISTINCT user_id) AS payers\n  FROM orders WHERE status = 'paid' GROUP BY 1\n)\nSELECT a.month,\n       p.payers,\n       a.users,\n       ROUND(100.0 * p.payers / NULLIF(a.users, 0), 2) AS paying_share_pct\nFROM active a\nLEFT JOIN payers p USING (month)\nORDER BY a.month;",
+    "related": ["arppu", "arpu", "conversion-rate"]
+  },
+  {
+    "id": "ltv",
+    "category": "monetization",
+    "title": { "ru": "LTV — пожизненная ценность клиента", "en": "LTV — customer lifetime value" },
+    "aliases": ["lifetime value", "пожизненная ценность"],
+    "tex": { "ru": "\\mathrm{LTV}\\approx \\mathrm{ARPU}_{\\text{мес}}\\times\\text{средний срок жизни (мес)}", "en": "\\mathrm{LTV}\\approx \\mathrm{ARPU}_{month}\\times\\text{avg lifetime (months)}" },
+    "desc": {
+      "ru": "Сколько денег приносит клиент за всё время отношений с продуктом. Определяет потолок допустимого CAC и смещает фокус с разовой сделки на удержание. Честный способ считать — по кумулятивной выручке когорт, а не по формуле с «средним сроком жизни».",
+      "en": "How much money a customer brings over their whole relationship with the product. Sets the ceiling for acceptable CAC and shifts focus from one-off deals to retention. The honest way to compute it is cumulative cohort revenue, not the \"average lifetime\" formula."
+    },
+    "pitfalls": {
+      "ru": [
+        "Формула ARPU × срок жизни предполагает постоянный churn — при нестабильном оттоке она сильно врёт; стройте когортные кривые.",
+        "LTV по выручке против LTV по марже: для сравнения с CAC нужна маржа.",
+        "Прогнозный LTV на 24 месяца по трём месяцам данных — экстраполяция; показывайте доверительный интервал."
+      ],
+      "en": [
+        "The ARPU × lifetime formula assumes constant churn — with unstable churn it lies badly; build cohort curves.",
+        "Revenue LTV vs margin LTV: comparing against CAC requires margin.",
+        "A 24-month predicted LTV from three months of data is extrapolation; show a confidence interval."
+      ]
+    },
+    "sql": "-- Cumulative revenue per user by cohort month (empirical LTV curve)\nWITH cohort AS (\n  SELECT user_id, date_trunc('month', MIN(created_at)) AS cohort_m\n  FROM orders WHERE status = 'paid' GROUP BY user_id\n)\nSELECT c.cohort_m,\n       EXTRACT(month FROM age(date_trunc('month', o.created_at), c.cohort_m)) AS month_n,\n       COUNT(DISTINCT c.user_id) AS cohort_users,\n       ROUND(SUM(SUM(o.amount)) OVER (PARTITION BY c.cohort_m ORDER BY\n         EXTRACT(month FROM age(date_trunc('month', o.created_at), c.cohort_m)))\n         / COUNT(DISTINCT c.user_id), 2) AS cum_revenue_per_user\nFROM cohort c\nJOIN orders o ON o.user_id = c.user_id AND o.status = 'paid'\nGROUP BY 1, 2\nORDER BY 1, 2;",
+    "related": ["ltv-cac", "arpu", "churn-rate", "repeat-rate"]
+  },
+  {
+    "id": "gmv",
+    "category": "monetization",
+    "title": { "ru": "GMV — валовой оборот", "en": "GMV — gross merchandise value" },
+    "aliases": ["gross merchandise value", "оборот"],
+    "tex": { "ru": "\\mathrm{GMV}=\\sum \\text{стоимость всех сделок на платформе}", "en": "\\mathrm{GMV}=\\sum \\text{value of all transactions on the platform}" },
+    "desc": {
+      "ru": "Суммарная стоимость всего, что продано через платформу, — до вычета комиссий, скидок и возвратов. Мера масштаба маркетплейса; выручка самой платформы = GMV × take rate.",
+      "en": "The total value of everything sold through the platform — before commissions, discounts and returns. The scale measure of a marketplace; the platform's own revenue = GMV × take rate."
+    },
+    "pitfalls": {
+      "ru": [
+        "GMV — не выручка платформы: рост GMV при падающем take rate может означать падение выручки.",
+        "Отменённые и возвращённые заказы: GMV «заказанный» и «выкупленный» отличаются на десятки процентов.",
+        "Промо-субсидии надувают GMV убыточными сделками — смотрите вместе с contribution margin."
+      ],
+      "en": [
+        "GMV is not the platform's revenue: GMV growth with a falling take rate can mean revenue decline.",
+        "Cancellations and returns: \"ordered\" vs \"redeemed\" GMV differ by dozens of percent.",
+        "Promo subsidies inflate GMV with loss-making deals — read together with contribution margin."
+      ]
+    },
+    "sql": "-- Monthly GMV: ordered vs delivered\nSELECT date_trunc('month', created_at) AS month,\n       SUM(amount) AS gmv_ordered,\n       SUM(amount) FILTER (WHERE status = 'delivered') AS gmv_delivered,\n       ROUND(100.0 * SUM(amount) FILTER (WHERE status = 'delivered')\n             / NULLIF(SUM(amount), 0), 1) AS delivered_share_pct\nFROM orders\nGROUP BY 1\nORDER BY 1;",
+    "related": ["take-rate", "aov", "purchase-frequency"]
+  },
+  {
+    "id": "mrr",
+    "category": "monetization",
+    "title": { "ru": "MRR / ARR — регулярная выручка", "en": "MRR / ARR — recurring revenue" },
+    "aliases": ["monthly recurring revenue", "arr"],
+    "tex": { "ru": "\\mathrm{MRR}=\\sum \\text{месячная плата активных подписок};\\quad \\mathrm{ARR}=12\\times \\mathrm{MRR}", "en": "\\mathrm{MRR}=\\sum \\text{monthly fee of active subscriptions};\\quad \\mathrm{ARR}=12\\times \\mathrm{MRR}" },
+    "desc": {
+      "ru": "Предсказуемая месячная (MRR) или годовая (ARR) выручка от активных подписок. Стандарт учёта в SaaS: сглаживает разовые платежи и позволяет раскладывать динамику на new / expansion / contraction / churned MRR.",
+      "en": "Predictable monthly (MRR) or annual (ARR) revenue from active subscriptions. The SaaS accounting standard: it smooths one-off payments and decomposes growth into new / expansion / contraction / churned MRR."
+    },
+    "pitfalls": {
+      "ru": [
+        "Разовые платежи (сетапы, услуги) в MRR не входят — не смешивайте с кассовой выручкой.",
+        "Годовые контракты с помесячным биллингом и скидкой: MRR по прайсу и по факту различаются.",
+        "ARR = 12 × MRR — это аннуализация текущего момента, а не прогноз года."
+      ],
+      "en": [
+        "One-off payments (setup, services) don't belong in MRR — don't mix it with cash revenue.",
+        "Annual contracts billed monthly with a discount: list-price and actual MRR diverge.",
+        "ARR = 12 × MRR annualizes the current moment; it is not a forecast for the year."
+      ]
+    },
+    "sql": "-- MRR waterfall: new, churned and net by month\nWITH months AS (\n  SELECT generate_series(date_trunc('month', now()) - INTERVAL '11 months',\n                         date_trunc('month', now()), '1 month') AS m\n)\nSELECT m::date AS month,\n       SUM(s.mrr) FILTER (WHERE s.started_at < m + INTERVAL '1 month'\n         AND (s.cancelled_at IS NULL OR s.cancelled_at >= m + INTERVAL '1 month')) AS mrr,\n       SUM(s.mrr) FILTER (WHERE date_trunc('month', s.started_at) = m) AS new_mrr,\n       SUM(s.mrr) FILTER (WHERE date_trunc('month', s.cancelled_at) = m) AS churned_mrr\nFROM months\nCROSS JOIN subscriptions s\nGROUP BY 1\nORDER BY 1;",
+    "related": ["nrr", "churn-rate", "arpu"]
+  },
+  {
+    "id": "purchase-frequency",
+    "category": "monetization",
+    "title": { "ru": "Частота покупок", "en": "Purchase frequency" },
+    "aliases": ["частота заказов", "order frequency"],
+    "tex": { "ru": "\\text{Частота}=\\dfrac{\\text{заказы за период}}{\\text{уникальные покупатели}}", "en": "\\mathrm{Frequency}=\\dfrac{\\text{orders in period}}{\\text{unique buyers}}" },
+    "desc": {
+      "ru": "Сколько заказов делает средний покупатель за период. Третий множитель транзакционной выручки: выручка = покупатели × частота × чек. У фудтеха рычаг именно здесь — чек и число клиентов растут медленно, а частота может вырасти в разы.",
+      "en": "How many orders an average buyer places per period. The third factor of transactional revenue: revenue = buyers × frequency × basket. In food delivery this is the lever — basket and buyer counts grow slowly, but frequency can multiply."
+    },
+    "pitfalls": {
+      "ru": [
+        "Средняя частота прячет бимодальность: ядро заказывает еженедельно, хвост — раз в квартал; смотрите распределение.",
+        "Рост частоты за счёт скидок каннибализирует полные заказы — проверяйте инкрементальность.",
+        "Частота на активного покупателя и на всю базу — разные метрики."
+      ],
+      "en": [
+        "Average frequency hides bimodality: the core orders weekly, the tail quarterly; look at the distribution.",
+        "Discount-driven frequency cannibalizes full-price orders — check incrementality.",
+        "Frequency per active buyer vs per whole base are different metrics."
+      ]
+    },
+    "sql": "-- Orders per buyer per month + distribution\nWITH per_buyer AS (\n  SELECT date_trunc('month', created_at) AS month, user_id, COUNT(*) AS orders\n  FROM orders WHERE status = 'paid'\n  GROUP BY 1, 2\n)\nSELECT month,\n       ROUND(AVG(orders), 2) AS avg_freq,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY orders) AS median_freq,\n       COUNT(*) FILTER (WHERE orders >= 4) AS weekly_plus_buyers\nFROM per_buyer\nGROUP BY 1\nORDER BY 1;",
+    "related": ["aov", "repeat-rate", "gmv"]
+  }
+]

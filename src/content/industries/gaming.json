@@ -1,124 +1,1020 @@
 {
   "id": "gaming",
-  "archetype": "Виртуальная экономика",
-  "industry": "Free-to-play игры",
-  "northStar": "Bookings (платежи игроков)",
+  "archetype": {
+    "ru": "Виртуальная экономика",
+    "en": "Virtual economy"
+  },
+  "industry": {
+    "ru": "Free-to-play игры",
+    "en": "Free-to-play games"
+  },
+  "northStar": {
+    "ru": "Bookings (платежи игроков)",
+    "en": "Bookings (player payments)"
+  },
   "root": {
-    "id": "bookings", "level": 0, "title": "Bookings", "formula": "DAU × Конверсия в платящих × ARPPU",
-    "note": "F2P-игра бесплатна; деньги приносит меньшинство платящих. Bookings = живая аудитория × доля платящих × средний платёж.",
+    "id": "bookings",
+    "level": 0,
+    "title": "Bookings",
+    "formula": {
+      "ru": "DAU × Конверсия в платящих × ARPPU",
+      "en": "DAU × Payer conversion × ARPPU"
+    },
+    "note": {
+      "ru": "F2P-игра бесплатна; деньги приносит меньшинство платящих. Bookings = живая аудитория × доля платящих × средний платёж — три множителя, которые двигают разные команды.",
+      "en": "An F2P game is free; a paying minority brings the money. Bookings = live audience × payer share × average payment — three factors moved by different teams."
+    },
     "children": [
-      { "id": "audience", "level": 1, "title": "Аудитория (DAU)", "formula": "установки × retention", "note": "Сколько живых игроков.", "children": [
-        { "id": "installs", "level": 2, "title": "Установки", "note": "Приток новых игроков.", "children": [
-          { "id": "retention", "level": 3, "title": "Retention D1/D7/D30", "note": "Удержание после установки.", "children": [
-            { "id": "core-loop", "level": 4, "title": "Сила core-loop", "note": "Затягивает ли базовый цикл игры." }
-          ] }
-        ] }
-      ] },
-      { "id": "engagement", "level": 1, "title": "Вовлечённость", "formula": "сессии × длина", "note": "Как глубоко играют.", "children": [
-        { "id": "sessions", "level": 2, "title": "Сессий в день", "note": "Частота возвратов.", "children": [
-          { "id": "progression", "level": 3, "title": "Прогрессия игрока", "note": "Чувство роста удерживает.", "children": [
-            { "id": "events", "level": 4, "title": "Ивенты и LiveOps", "note": "Регулярные события возвращают игроков." }
-          ] }
-        ] }
-      ] },
-      { "id": "monet", "level": 1, "title": "Монетизация", "formula": "конверсия × ARPPU", "note": "Виртуальная экономика.", "children": [
-        { "id": "conv", "level": 2, "title": "Конверсия в платящих", "note": "Доля заплативших.", "children": [
-          { "id": "first-pay", "level": 3, "title": "Первая покупка", "note": "Порог входа в платящие." }
-        ] },
-        { "id": "arppu", "level": 2, "title": "ARPPU", "note": "Средний платёж платящего.", "children": [
-          { "id": "whales", "level": 3, "title": "Доля «китов»", "note": "Топ-платящие дают львиную долю выручки." }
-        ] }
-      ] }
-    ]
+      {
+        "id": "audience",
+        "level": 1,
+        "title": {
+          "ru": "Аудитория (DAU)",
+          "en": "Audience (DAU)"
+        },
+        "formula": {
+          "ru": "установки × retention",
+          "en": "installs × retention"
+        },
+        "note": {
+          "ru": "Сколько живых игроков: без аудитории монетизировать некого.",
+          "en": "How many live players: with no audience there's nobody to monetize."
+        },
+        "children": [
+          {
+            "id": "installs",
+            "level": 2,
+            "title": {
+              "ru": "Установки",
+              "en": "Installs"
+            },
+            "note": {
+              "ru": "Приток новых игроков: почти всегда платный (UA).",
+              "en": "The inflow of new players: almost always paid (UA)."
+            },
+            "children": [
+              {
+                "id": "cpi",
+                "level": 3,
+                "metricId": "cac",
+                "title": {
+                  "ru": "CPI / UA-косты",
+                  "en": "CPI / UA costs"
+                },
+                "note": {
+                  "ru": "Стоимость установки: F2P-игры покупают аудиторию и окупают её тратами игроков.",
+                  "en": "Cost per install: F2P games buy their audience and recoup it from player spend."
+                },
+                "children": [
+                  {
+                    "id": "retention",
+                    "level": 4,
+                    "metricId": "retention-n-day",
+                    "title": "Retention D1/D7/D30",
+                    "note": {
+                      "ru": "Удержание после установки — то, что превращает купленную установку в игрока.",
+                      "en": "Retention after install — what turns a bought install into a player."
+                    },
+                    "children": [
+                      {
+                        "id": "core-loop",
+                        "level": 5,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Сила core-loop",
+                          "en": "Core-loop strength"
+                        },
+                        "note": {
+                          "ru": "Рычаг: затягивает ли базовый цикл игры за первые сессии — фундамент всего retention.",
+                          "en": "Lever: does the basic gameplay loop hook you in the first sessions — the foundation of all retention."
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "metricId": "installs"
+          }
+        ],
+        "metricId": "dau-mau"
+      },
+      {
+        "id": "engagement",
+        "level": 1,
+        "title": {
+          "ru": "Вовлечённость",
+          "en": "Engagement"
+        },
+        "formula": {
+          "ru": "сессии × длина",
+          "en": "sessions × length"
+        },
+        "note": {
+          "ru": "Как глубоко играют: вовлечённость — мост между аудиторией и монетизацией.",
+          "en": "How deeply they play: engagement is the bridge from audience to monetization."
+        },
+        "children": [
+          {
+            "id": "sessions",
+            "level": 2,
+            "metricId": "sessions-per-user",
+            "title": {
+              "ru": "Сессий в день",
+              "en": "Sessions per day"
+            },
+            "note": {
+              "ru": "Частота возвратов в игру.",
+              "en": "How often players come back."
+            },
+            "children": [
+              {
+                "id": "progression",
+                "level": 3,
+                "title": {
+                  "ru": "Прогрессия игрока",
+                  "en": "Player progression"
+                },
+                "note": {
+                  "ru": "Чувство роста удерживает: застой в прогрессе — прямой путь к оттоку.",
+                  "en": "The feeling of growth retains: a progression stall leads straight to churn."
+                },
+                "children": [
+                  {
+                    "id": "events",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Ивенты и LiveOps",
+                      "en": "Events & LiveOps"
+                    },
+                    "note": {
+                      "ru": "Рычаг: регулярные события возвращают игроков и создают поводы платить.",
+                      "en": "Lever: regular events bring players back and create reasons to pay."
+                    },
+                    "children": [
+                      {
+                        "id": "event-participation",
+                        "level": 5,
+                        "title": {
+                          "ru": "Участие в ивентах",
+                          "en": "Event participation"
+                        },
+                        "note": {
+                          "ru": "Доля DAU, вовлечённых в событие, — измеримый эффект работы LiveOps-команды.",
+                          "en": "The share of DAU engaged in an event — the LiveOps team's measurable output."
+                        },
+                        "metricId": "active-days"
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "retention-n-day"
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "monet",
+        "level": 1,
+        "title": {
+          "ru": "Монетизация",
+          "en": "Monetization"
+        },
+        "formula": {
+          "ru": "конверсия × ARPPU",
+          "en": "conversion × ARPPU"
+        },
+        "note": {
+          "ru": "Виртуальная экономика: два независимых рычага — сколько платят и сколько платит каждый.",
+          "en": "The virtual economy: two independent levers — how many pay and how much each pays."
+        },
+        "children": [
+          {
+            "id": "conv",
+            "level": 2,
+            "metricId": "paying-share",
+            "title": {
+              "ru": "Конверсия в платящих",
+              "en": "Payer conversion"
+            },
+            "note": {
+              "ru": "Доля заплативших: в F2P это обычно единицы процентов.",
+              "en": "The share who paid: in F2P this is usually low single digits."
+            },
+            "children": [
+              {
+                "id": "first-pay",
+                "level": 3,
+                "title": {
+                  "ru": "Первая покупка",
+                  "en": "First purchase"
+                },
+                "note": {
+                  "ru": "Порог входа в платящие: стартовый оффер снимает психологический барьер.",
+                  "en": "The entry threshold into paying: a starter offer removes the psychological barrier."
+                },
+                "children": [
+                  {
+                    "id": "time-to-first-pay",
+                    "level": 4,
+                    "title": {
+                      "ru": "Время до первого платежа",
+                      "en": "Time to first payment"
+                    },
+                    "note": {
+                      "ru": "Чем раньше игрок платит, тем выше его итоговый LTV — но давить рано опасно.",
+                      "en": "The earlier a player pays, the higher their eventual LTV — but pushing too early backfires."
+                    },
+                    "metricId": "paying-share"
+                  }
+                ],
+                "metricId": "paying-share"
+              }
+            ]
+          },
+          {
+            "id": "arppu",
+            "level": 2,
+            "metricId": "arppu",
+            "title": "ARPPU",
+            "note": {
+              "ru": "Средний платёж платящего.",
+              "en": "The average payer's spend."
+            },
+            "children": [
+              {
+                "id": "whales",
+                "level": 3,
+                "title": {
+                  "ru": "Доля «китов»",
+                  "en": "Whale share"
+                },
+                "note": {
+                  "ru": "Топ-платящие дают львиную долю выручки — распределение экстремально скошено.",
+                  "en": "Top payers bring the lion's share of revenue — the distribution is extremely skewed."
+                },
+                "children": [
+                  {
+                    "id": "whale-concentration",
+                    "level": 4,
+                    "title": {
+                      "ru": "Концентрация выручки",
+                      "en": "Revenue concentration"
+                    },
+                    "note": {
+                      "ru": "Доля выручки от топ-1% платящих — риск: уход десятка китов заметен в отчётности.",
+                      "en": "Revenue share from the top 1% of payers — a risk: a dozen whales leaving shows up in the P&L."
+                    },
+                    "metricId": "arppu"
+                  }
+                ],
+                "metricId": "arppu"
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      }
+    ],
+    "metricId": "bookings"
   },
   "pyramid": {
-    "note": "От выручки игры (вершина) к стабильности билда и серверов (основание).",
+    "note": {
+      "ru": "От выручки игры (вершина) к стабильности билда и серверов (основание).",
+      "en": "From game revenue (top) to build and server stability (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "студия/издатель", "items": ["Bookings", "LTV / CPI", "ROAS UA"] },
-      { "label": "Продуктовые", "role": "геймдизайн/продакт", "items": ["DAU", "Retention D1/D7/D30", "Конверсия в платящих", "ARPPU"] },
-      { "label": "Операционные", "role": "LiveOps", "items": ["Сессий в день", "Прогрессия", "Ивенты", "Первая покупка"] },
-      { "label": "Платформенные", "role": "инженеры", "items": ["Стабильность билда (краши)", "Пинг/тикрейт", "Время загрузки"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "студия/издатель",
+          "en": "studio/publisher"
+        },
+        "items": [
+          "Bookings",
+          "LTV / CPI",
+          "ROAS UA"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "геймдизайн/продакт",
+          "en": "game design/product"
+        },
+        "items": [
+          "DAU",
+          "Retention D1/D7/D30",
+          {
+            "ru": "Конверсия в платящих",
+            "en": "Payer conversion"
+          },
+          "ARPPU"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": "LiveOps",
+        "items": [
+          {
+            "ru": "Сессий в день",
+            "en": "Sessions per day"
+          },
+          {
+            "ru": "Прогрессия",
+            "en": "Progression"
+          },
+          {
+            "ru": "Ивенты",
+            "en": "Events"
+          },
+          {
+            "ru": "Первая покупка",
+            "en": "First purchase"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "инженеры",
+          "en": "engineers"
+        },
+        "items": [
+          {
+            "ru": "Стабильность билда (краши)",
+            "en": "Build stability (crashes)"
+          },
+          {
+            "ru": "Пинг/тикрейт",
+            "en": "Ping/tickrate"
+          },
+          {
+            "ru": "Время загрузки",
+            "en": "Load time"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Pay-to-win баланс", "note": "перекос монетизации выжигает неплатящих, на которых держится комьюнити" },
-    { "title": "Инфляция виртуальной экономики", "note": "обесценивает прогресс и покупки" },
-    { "title": "Краши и читеры", "note": "техника и честность матчей удерживают игроков" }
+    {
+      "title": {
+        "ru": "Pay-to-win баланс",
+        "en": "Pay-to-win balance"
+      },
+      "note": {
+        "ru": "перекос монетизации выжигает неплатящих, на которых держится комьюнити",
+        "en": "monetization overreach burns the non-payers the community rests on"
+      }
+    },
+    {
+      "title": {
+        "ru": "Инфляция виртуальной экономики",
+        "en": "Virtual-economy inflation"
+      },
+      "note": {
+        "ru": "обесценивает прогресс и покупки",
+        "en": "it devalues progress and purchases"
+      }
+    },
+    {
+      "title": {
+        "ru": "Краши и читеры",
+        "en": "Crashes & cheaters"
+      },
+      "note": {
+        "ru": "техника и честность матчей удерживают игроков",
+        "en": "tech quality and fair matches retain players"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "supercell", "name": "Supercell", "northStar": "Bookings (мультиплеер + долгий LiveOps)",
-      "note": "соревновательный мультиплеер (Clash, Brawl Stars): ставка на долгие LiveOps, кланы и честный соревновательный баланс.",
+      "id": "supercell",
+      "name": "Supercell",
+      "northStar": {
+        "ru": "Bookings (мультиплеер + долгий LiveOps)",
+        "en": "Bookings (multiplayer + long-run LiveOps)"
+      },
+      "note": {
+        "ru": "соревновательный мультиплеер (Clash, Brawl Stars): ставка на долгие LiveOps, кланы и честный соревновательный баланс.",
+        "en": "competitive multiplayer (Clash, Brawl Stars): a bet on long-run LiveOps, clans and fair competitive balance."
+      },
       "root": {
-        "id": "sc-book", "level": 0, "title": "Bookings", "formula": "DAU × Конверсия × ARPPU",
-        "note": "Игры-сервисы на годы: социальные связи (кланы) и регулярные обновления держат аудиторию.",
+        "id": "sc-book",
+        "level": 0,
+        "title": "Bookings",
+        "formula": {
+          "ru": "DAU × Конверсия × ARPPU",
+          "en": "DAU × Conversion × ARPPU"
+        },
+        "note": {
+          "ru": "Игры-сервисы на годы: социальные связи (кланы) и регулярные обновления держат аудиторию.",
+          "en": "Games as services for years: social ties (clans) and regular updates hold the audience."
+        },
         "children": [
-          { "id": "sc-aud", "level": 1, "title": "Аудитория", "note": "Установки + долгое удержание.", "children": [
-            { "id": "sc-ret", "level": 2, "title": "Long-term Retention", "note": "Удержание на месяцы/годы.", "children": [
-              { "id": "sc-clan", "level": 3, "title": "Членство в кланах", "note": "Соц-связи держат сильнее механик.", "children": [
-                { "id": "sc-social", "level": 4, "title": "Активность клана", "note": "Совместные цели возвращают." }
-              ] }
-            ] }
-          ] },
-          { "id": "sc-eng", "level": 1, "title": "Вовлечённость", "note": "Соревновательный цикл.", "children": [
-            { "id": "sc-ladder", "level": 2, "title": "Рейтинговые матчи", "note": "Желание расти в ранге.", "children": [
-              { "id": "sc-season", "level": 3, "title": "Сезоны / Pass", "note": "Сезонные цели и награды." }
-            ] }
-          ] },
-          { "id": "sc-monet", "level": 1, "title": "Монетизация", "note": "Косметика + Pass, без pay-to-win.", "children": [
-            { "id": "sc-conv", "level": 2, "title": "Конверсия в платящих", "note": "Battle Pass — массовый вход.", "children": [
-              { "id": "sc-cosmetic", "level": 3, "title": "Косметика/скины", "note": "Не влияет на баланс." }
-            ] }
-          ] }
+          {
+            "id": "sc-aud",
+            "level": 1,
+            "title": {
+              "ru": "Аудитория",
+              "en": "Audience"
+            },
+            "note": {
+              "ru": "Установки + долгое удержание.",
+              "en": "Installs + long-run retention."
+            },
+            "children": [
+              {
+                "id": "sc-ret",
+                "level": 2,
+                "metricId": "retention-n-day",
+                "title": "Long-term Retention",
+                "note": {
+                  "ru": "Удержание на месяцы и годы, а не на первую неделю.",
+                  "en": "Retention over months and years, not just the first week."
+                },
+                "children": [
+                  {
+                    "id": "sc-clan",
+                    "level": 3,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Членство в кланах",
+                      "en": "Clan membership"
+                    },
+                    "note": {
+                      "ru": "Рычаг: соц-связи держат сильнее любых игровых механик.",
+                      "en": "Lever: social ties hold harder than any game mechanic."
+                    },
+                    "children": [
+                      {
+                        "id": "sc-social",
+                        "level": 4,
+                        "title": {
+                          "ru": "Активность клана",
+                          "en": "Clan activity"
+                        },
+                        "note": {
+                          "ru": "Совместные цели возвращают: уйти из игры значит подвести команду.",
+                          "en": "Shared goals bring people back: quitting means letting the team down."
+                        },
+                        "children": [
+                          {
+                            "id": "sc-clan-retention",
+                            "level": 5,
+                            "title": {
+                              "ru": "Retention в клане vs без",
+                              "en": "Retention in a clan vs without"
+                            },
+                            "note": {
+                              "ru": "Разница удержания игроков в клане и без него — измеримая цена социального слоя.",
+                              "en": "The retention gap between clan and non-clan players — the social layer's measurable worth."
+                            },
+                            "metricId": "retention-n-day"
+                          }
+                        ],
+                        "metricId": "active-days"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "sc-eng",
+            "level": 1,
+            "title": {
+              "ru": "Вовлечённость",
+              "en": "Engagement"
+            },
+            "note": {
+              "ru": "Соревновательный цикл: рейтинг вместо сюжета.",
+              "en": "The competitive loop: ranking instead of story."
+            },
+            "children": [
+              {
+                "id": "sc-ladder",
+                "level": 2,
+                "title": {
+                  "ru": "Рейтинговые матчи",
+                  "en": "Ranked matches"
+                },
+                "note": {
+                  "ru": "Желание расти в ранге — вечный двигатель сессий.",
+                  "en": "The urge to climb — the eternal session engine."
+                },
+                "children": [
+                  {
+                    "id": "sc-season",
+                    "level": 3,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Сезоны / Pass",
+                      "en": "Seasons / Pass"
+                    },
+                    "note": {
+                      "ru": "Рычаг: сезонные цели и награды задают ритм возвратов.",
+                      "en": "Lever: seasonal goals and rewards set the rhythm of returns."
+                    },
+                    "children": [
+                      {
+                        "id": "sc-matchmaking",
+                        "level": 4,
+                        "title": {
+                          "ru": "Качество матчмейкинга",
+                          "en": "Matchmaking quality"
+                        },
+                        "note": {
+                          "ru": "Баланс сил в матче: несправедливые матчи гонят новичков быстрее любых багов.",
+                          "en": "Match balance: unfair matches drive newcomers away faster than any bug."
+                        },
+                        "kind": "group"
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "sessions-per-user"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "sc-monet",
+            "level": 1,
+            "title": {
+              "ru": "Монетизация",
+              "en": "Monetization"
+            },
+            "note": {
+              "ru": "Косметика и Pass без pay-to-win — осознанное ограничение.",
+              "en": "Cosmetics and Pass with no pay-to-win — a deliberate constraint."
+            },
+            "children": [
+              {
+                "id": "sc-conv",
+                "level": 2,
+                "metricId": "paying-share",
+                "title": {
+                  "ru": "Конверсия в платящих",
+                  "en": "Payer conversion"
+                },
+                "note": {
+                  "ru": "Battle Pass — массовый дешёвый вход в платящие.",
+                  "en": "The Battle Pass — a cheap mass entry into paying."
+                },
+                "children": [
+                  {
+                    "id": "sc-cosmetic",
+                    "level": 3,
+                    "title": {
+                      "ru": "Косметика / скины",
+                      "en": "Cosmetics / skins"
+                    },
+                    "note": {
+                      "ru": "Не влияет на баланс: платящие выделяются, но не побеждают за деньги.",
+                      "en": "No balance impact: payers stand out but don't buy wins."
+                    },
+                    "metricId": "arppu"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          }
+        ],
+        "metricId": "bookings"
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "студия",
+              "en": "studio"
+            },
+            "items": [
+              "Bookings",
+              "LTV / CPI"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "геймдизайн",
+              "en": "game design"
+            },
+            "items": [
+              "Long-term Retention",
+              {
+                "ru": "Рейтинговые матчи",
+                "en": "Ranked matches"
+              },
+              {
+                "ru": "Конверсия в Pass",
+                "en": "Pass conversion"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": "LiveOps",
+            "items": [
+              {
+                "ru": "Активность кланов",
+                "en": "Clan activity"
+              },
+              {
+                "ru": "Сезоны",
+                "en": "Seasons"
+              },
+              {
+                "ru": "Косметика",
+                "en": "Cosmetics"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Тикрейт/пинг",
+                "en": "Tickrate/ping"
+              },
+              {
+                "ru": "Стабильность",
+                "en": "Stability"
+              },
+              {
+                "ru": "Анти-чит",
+                "en": "Anti-cheat"
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "студия", "items": ["Bookings", "LTV / CPI"] },
-        { "label": "Продуктовые", "role": "геймдизайн", "items": ["Long-term Retention", "Рейтинговые матчи", "Конверсия в Pass"] },
-        { "label": "Операционные", "role": "LiveOps", "items": ["Активность кланов", "Сезоны", "Косметика"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Тикрейт/пинг", "Стабильность", "Анти-чит"] }
-      ] },
       "counterMetrics": [
-        { "title": "Баланс матчмейкинга", "note": "несправедливые матчи гонят новичков" },
-        { "title": "Намёки на pay-to-win", "note": "подрывают соревновательную честность" }
+        {
+          "title": {
+            "ru": "Баланс матчмейкинга",
+            "en": "Matchmaking balance"
+          },
+          "note": {
+            "ru": "несправедливые матчи гонят новичков",
+            "en": "unfair matches drive newcomers away"
+          }
+        },
+        {
+          "title": {
+            "ru": "Намёки на pay-to-win",
+            "en": "Pay-to-win creep"
+          },
+          "note": {
+            "ru": "подрывают соревновательную честность",
+            "en": "it undermines competitive fairness"
+          }
+        }
       ]
     },
     {
-      "id": "mihoyo", "name": "miHoYo (HoYoverse)", "northStar": "Bookings (gacha + контентные апдейты)",
-      "note": "сюжетная gacha (Genshin): ставка на качество контента, баннеры персонажей и патчи-релизы; монетизация через гачу.",
+      "id": "mihoyo",
+      "name": "miHoYo (HoYoverse)",
+      "northStar": {
+        "ru": "Bookings (gacha + контентные апдейты)",
+        "en": "Bookings (gacha + content updates)"
+      },
+      "note": {
+        "ru": "сюжетная gacha (Genshin): ставка на качество контента, баннеры персонажей и патчи-релизы; монетизация через гачу.",
+        "en": "story-driven gacha (Genshin): a bet on content quality, character banners and patch releases; monetized through gacha."
+      },
       "root": {
-        "id": "mh-book", "level": 0, "title": "Bookings", "formula": "DAU × Конверсия × ARPPU",
-        "note": "Контент-driven gacha: новые персонажи и регионы в патчах задают волны выручки.",
+        "id": "mh-book",
+        "level": 0,
+        "title": "Bookings",
+        "formula": {
+          "ru": "DAU × Конверсия × ARPPU",
+          "en": "DAU × Conversion × ARPPU"
+        },
+        "note": {
+          "ru": "Контент-driven gacha: новые персонажи и регионы в патчах задают волны выручки.",
+          "en": "Content-driven gacha: new characters and regions in patches set the revenue waves."
+        },
         "children": [
-          { "id": "mh-aud", "level": 1, "title": "Аудитория", "note": "Привлечение под релизы.", "children": [
-            { "id": "mh-patch", "level": 2, "title": "Патч-циклы (контент)", "note": "Новый регион/сюжет возвращает игроков.", "children": [
-              { "id": "mh-ret", "level": 3, "title": "Retention между патчами", "note": "Дейлики и события держат.", "children": [
-                { "id": "mh-daily", "level": 4, "title": "Ежедневные задания", "note": "Привычка заходить каждый день." }
-              ] }
-            ] }
-          ] },
-          { "id": "mh-eng", "level": 1, "title": "Вовлечённость контентом", "note": "Исследование и сюжет.", "children": [
-            { "id": "mh-story", "level": 2, "title": "Прохождение сюжета", "note": "Качество нарратива удерживает.", "children": [
-              { "id": "mh-endgame", "level": 3, "title": "Endgame-активности", "note": "Спираль/события для прокачанных." }
-            ] }
-          ] },
-          { "id": "mh-monet", "level": 1, "title": "Gacha-монетизация", "note": "Баннеры персонажей.", "children": [
-            { "id": "mh-banner", "level": 2, "title": "Конверсия на баннер", "note": "Желанный персонаж → всплеск трат.", "children": [
-              { "id": "mh-pity", "level": 3, "title": "Pity-система", "note": "Гарантия после N круток управляет тратами." }
-            ] },
-            { "id": "mh-arppu", "level": 2, "title": "ARPPU", "note": "Глубина трат на персонажей/оружие." }
-          ] }
+          {
+            "id": "mh-aud",
+            "level": 1,
+            "title": {
+              "ru": "Аудитория",
+              "en": "Audience"
+            },
+            "note": {
+              "ru": "Привлечение под релизы патчей.",
+              "en": "Acquisition timed to patch releases."
+            },
+            "children": [
+              {
+                "id": "mh-patch",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Патч-циклы (контент)",
+                  "en": "Patch cycles (content)"
+                },
+                "note": {
+                  "ru": "Рычаг: новый регион или сюжет возвращает даже давно ушедших.",
+                  "en": "Lever: a new region or story arc brings back even long-lapsed players."
+                },
+                "children": [
+                  {
+                    "id": "mh-ret",
+                    "level": 3,
+                    "metricId": "retention-n-day",
+                    "title": {
+                      "ru": "Retention между патчами",
+                      "en": "Between-patch retention"
+                    },
+                    "note": {
+                      "ru": "Дейлики и события держат в промежутках между контентом.",
+                      "en": "Dailies and events hold players between content drops."
+                    },
+                    "children": [
+                      {
+                        "id": "mh-daily",
+                        "level": 4,
+                        "title": {
+                          "ru": "Ежедневные задания",
+                          "en": "Daily quests"
+                        },
+                        "note": {
+                          "ru": "Привычка заходить каждый день — дешёвый способ не потерять игрока.",
+                          "en": "The habit of logging in daily — a cheap way not to lose a player."
+                        },
+                        "children": [
+                          {
+                            "id": "mh-lapse",
+                            "level": 5,
+                            "title": {
+                              "ru": "Возвраты на патч",
+                              "en": "Patch-driven returns"
+                            },
+                            "note": {
+                              "ru": "Доля ушедших, вернувшихся на релиз, — реальная сила контентного цикла.",
+                              "en": "The share of lapsed players who return on release — the content cycle's real power."
+                            },
+                            "metricId": "win-back"
+                          }
+                        ],
+                        "metricId": "active-days"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "mh-eng",
+            "level": 1,
+            "title": {
+              "ru": "Вовлечённость контентом",
+              "en": "Content engagement"
+            },
+            "note": {
+              "ru": "Исследование и сюжет вместо соревнования.",
+              "en": "Exploration and story instead of competition."
+            },
+            "children": [
+              {
+                "id": "mh-story",
+                "level": 2,
+                "title": {
+                  "ru": "Прохождение сюжета",
+                  "en": "Story progression"
+                },
+                "note": {
+                  "ru": "Качество нарратива удерживает и продаёт персонажей.",
+                  "en": "Narrative quality retains — and sells the characters."
+                },
+                "children": [
+                  {
+                    "id": "mh-endgame",
+                    "level": 3,
+                    "title": {
+                      "ru": "Endgame-активности",
+                      "en": "Endgame activities"
+                    },
+                    "note": {
+                      "ru": "Спираль и события для прокачанных: смысл вкладываться в персонажей.",
+                      "en": "Abyss and events for maxed accounts: the reason to invest in characters."
+                    },
+                    "metricId": "active-days"
+                  }
+                ],
+                "metricId": "course-completion"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "mh-monet",
+            "level": 1,
+            "title": {
+              "ru": "Gacha-монетизация",
+              "en": "Gacha monetization"
+            },
+            "note": {
+              "ru": "Баннеры персонажей: выручка приходит волнами, а не ровным потоком.",
+              "en": "Character banners: revenue arrives in waves, not a steady stream."
+            },
+            "children": [
+              {
+                "id": "mh-banner",
+                "level": 2,
+                "metricId": "paying-share",
+                "title": {
+                  "ru": "Конверсия на баннер",
+                  "en": "Banner conversion"
+                },
+                "note": {
+                  "ru": "Желанный персонаж → всплеск трат за две недели баннера.",
+                  "en": "A desirable character → a spending spike over the banner's two weeks."
+                },
+                "children": [
+                  {
+                    "id": "mh-pity",
+                    "level": 3,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Pity-система",
+                      "en": "Pity system"
+                    },
+                    "note": {
+                      "ru": "Рычаг: гарантия после N круток превращает лотерею в предсказуемую цену.",
+                      "en": "Lever: a guarantee after N pulls turns a lottery into a predictable price."
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "mh-arppu",
+                "level": 2,
+                "metricId": "arppu",
+                "title": "ARPPU",
+                "note": {
+                  "ru": "Глубина трат на персонажей и оружие.",
+                  "en": "Spend depth on characters and weapons."
+                }
+              }
+            ],
+            "kind": "group"
+          }
+        ],
+        "metricId": "bookings"
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "издатель",
+              "en": "publisher"
+            },
+            "items": [
+              "Bookings",
+              "LTV / CPI",
+              {
+                "ru": "Выручка на патч",
+                "en": "Revenue per patch"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "геймдизайн",
+              "en": "game design"
+            },
+            "items": [
+              {
+                "ru": "Retention между патчами",
+                "en": "Between-patch retention"
+              },
+              {
+                "ru": "Прохождение сюжета",
+                "en": "Story progression"
+              },
+              {
+                "ru": "Конверсия на баннер",
+                "en": "Banner conversion"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": "LiveOps",
+            "items": [
+              {
+                "ru": "Ежедневные задания",
+                "en": "Daily quests"
+              },
+              "Endgame",
+              {
+                "ru": "Pity-механика",
+                "en": "Pity mechanic"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Время загрузки",
+                "en": "Load time"
+              },
+              {
+                "ru": "Стабильность кроссплея",
+                "en": "Cross-play stability"
+              },
+              {
+                "ru": "Размер апдейтов",
+                "en": "Update size"
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "издатель", "items": ["Bookings", "LTV / CPI", "Выручка на патч"] },
-        { "label": "Продуктовые", "role": "геймдизайн", "items": ["Retention между патчами", "Прохождение сюжета", "Конверсия на баннер"] },
-        { "label": "Операционные", "role": "LiveOps", "items": ["Ежедневные задания", "Endgame", "Pity-механика"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Время загрузки", "Стабильность кроссплея", "Размер апдейтов"] }
-      ] },
       "counterMetrics": [
-        { "title": "Gacha-усталость / выгорание", "note": "давление на траты выжигает игроков" },
-        { "title": "Контентная засуха", "note": "слабый патч обрушивает и retention, и выручку" }
+        {
+          "title": {
+            "ru": "Gacha-усталость / выгорание",
+            "en": "Gacha fatigue / burnout"
+          },
+          "note": {
+            "ru": "давление на траты выжигает игроков",
+            "en": "spend pressure burns players out"
+          }
+        },
+        {
+          "title": {
+            "ru": "Контентная засуха",
+            "en": "Content drought"
+          },
+          "note": {
+            "ru": "слабый патч обрушивает и retention, и выручку",
+            "en": "a weak patch collapses both retention and revenue"
+          }
+        }
       ]
     }
   ]

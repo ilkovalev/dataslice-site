@@ -1,140 +1,1534 @@
 {
   "id": "social",
-  "archetype": "Экономика внимания",
-  "industry": "Соцсети и контент",
-  "northStar": "Total Watch Time (общее время просмотра)",
+  "archetype": {
+    "ru": "Экономика внимания",
+    "en": "Attention economy"
+  },
+  "industry": {
+    "ru": "Соцсети и контент",
+    "en": "Social & content"
+  },
+  "northStar": {
+    "ru": "Total Watch Time (общее время просмотра)",
+    "en": "Total watch time"
+  },
   "root": {
-    "id": "wt", "level": 0, "title": "Total Watch Time", "formula": "Reach × Frequency × Depth",
-    "note": "Валюта — минуты внимания: больше времени в приложении → больше рекламного инвентаря.",
+    "id": "wt",
+    "level": 0,
+    "metricId": "time-spent",
+    "title": "Total Watch Time",
+    "formula": "Reach × Frequency × Depth",
+    "note": {
+      "ru": "Валюта — минуты внимания: больше времени в приложении → больше рекламного инвентаря. Раскладывается на три независимых рычага: сколько людей, сколько раз в день, сколько за заход.",
+      "en": "The currency is minutes of attention: more time in the app means more ad inventory. It splits into three independent levers: how many people, how many times a day, how long per visit."
+    },
     "children": [
-      { "id": "reach", "level": 1, "title": "Reach (охват)", "formula": "DAU / MAU", "note": "Сколько активных вообще заходит.", "children": [
-        { "id": "new", "level": 2, "title": "Новые пользователи", "note": "Приток из всех каналов.", "children": [
-          { "id": "viral", "level": 3, "title": "Виральный коэффициент (K)", "note": "Сколько новых приводит один.", "children": [
-            { "id": "shares", "level": 4, "title": "Доля шеров", "note": "Как часто делятся вовне." },
-            { "id": "invite-cr", "level": 4, "title": "Конверсия приглашения", "note": "Доля перешедших по шеру и оставшихся." }
-          ] },
-          { "id": "paid-acq", "level": 3, "title": "Платный трафик", "note": "Установки из рекламы." }
-        ] },
-        { "id": "ret", "level": 2, "title": "Retention 1/7/30", "note": "Возвращаются ли после установки.", "children": [
-          { "id": "push-cr", "level": 3, "title": "Конверсия пуш → открытие", "note": "Доля уведомлений, вернувших юзера." }
-        ] }
-      ] },
-      { "id": "freq", "level": 1, "title": "Frequency (частота)", "formula": "сессии / польз.", "note": "Сколько раз в день заходят.", "children": [
-        { "id": "triggers", "level": 2, "title": "Триггеры возврата", "note": "Что возвращает в приложение.", "children": [
-          { "id": "push-sent", "level": 3, "title": "Отправленные пуши", "note": "Перебор бьёт по отпискам." },
-          { "id": "follow-graph", "level": 3, "title": "Размер графа подписок", "note": "Больше подписок — больше поводов вернуться." }
-        ] },
-        { "id": "habit", "level": 2, "title": "Привычка (D7 сессий)", "note": "Закрепилась ли регулярность." }
-      ] },
-      { "id": "depth", "level": 1, "title": "Depth (глубина)", "formula": "минуты / сессию", "note": "Сколько проводят за заход — работа алгоритма.", "children": [
-        { "id": "reco", "level": 2, "title": "Качество рекомендаций", "note": "Попадает ли лента в интерес.", "children": [
-          { "id": "ctr", "level": 3, "title": "CTR обложки/превью", "note": "Кликают ли на предложенное." },
-          { "id": "completion", "level": 3, "title": "Completion Rate", "note": "Какую долю видео досматривают.", "children": [
-            { "id": "avd", "level": 4, "title": "Средняя длительность просмотра", "note": "Минуты на ролик — сигнал качества." }
-          ] }
-        ] },
-        { "id": "scroll", "level": 2, "title": "Глубина скролла", "note": "Как далеко уходят по ленте." }
-      ] }
+      {
+        "id": "reach",
+        "level": 1,
+        "title": {
+          "ru": "Reach (охват)",
+          "en": "Reach"
+        },
+        "formula": "DAU / MAU",
+        "note": {
+          "ru": "Сколько активных вообще заходит: приток новых плюс удержание старых.",
+          "en": "How many active users show up at all: new inflow plus retention of the old."
+        },
+        "children": [
+          {
+            "id": "new",
+            "level": 2,
+            "title": {
+              "ru": "Новые пользователи",
+              "en": "New users"
+            },
+            "note": {
+              "ru": "Приток из всех каналов: виральность, органика, платный трафик.",
+              "en": "Inflow from every channel: virality, organic, paid."
+            },
+            "children": [
+              {
+                "id": "viral",
+                "level": 3,
+                "title": {
+                  "ru": "Виральный коэффициент (K)",
+                  "en": "Viral coefficient (K)"
+                },
+                "note": {
+                  "ru": "Сколько новых приводит один существующий: при K > 1 продукт растёт сам.",
+                  "en": "How many new users one existing user brings: at K > 1 the product grows on its own."
+                },
+                "children": [
+                  {
+                    "id": "shares",
+                    "level": 4,
+                    "title": {
+                      "ru": "Доля шеров",
+                      "en": "Share rate"
+                    },
+                    "note": {
+                      "ru": "Как часто делятся контентом вовне — первый множитель виральности.",
+                      "en": "How often content gets shared outward — virality's first factor."
+                    },
+                    "children": [
+                      {
+                        "id": "invite-cr",
+                        "level": 5,
+                        "title": {
+                          "ru": "Конверсия приглашения",
+                          "en": "Invite conversion"
+                        },
+                        "note": {
+                          "ru": "Доля перешедших по шеру и оставшихся — второй множитель K.",
+                          "en": "The share of people who follow a share and stay — K's second factor."
+                        },
+                        "metricId": "viral-coefficient"
+                      }
+                    ],
+                    "metricId": "share-rate"
+                  }
+                ],
+                "metricId": "viral-coefficient"
+              },
+              {
+                "id": "paid-acq",
+                "level": 3,
+                "metricId": "cac",
+                "title": {
+                  "ru": "Платный трафик",
+                  "en": "Paid acquisition"
+                },
+                "note": {
+                  "ru": "Установки из рекламы: дорогой способ докупить охват там, где виральность не тянет.",
+                  "en": "Installs from ads: the expensive way to buy reach where virality falls short."
+                }
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "ret",
+            "level": 2,
+            "metricId": "retention-n-day",
+            "title": "Retention 1/7/30",
+            "note": {
+              "ru": "Возвращаются ли после установки — без удержания охват течёт как решето.",
+              "en": "Do they come back after install — without retention, reach leaks like a sieve."
+            },
+            "children": [
+              {
+                "id": "push-cr",
+                "level": 3,
+                "title": {
+                  "ru": "Конверсия пуш → открытие",
+                  "en": "Push → open conversion"
+                },
+                "note": {
+                  "ru": "Доля уведомлений, вернувших пользователя в приложение.",
+                  "en": "The share of notifications that bring a user back."
+                },
+                "children": [
+                  {
+                    "id": "unsub-rate",
+                    "level": 4,
+                    "title": {
+                      "ru": "Отписки от уведомлений",
+                      "en": "Notification opt-outs"
+                    },
+                    "note": {
+                      "ru": "Перебор пушами выключает канал возврата навсегда.",
+                      "en": "Push overload switches off the return channel for good."
+                    },
+                    "metricId": "churn-rate"
+                  }
+                ],
+                "metricId": "ctr"
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "freq",
+        "level": 1,
+        "metricId": "sessions-per-user",
+        "title": {
+          "ru": "Frequency (частота)",
+          "en": "Frequency"
+        },
+        "formula": {
+          "ru": "сессии / пользователя",
+          "en": "sessions / user"
+        },
+        "note": {
+          "ru": "Сколько раз в день заходят: второй множитель времени.",
+          "en": "How many times a day people open the app: time's second factor."
+        },
+        "children": [
+          {
+            "id": "triggers",
+            "level": 2,
+            "title": {
+              "ru": "Триггеры возврата",
+              "en": "Return triggers"
+            },
+            "note": {
+              "ru": "Что именно возвращает в приложение.",
+              "en": "What actually brings people back."
+            },
+            "children": [
+              {
+                "id": "push-sent",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "Отправленные пуши",
+                  "en": "Pushes sent"
+                },
+                "note": {
+                  "ru": "Рычаг: частота и релевантность уведомлений; перебор бьёт по отпискам.",
+                  "en": "Lever: notification frequency and relevance; overdoing it drives opt-outs."
+                },
+                "children": [
+                  {
+                    "id": "push-relevance",
+                    "level": 4,
+                    "title": {
+                      "ru": "Релевантность пуша",
+                      "en": "Push relevance"
+                    },
+                    "note": {
+                      "ru": "Открыл и остался vs открыл и вышел — качество повода вернуться.",
+                      "en": "Opened and stayed vs opened and left — the quality of the reason to return."
+                    },
+                    "children": [
+                      {
+                        "id": "push-session-len",
+                        "level": 5,
+                        "title": {
+                          "ru": "Длина сессии после пуша",
+                          "en": "Post-push session length"
+                        },
+                        "note": {
+                          "ru": "Пуш ценен, только если приводит к настоящей сессии, а не к мгновенному закрытию.",
+                          "en": "A push is worth something only if it leads to a real session, not an instant close."
+                        },
+                        "metricId": "session-depth"
+                      }
+                    ],
+                    "metricId": "ctr"
+                  }
+                ]
+              },
+              {
+                "id": "follow-graph",
+                "level": 3,
+                "title": {
+                  "ru": "Размер графа подписок",
+                  "en": "Follow graph size"
+                },
+                "note": {
+                  "ru": "Больше подписок — больше поводов вернуться; классический сетевой эффект соцсети.",
+                  "en": "More follows mean more reasons to return; the classic social network effect."
+                },
+                "metricId": "follow-graph"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "habit",
+            "level": 2,
+            "metricId": "stickiness",
+            "title": {
+              "ru": "Привычка (D7 сессий)",
+              "en": "Habit (D7 sessions)"
+            },
+            "note": {
+              "ru": "Закрепилась ли регулярность: приложение открывают без напоминаний.",
+              "en": "Did regularity stick: the app gets opened without reminders."
+            }
+          }
+        ]
+      },
+      {
+        "id": "depth",
+        "level": 1,
+        "metricId": "session-depth",
+        "title": {
+          "ru": "Depth (глубина)",
+          "en": "Depth"
+        },
+        "formula": {
+          "ru": "минуты / сессию",
+          "en": "minutes / session"
+        },
+        "note": {
+          "ru": "Сколько проводят за заход — прямая работа рекомендательного алгоритма.",
+          "en": "How long a visit lasts — the recommendation algorithm's direct output."
+        },
+        "children": [
+          {
+            "id": "reco",
+            "level": 2,
+            "kind": "lever",
+            "title": {
+              "ru": "Качество рекомендаций",
+              "en": "Recommendation quality"
+            },
+            "note": {
+              "ru": "Рычаг: попадает ли лента в интерес — главный рычаг глубины.",
+              "en": "Lever: does the feed hit the interest — the main depth lever."
+            },
+            "children": [
+              {
+                "id": "ctr",
+                "level": 3,
+                "metricId": "ctr",
+                "title": {
+                  "ru": "CTR обложки/превью",
+                  "en": "Thumbnail CTR"
+                },
+                "note": {
+                  "ru": "Кликают ли на предложенное — первый шаг просмотра.",
+                  "en": "Do people click what's offered — the first step of a view."
+                }
+              },
+              {
+                "id": "completion",
+                "level": 3,
+                "title": "Completion Rate",
+                "note": {
+                  "ru": "Какую долю видео досматривают — честный сигнал качества против кликбейта.",
+                  "en": "What share of a video gets watched — the honest quality signal against clickbait."
+                },
+                "children": [
+                  {
+                    "id": "avd",
+                    "level": 4,
+                    "title": {
+                      "ru": "Средняя длительность просмотра",
+                      "en": "Average view duration"
+                    },
+                    "note": {
+                      "ru": "Минуты на ролик — сигнал качества для алгоритма.",
+                      "en": "Minutes per video — the algorithm's quality signal."
+                    },
+                    "children": [
+                      {
+                        "id": "negative-signals",
+                        "level": 5,
+                        "title": {
+                          "ru": "Негативные сигналы (скрыть/не интересно)",
+                          "en": "Negative signals (hide/not interested)"
+                        },
+                        "note": {
+                          "ru": "Явные отказы — данные для алгоритма и ранний сигнал выжигания аудитории.",
+                          "en": "Explicit rejections — algorithm training data and an early audience-burnout signal."
+                        },
+                        "metricId": "complaint-rate"
+                      }
+                    ],
+                    "metricId": "avd"
+                  }
+                ],
+                "metricId": "video-completion"
+              }
+            ]
+          },
+          {
+            "id": "scroll",
+            "level": 2,
+            "title": {
+              "ru": "Глубина скролла",
+              "en": "Scroll depth"
+            },
+            "note": {
+              "ru": "Как далеко уходят по ленте: бесконечная лента убирает естественную точку выхода.",
+              "en": "How far people go down the feed: infinite scroll removes the natural stopping point."
+            },
+            "metricId": "scroll-depth"
+          }
+        ]
+      }
     ]
   },
   "pyramid": {
-    "note": "Те же метрики, но сгруппированы по аудитории — от совета директоров (вершина) до инженеров (основание).",
+    "note": {
+      "ru": "Те же метрики, но сгруппированы по аудитории — от совета директоров (вершина) до инженеров (основание).",
+      "en": "The same metrics grouped by audience — from the board (top) down to engineers (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "совет директоров", "items": ["Рекламная выручка", "Total Watch Time", "DAU"] },
-      { "label": "Продуктовые", "role": "продакт-команды", "items": ["Reach", "Frequency", "Depth", "Retention 1/7/30"] },
-      { "label": "Операционные", "role": "аналитики ленты", "items": ["CTR превью", "Completion Rate", "Глубина скролла", "Конверсия пушей"] },
-      { "label": "Платформенные", "role": "инженеры", "items": ["Время загрузки видео", "p99 латентности ленты", "Доля сбоев плеера"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "совет директоров",
+          "en": "board"
+        },
+        "items": [
+          {
+            "ru": "Рекламная выручка",
+            "en": "Ad revenue"
+          },
+          "Total Watch Time",
+          "DAU"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "продакт-команды",
+          "en": "product teams"
+        },
+        "items": [
+          "Reach",
+          "Frequency",
+          "Depth",
+          "Retention 1/7/30"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": {
+          "ru": "аналитики ленты",
+          "en": "feed analysts"
+        },
+        "items": [
+          {
+            "ru": "CTR превью",
+            "en": "Thumbnail CTR"
+          },
+          "Completion Rate",
+          {
+            "ru": "Глубина скролла",
+            "en": "Scroll depth"
+          },
+          {
+            "ru": "Конверсия пушей",
+            "en": "Push conversion"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "инженеры",
+          "en": "engineers"
+        },
+        "items": [
+          {
+            "ru": "Время загрузки видео",
+            "en": "Video load time"
+          },
+          {
+            "ru": "p99 латентности ленты",
+            "en": "Feed p99 latency"
+          },
+          {
+            "ru": "Доля сбоев плеера",
+            "en": "Player error rate"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Do Not Recommend / скрытия", "note": "сигнал, что алгоритм давит залипательным мусором" },
-    { "title": "Report Rate", "note": "жалобы на контент" },
-    { "title": "Long-term Retention", "note": "если Watch Time растёт, а удержание 30-го дня падает — выжигаем аудиторию" }
+    {
+      "title": {
+        "ru": "Do Not Recommend / скрытия",
+        "en": "Do not recommend / hides"
+      },
+      "note": {
+        "ru": "сигнал, что алгоритм давит залипательным мусором",
+        "en": "a signal the algorithm is pushing addictive junk"
+      }
+    },
+    {
+      "title": "Report Rate",
+      "note": {
+        "ru": "жалобы на контент",
+        "en": "content complaints"
+      }
+    },
+    {
+      "title": "Long-term Retention",
+      "note": {
+        "ru": "если Watch Time растёт, а удержание 30-го дня падает — выжигаем аудиторию",
+        "en": "if watch time grows while D30 retention falls, the audience is being burned out"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "youtube", "name": "YouTube", "northStar": "Total Watch Time (длинные сессии)",
-      "note": "длинный контент, осознанный выбор по превью и через поиск; ключ — рекомендации и подписки.",
+      "id": "youtube",
+      "name": "YouTube",
+      "northStar": {
+        "ru": "Total Watch Time (длинные сессии)",
+        "en": "Total watch time (long sessions)"
+      },
+      "note": {
+        "ru": "длинный контент, осознанный выбор по превью и через поиск; ключ — рекомендации и подписки.",
+        "en": "long-form content, deliberate choice via thumbnails and search; recommendations and subscriptions are the key."
+      },
       "root": {
-        "id": "yt-wt", "level": 0, "title": "Total Watch Time", "formula": "Сессии × Длина сессии",
-        "note": "Ставка на длинные осознанные просмотры, а не на бесконечную ленту.",
+        "id": "yt-wt",
+        "level": 0,
+        "metricId": "time-spent",
+        "title": "Total Watch Time",
+        "formula": {
+          "ru": "Сессии × Длина сессии",
+          "en": "Sessions × Session length"
+        },
+        "note": {
+          "ru": "Ставка на длинные осознанные просмотры, а не на бесконечную ленту.",
+          "en": "A bet on long deliberate viewing rather than an infinite feed."
+        },
         "children": [
-          { "id": "yt-disc", "level": 1, "title": "Discovery (как находят видео)", "note": "Три разных входа в контент.", "children": [
-            { "id": "yt-home", "level": 2, "title": "Рекомендации на главной", "note": "Основной источник просмотров.", "children": [
-              { "id": "yt-ctr", "level": 3, "title": "CTR превью", "note": "Кликабельность обложки и заголовка.", "children": [
-                { "id": "yt-thumb", "level": 4, "title": "A/B обложек", "note": "Тест превью по кликам." }
-              ] }
-            ] },
-            { "id": "yt-search", "level": 2, "title": "Поиск", "note": "Осознанный запрос.", "children": [
-              { "id": "yt-ssr", "level": 3, "title": "Search Success Rate", "note": "Нашёл ли нужное." }
-            ] },
-            { "id": "yt-subs", "level": 2, "title": "Подписки", "note": "Возврат к любимым авторам.", "children": [
-              { "id": "yt-notif", "level": 3, "title": "CR уведомлений о новом видео", "note": "Открыли ли свежий ролик." }
-            ] }
-          ] },
-          { "id": "yt-eng", "level": 1, "title": "Вовлечение в видео", "note": "Удержание внутри ролика.", "children": [
-            { "id": "yt-avd", "level": 2, "title": "Average View Duration", "note": "Сколько минут досматривают.", "children": [
-              { "id": "yt-retcurve", "level": 3, "title": "Кривая удержания", "note": "Где зрители уходят из ролика." }
-            ] },
-            { "id": "yt-next", "level": 2, "title": "Переход к следующему видео", "note": "Удерживает ли сессию." }
-          ] },
-          { "id": "yt-creator", "level": 1, "title": "Здоровье авторов", "note": "Без авторов нет контента.", "children": [
-            { "id": "yt-upload", "level": 2, "title": "Частота загрузок", "note": "Регулярность новых видео." },
-            { "id": "yt-rev-share", "level": 2, "title": "Доход авторов (RPM)", "note": "Мотивация продолжать." }
-          ] }
+          {
+            "id": "yt-disc",
+            "level": 1,
+            "title": {
+              "ru": "Discovery (как находят видео)",
+              "en": "Discovery (how videos are found)"
+            },
+            "note": {
+              "ru": "Три разных входа в контент, у каждого своя механика.",
+              "en": "Three different entry points into content, each with its own mechanics."
+            },
+            "children": [
+              {
+                "id": "yt-home",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Рекомендации на главной",
+                  "en": "Home recommendations"
+                },
+                "note": {
+                  "ru": "Рычаг: основной источник просмотров на платформе.",
+                  "en": "Lever: the platform's main source of views."
+                },
+                "children": [
+                  {
+                    "id": "yt-ctr",
+                    "level": 3,
+                    "metricId": "ctr",
+                    "title": {
+                      "ru": "CTR превью",
+                      "en": "Thumbnail CTR"
+                    },
+                    "note": {
+                      "ru": "Кликабельность обложки и заголовка.",
+                      "en": "Click rate of thumbnail and title."
+                    },
+                    "children": [
+                      {
+                        "id": "yt-thumb",
+                        "level": 4,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "A/B обложек",
+                          "en": "Thumbnail A/B tests"
+                        },
+                        "note": {
+                          "ru": "Рычаг: тест превью по кликам — и ловушка кликбейта.",
+                          "en": "Lever: testing thumbnails by clicks — and the clickbait trap."
+                        },
+                        "children": [
+                          {
+                            "id": "yt-satisfaction",
+                            "level": 5,
+                            "metricId": "nps-csat",
+                            "title": {
+                              "ru": "Опросы удовлетворённости",
+                              "en": "Satisfaction surveys"
+                            },
+                            "note": {
+                              "ru": "Ответ YouTube на кликбейт: спрашивать зрителя, а не только считать минуты.",
+                              "en": "YouTube's answer to clickbait: ask the viewer instead of only counting minutes."
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "yt-search",
+                "level": 2,
+                "metricId": "search-success",
+                "title": {
+                  "ru": "Поиск",
+                  "en": "Search"
+                },
+                "note": {
+                  "ru": "Осознанный запрос: пользователь знает, что ищет.",
+                  "en": "A deliberate query: the user knows what they want."
+                },
+                "children": [
+                  {
+                    "id": "yt-ssr",
+                    "level": 3,
+                    "title": "Search Success Rate",
+                    "note": {
+                      "ru": "Нашёл ли нужное видео с первого раза.",
+                      "en": "Did they find the right video on the first try."
+                    },
+                    "metricId": "search-success"
+                  }
+                ]
+              },
+              {
+                "id": "yt-subs",
+                "level": 2,
+                "title": {
+                  "ru": "Подписки",
+                  "en": "Subscriptions"
+                },
+                "note": {
+                  "ru": "Возврат к любимым авторам — самый лояльный вход.",
+                  "en": "Returning to favorite creators — the most loyal entry point."
+                },
+                "children": [
+                  {
+                    "id": "yt-notif",
+                    "level": 3,
+                    "title": {
+                      "ru": "CR уведомлений о новом видео",
+                      "en": "New-video notification CR"
+                    },
+                    "note": {
+                      "ru": "Открыли ли свежий ролик любимого автора.",
+                      "en": "Did they open a favorite creator's fresh upload."
+                    },
+                    "metricId": "ctr"
+                  }
+                ],
+                "kind": "group"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "yt-eng",
+            "level": 1,
+            "title": {
+              "ru": "Вовлечение в видео",
+              "en": "In-video engagement"
+            },
+            "note": {
+              "ru": "Удержание внутри ролика — где на самом деле копятся минуты.",
+              "en": "Retention inside a video — where the minutes actually accumulate."
+            },
+            "children": [
+              {
+                "id": "yt-avd",
+                "level": 2,
+                "title": "Average View Duration",
+                "note": {
+                  "ru": "Сколько минут досматривают из ролика.",
+                  "en": "How many minutes of a video get watched."
+                },
+                "children": [
+                  {
+                    "id": "yt-retcurve",
+                    "level": 3,
+                    "title": {
+                      "ru": "Кривая удержания",
+                      "en": "Retention curve"
+                    },
+                    "note": {
+                      "ru": "Где зрители уходят из ролика — обратная связь для авторов.",
+                      "en": "Where viewers leave a video — the creator's feedback loop."
+                    },
+                    "children": [
+                      {
+                        "id": "yt-intro-drop",
+                        "level": 4,
+                        "title": {
+                          "ru": "Отвал на первых 30 секундах",
+                          "en": "First-30s drop-off"
+                        },
+                        "note": {
+                          "ru": "Обещание превью против реальности ролика: расхождение видно сразу.",
+                          "en": "The thumbnail's promise versus the video's reality: the gap shows instantly."
+                        },
+                        "metricId": "avd"
+                      }
+                    ],
+                    "metricId": "avd"
+                  }
+                ],
+                "metricId": "avd"
+              },
+              {
+                "id": "yt-next",
+                "level": 2,
+                "title": {
+                  "ru": "Переход к следующему видео",
+                  "en": "Next-video transition"
+                },
+                "note": {
+                  "ru": "Удерживает ли сессию: одно видео → цепочка.",
+                  "en": "Does the session hold: one video → a chain."
+                },
+                "metricId": "session-depth"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "yt-creator",
+            "level": 1,
+            "title": {
+              "ru": "Здоровье авторов",
+              "en": "Creator health"
+            },
+            "note": {
+              "ru": "Без авторов нет контента — вторая сторона платформы.",
+              "en": "No creators, no content — the platform's other side."
+            },
+            "children": [
+              {
+                "id": "yt-upload",
+                "level": 2,
+                "title": {
+                  "ru": "Частота загрузок",
+                  "en": "Upload frequency"
+                },
+                "note": {
+                  "ru": "Регулярность новых видео = поток свежего инвентаря.",
+                  "en": "Regular uploads mean a flow of fresh inventory."
+                },
+                "metricId": "content-supply"
+              },
+              {
+                "id": "yt-rev-share",
+                "level": 2,
+                "title": {
+                  "ru": "Доход авторов (RPM)",
+                  "en": "Creator earnings (RPM)"
+                },
+                "note": {
+                  "ru": "Мотивация продолжать: авторы уходят туда, где платят.",
+                  "en": "The motivation to continue: creators go where the money is."
+                },
+                "metricId": "creator-payout"
+              }
+            ],
+            "kind": "group"
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Рекламная + Premium выручка", "Total Watch Time"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Discovery (главная/поиск/подписки)", "Average View Duration"] },
-        { "label": "Операционные", "role": "аналитики", "items": ["CTR превью", "Search Success Rate", "Кривая удержания"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Скорость старта видео", "Качество транскода", "Аптайм CDN"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Рекламная + Premium выручка",
+                "en": "Ad + Premium revenue"
+              },
+              "Total Watch Time"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Discovery (главная/поиск/подписки)",
+                "en": "Discovery (home/search/subs)"
+              },
+              "Average View Duration"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "аналитики",
+              "en": "analysts"
+            },
+            "items": [
+              {
+                "ru": "CTR превью",
+                "en": "Thumbnail CTR"
+              },
+              "Search Success Rate",
+              {
+                "ru": "Кривая удержания",
+                "en": "Retention curve"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Скорость старта видео",
+                "en": "Video start speed"
+              },
+              {
+                "ru": "Качество транскода",
+                "en": "Transcode quality"
+              },
+              {
+                "ru": "Аптайм CDN",
+                "en": "CDN uptime"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Кликбейт-сигналы", "note": "высокий CTR при низком досмотре — обманное превью" },
-        { "title": "Satisfaction-опросы", "note": "довольны ли просмотром, а не только досмотрели" }
+        {
+          "title": {
+            "ru": "Кликбейт-сигналы",
+            "en": "Clickbait signals"
+          },
+          "note": {
+            "ru": "высокий CTR при низком досмотре — обманное превью",
+            "en": "high CTR with low completion means a deceptive thumbnail"
+          }
+        },
+        {
+          "title": {
+            "ru": "Satisfaction-опросы",
+            "en": "Satisfaction surveys"
+          },
+          "note": {
+            "ru": "довольны ли просмотром, а не только досмотрели",
+            "en": "were they happy with the view, not just did they finish it"
+          }
+        }
       ]
     },
     {
-      "id": "tiktok", "name": "TikTok", "northStar": "Total Watch Time (пассивная лента)",
-      "note": "короткий контент, бесконечная For You лента — видео включается само; ключ — мгновенный хук и досматриваемость.",
+      "id": "tiktok",
+      "name": "TikTok",
+      "northStar": {
+        "ru": "Total Watch Time (пассивная лента)",
+        "en": "Total watch time (passive feed)"
+      },
+      "note": {
+        "ru": "короткий контент, бесконечная For You лента — видео включается само; ключ — мгновенный хук и досматриваемость.",
+        "en": "short content, an infinite For You feed — the video plays itself; the instant hook and completion are the keys."
+      },
       "root": {
-        "id": "tt-wt", "level": 0, "title": "Total Watch Time", "formula": "Сессии × Видео за сессию × Длина видео",
-        "note": "Копится из множества коротких пассивных просмотров в ленте For You.",
+        "id": "tt-wt",
+        "level": 0,
+        "metricId": "time-spent",
+        "title": "Total Watch Time",
+        "formula": {
+          "ru": "Сессии × Видео за сессию × Длина видео",
+          "en": "Sessions × Videos per session × Video length"
+        },
+        "note": {
+          "ru": "Копится из множества коротких пассивных просмотров в ленте For You.",
+          "en": "Accumulates from many short passive views in the For You feed."
+        },
         "children": [
-          { "id": "tt-feed", "level": 1, "title": "Качество For You", "note": "Лента — единственный вход.", "children": [
-            { "id": "tt-hook", "level": 2, "title": "Hook Rate (первые 3 сек)", "note": "Зацепило ли мгновенно.", "children": [
-              { "id": "tt-swipe", "level": 3, "title": "Скорость свайпа", "note": "Как быстро листают неинтересное.", "children": [
-                { "id": "tt-skip", "level": 4, "title": "Доля досвайпов до 1 сек", "note": "Совсем не зашло." }
-              ] }
-            ] },
-            { "id": "tt-completion", "level": 2, "title": "Completion Rate", "note": "Досмотрели ли короткое видео.", "children": [
-              { "id": "tt-replay", "level": 3, "title": "Replays / Loops", "note": "Пересматривают ли — сильный сигнал." }
-            ] }
-          ] },
-          { "id": "tt-inter", "level": 1, "title": "Интеракции", "note": "Сигналы для алгоритма и виральность.", "children": [
-            { "id": "tt-like", "level": 2, "title": "Like / Comment Rate", "note": "Обратная связь по видео.", "children": [
-              { "id": "tt-share", "level": 3, "title": "Share Rate", "note": "Двигатель виральности." }
-            ] },
-            { "id": "tt-follow", "level": 2, "title": "Конверсия в подписку", "note": "Из просмотра в фолловера." }
-          ] },
-          { "id": "tt-creator", "level": 1, "title": "Поток контента", "note": "Лента жива, пока авторы публикуют.", "children": [
-            { "id": "tt-posts", "level": 2, "title": "Видео в день", "note": "Объём нового контента." },
-            { "id": "tt-newcreator", "level": 2, "title": "Доля новых авторов", "note": "Приток создателей.", "children": [
-              { "id": "tt-firstview", "level": 3, "title": "Просмотры первого видео", "note": "Получает ли новичок аудиторию." }
-            ] }
-          ] }
+          {
+            "id": "tt-feed",
+            "level": 1,
+            "kind": "lever",
+            "title": {
+              "ru": "Качество For You",
+              "en": "For You quality"
+            },
+            "note": {
+              "ru": "Рычаг: лента — единственный вход, весь продукт держится на её алгоритме.",
+              "en": "Lever: the feed is the only entry point; the whole product rests on its algorithm."
+            },
+            "children": [
+              {
+                "id": "tt-hook",
+                "level": 2,
+                "title": {
+                  "ru": "Hook Rate (первые 3 сек)",
+                  "en": "Hook rate (first 3s)"
+                },
+                "note": {
+                  "ru": "Зацепило ли мгновенно — у автора три секунды на удержание.",
+                  "en": "Did it hook instantly — the creator has three seconds to hold you."
+                },
+                "children": [
+                  {
+                    "id": "tt-swipe",
+                    "level": 3,
+                    "title": {
+                      "ru": "Скорость свайпа",
+                      "en": "Swipe speed"
+                    },
+                    "note": {
+                      "ru": "Как быстро листают неинтересное — сигнал алгоритму в реальном времени.",
+                      "en": "How fast people swipe past the boring — a real-time algorithm signal."
+                    },
+                    "children": [
+                      {
+                        "id": "tt-skip",
+                        "level": 4,
+                        "title": {
+                          "ru": "Доля досвайпов до 1 сек",
+                          "en": "Sub-1s swipe share"
+                        },
+                        "note": {
+                          "ru": "Совсем не зашло: сильнейший негативный сигнал ранжирования.",
+                          "en": "A total miss: the strongest negative ranking signal."
+                        },
+                        "children": [
+                          {
+                            "id": "tt-feed-freshness",
+                            "level": 5,
+                            "title": {
+                              "ru": "Свежесть ленты",
+                              "en": "Feed freshness"
+                            },
+                            "note": {
+                              "ru": "Доля нового контента в выдаче: повторы разгоняют свайпы и убивают время.",
+                              "en": "Share of new content in the feed: repeats speed up swipes and kill watch time."
+                            },
+                            "metricId": "content-supply"
+                          }
+                        ],
+                        "metricId": "hook-rate"
+                      }
+                    ],
+                    "metricId": "hook-rate"
+                  }
+                ],
+                "metricId": "hook-rate"
+              },
+              {
+                "id": "tt-completion",
+                "level": 2,
+                "title": "Completion Rate",
+                "note": {
+                  "ru": "Досмотрели ли короткое видео до конца.",
+                  "en": "Did the short video get watched to the end."
+                },
+                "children": [
+                  {
+                    "id": "tt-replay",
+                    "level": 3,
+                    "title": "Replays / Loops",
+                    "note": {
+                      "ru": "Пересматривают ли — сильнейший позитивный сигнал качества.",
+                      "en": "Do they rewatch — the strongest positive quality signal."
+                    },
+                    "metricId": "video-completion"
+                  }
+                ],
+                "metricId": "video-completion"
+              }
+            ]
+          },
+          {
+            "id": "tt-inter",
+            "level": 1,
+            "title": {
+              "ru": "Интеракции",
+              "en": "Interactions"
+            },
+            "note": {
+              "ru": "Сигналы для алгоритма и топливо виральности.",
+              "en": "Algorithm signals and virality fuel."
+            },
+            "children": [
+              {
+                "id": "tt-like",
+                "level": 2,
+                "title": {
+                  "ru": "Like / Comment Rate",
+                  "en": "Like / comment rate"
+                },
+                "note": {
+                  "ru": "Обратная связь по видео.",
+                  "en": "Feedback on a video."
+                },
+                "children": [
+                  {
+                    "id": "tt-share",
+                    "level": 3,
+                    "title": "Share Rate",
+                    "note": {
+                      "ru": "Двигатель виральности: шеры выносят контент за пределы платформы.",
+                      "en": "The virality engine: shares carry content beyond the platform."
+                    },
+                    "children": [
+                      {
+                        "id": "tt-external-reach",
+                        "level": 4,
+                        "title": {
+                          "ru": "Внешний охват шеров",
+                          "en": "External share reach"
+                        },
+                        "note": {
+                          "ru": "Просмотры вне приложения — бесплатный маркетинг платформы.",
+                          "en": "Views outside the app — the platform's free marketing."
+                        },
+                        "metricId": "share-rate"
+                      }
+                    ],
+                    "metricId": "share-rate"
+                  }
+                ],
+                "metricId": "ctr"
+              },
+              {
+                "id": "tt-follow",
+                "level": 2,
+                "title": {
+                  "ru": "Конверсия в подписку",
+                  "en": "Follow conversion"
+                },
+                "note": {
+                  "ru": "Из просмотра в фолловера — переход от ленты к графу.",
+                  "en": "From a view to a follower — the shift from feed to graph."
+                },
+                "metricId": "conversion-rate"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "tt-creator",
+            "level": 1,
+            "title": {
+              "ru": "Поток контента",
+              "en": "Content flow"
+            },
+            "note": {
+              "ru": "Лента жива, пока авторы публикуют.",
+              "en": "The feed lives as long as creators post."
+            },
+            "children": [
+              {
+                "id": "tt-posts",
+                "level": 2,
+                "title": {
+                  "ru": "Видео в день",
+                  "en": "Videos per day"
+                },
+                "note": {
+                  "ru": "Объём нового контента — топливо бесконечной ленты.",
+                  "en": "The volume of new content — the infinite feed's fuel."
+                },
+                "metricId": "content-supply"
+              },
+              {
+                "id": "tt-newcreator",
+                "level": 2,
+                "title": {
+                  "ru": "Доля новых авторов",
+                  "en": "New-creator share"
+                },
+                "note": {
+                  "ru": "Приток создателей: платформа обещает шанс каждому.",
+                  "en": "Creator inflow: the platform promises everyone a shot."
+                },
+                "children": [
+                  {
+                    "id": "tt-firstview",
+                    "level": 3,
+                    "title": {
+                      "ru": "Просмотры первого видео",
+                      "en": "First-video views"
+                    },
+                    "note": {
+                      "ru": "Получает ли новичок аудиторию — иначе не станет автором.",
+                      "en": "Does a newcomer get an audience — otherwise they never become a creator."
+                    },
+                    "metricId": "content-supply"
+                  }
+                ],
+                "metricId": "content-supply"
+              }
+            ],
+            "kind": "group"
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Рекламная выручка", "Total Watch Time", "DAU"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Качество For You", "Completion Rate", "Share Rate"] },
-        { "label": "Операционные", "role": "аналитики ленты", "items": ["Hook Rate 3 сек", "Replays", "Скорость свайпа"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Предзагрузка следующего видео", "p99 ленты", "Сбои плеера"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Рекламная выручка",
+                "en": "Ad revenue"
+              },
+              "Total Watch Time",
+              "DAU"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Качество For You",
+                "en": "For You quality"
+              },
+              "Completion Rate",
+              "Share Rate"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "аналитики ленты",
+              "en": "feed analysts"
+            },
+            "items": [
+              {
+                "ru": "Hook Rate 3 сек",
+                "en": "3s hook rate"
+              },
+              "Replays",
+              {
+                "ru": "Скорость свайпа",
+                "en": "Swipe speed"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Предзагрузка следующего видео",
+                "en": "Next-video preload"
+              },
+              {
+                "ru": "p99 ленты",
+                "en": "Feed p99"
+              },
+              {
+                "ru": "Сбои плеера",
+                "en": "Player errors"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Doomscroll-усталость", "note": "падение D30 при росте времени — залипание выжигает" },
-        { "title": "Report / «не интересует»", "note": "негативные сигналы по контенту" }
+        {
+          "title": {
+            "ru": "Doomscroll-усталость",
+            "en": "Doomscroll fatigue"
+          },
+          "note": {
+            "ru": "падение D30 при росте времени — залипание выжигает",
+            "en": "D30 falling while time grows — the addiction burns users out"
+          }
+        },
+        {
+          "title": {
+            "ru": "Report / «не интересует»",
+            "en": "Report / \"not interested\""
+          },
+          "note": {
+            "ru": "негативные сигналы по контенту",
+            "en": "negative content signals"
+          }
+        }
+      ]
+    },
+    {
+      "id": "facebook",
+      "name": "Facebook",
+      "northStar": {
+        "ru": "Total Watch Time (лента на графе друзей)",
+        "en": "Total watch time (friend-graph feed)"
+      },
+      "note": {
+        "ru": "третий полюс экономики внимания: лента строится на графе друзей, а не на алгоритмических рекомендациях незнакомцев. Отсюда другая механика роста и другой предел: контент друзей конечен, поэтому лента постепенно съезжает к рекомендациям.",
+        "en": "the attention economy's third pole: the feed is built on the friend graph rather than algorithmic recommendations of strangers. Hence different growth mechanics and a different ceiling: friends' content is finite, so the feed drifts toward recommendations over time."
+      },
+      "root": {
+        "id": "fb-wt",
+        "level": 0,
+        "metricId": "time-spent",
+        "title": "Total Watch Time",
+        "formula": {
+          "ru": "Граф × Контент друзей × Рекомендации",
+          "en": "Graph × Friend content × Recommendations"
+        },
+        "note": {
+          "ru": "Внимание, выросшее из социального графа: сначала люди приходят ради знакомых, а монетизируется это рекламой. Ключевое противоречие модели: чем больше в ленте рекомендаций незнакомцев, тем больше времени — и тем меньше повода приходить именно сюда.",
+          "en": "Attention grown out of a social graph: people come for people they know, and it monetizes as ads. The model's core tension: the more stranger recommendations in the feed, the more time — and the less reason to come here specifically."
+        },
+        "children": [
+          {
+            "id": "fb-graph",
+            "level": 1,
+            "kind": "group",
+            "title": {
+              "ru": "Социальный граф",
+              "en": "The social graph"
+            },
+            "note": {
+              "ru": "Актив, которого нет у алгоритмических лент: связи между реальными людьми.",
+              "en": "The asset algorithmic feeds lack: ties between real people."
+            },
+            "children": [
+              {
+                "id": "fb-friends",
+                "level": 2,
+                "metricId": "follow-graph",
+                "title": {
+                  "ru": "Друзья на пользователя",
+                  "en": "Friends per user"
+                },
+                "note": {
+                  "ru": "Знаменитый порог «7 друзей за 10 дней»: ниже него новичок уходит, выше — остаётся. Классический пример aha-момента, найденного по данным, а не придуманного.",
+                  "en": "The famous \"7 friends in 10 days\" threshold: below it a newcomer leaves, above it they stay. The classic example of an aha moment found in data rather than invented."
+                },
+                "children": [
+                  {
+                    "id": "fb-invites",
+                    "level": 3,
+                    "metricId": "viral-coefficient",
+                    "title": {
+                      "ru": "Приглашения и находки знакомых",
+                      "en": "Invites & people you may know"
+                    },
+                    "note": {
+                      "ru": "Рост через сам граф: продукт подсказывает, кого вы знаете, и сеть достраивает себя.",
+                      "en": "Growth through the graph itself: the product suggests who you know, and the network builds itself."
+                    },
+                    "children": [
+                      {
+                        "id": "fb-activation",
+                        "level": 4,
+                        "metricId": "activation-rate",
+                        "title": {
+                          "ru": "Активация (порог друзей)",
+                          "en": "Activation (friend threshold)"
+                        },
+                        "note": {
+                          "ru": "Новичок, не набравший ядро связей, не увидит в ленте ничего своего — и не вернётся.",
+                          "en": "A newcomer who hasn't formed a core of ties sees nothing of their own in the feed — and won't return."
+                        },
+                        "children": [
+                          {
+                            "id": "fb-retention",
+                            "level": 5,
+                            "metricId": "retention-n-day",
+                            "title": {
+                              "ru": "Удержание после порога",
+                              "en": "Retention past the threshold"
+                            },
+                            "note": {
+                              "ru": "Кривая удержания до и после набора ядра друзей — разница и есть цена социального графа.",
+                              "en": "The retention curve before and after forming a friend core — the gap is the social graph's value."
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "fb-feed",
+            "level": 1,
+            "kind": "group",
+            "title": {
+              "ru": "Лента",
+              "en": "The feed"
+            },
+            "note": {
+              "ru": "Смесь двух источников: посты друзей и рекомендованный контент незнакомцев.",
+              "en": "A mix of two sources: friends' posts and recommended content from strangers."
+            },
+            "children": [
+              {
+                "id": "fb-friend-content",
+                "level": 2,
+                "metricId": "content-supply",
+                "title": {
+                  "ru": "Контент друзей",
+                  "en": "Friend content"
+                },
+                "note": {
+                  "ru": "Дефицитный ресурс: люди публикуют всё меньше личного, и лента вынужденно заполняется чужим.",
+                  "en": "A scarce resource: people post less and less personal content, so the feed fills up with strangers' material."
+                },
+                "children": [
+                  {
+                    "id": "fb-reco",
+                    "level": 3,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Доля рекомендаций в ленте",
+                      "en": "Recommended share of the feed"
+                    },
+                    "note": {
+                      "ru": "Рычаг: подмешивание контента незнакомцев поднимает время, но размывает то, ради чего сюда приходили.",
+                      "en": "Lever: mixing in strangers' content lifts time but dilutes the reason people came."
+                    },
+                    "children": [
+                      {
+                        "id": "fb-engagement",
+                        "level": 4,
+                        "metricId": "session-depth",
+                        "title": {
+                          "ru": "Глубина сессии",
+                          "en": "Session depth"
+                        },
+                        "note": {
+                          "ru": "Сколько успевает показать лента за заход.",
+                          "en": "How much the feed shows per visit."
+                        },
+                        "children": [
+                          {
+                            "id": "fb-meaningful",
+                            "level": 5,
+                            "metricId": "nps-csat",
+                            "title": {
+                              "ru": "Осмысленные взаимодействия",
+                              "en": "Meaningful interactions"
+                            },
+                            "note": {
+                              "ru": "Ответ Facebook на закон Гудхарта: после того как погоня за временем привела к пассивному листанию, метрику переопределили через общение с близкими — время просело осознанно.",
+                              "en": "Facebook's answer to Goodhart's law: after chasing time led to passive scrolling, the metric was redefined around interaction with people you care about — time dropped on purpose."
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "fb-monet",
+            "level": 1,
+            "kind": "group",
+            "title": {
+              "ru": "Монетизация",
+              "en": "Monetization"
+            },
+            "note": {
+              "ru": "Реклама на данных графа: таргетинг точнее, чем у любого контекста.",
+              "en": "Ads on graph data: targeting sharper than any contextual channel."
+            },
+            "children": [
+              {
+                "id": "fb-ads",
+                "level": 2,
+                "metricId": "ad-coverage",
+                "title": {
+                  "ru": "Плотность рекламы в ленте",
+                  "en": "Ad load in the feed"
+                },
+                "note": {
+                  "ru": "Сколько рекламы приходится на органические посты.",
+                  "en": "How many ads there are per organic post."
+                },
+                "children": [
+                  {
+                    "id": "fb-arpu",
+                    "level": 3,
+                    "metricId": "arpu",
+                    "title": {
+                      "ru": "ARPU по регионам",
+                      "en": "ARPU by region"
+                    },
+                    "note": {
+                      "ru": "Разница между рынками десятикратная: рекламодатель платит за платёжеспособность аудитории, а не за её размер.",
+                      "en": "A tenfold gap between markets: advertisers pay for the audience's spending power, not its size."
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Рекламная выручка",
+                "en": "Ad revenue"
+              },
+              "Total Watch Time",
+              {
+                "ru": "ARPU по регионам",
+                "en": "ARPU by region"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Социальный граф",
+                "en": "Social graph"
+              },
+              {
+                "ru": "Контент друзей",
+                "en": "Friend content"
+              },
+              {
+                "ru": "Осмысленные взаимодействия",
+                "en": "Meaningful interactions"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "аналитики",
+              "en": "analysts"
+            },
+            "items": [
+              {
+                "ru": "Друзья на пользователя",
+                "en": "Friends per user"
+              },
+              {
+                "ru": "Доля рекомендаций",
+                "en": "Recommended share"
+              },
+              {
+                "ru": "Плотность рекламы",
+                "en": "Ad load"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Скорость ленты",
+                "en": "Feed speed"
+              },
+              {
+                "ru": "Загрузка медиа",
+                "en": "Media load"
+              },
+              {
+                "ru": "Аптайм",
+                "en": "Uptime"
+              }
+            ]
+          }
+        ]
+      },
+      "counterMetrics": [
+        {
+          "title": {
+            "ru": "Пассивное листание",
+            "en": "Passive scrolling"
+          },
+          "note": {
+            "ru": "время растёт, а осмысленных взаимодействий нет — классический Гудхарт",
+            "en": "time grows while meaningful interactions don't — classic Goodhart"
+          }
+        },
+        {
+          "title": {
+            "ru": "Публикации друзей",
+            "en": "Friend posting"
+          },
+          "note": {
+            "ru": "чем больше в ленте незнакомцев, тем меньше личного публикуют — сеть съедает сама себя",
+            "en": "the more strangers in the feed, the less personal content people post — the network eats itself"
+          }
+        }
       ]
     }
   ]

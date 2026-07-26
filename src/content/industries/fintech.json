@@ -1,124 +1,1135 @@
 {
   "id": "fintech",
-  "archetype": "Финтех",
-  "industry": "Банкинг и финтех",
-  "northStar": "TPV / активные платящие клиенты",
+  "archetype": {
+    "ru": "Финтех",
+    "en": "Fintech"
+  },
+  "industry": {
+    "ru": "Банкинг и финтех",
+    "en": "Banking & fintech"
+  },
+  "northStar": {
+    "ru": "TPV / активные платящие клиенты",
+    "en": "TPV / active paying customers"
+  },
   "root": {
-    "id": "tpv", "level": 0, "title": "TPV (оборот) / активные клиенты", "formula": "Клиенты × Активность × Чек операции",
-    "note": "Финтех зарабатывает на потоке денег: проценты, комиссии, interchange. Чем больше оборот активных клиентов — тем больше доход.",
+    "id": "tpv",
+    "level": 0,
+    "metricId": "tpv",
+    "title": {
+      "ru": "TPV (оборот) / активные клиенты",
+      "en": "TPV / active customers"
+    },
+    "formula": {
+      "ru": "Клиенты × Активность × Чек операции",
+      "en": "Customers × Activity × Transaction size"
+    },
+    "note": {
+      "ru": "Финтех зарабатывает на потоке денег: проценты, комиссии, interchange. Чем больше оборот активных клиентов — тем больше доход, но каждый рубль оборота должен быть честным и рисково-взвешенным.",
+      "en": "Fintech earns on money flow: interest, fees, interchange. The bigger the active customers' volume, the bigger the income — but every unit of flow must be honest and risk-weighted."
+    },
     "children": [
-      { "id": "base", "level": 1, "title": "База клиентов", "formula": "привлечение − отток", "note": "Сколько активных пользователей.", "children": [
-        { "id": "acq", "level": 2, "title": "Привлечение", "note": "Каналы и реферралы.", "children": [
-          { "id": "onb", "level": 3, "title": "Онбординг/KYC", "note": "Доходят ли до открытого счёта.", "children": [
-            { "id": "first-tx", "level": 4, "title": "Первая операция", "note": "Активация — деньги пошли." }
-          ] }
-        ] },
-        { "id": "active", "level": 2, "title": "Доля активных (primary bank)", "note": "Основной ли это банк клиента." }
-      ] },
-      { "id": "engagement", "level": 1, "title": "Активность и продукты", "formula": "продуктов на клиента", "note": "Глубина отношений.", "children": [
-        { "id": "products", "level": 2, "title": "Продуктов на клиента", "note": "Карта→вклад→кредит→инвестиции.", "children": [
-          { "id": "tx-freq", "level": 3, "title": "Частота транзакций", "note": "Как часто платят картой.", "children": [
-            { "id": "balance", "level": 4, "title": "Остатки на счетах", "note": "Дешёвое фондирование." }
-          ] }
-        ] }
-      ] },
-      { "id": "monet", "level": 1, "title": "Монетизация и риск", "formula": "доход − риск-косты", "note": "Доход с поправкой на риск.", "children": [
-        { "id": "nim", "level": 2, "title": "Процентный доход (NIM)", "note": "Маржа на кредитах и остатках.", "children": [
-          { "id": "risk", "level": 3, "title": "Стоимость риска (дефолты)", "note": "Просрочка съедает процентный доход." }
-        ] },
-        { "id": "fees", "level": 2, "title": "Комиссионный доход", "note": "Interchange, переводы, сервисы." }
-      ] }
+      {
+        "id": "base",
+        "level": 1,
+        "title": {
+          "ru": "База клиентов",
+          "en": "Customer base"
+        },
+        "formula": {
+          "ru": "привлечение − отток",
+          "en": "acquisition − churn"
+        },
+        "note": {
+          "ru": "Сколько активных пользователей и становится ли банк основным.",
+          "en": "How many active users there are and whether the bank becomes primary."
+        },
+        "children": [
+          {
+            "id": "acq",
+            "level": 2,
+            "metricId": "cac",
+            "title": {
+              "ru": "Привлечение",
+              "en": "Acquisition"
+            },
+            "note": {
+              "ru": "Каналы, реферралы и стоимость клиента.",
+              "en": "Channels, referrals and customer cost."
+            },
+            "children": [
+              {
+                "id": "onb",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "Онбординг / KYC",
+                  "en": "Onboarding / KYC"
+                },
+                "note": {
+                  "ru": "Рычаг: доходят ли заявки до открытого счёта; каждый лишний шаг проверки — потери.",
+                  "en": "Lever: do applications reach an open account; every extra verification step leaks users."
+                },
+                "children": [
+                  {
+                    "id": "first-tx",
+                    "level": 4,
+                    "metricId": "activation-rate",
+                    "title": {
+                      "ru": "Первая операция",
+                      "en": "First transaction"
+                    },
+                    "note": {
+                      "ru": "Активация: деньги пошли — счёт живой.",
+                      "en": "Activation: money moved — the account is alive."
+                    },
+                    "children": [
+                      {
+                        "id": "funded-accounts",
+                        "level": 5,
+                        "title": {
+                          "ru": "Доля пополненных счетов",
+                          "en": "Funded-account share"
+                        },
+                        "note": {
+                          "ru": "Счёт с деньгами против пустой регистрации — реальная база бизнеса.",
+                          "en": "An account with money versus an empty registration — the business's real base."
+                        },
+                        "metricId": "activation-rate"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "active",
+            "level": 2,
+            "title": {
+              "ru": "Доля активных (primary bank)",
+              "en": "Primary-bank share"
+            },
+            "note": {
+              "ru": "Основной ли это банк клиента: зарплата, регулярные платежи, остатки.",
+              "en": "Is this the customer's main bank: salary, recurring payments, balances."
+            },
+            "children": [
+              {
+                "id": "salary-share",
+                "level": 3,
+                "title": {
+                  "ru": "Зарплатные клиенты",
+                  "en": "Salary customers"
+                },
+                "note": {
+                  "ru": "Зарплата на счёт — сильнейший признак primary-статуса и источник остатков.",
+                  "en": "Salary landing on the account — the strongest primary signal and the source of balances."
+                },
+                "metricId": "deposits"
+              }
+            ],
+            "metricId": "dau-mau"
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "engagement",
+        "level": 1,
+        "title": {
+          "ru": "Активность и продукты",
+          "en": "Activity & products"
+        },
+        "formula": {
+          "ru": "продуктов на клиента",
+          "en": "products per customer"
+        },
+        "note": {
+          "ru": "Глубина отношений: чем больше продуктов, тем выше LTV и ниже отток.",
+          "en": "Relationship depth: more products mean higher LTV and lower churn."
+        },
+        "children": [
+          {
+            "id": "products",
+            "level": 2,
+            "title": {
+              "ru": "Продуктов на клиента",
+              "en": "Products per customer"
+            },
+            "note": {
+              "ru": "Карта → вклад → кредит → инвестиции: лестница кросс-продаж.",
+              "en": "Card → deposit → loan → investments: the cross-sell ladder."
+            },
+            "children": [
+              {
+                "id": "cross-sell",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "Кросс-продажи",
+                  "en": "Cross-selling"
+                },
+                "note": {
+                  "ru": "Рычаг: следующий продукт в нужный момент по данным о клиенте.",
+                  "en": "Lever: the next product at the right moment, driven by customer data."
+                },
+                "children": [
+                  {
+                    "id": "tx-freq",
+                    "level": 4,
+                    "metricId": "purchase-frequency",
+                    "title": {
+                      "ru": "Частота транзакций",
+                      "en": "Transaction frequency"
+                    },
+                    "note": {
+                      "ru": "Как часто платят картой — привычка, дающая interchange.",
+                      "en": "How often the card is used — the habit that yields interchange."
+                    },
+                    "children": [
+                      {
+                        "id": "balance",
+                        "level": 5,
+                        "title": {
+                          "ru": "Остатки на счетах",
+                          "en": "Account balances"
+                        },
+                        "note": {
+                          "ru": "Дешёвое фондирование: остатки клиентов — сырьё процентного дохода.",
+                          "en": "Cheap funding: customer balances are the raw material of interest income."
+                        },
+                        "metricId": "deposits"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "metricId": "products-per-customer"
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "monet",
+        "level": 1,
+        "title": {
+          "ru": "Монетизация и риск",
+          "en": "Monetization & risk"
+        },
+        "formula": {
+          "ru": "доход − риск-косты",
+          "en": "income − risk costs"
+        },
+        "note": {
+          "ru": "Доход с поправкой на риск: агрессивная выдача раздувает и то и другое.",
+          "en": "Risk-adjusted income: aggressive lending inflates both sides."
+        },
+        "children": [
+          {
+            "id": "nim",
+            "level": 2,
+            "title": {
+              "ru": "Процентный доход (NIM)",
+              "en": "Interest income (NIM)"
+            },
+            "note": {
+              "ru": "Маржа на кредитах и остатках.",
+              "en": "The margin on loans and balances."
+            },
+            "children": [
+              {
+                "id": "risk",
+                "level": 3,
+                "title": {
+                  "ru": "Стоимость риска (дефолты)",
+                  "en": "Cost of risk (defaults)"
+                },
+                "note": {
+                  "ru": "Просрочка съедает процентный доход; видна с лагом месяцев.",
+                  "en": "Delinquency eats interest income; visible with months of lag."
+                },
+                "children": [
+                  {
+                    "id": "scoring",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Качество скоринга",
+                      "en": "Scoring quality"
+                    },
+                    "note": {
+                      "ru": "Рычаг: модель отбора заёмщиков — баланс одобрения и дефолтов.",
+                      "en": "Lever: the borrower-selection model — the approval/default trade-off."
+                    },
+                    "children": [
+                      {
+                        "id": "vintage-npl",
+                        "level": 5,
+                        "title": {
+                          "ru": "Дефолты по винтажам",
+                          "en": "Vintage default rates"
+                        },
+                        "note": {
+                          "ru": "Просрочка по когортам выдач — честная оценка скоринга без эффекта роста портфеля.",
+                          "en": "Delinquency by issuance cohort — an honest scoring readout without portfolio-growth distortion."
+                        },
+                        "metricId": "cost-of-risk"
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "cost-of-risk"
+              }
+            ],
+            "metricId": "nim"
+          },
+          {
+            "id": "fees",
+            "level": 2,
+            "metricId": "take-rate",
+            "title": {
+              "ru": "Комиссионный доход",
+              "en": "Fee income"
+            },
+            "note": {
+              "ru": "Interchange, переводы, сервисы: доход без кредитного риска.",
+              "en": "Interchange, transfers, services: income without credit risk."
+            },
+            "children": [
+              {
+                "id": "fraud",
+                "level": 3,
+                "metricId": "fraud-rate",
+                "title": {
+                  "ru": "Фрод и чарджбэки",
+                  "en": "Fraud & chargebacks"
+                },
+                "note": {
+                  "ru": "Guardrail оборота: нечестный TPV оборачивается штрафами и блокировками.",
+                  "en": "The volume guardrail: dishonest TPV turns into fines and network penalties."
+                }
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      }
     ]
   },
   "pyramid": {
-    "note": "От P&L банка (вершина) к надёжности транзакций и анти-фроду (основание).",
+    "note": {
+      "ru": "От P&L банка (вершина) к надёжности транзакций и анти-фроду (основание).",
+      "en": "From the bank's P&L (top) to transaction reliability and anti-fraud (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "правление", "items": ["Выручка", "TPV", "Чистая прибыль / ROE"] },
-      { "label": "Продуктовые", "role": "продакты", "items": ["Активные клиенты", "Продуктов на клиента", "NIM + комиссии"] },
-      { "label": "Операционные", "role": "риск/операции", "items": ["Активация", "Частота транзакций", "Стоимость риска"] },
-      { "label": "Платформенные", "role": "инженеры/безопасность", "items": ["Аптайм платежей", "Скорость операций", "Фрод-rate"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "правление",
+          "en": "board"
+        },
+        "items": [
+          {
+            "ru": "Выручка",
+            "en": "Revenue"
+          },
+          "TPV",
+          {
+            "ru": "Чистая прибыль / ROE",
+            "en": "Net profit / ROE"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "продакты",
+          "en": "product"
+        },
+        "items": [
+          {
+            "ru": "Активные клиенты",
+            "en": "Active customers"
+          },
+          {
+            "ru": "Продуктов на клиента",
+            "en": "Products per customer"
+          },
+          {
+            "ru": "NIM + комиссии",
+            "en": "NIM + fees"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": {
+          "ru": "риск/операции",
+          "en": "risk/ops"
+        },
+        "items": [
+          {
+            "ru": "Активация",
+            "en": "Activation"
+          },
+          {
+            "ru": "Частота транзакций",
+            "en": "Transaction frequency"
+          },
+          {
+            "ru": "Стоимость риска",
+            "en": "Cost of risk"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "инженеры/безопасность",
+          "en": "engineers/security"
+        },
+        "items": [
+          {
+            "ru": "Аптайм платежей",
+            "en": "Payment uptime"
+          },
+          {
+            "ru": "Скорость операций",
+            "en": "Operation speed"
+          },
+          {
+            "ru": "Фрод-rate",
+            "en": "Fraud rate"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Уровень дефолтов / просрочки", "note": "агрессивная выдача кредитов раздувает доход и риск" },
-    { "title": "Фрод и чарджбэки", "note": "оборот ценен, только если он честный" },
-    { "title": "Жалобы / отток primary", "note": "перестали считать основным банком" }
+    {
+      "title": {
+        "ru": "Уровень дефолтов / просрочки",
+        "en": "Default / delinquency level"
+      },
+      "note": {
+        "ru": "агрессивная выдача кредитов раздувает доход и риск",
+        "en": "aggressive lending inflates both income and risk"
+      }
+    },
+    {
+      "title": {
+        "ru": "Фрод и чарджбэки",
+        "en": "Fraud & chargebacks"
+      },
+      "note": {
+        "ru": "оборот ценен, только если он честный",
+        "en": "volume is only worth anything if it's honest"
+      }
+    },
+    {
+      "title": {
+        "ru": "Жалобы / отток primary",
+        "en": "Complaints / primary churn"
+      },
+      "note": {
+        "ru": "перестали считать основным банком",
+        "en": "no longer considered the main bank"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "tbank", "name": "Т-Банк", "northStar": "TPV (экосистема + кросс-продажи)",
-      "note": "цифровой банк-экосистема: ставка на дешёвое привлечение, кросс-продажи продуктов и lifestyle-сервисы.",
+      "id": "tbank",
+      "name": {
+        "ru": "Т-Банк",
+        "en": "T-Bank"
+      },
+      "northStar": {
+        "ru": "TPV (экосистема + кросс-продажи)",
+        "en": "TPV (ecosystem + cross-sell)"
+      },
+      "note": {
+        "ru": "цифровой банк-экосистема: ставка на дешёвое привлечение, кросс-продажи продуктов и lifestyle-сервисы.",
+        "en": "a digital bank-ecosystem: a bet on cheap acquisition, product cross-sell and lifestyle services."
+      },
       "root": {
-        "id": "tb-tpv", "level": 0, "title": "TPV / активные клиенты", "formula": "Клиенты × Продукты × Активность",
-        "note": "Маховик экосистемы: дешёвый онлайн-онбординг → много продуктов на клиента → высокий LTV.",
+        "id": "tb-tpv",
+        "level": 0,
+        "metricId": "tpv",
+        "title": {
+          "ru": "TPV / активные клиенты",
+          "en": "TPV / active customers"
+        },
+        "formula": {
+          "ru": "Клиенты × Продукты × Активность",
+          "en": "Customers × Products × Activity"
+        },
+        "note": {
+          "ru": "Маховик экосистемы: дешёвый онлайн-онбординг → много продуктов на клиента → высокий LTV.",
+          "en": "The ecosystem flywheel: cheap online onboarding → many products per customer → high LTV."
+        },
         "children": [
-          { "id": "tb-base", "level": 1, "title": "База клиентов", "note": "Полностью онлайн-привлечение.", "children": [
-            { "id": "tb-acq", "level": 2, "title": "Привлечение", "note": "Реферралы + перформанс.", "children": [
-              { "id": "tb-cac", "level": 3, "title": "CAC", "note": "Дешевле классических банков.", "children": [
-                { "id": "tb-activation", "level": 4, "title": "Активация в primary", "note": "Стал основным банком." }
-              ] }
-            ] }
-          ] },
-          { "id": "tb-cross", "level": 1, "title": "Кросс-продажи", "note": "Сердце экономики.", "children": [
-            { "id": "tb-products", "level": 2, "title": "Продуктов на клиента", "note": "Карта, вклад, инвестиции, моб. связь.", "children": [
-              { "id": "tb-eco", "level": 3, "title": "Lifestyle-сервисы", "note": "Путешествия, рестораны — частота контакта." }
-            ] }
-          ] },
-          { "id": "tb-monet", "level": 1, "title": "Монетизация и риск", "note": "Процент + комиссии.", "children": [
-            { "id": "tb-nim", "level": 2, "title": "Процентный доход", "note": "Кредитные продукты.", "children": [
-              { "id": "tb-risk", "level": 3, "title": "Скоринг и стоимость риска", "note": "Данные снижают дефолты." }
-            ] },
-            { "id": "tb-fee", "level": 2, "title": "Комиссии и брокеридж", "note": "Инвестиции, эквайринг." }
-          ] }
+          {
+            "id": "tb-base",
+            "level": 1,
+            "title": {
+              "ru": "База клиентов",
+              "en": "Customer base"
+            },
+            "note": {
+              "ru": "Полностью онлайн-привлечение без отделений.",
+              "en": "Fully online acquisition, no branches."
+            },
+            "children": [
+              {
+                "id": "tb-acq",
+                "level": 2,
+                "title": {
+                  "ru": "Привлечение",
+                  "en": "Acquisition"
+                },
+                "note": {
+                  "ru": "Реферралы + перформанс.",
+                  "en": "Referrals + performance."
+                },
+                "children": [
+                  {
+                    "id": "tb-cac",
+                    "level": 3,
+                    "metricId": "cac",
+                    "title": "CAC",
+                    "note": {
+                      "ru": "Дешевле классических банков за счёт цифровой модели.",
+                      "en": "Cheaper than classic banks thanks to the digital model."
+                    },
+                    "children": [
+                      {
+                        "id": "tb-activation",
+                        "level": 4,
+                        "metricId": "activation-rate",
+                        "title": {
+                          "ru": "Активация в primary",
+                          "en": "Primary activation"
+                        },
+                        "note": {
+                          "ru": "Стал ли банк основным: зарплата и регулярные платежи.",
+                          "en": "Did the bank become primary: salary and recurring payments."
+                        },
+                        "children": [
+                          {
+                            "id": "tb-primary-retention",
+                            "level": 5,
+                            "metricId": "retention-n-day",
+                            "title": {
+                              "ru": "Удержание primary-клиентов",
+                              "en": "Primary retention"
+                            },
+                            "note": {
+                              "ru": "Когорты primary-клиентов почти не текут — в отличие от «вторых карт».",
+                              "en": "Primary cohorts barely churn — unlike \"second card\" users."
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "kind": "group"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "tb-cross",
+            "level": 1,
+            "title": {
+              "ru": "Кросс-продажи",
+              "en": "Cross-sell"
+            },
+            "note": {
+              "ru": "Сердце экономики экосистемы.",
+              "en": "The heart of the ecosystem economics."
+            },
+            "children": [
+              {
+                "id": "tb-products",
+                "level": 2,
+                "title": {
+                  "ru": "Продуктов на клиента",
+                  "en": "Products per customer"
+                },
+                "note": {
+                  "ru": "Карта, вклад, инвестиции, мобильная связь.",
+                  "en": "Card, deposit, investments, mobile."
+                },
+                "children": [
+                  {
+                    "id": "tb-eco",
+                    "level": 3,
+                    "title": {
+                      "ru": "Lifestyle-сервисы",
+                      "en": "Lifestyle services"
+                    },
+                    "note": {
+                      "ru": "Путешествия, рестораны, афиша — частота контакта с приложением.",
+                      "en": "Travel, restaurants, events — app contact frequency."
+                    },
+                    "children": [
+                      {
+                        "id": "tb-app-dau",
+                        "level": 4,
+                        "metricId": "dau-mau",
+                        "title": {
+                          "ru": "DAU приложения",
+                          "en": "App DAU"
+                        },
+                        "note": {
+                          "ru": "Банк, в который заходят ежедневно, продаёт следующий продукт бесплатно.",
+                          "en": "A bank opened daily sells the next product for free."
+                        }
+                      }
+                    ],
+                    "metricId": "products-per-customer"
+                  }
+                ],
+                "metricId": "products-per-customer"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "tb-monet",
+            "level": 1,
+            "title": {
+              "ru": "Монетизация и риск",
+              "en": "Monetization & risk"
+            },
+            "note": {
+              "ru": "Процент + комиссии.",
+              "en": "Interest + fees."
+            },
+            "children": [
+              {
+                "id": "tb-nim",
+                "level": 2,
+                "title": {
+                  "ru": "Процентный доход",
+                  "en": "Interest income"
+                },
+                "note": {
+                  "ru": "Кредитные продукты.",
+                  "en": "Credit products."
+                },
+                "children": [
+                  {
+                    "id": "tb-risk",
+                    "level": 3,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Скоринг и стоимость риска",
+                      "en": "Scoring & cost of risk"
+                    },
+                    "note": {
+                      "ru": "Рычаг: данные экосистемы снижают дефолты при том же одобрении.",
+                      "en": "Lever: ecosystem data cuts defaults at the same approval rate."
+                    }
+                  }
+                ],
+                "metricId": "nim"
+              },
+              {
+                "id": "tb-fee",
+                "level": 2,
+                "title": {
+                  "ru": "Комиссии и брокеридж",
+                  "en": "Fees & brokerage"
+                },
+                "note": {
+                  "ru": "Инвестиции, эквайринг.",
+                  "en": "Investments, acquiring."
+                },
+                "metricId": "take-rate"
+              }
+            ],
+            "kind": "group"
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "правление", "items": ["Выручка", "TPV", "ROE"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Активные primary", "Продуктов на клиента", "Процент+комиссии"] },
-        { "label": "Операционные", "role": "риск", "items": ["Активация", "Lifestyle-частота", "Стоимость риска"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Аптайм приложения", "Скорость платежей", "Анти-фрод"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "правление",
+              "en": "board"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              "TPV",
+              "ROE"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Активные primary",
+                "en": "Active primary"
+              },
+              {
+                "ru": "Продуктов на клиента",
+                "en": "Products per customer"
+              },
+              {
+                "ru": "Процент+комиссии",
+                "en": "Interest+fees"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "риск",
+              "en": "risk"
+            },
+            "items": [
+              {
+                "ru": "Активация",
+                "en": "Activation"
+              },
+              {
+                "ru": "Lifestyle-частота",
+                "en": "Lifestyle frequency"
+              },
+              {
+                "ru": "Стоимость риска",
+                "en": "Cost of risk"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Аптайм приложения",
+                "en": "App uptime"
+              },
+              {
+                "ru": "Скорость платежей",
+                "en": "Payment speed"
+              },
+              {
+                "ru": "Анти-фрод",
+                "en": "Anti-fraud"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Дефолты по кредиткам", "note": "рост выдачи увеличивает риск" },
-        { "title": "Навязчивость кросс-продаж", "note": "перебор офферов раздражает клиентов" }
+        {
+          "title": {
+            "ru": "Дефолты по кредиткам",
+            "en": "Credit-card defaults"
+          },
+          "note": {
+            "ru": "рост выдачи увеличивает риск",
+            "en": "issuance growth raises risk"
+          }
+        },
+        {
+          "title": {
+            "ru": "Навязчивость кросс-продаж",
+            "en": "Cross-sell pushiness"
+          },
+          "note": {
+            "ru": "перебор офферов раздражает клиентов",
+            "en": "offer overload annoys customers"
+          }
+        }
       ]
     },
     {
-      "id": "revolut", "name": "Revolut", "northStar": "TPV (мультивалюта + interchange)",
-      "note": "необанк для трат за рубежом: ставка на мультивалютные карты, путешествия и комиссионный (interchange) доход.",
+      "id": "revolut",
+      "name": "Revolut",
+      "northStar": {
+        "ru": "TPV (мультивалюта + interchange)",
+        "en": "TPV (multi-currency + interchange)"
+      },
+      "note": {
+        "ru": "необанк для трат за рубежом: ставка на мультивалютные карты, путешествия и комиссионный (interchange) доход.",
+        "en": "a neobank for spending abroad: a bet on multi-currency cards, travel and interchange income."
+      },
       "root": {
-        "id": "rv-tpv", "level": 0, "title": "TPV / активные клиенты", "formula": "Клиенты × Активность × Чек",
-        "note": "Главный двигатель — объём карточных трат (особенно за рубежом), с которого идёт interchange.",
+        "id": "rv-tpv",
+        "level": 0,
+        "metricId": "tpv",
+        "title": {
+          "ru": "TPV / активные клиенты",
+          "en": "TPV / active customers"
+        },
+        "formula": {
+          "ru": "Клиенты × Активность × Чек",
+          "en": "Customers × Activity × Ticket"
+        },
+        "note": {
+          "ru": "Главный двигатель — объём карточных трат (особенно за рубежом), с которого идёт interchange.",
+          "en": "The main engine is card spend volume (especially abroad), which yields interchange."
+        },
         "children": [
-          { "id": "rv-base", "level": 1, "title": "База клиентов", "note": "Глобальное цифровое привлечение.", "children": [
-            { "id": "rv-acq", "level": 2, "title": "Привлечение", "note": "Виральность и реферралы.", "children": [
-              { "id": "rv-onb", "level": 3, "title": "Онбординг/KYC", "note": "Мгновенная виртуальная карта.", "children": [
-                { "id": "rv-firstspend", "level": 4, "title": "Первая трата", "note": "Активация картой." }
-              ] }
-            ] }
-          ] },
-          { "id": "rv-spend", "level": 1, "title": "Карточные траты (TPV)", "note": "Источник interchange.", "children": [
-            { "id": "rv-travel", "level": 2, "title": "Траты в поездках", "note": "Мультивалюта без комиссий — киллер-фича.", "children": [
-              { "id": "rv-fx", "level": 3, "title": "Объём FX-операций", "note": "Конвертация валют." }
-            ] }
-          ] },
-          { "id": "rv-monet", "level": 1, "title": "Монетизация", "note": "Подписки + комиссии.", "children": [
-            { "id": "rv-sub", "level": 2, "title": "Платные планы (Premium/Metal)", "note": "Подписочная выручка.", "children": [
-              { "id": "rv-attach", "level": 3, "title": "Доп-продукты (крипто, вклады, страховки)", "note": "Расширение кошелька." }
-            ] },
-            { "id": "rv-interchange", "level": 2, "title": "Interchange", "note": "Комиссия с трат." }
-          ] }
+          {
+            "id": "rv-base",
+            "level": 1,
+            "title": {
+              "ru": "База клиентов",
+              "en": "Customer base"
+            },
+            "note": {
+              "ru": "Глобальное цифровое привлечение.",
+              "en": "Global digital acquisition."
+            },
+            "children": [
+              {
+                "id": "rv-acq",
+                "level": 2,
+                "title": {
+                  "ru": "Привлечение",
+                  "en": "Acquisition"
+                },
+                "note": {
+                  "ru": "Виральность и реферралы.",
+                  "en": "Virality and referrals."
+                },
+                "children": [
+                  {
+                    "id": "rv-onb",
+                    "level": 3,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Онбординг / KYC",
+                      "en": "Onboarding / KYC"
+                    },
+                    "note": {
+                      "ru": "Рычаг: мгновенная виртуальная карта — ценность до прихода пластика.",
+                      "en": "Lever: an instant virtual card — value before the plastic arrives."
+                    },
+                    "children": [
+                      {
+                        "id": "rv-firstspend",
+                        "level": 4,
+                        "metricId": "activation-rate",
+                        "title": {
+                          "ru": "Первая трата",
+                          "en": "First spend"
+                        },
+                        "note": {
+                          "ru": "Активация картой.",
+                          "en": "Card activation."
+                        },
+                        "children": [
+                          {
+                            "id": "rv-active-retention",
+                            "level": 5,
+                            "metricId": "retention-n-day",
+                            "title": {
+                              "ru": "Retention трат",
+                              "en": "Spend retention"
+                            },
+                            "note": {
+                              "ru": "Продолжают ли тратить после первого месяца — или карта уснула до отпуска.",
+                              "en": "Do they keep spending after month one — or does the card sleep until vacation."
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "kind": "group"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "rv-spend",
+            "level": 1,
+            "title": {
+              "ru": "Карточные траты (TPV)",
+              "en": "Card spend (TPV)"
+            },
+            "note": {
+              "ru": "Источник interchange.",
+              "en": "The interchange source."
+            },
+            "children": [
+              {
+                "id": "rv-travel",
+                "level": 2,
+                "title": {
+                  "ru": "Траты в поездках",
+                  "en": "Travel spend"
+                },
+                "note": {
+                  "ru": "Мультивалюта без комиссий — киллер-фича.",
+                  "en": "Fee-free multi-currency — the killer feature."
+                },
+                "children": [
+                  {
+                    "id": "rv-fx",
+                    "level": 3,
+                    "title": {
+                      "ru": "Объём FX-операций",
+                      "en": "FX volume"
+                    },
+                    "note": {
+                      "ru": "Конвертация валют — и доход, и магнит для трат.",
+                      "en": "Currency conversion — both income and a spend magnet."
+                    },
+                    "children": [
+                      {
+                        "id": "rv-domestic",
+                        "level": 4,
+                        "title": {
+                          "ru": "Доля домашних трат",
+                          "en": "Domestic spend share"
+                        },
+                        "note": {
+                          "ru": "Тратят ли дома между поездками — тест на primary-статус.",
+                          "en": "Do they spend at home between trips — the primary-status test."
+                        },
+                        "metricId": "tpv"
+                      }
+                    ],
+                    "metricId": "tpv"
+                  }
+                ],
+                "metricId": "tpv"
+              }
+            ],
+            "metricId": "tpv"
+          },
+          {
+            "id": "rv-monet",
+            "level": 1,
+            "title": {
+              "ru": "Монетизация",
+              "en": "Monetization"
+            },
+            "note": {
+              "ru": "Подписки + комиссии.",
+              "en": "Subscriptions + fees."
+            },
+            "children": [
+              {
+                "id": "rv-sub",
+                "level": 2,
+                "metricId": "mrr",
+                "title": {
+                  "ru": "Платные планы (Premium/Metal)",
+                  "en": "Paid plans (Premium/Metal)"
+                },
+                "note": {
+                  "ru": "Подписочная выручка поверх транзакционной.",
+                  "en": "Subscription revenue on top of transactional."
+                },
+                "children": [
+                  {
+                    "id": "rv-attach",
+                    "level": 3,
+                    "title": {
+                      "ru": "Доп-продукты (крипто, вклады, страховки)",
+                      "en": "Attach products (crypto, savings, insurance)"
+                    },
+                    "note": {
+                      "ru": "Расширение кошелька клиента.",
+                      "en": "Expanding the customer's wallet."
+                    },
+                    "children": [
+                      {
+                        "id": "rv-plan-churn",
+                        "level": 4,
+                        "metricId": "churn-rate",
+                        "title": {
+                          "ru": "Отток платных планов",
+                          "en": "Paid-plan churn"
+                        },
+                        "note": {
+                          "ru": "Продление Premium/Metal: подписка живёт, пока живут поездки и лимиты.",
+                          "en": "Premium/Metal renewals: the plan lives while trips and limits stay relevant."
+                        }
+                      }
+                    ],
+                    "metricId": "products-per-customer"
+                  }
+                ]
+              },
+              {
+                "id": "rv-interchange",
+                "level": 2,
+                "metricId": "take-rate",
+                "title": "Interchange",
+                "note": {
+                  "ru": "Комиссия с каждой карточной операции.",
+                  "en": "A fee on every card transaction."
+                }
+              }
+            ],
+            "kind": "group"
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "правление", "items": ["Выручка", "TPV", "ARPU"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["Активные клиенты", "Платные планы", "Interchange+подписки"] },
-        { "label": "Операционные", "role": "операции", "items": ["Первая трата", "FX-объём", "Attach доп-продуктов"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Аптайм платежей", "Скорость FX", "Анти-фрод"] }
-      ] },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "правление",
+              "en": "board"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              "TPV",
+              "ARPU"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "Активные клиенты",
+                "en": "Active customers"
+              },
+              {
+                "ru": "Платные планы",
+                "en": "Paid plans"
+              },
+              {
+                "ru": "Interchange+подписки",
+                "en": "Interchange+subs"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "операции",
+              "en": "operations"
+            },
+            "items": [
+              {
+                "ru": "Первая трата",
+                "en": "First spend"
+              },
+              {
+                "ru": "FX-объём",
+                "en": "FX volume"
+              },
+              {
+                "ru": "Attach доп-продуктов",
+                "en": "Product attach"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Аптайм платежей",
+                "en": "Payment uptime"
+              },
+              {
+                "ru": "Скорость FX",
+                "en": "FX speed"
+              },
+              {
+                "ru": "Анти-фрод",
+                "en": "Anti-fraud"
+              }
+            ]
+          }
+        ]
+      },
       "counterMetrics": [
-        { "title": "Фрод и заморозки счетов", "note": "агрессивный анти-фрод бьёт по честным клиентам" },
-        { "title": "Отток после поездки", "note": "пользуются только в путешествиях, потом спят" }
+        {
+          "title": {
+            "ru": "Фрод и заморозки счетов",
+            "en": "Fraud & account freezes"
+          },
+          "note": {
+            "ru": "агрессивный анти-фрод бьёт по честным клиентам",
+            "en": "aggressive anti-fraud hits honest customers"
+          }
+        },
+        {
+          "title": {
+            "ru": "Отток после поездки",
+            "en": "Post-trip dormancy"
+          },
+          "note": {
+            "ru": "пользуются только в путешествиях, потом спят",
+            "en": "used only while traveling, dormant after"
+          }
+        }
       ]
     }
   ]

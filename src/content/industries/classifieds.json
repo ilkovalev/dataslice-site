@@ -1,120 +1,1082 @@
 {
   "id": "classifieds",
-  "archetype": "Классифайды / lead-gen",
-  "industry": "Классифайды (объявления)",
+  "archetype": {
+    "ru": "Классифайды / lead-gen",
+    "en": "Classifieds / lead-gen"
+  },
+  "industry": {
+    "ru": "Классифайды (объявления)",
+    "en": "Classifieds (listings)"
+  },
   "northStar": "Successful Deals / Contacts",
   "root": {
-    "id": "deals", "level": 0, "title": "Successful Contacts", "formula": "Объявления × Просмотры × CR в контакт",
-    "note": "Ценность классифайда — состоявшийся контакт покупателя и продавца. Монетизация — платное продвижение и лиды.",
+    "id": "deals",
+    "level": 0,
+    "title": "Successful Contacts",
+    "formula": {
+      "ru": "Объявления × Просмотры × CR в контакт",
+      "en": "Listings × Views × Contact CR"
+    },
+    "note": {
+      "ru": "Ценность классифайда — состоявшийся контакт покупателя и продавца: сделка происходит за пределами платформы. Монетизация — платное продвижение и лиды.",
+      "en": "A classified's value is a buyer–seller contact that happens: the deal itself closes off-platform. Monetization is paid promotion and leads."
+    },
     "children": [
-      { "id": "buyers", "level": 1, "title": "Спрос (покупатели)", "formula": "трафик × частота", "note": "Сторона ищущих.", "children": [
-        { "id": "search-traffic", "level": 2, "title": "Поисковый трафик", "note": "SEO — основной канал.", "children": [
-          { "id": "find", "level": 3, "title": "Нашёл подходящее", "note": "Качество поиска и фильтров.", "children": [
-            { "id": "contact-cr", "level": 4, "title": "CR просмотр → контакт", "note": "Позвонил/написал продавцу." }
-          ] }
-        ] }
-      ] },
-      { "id": "sellers", "level": 1, "title": "Предложение (продавцы)", "formula": "объявления × качество", "note": "Сторона размещающих.", "children": [
-        { "id": "listings", "level": 2, "title": "Активные объявления", "note": "Ширина инвентаря.", "children": [
-          { "id": "fresh", "level": 3, "title": "Свежесть/актуальность", "note": "Не протухли ли объявления.", "children": [
-            { "id": "moderation", "level": 4, "title": "Качество модерации", "note": "Доля дублей и фейков." }
-          ] }
-        ] }
-      ] },
-      { "id": "monet", "level": 1, "title": "Монетизация", "formula": "платные услуги + лиды", "note": "Доход с продавцов.", "children": [
-        { "id": "promo", "level": 2, "title": "Платное продвижение", "note": "Поднятие/выделение объявления.", "children": [
-          { "id": "arppu", "level": 3, "title": "ARPPU продавца", "note": "Сколько платит активный продавец." }
-        ] },
-        { "id": "verticals", "level": 2, "title": "Вертикали (авто/недвиж/работа)", "note": "Разная экономика по категориям." }
-      ] }
-    ]
+      {
+        "id": "buyers",
+        "level": 1,
+        "title": {
+          "ru": "Спрос (покупатели)",
+          "en": "Demand (buyers)"
+        },
+        "formula": {
+          "ru": "трафик × частота",
+          "en": "traffic × frequency"
+        },
+        "note": {
+          "ru": "Сторона ищущих: пришли, нашли, связались.",
+          "en": "The searching side: arrive, find, reach out."
+        },
+        "children": [
+          {
+            "id": "search-traffic",
+            "level": 2,
+            "title": {
+              "ru": "Поисковый трафик",
+              "en": "Search traffic"
+            },
+            "note": {
+              "ru": "SEO — основной канал: миллионы длиннохвостых запросов ведут на страницы объявлений.",
+              "en": "SEO is the main channel: millions of long-tail queries land on listing pages."
+            },
+            "children": [
+              {
+                "id": "seo-visibility",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "SEO-видимость",
+                  "en": "SEO visibility"
+                },
+                "note": {
+                  "ru": "Рычаг: индексация, структура категорий, скорость страниц.",
+                  "en": "Lever: indexation, category structure, page speed."
+                }
+              },
+              {
+                "id": "find",
+                "level": 3,
+                "metricId": "search-success",
+                "title": {
+                  "ru": "Нашёл подходящее",
+                  "en": "Found a match"
+                },
+                "note": {
+                  "ru": "Качество поиска и фильтров: доля поисков, дошедших до просмотра объявления.",
+                  "en": "Search and filter quality: the share of searches reaching a listing view."
+                },
+                "children": [
+                  {
+                    "id": "contact-cr",
+                    "level": 4,
+                    "metricId": "conversion-rate",
+                    "title": {
+                      "ru": "CR просмотр → контакт",
+                      "en": "View → contact CR"
+                    },
+                    "note": {
+                      "ru": "Позвонил или написал продавцу — целевое действие платформы.",
+                      "en": "Called or messaged the seller — the platform's target action."
+                    },
+                    "children": [
+                      {
+                        "id": "reply-rate",
+                        "level": 5,
+                        "title": {
+                          "ru": "Доля ответов продавцов",
+                          "en": "Seller reply rate"
+                        },
+                        "note": {
+                          "ru": "Контакт без ответа — несостоявшаяся ценность; молчащие продавцы гасят спрос.",
+                          "en": "A contact with no reply is value that didn't happen; silent sellers smother demand."
+                        },
+                        "metricId": "successful-contacts"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "metricId": "seo-visibility"
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "sellers",
+        "level": 1,
+        "title": {
+          "ru": "Предложение (продавцы)",
+          "en": "Supply (sellers)"
+        },
+        "formula": {
+          "ru": "объявления × качество",
+          "en": "listings × quality"
+        },
+        "note": {
+          "ru": "Сторона размещающих: инвентарь и его достоверность.",
+          "en": "The listing side: inventory and its truthfulness."
+        },
+        "children": [
+          {
+            "id": "listings",
+            "level": 2,
+            "metricId": "active-listings",
+            "title": {
+              "ru": "Активные объявления",
+              "en": "Active listings"
+            },
+            "note": {
+              "ru": "Ширина инвентаря по категориям и городам.",
+              "en": "Inventory width by category and city."
+            },
+            "children": [
+              {
+                "id": "new-listings",
+                "level": 3,
+                "title": {
+                  "ru": "Новые объявления",
+                  "en": "New listings"
+                },
+                "note": {
+                  "ru": "Приток свежего инвентаря — топливо ликвидности.",
+                  "en": "Fresh inventory inflow — liquidity fuel."
+                },
+                "children": [
+                  {
+                    "id": "posting-funnel",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Простота подачи",
+                      "en": "Posting simplicity"
+                    },
+                    "note": {
+                      "ru": "Рычаг: меньше шагов и полей в форме подачи — больше объявлений.",
+                      "en": "Lever: fewer steps and fields in the posting flow — more listings."
+                    }
+                  }
+                ],
+                "metricId": "active-listings"
+              },
+              {
+                "id": "fresh",
+                "level": 3,
+                "title": {
+                  "ru": "Свежесть/актуальность",
+                  "en": "Freshness"
+                },
+                "note": {
+                  "ru": "Не протухли ли объявления: «позвонил — уже продано» убивает доверие.",
+                  "en": "Whether listings went stale: \"called — already sold\" kills trust."
+                },
+                "children": [
+                  {
+                    "id": "moderation",
+                    "level": 4,
+                    "metricId": "fraud-rate",
+                    "title": {
+                      "ru": "Модерация и анти-фрод",
+                      "en": "Moderation & anti-fraud"
+                    },
+                    "note": {
+                      "ru": "Доля дублей, фейков и мошеннических объявлений.",
+                      "en": "The share of duplicates, fakes and scam listings."
+                    },
+                    "children": [
+                      {
+                        "id": "fake-share",
+                        "level": 5,
+                        "title": {
+                          "ru": "Доля фейков в выдаче",
+                          "en": "Fake share in results"
+                        },
+                        "note": {
+                          "ru": "Сколько недостоверного доходит до покупателя — итоговая мера чистоты.",
+                          "en": "How much bogus content reaches buyers — the final cleanliness measure."
+                        },
+                        "metricId": "fraud-rate"
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "listing-freshness"
+              }
+            ]
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "monet",
+        "level": 1,
+        "title": {
+          "ru": "Монетизация",
+          "en": "Monetization"
+        },
+        "formula": {
+          "ru": "платные услуги + лиды",
+          "en": "paid services + leads"
+        },
+        "note": {
+          "ru": "Доход с продавцов: продвижение, лимиты, подписки, плата за лид.",
+          "en": "Seller revenue: promotion, limits, subscriptions, per-lead fees."
+        },
+        "children": [
+          {
+            "id": "promo",
+            "level": 2,
+            "kind": "lever",
+            "title": {
+              "ru": "Платное продвижение",
+              "en": "Paid promotion"
+            },
+            "note": {
+              "ru": "Рычаг: поднятие и выделение объявления — аукцион за внимание покупателя.",
+              "en": "Lever: boosts and highlights — an auction for buyer attention."
+            },
+            "children": [
+              {
+                "id": "paying-sellers",
+                "level": 3,
+                "metricId": "paying-share",
+                "title": {
+                  "ru": "Доля платящих продавцов",
+                  "en": "Paying-seller share"
+                },
+                "note": {
+                  "ru": "Сколько продавцов покупает услуги.",
+                  "en": "How many sellers buy services."
+                },
+                "children": [
+                  {
+                    "id": "arppu",
+                    "level": 4,
+                    "metricId": "arppu",
+                    "title": {
+                      "ru": "ARPPU продавца",
+                      "en": "Seller ARPPU"
+                    },
+                    "note": {
+                      "ru": "Сколько платит активный платящий продавец.",
+                      "en": "What an active paying seller spends."
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "verticals",
+            "level": 2,
+            "title": {
+              "ru": "Вертикали (авто/недвиж/работа)",
+              "en": "Verticals (auto/property/jobs)"
+            },
+            "note": {
+              "ru": "Разная экономика по категориям: цена лида в недвижимости и в вещах отличается на порядки.",
+              "en": "Category economics differ: a property lead and a household-item lead differ by orders of magnitude."
+            },
+            "metricId": "lead-price"
+          }
+        ],
+        "kind": "group"
+      }
+    ],
+    "metricId": "successful-contacts"
   },
   "pyramid": {
-    "note": "От монетизации продавцов (вершина) к качеству поиска и модерации (основание).",
+    "note": {
+      "ru": "От монетизации продавцов (вершина) к качеству поиска и модерации (основание).",
+      "en": "From seller monetization (top) to search quality and moderation (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Successful Contacts", "ARPPU продавца"] },
-      { "label": "Продуктовые", "role": "продакты", "items": ["Поисковый трафик", "Активные объявления", "Платное продвижение"] },
-      { "label": "Операционные", "role": "категории/модерация", "items": ["CR в контакт", "Свежесть", "Качество модерации"] },
-      { "label": "Платформенные", "role": "инженеры", "items": ["Скорость поиска", "Аптайм", "Анти-фрод объявлений"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "руководство",
+          "en": "leadership"
+        },
+        "items": [
+          {
+            "ru": "Выручка",
+            "en": "Revenue"
+          },
+          "Successful Contacts",
+          {
+            "ru": "ARPPU продавца",
+            "en": "Seller ARPPU"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "продакты",
+          "en": "product"
+        },
+        "items": [
+          {
+            "ru": "Поисковый трафик",
+            "en": "Search traffic"
+          },
+          {
+            "ru": "Активные объявления",
+            "en": "Active listings"
+          },
+          {
+            "ru": "Платное продвижение",
+            "en": "Paid promotion"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": {
+          "ru": "категории/модерация",
+          "en": "categories/moderation"
+        },
+        "items": [
+          {
+            "ru": "CR в контакт",
+            "en": "Contact CR"
+          },
+          {
+            "ru": "Свежесть",
+            "en": "Freshness"
+          },
+          {
+            "ru": "Качество модерации",
+            "en": "Moderation quality"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "инженеры",
+          "en": "engineers"
+        },
+        "items": [
+          {
+            "ru": "Скорость поиска",
+            "en": "Search speed"
+          },
+          {
+            "ru": "Аптайм",
+            "en": "Uptime"
+          },
+          {
+            "ru": "Анти-фрод объявлений",
+            "en": "Listing anti-fraud"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Доля фейков/дублей", "note": "накрутка объявлений убивает доверие покупателей" },
-    { "title": "Спам в контактах", "note": "продавцов заваливают нерелевантными лидами" }
+    {
+      "title": {
+        "ru": "Доля фейков/дублей",
+        "en": "Fake/duplicate share"
+      },
+      "note": {
+        "ru": "накрутка объявлений убивает доверие покупателей",
+        "en": "listing inflation kills buyer trust"
+      }
+    },
+    {
+      "title": {
+        "ru": "Спам в контактах",
+        "en": "Contact spam"
+      },
+      "note": {
+        "ru": "продавцов заваливают нерелевантными лидами",
+        "en": "sellers get buried in irrelevant leads"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "avito", "name": "Авито", "northStar": "Successful Contacts (горизонтальный + услуги)",
-      "note": "горизонтальный классифайд РФ: всё во всех категориях; ставка на масштаб трафика и монетизацию услуг.",
+      "id": "avito",
+      "name": {
+        "ru": "Авито",
+        "en": "Avito"
+      },
+      "northStar": {
+        "ru": "Successful Contacts (горизонтальный + услуги)",
+        "en": "Successful contacts (horizontal + services)"
+      },
+      "note": {
+        "ru": "горизонтальный классифайд РФ: всё во всех категориях; ставка на масштаб трафика и монетизацию услуг.",
+        "en": "Russia's horizontal classified: everything in every category; a bet on traffic scale and service monetization."
+      },
       "root": {
-        "id": "av-deals", "level": 0, "title": "Successful Contacts", "formula": "Объявления × Просмотры × CR",
-        "note": "Универсальная площадка: огромный охват категорий и развитые платные инструменты.",
+        "id": "av-deals",
+        "level": 0,
+        "title": "Successful Contacts",
+        "formula": {
+          "ru": "Объявления × Просмотры × CR",
+          "en": "Listings × Views × CR"
+        },
+        "note": {
+          "ru": "Универсальная площадка: огромный охват категорий и развитые платные инструменты.",
+          "en": "A universal venue: vast category coverage and mature paid tools."
+        },
         "children": [
-          { "id": "av-demand", "level": 1, "title": "Спрос", "note": "Массовый трафик.", "children": [
-            { "id": "av-seo", "level": 2, "title": "SEO + приложение", "note": "Бренд и прямой трафик.", "children": [
-              { "id": "av-cr", "level": 3, "title": "CR в контакт", "note": "Поиск, фильтры, чат.", "children": [
-                { "id": "av-delivery", "level": 4, "title": "Авито Доставка", "note": "Закрывает сделку внутри платформы." }
-              ] }
-            ] }
-          ] },
-          { "id": "av-supply", "level": 1, "title": "Объявления", "note": "Все категории.", "children": [
-            { "id": "av-listings", "level": 2, "title": "Активные объявления", "note": "Ширина инвентаря.", "children": [
-              { "id": "av-mod", "level": 3, "title": "Модерация и анти-фрод", "note": "Чистота площадки." }
-            ] }
-          ] },
-          { "id": "av-monet", "level": 1, "title": "Монетизация", "note": "Услуги + вертикали.", "children": [
-            { "id": "av-promo", "level": 2, "title": "Платное продвижение", "note": "Поднятия, выделения, лимиты.", "children": [
-              { "id": "av-pro", "level": 3, "title": "Pro-продавцы / магазины", "note": "Профессиональные продавцы платят больше." }
-            ] }
-          ] }
+          {
+            "id": "av-demand",
+            "level": 1,
+            "title": {
+              "ru": "Спрос",
+              "en": "Demand"
+            },
+            "note": {
+              "ru": "Массовый трафик со всех каналов.",
+              "en": "Mass traffic from every channel."
+            },
+            "children": [
+              {
+                "id": "av-seo",
+                "level": 2,
+                "title": {
+                  "ru": "SEO + приложение",
+                  "en": "SEO + app"
+                },
+                "note": {
+                  "ru": "Бренд и прямой трафик снижаюют стоимость визита.",
+                  "en": "Brand and direct traffic keep visit costs down."
+                },
+                "children": [
+                  {
+                    "id": "av-cr",
+                    "level": 3,
+                    "metricId": "conversion-rate",
+                    "title": {
+                      "ru": "CR в контакт",
+                      "en": "Contact CR"
+                    },
+                    "note": {
+                      "ru": "Поиск, фильтры, чат.",
+                      "en": "Search, filters, chat."
+                    },
+                    "children": [
+                      {
+                        "id": "av-delivery",
+                        "level": 4,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Авито Доставка",
+                          "en": "Avito Delivery"
+                        },
+                        "note": {
+                          "ru": "Рычаг: сделка и оплата внутри платформы — контроль качества и новая комиссия.",
+                          "en": "Lever: deal and payment inside the platform — quality control and a new commission."
+                        },
+                        "children": [
+                          {
+                            "id": "av-deal-share",
+                            "level": 5,
+                            "title": {
+                              "ru": "Доля сделок внутри платформы",
+                              "en": "On-platform deal share"
+                            },
+                            "note": {
+                              "ru": "Сколько контактов конвертируется в сделку с доставкой — видимая часть успеха.",
+                              "en": "How many contacts convert into a delivery deal — the visible slice of success."
+                            },
+                            "metricId": "conversion-rate"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "app-share"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "av-supply",
+            "level": 1,
+            "title": {
+              "ru": "Объявления",
+              "en": "Listings"
+            },
+            "note": {
+              "ru": "Все категории — от вещей до работы.",
+              "en": "All categories — from goods to jobs."
+            },
+            "children": [
+              {
+                "id": "av-listings",
+                "level": 2,
+                "metricId": "active-listings",
+                "title": {
+                  "ru": "Активные объявления",
+                  "en": "Active listings"
+                },
+                "note": {
+                  "ru": "Ширина инвентаря.",
+                  "en": "Inventory width."
+                },
+                "children": [
+                  {
+                    "id": "av-mod",
+                    "level": 3,
+                    "metricId": "fraud-rate",
+                    "title": {
+                      "ru": "Модерация и анти-фрод",
+                      "en": "Moderation & anti-fraud"
+                    },
+                    "note": {
+                      "ru": "Чистота площадки.",
+                      "en": "Venue cleanliness."
+                    },
+                    "children": [
+                      {
+                        "id": "av-trust",
+                        "level": 4,
+                        "title": {
+                          "ru": "Доверие покупателей",
+                          "en": "Buyer trust"
+                        },
+                        "note": {
+                          "ru": "Верификация продавцов, рейтинги, безопасная сделка.",
+                          "en": "Seller verification, ratings, protected deals."
+                        },
+                        "metricId": "fraud-rate"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "av-monet",
+            "level": 1,
+            "title": {
+              "ru": "Монетизация",
+              "en": "Monetization"
+            },
+            "note": {
+              "ru": "Услуги + вертикали.",
+              "en": "Services + verticals."
+            },
+            "children": [
+              {
+                "id": "av-promo",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Платное продвижение",
+                  "en": "Paid promotion"
+                },
+                "note": {
+                  "ru": "Рычаг: поднятия, выделения, лимиты размещений.",
+                  "en": "Lever: boosts, highlights, posting limits."
+                },
+                "children": [
+                  {
+                    "id": "av-pro",
+                    "level": 3,
+                    "metricId": "arppu",
+                    "title": {
+                      "ru": "Pro-продавцы / магазины",
+                      "en": "Pro sellers / stores"
+                    },
+                    "note": {
+                      "ru": "Профессиональные продавцы платят больше и стабильнее.",
+                      "en": "Professional sellers pay more and more steadily."
+                    },
+                    "children": [
+                      {
+                        "id": "av-pro-retention",
+                        "level": 4,
+                        "metricId": "churn-rate",
+                        "title": {
+                          "ru": "Удержание Pro-продавцов",
+                          "en": "Pro-seller retention"
+                        },
+                        "note": {
+                          "ru": "Подписки магазинов — регулярная выручка, чувствительная к качеству лидов.",
+                          "en": "Store subscriptions are recurring revenue, sensitive to lead quality."
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          }
+        ],
+        "metricId": "successful-contacts"
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              "Successful Contacts",
+              "ARPPU"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "CR в контакт",
+                "en": "Contact CR"
+              },
+              {
+                "ru": "Активные объявления",
+                "en": "Active listings"
+              },
+              {
+                "ru": "Платные услуги",
+                "en": "Paid services"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "категории",
+              "en": "categories"
+            },
+            "items": [
+              {
+                "ru": "Авито Доставка",
+                "en": "Avito Delivery"
+              },
+              {
+                "ru": "Pro-продавцы",
+                "en": "Pro sellers"
+              },
+              {
+                "ru": "Модерация",
+                "en": "Moderation"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Скорость поиска",
+                "en": "Search speed"
+              },
+              {
+                "ru": "Аптайм",
+                "en": "Uptime"
+              },
+              {
+                "ru": "Анти-фрод",
+                "en": "Anti-fraud"
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Successful Contacts", "ARPPU"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["CR в контакт", "Активные объявления", "Платные услуги"] },
-        { "label": "Операционные", "role": "категории", "items": ["Авито Доставка", "Pro-продавцы", "Модерация"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Скорость поиска", "Аптайм", "Анти-фрод"] }
-      ] },
       "counterMetrics": [
-        { "title": "Фейки и перекупы", "note": "качество объявлений" },
-        { "title": "Перегруз платными подъёмами", "note": "органика тонет, покупателю хуже искать" }
+        {
+          "title": {
+            "ru": "Фейки и перекупы",
+            "en": "Fakes & resellers"
+          },
+          "note": {
+            "ru": "качество объявлений",
+            "en": "listing quality"
+          }
+        },
+        {
+          "title": {
+            "ru": "Перегруз платными подъёмами",
+            "en": "Paid-boost overload"
+          },
+          "note": {
+            "ru": "органика тонет, покупателю хуже искать",
+            "en": "organic sinks, buyers search worse"
+          }
+        }
       ]
     },
     {
-      "id": "cian", "name": "ЦИАН", "northStar": "Successful Leads (вертикаль недвижимости)",
-      "note": "вертикальный классифайд недвижимости: ставка на качество лида для риелторов и застройщиков.",
+      "id": "cian",
+      "name": {
+        "ru": "ЦИАН",
+        "en": "Cian"
+      },
+      "northStar": {
+        "ru": "Successful Leads (вертикаль недвижимости)",
+        "en": "Successful leads (real-estate vertical)"
+      },
+      "note": {
+        "ru": "вертикальный классифайд недвижимости: ставка на качество лида для риелторов и застройщиков.",
+        "en": "a vertical real-estate classified: a bet on lead quality for agents and developers."
+      },
       "root": {
-        "id": "ci-leads", "level": 0, "title": "Successful Leads", "formula": "Объявления × Просмотры × CR в лид",
-        "note": "Узкая вертикаль: глубокая экспертиза по недвижимости и дорогие лиды.",
+        "id": "ci-leads",
+        "level": 0,
+        "title": "Successful Leads",
+        "formula": {
+          "ru": "Объявления × Просмотры × CR в лид",
+          "en": "Listings × Views × Lead CR"
+        },
+        "note": {
+          "ru": "Узкая вертикаль: глубокая экспертиза по недвижимости и дорогие лиды.",
+          "en": "A narrow vertical: deep real-estate expertise and expensive leads."
+        },
         "children": [
-          { "id": "ci-demand", "level": 1, "title": "Спрос (ищущие жильё)", "note": "Покупатели и арендаторы.", "children": [
-            { "id": "ci-seo", "level": 2, "title": "Поисковый трафик", "note": "SEO под гео-запросы.", "children": [
-              { "id": "ci-cr", "level": 3, "title": "CR в лид (звонок/заявка)", "note": "Качество карточек и фото.", "children": [
-                { "id": "ci-verified", "level": 4, "title": "Верифицированные объекты", "note": "Проверка снижает фейки, растит доверие." }
-              ] }
-            ] }
-          ] },
-          { "id": "ci-supply", "level": 1, "title": "Предложение", "note": "Риелторы и застройщики.", "children": [
-            { "id": "ci-listings", "level": 2, "title": "Актуальные объекты", "note": "Свежесть базы недвижимости.", "children": [
-              { "id": "ci-developers", "level": 3, "title": "Новостройки от застройщиков", "note": "Высокомаржинальный сегмент." }
-            ] }
-          ] },
-          { "id": "ci-monet", "level": 1, "title": "Монетизация", "note": "Лиды + продвижение.", "children": [
-            { "id": "ci-leadprice", "level": 2, "title": "Цена лида", "note": "Сколько платят за контакт.", "children": [
-              { "id": "ci-mortgage", "level": 3, "title": "Ипотека/доп-сервисы", "note": "Сопутствующая монетизация." }
-            ] }
-          ] }
+          {
+            "id": "ci-demand",
+            "level": 1,
+            "title": {
+              "ru": "Спрос (ищущие жильё)",
+              "en": "Demand (home seekers)"
+            },
+            "note": {
+              "ru": "Покупатели и арендаторы.",
+              "en": "Buyers and renters."
+            },
+            "children": [
+              {
+                "id": "ci-seo",
+                "level": 2,
+                "title": {
+                  "ru": "Поисковый трафик",
+                  "en": "Search traffic"
+                },
+                "note": {
+                  "ru": "SEO под гео-запросы «купить квартиру + район».",
+                  "en": "SEO for geo queries like \"buy apartment + district\"."
+                },
+                "children": [
+                  {
+                    "id": "ci-cr",
+                    "level": 3,
+                    "metricId": "conversion-rate",
+                    "title": {
+                      "ru": "CR в лид (звонок/заявка)",
+                      "en": "Lead CR (call/request)"
+                    },
+                    "note": {
+                      "ru": "Качество карточек и фото объектов.",
+                      "en": "Listing content and photo quality."
+                    },
+                    "children": [
+                      {
+                        "id": "ci-verified",
+                        "level": 4,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Верифицированные объекты",
+                          "en": "Verified listings"
+                        },
+                        "note": {
+                          "ru": "Рычаг: проверка снижает фейки и растит доверие и конверсию.",
+                          "en": "Lever: verification cuts fakes and grows trust and conversion."
+                        },
+                        "children": [
+                          {
+                            "id": "ci-lead-quality",
+                            "level": 5,
+                            "title": {
+                              "ru": "Качество лида",
+                              "en": "Lead quality"
+                            },
+                            "note": {
+                              "ru": "Доля лидов, дошедших до показа/сделки, — за это платят риелторы.",
+                              "en": "The share of leads reaching a viewing/deal — what agents actually pay for."
+                            },
+                            "metricId": "lead-price"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "seo-visibility"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "ci-supply",
+            "level": 1,
+            "title": {
+              "ru": "Предложение",
+              "en": "Supply"
+            },
+            "note": {
+              "ru": "Риелторы и застройщики.",
+              "en": "Agents and developers."
+            },
+            "children": [
+              {
+                "id": "ci-listings",
+                "level": 2,
+                "metricId": "active-listings",
+                "title": {
+                  "ru": "Актуальные объекты",
+                  "en": "Current listings"
+                },
+                "note": {
+                  "ru": "Свежесть базы недвижимости.",
+                  "en": "Real-estate base freshness."
+                },
+                "children": [
+                  {
+                    "id": "ci-developers",
+                    "level": 3,
+                    "title": {
+                      "ru": "Новостройки от застройщиков",
+                      "en": "Developer new-builds"
+                    },
+                    "note": {
+                      "ru": "Высокомаржинальный сегмент с бюджетами застройщиков.",
+                      "en": "A high-margin segment with developer budgets."
+                    },
+                    "children": [
+                      {
+                        "id": "ci-dev-budget",
+                        "level": 4,
+                        "title": {
+                          "ru": "Бюджеты застройщиков",
+                          "en": "Developer budgets"
+                        },
+                        "note": {
+                          "ru": "Выручка с рекламы новостроек — самая ёмкая строка монетизации.",
+                          "en": "New-build ad revenue — the largest monetization line."
+                        },
+                        "metricId": "lead-price"
+                      }
+                    ],
+                    "metricId": "lead-price"
+                  }
+                ]
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "ci-monet",
+            "level": 1,
+            "title": {
+              "ru": "Монетизация",
+              "en": "Monetization"
+            },
+            "note": {
+              "ru": "Лиды + продвижение.",
+              "en": "Leads + promotion."
+            },
+            "children": [
+              {
+                "id": "ci-leadprice",
+                "level": 2,
+                "title": {
+                  "ru": "Цена лида",
+                  "en": "Lead price"
+                },
+                "note": {
+                  "ru": "Сколько платят за контакт; держится только на качестве лида.",
+                  "en": "What a contact costs; sustainable only with lead quality."
+                },
+                "children": [
+                  {
+                    "id": "ci-mortgage",
+                    "level": 3,
+                    "title": {
+                      "ru": "Ипотека/доп-сервисы",
+                      "en": "Mortgage / extra services"
+                    },
+                    "note": {
+                      "ru": "Сопутствующая монетизация сделки: ипотека, проверка, страховка.",
+                      "en": "Deal-adjacent monetization: mortgage, checks, insurance."
+                    },
+                    "metricId": "products-per-customer"
+                  }
+                ],
+                "metricId": "lead-price"
+              }
+            ],
+            "kind": "group"
+          }
+        ],
+        "metricId": "successful-contacts"
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              {
+                "ru": "Выручка",
+                "en": "Revenue"
+              },
+              "Successful Leads",
+              {
+                "ru": "Цена лида",
+                "en": "Lead price"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "продакты",
+              "en": "product"
+            },
+            "items": [
+              {
+                "ru": "CR в лид",
+                "en": "Lead CR"
+              },
+              {
+                "ru": "Актуальные объекты",
+                "en": "Current listings"
+              },
+              {
+                "ru": "Новостройки",
+                "en": "New-builds"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "вертикаль",
+              "en": "vertical"
+            },
+            "items": [
+              {
+                "ru": "Верифицированные объекты",
+                "en": "Verified listings"
+              },
+              {
+                "ru": "Доп-сервисы (ипотека)",
+                "en": "Extra services (mortgage)"
+              },
+              {
+                "ru": "Свежесть базы",
+                "en": "Base freshness"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "инженеры",
+              "en": "engineers"
+            },
+            "items": [
+              {
+                "ru": "Скорость поиска",
+                "en": "Search speed"
+              },
+              {
+                "ru": "Аптайм",
+                "en": "Uptime"
+              },
+              {
+                "ru": "Проверка объявлений",
+                "en": "Listing verification"
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Выручка", "Successful Leads", "Цена лида"] },
-        { "label": "Продуктовые", "role": "продакты", "items": ["CR в лид", "Актуальные объекты", "Новостройки"] },
-        { "label": "Операционные", "role": "вертикаль", "items": ["Верифицированные объекты", "Доп-сервисы (ипотека)", "Свежесть базы"] },
-        { "label": "Платформенные", "role": "инженеры", "items": ["Скорость поиска", "Аптайм", "Проверка объявлений"] }
-      ] },
       "counterMetrics": [
-        { "title": "Фейковые/устаревшие объекты", "note": "«позвонил — уже продано» убивает доверие" },
-        { "title": "Качество лида для риелтора", "note": "пустые лиды → отток платящих" }
+        {
+          "title": {
+            "ru": "Фейковые/устаревшие объекты",
+            "en": "Fake/stale listings"
+          },
+          "note": {
+            "ru": "«позвонил — уже продано» убивает доверие",
+            "en": "\"called — already sold\" kills trust"
+          }
+        },
+        {
+          "title": {
+            "ru": "Качество лида для риелтора",
+            "en": "Lead quality for agents"
+          },
+          "note": {
+            "ru": "пустые лиды → отток платящих",
+            "en": "empty leads → paying-user churn"
+          }
+        }
       ]
     }
   ]

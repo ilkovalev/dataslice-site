@@ -1,124 +1,1046 @@
 {
   "id": "restaurants",
-  "archetype": "Сети физических точек",
-  "industry": "Ресторанные сети",
-  "northStar": "Total Sales (или Number of Orders)",
+  "archetype": {
+    "ru": "Сети физических точек",
+    "en": "Physical location chains"
+  },
+  "industry": {
+    "ru": "Ресторанные сети",
+    "en": "Restaurant chains"
+  },
+  "northStar": {
+    "ru": "Total Sales (или Number of Orders)",
+    "en": "Total sales (or number of orders)"
+  },
   "root": {
-    "id": "sales", "level": 0, "title": "Total Sales", "formula": "Точки × Выручка с точки",
-    "note": "Сеть растёт двумя путями: открывать новые точки и поднимать выручку каждой (same-store).",
+    "id": "sales",
+    "level": 0,
+    "title": "Total Sales",
+    "formula": {
+      "ru": "Точки × Выручка с точки",
+      "en": "Locations × Sales per location"
+    },
+    "note": {
+      "ru": "Сеть растёт двумя путями: открывать новые точки и поднимать выручку каждой (same-store). Смешивать эти два роста в одну цифру — классическая ошибка чтения отчётности сетей.",
+      "en": "A chain grows two ways: opening new locations and raising each location's sales (same-store). Blending the two into one number is the classic mistake in reading chain reports."
+    },
     "children": [
-      { "id": "expansion", "level": 1, "title": "Экспансия (число точек)", "formula": "открытия − закрытия", "note": "Рост сети вширь.", "children": [
-        { "id": "new-units", "level": 2, "title": "Открытия", "note": "Темп новых точек.", "children": [
-          { "id": "payback", "level": 3, "title": "Окупаемость точки", "note": "Когда точка выходит в плюс.", "children": [
-            { "id": "location", "level": 4, "title": "Качество локации (трафик)", "note": "Поток рядом с точкой." }
-          ] }
-        ] },
-        { "id": "cannib", "level": 2, "title": "Каннибализация", "note": "Новая точка отъедает у соседней." }
-      ] },
-      { "id": "ssales", "level": 1, "title": "Same-store sales", "formula": "Чеки × Средний чек", "note": "Рост выручки существующих точек.", "children": [
-        { "id": "traffic", "level": 2, "title": "Трафик (число чеков)", "note": "Сколько гостей.", "children": [
-          { "id": "repeat", "level": 3, "title": "Повторные визиты", "note": "Лояльность и программа.", "children": [
-            { "id": "loyalty", "level": 4, "title": "Доля заказов по программе лояльности", "note": "Узнаём гостя — растим частоту." }
-          ] }
-        ] },
-        { "id": "check", "level": 2, "title": "Средний чек", "note": "Апсейл, комбо, цена.", "children": [
-          { "id": "attach", "level": 3, "title": "Доля допов (напиток/десерт)", "note": "Допродажи к основному." }
-        ] }
-      ] },
-      { "id": "ops", "level": 1, "title": "Операционка точки", "note": "Маржа и качество исполнения.", "children": [
-        { "id": "speed", "level": 2, "title": "Скорость обслуживания", "note": "Время отдачи заказа." },
-        { "id": "foodcost", "level": 2, "title": "Food cost / списания", "note": "Себестоимость и потери." }
-      ] }
-    ]
+      {
+        "id": "expansion",
+        "level": 1,
+        "title": {
+          "ru": "Экспансия (число точек)",
+          "en": "Expansion (location count)"
+        },
+        "formula": {
+          "ru": "открытия − закрытия",
+          "en": "openings − closures"
+        },
+        "note": {
+          "ru": "Рост сети вширь: каждая точка — отдельная инвестиция со своей окупаемостью.",
+          "en": "Growing wide: every location is a separate investment with its own payback."
+        },
+        "children": [
+          {
+            "id": "new-units",
+            "level": 2,
+            "title": {
+              "ru": "Открытия",
+              "en": "Openings"
+            },
+            "note": {
+              "ru": "Темп новых точек и качество их запуска.",
+              "en": "The pace of new locations and launch quality."
+            },
+            "children": [
+              {
+                "id": "payback",
+                "level": 3,
+                "metricId": "payback-period",
+                "title": {
+                  "ru": "Окупаемость точки",
+                  "en": "Location payback"
+                },
+                "note": {
+                  "ru": "Когда точка возвращает вложенное и выходит в плюс.",
+                  "en": "When a location returns the investment and turns profitable."
+                },
+                "children": [
+                  {
+                    "id": "location",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Качество локации (трафик)",
+                      "en": "Site quality (footfall)"
+                    },
+                    "note": {
+                      "ru": "Рычаг: поток людей рядом с точкой — решение принимается до открытия.",
+                      "en": "Lever: footfall near the site — decided before opening."
+                    },
+                    "children": [
+                      {
+                        "id": "site-model",
+                        "level": 5,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Модель выбора локаций",
+                          "en": "Site-selection model"
+                        },
+                        "note": {
+                          "ru": "Рычаг: прогноз выручки точки по гео-данным до подписания аренды.",
+                          "en": "Lever: forecasting a site's sales from geo data before signing the lease."
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "metricId": "unit-payback"
+          },
+          {
+            "id": "cannib",
+            "level": 2,
+            "title": {
+              "ru": "Каннибализация",
+              "en": "Cannibalization"
+            },
+            "note": {
+              "ru": "Новая точка отъедает выручку у соседней: рост сети без роста продаж.",
+              "en": "A new location eats a neighbor's sales: chain growth without sales growth."
+            },
+            "metricId": "same-store-sales"
+          }
+        ],
+        "kind": "group"
+      },
+      {
+        "id": "ssales",
+        "level": 1,
+        "title": "Same-store sales",
+        "formula": {
+          "ru": "Чеки × Средний чек",
+          "en": "Tickets × Average ticket"
+        },
+        "note": {
+          "ru": "Рост выручки существующих точек — честная мера здоровья бренда.",
+          "en": "Sales growth of existing locations — the honest measure of brand health."
+        },
+        "children": [
+          {
+            "id": "traffic",
+            "level": 2,
+            "title": {
+              "ru": "Трафик (число чеков)",
+              "en": "Traffic (ticket count)"
+            },
+            "note": {
+              "ru": "Сколько гостей проходит через точку.",
+              "en": "How many guests pass through a location."
+            },
+            "children": [
+              {
+                "id": "repeat",
+                "level": 3,
+                "metricId": "repeat-rate",
+                "title": {
+                  "ru": "Повторные визиты",
+                  "en": "Repeat visits"
+                },
+                "note": {
+                  "ru": "Лояльность: вернувшийся гость дешевле привлечённого.",
+                  "en": "Loyalty: a returning guest is cheaper than an acquired one."
+                },
+                "children": [
+                  {
+                    "id": "loyalty",
+                    "level": 4,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Программа лояльности",
+                      "en": "Loyalty program"
+                    },
+                    "note": {
+                      "ru": "Рычаг: узнаём гостя по программе — можем считать и растить частоту.",
+                      "en": "Lever: the program identifies the guest — frequency becomes measurable and growable."
+                    },
+                    "children": [
+                      {
+                        "id": "loyalty-freq",
+                        "level": 5,
+                        "metricId": "purchase-frequency",
+                        "title": {
+                          "ru": "Частота участников",
+                          "en": "Member frequency"
+                        },
+                        "note": {
+                          "ru": "Визиты на участника программы против гостя без неё.",
+                          "en": "Visits per program member versus a guest without it."
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "metricId": "traffic"
+          },
+          {
+            "id": "check",
+            "level": 2,
+            "metricId": "aov",
+            "title": {
+              "ru": "Средний чек",
+              "en": "Average ticket"
+            },
+            "note": {
+              "ru": "Апсейл, комбо, цена.",
+              "en": "Upsell, combos, pricing."
+            },
+            "children": [
+              {
+                "id": "attach",
+                "level": 3,
+                "kind": "lever",
+                "title": {
+                  "ru": "Доля допов (напиток/десерт)",
+                  "en": "Attach rate (drink/dessert)"
+                },
+                "note": {
+                  "ru": "Рычаг: допродажи к основному — комбо и подсказки на кассе.",
+                  "en": "Lever: add-on sales — combos and register prompts."
+                }
+              }
+            ]
+          }
+        ],
+        "metricId": "same-store-sales"
+      },
+      {
+        "id": "ops",
+        "level": 1,
+        "title": {
+          "ru": "Операционка точки",
+          "en": "Location operations"
+        },
+        "note": {
+          "ru": "Маржа и качество исполнения: здесь выручка превращается в прибыль.",
+          "en": "Margin and execution quality: this is where sales become profit."
+        },
+        "children": [
+          {
+            "id": "speed",
+            "level": 2,
+            "title": {
+              "ru": "Скорость обслуживания",
+              "en": "Service speed"
+            },
+            "note": {
+              "ru": "Время отдачи заказа: очередь в пик — потерянные продажи.",
+              "en": "Order hand-off time: a peak-hour queue is lost sales."
+            },
+            "children": [
+              {
+                "id": "peak-throughput",
+                "level": 3,
+                "title": {
+                  "ru": "Пропускная способность в пик",
+                  "en": "Peak throughput"
+                },
+                "note": {
+                  "ru": "Чеков в час в обеденный пик — физический потолок выручки точки.",
+                  "en": "Tickets per hour at lunch peak — the location's physical revenue ceiling."
+                },
+                "metricId": "provider-availability"
+              }
+            ],
+            "metricId": "delivery-time"
+          },
+          {
+            "id": "foodcost",
+            "level": 2,
+            "metricId": "gross-margin",
+            "title": {
+              "ru": "Food cost / списания",
+              "en": "Food cost / waste"
+            },
+            "note": {
+              "ru": "Себестоимость и потери: пара процентов food cost — вся маржа точки.",
+              "en": "Cost of goods and waste: a couple of food-cost points equal the location's whole margin."
+            }
+          }
+        ],
+        "kind": "group"
+      }
+    ],
+    "metricId": "total-sales"
   },
   "pyramid": {
-    "note": "От финансов сети (вершина) к операциям конкретной кухни (основание).",
+    "note": {
+      "ru": "От финансов сети (вершина) к операциям конкретной кухни (основание).",
+      "en": "From chain finance (top) to a specific kitchen's operations (base)."
+    },
     "bands": [
-      { "label": "Бизнесовые", "role": "управляющая компания", "items": ["Total Sales", "Same-store sales", "Маржа точки"] },
-      { "label": "Продуктовые", "role": "маркетинг/меню", "items": ["Трафик", "Средний чек", "Повторные визиты"] },
-      { "label": "Операционные", "role": "управляющий точкой", "items": ["Скорость обслуживания", "Доля допов", "Food cost"] },
-      { "label": "Платформенные", "role": "ИТ/процессы", "items": ["Аптайм касс/приложения", "Точность заказов", "Учёт остатков"] }
+      {
+        "label": {
+          "ru": "Бизнесовые",
+          "en": "Business"
+        },
+        "role": {
+          "ru": "управляющая компания",
+          "en": "HQ"
+        },
+        "items": [
+          "Total Sales",
+          "Same-store sales",
+          {
+            "ru": "Маржа точки",
+            "en": "Location margin"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Продуктовые",
+          "en": "Product"
+        },
+        "role": {
+          "ru": "маркетинг/меню",
+          "en": "marketing/menu"
+        },
+        "items": [
+          {
+            "ru": "Трафик",
+            "en": "Traffic"
+          },
+          {
+            "ru": "Средний чек",
+            "en": "Average ticket"
+          },
+          {
+            "ru": "Повторные визиты",
+            "en": "Repeat visits"
+          }
+        ]
+      },
+      {
+        "label": {
+          "ru": "Операционные",
+          "en": "Operational"
+        },
+        "role": {
+          "ru": "управляющий точкой",
+          "en": "location manager"
+        },
+        "items": [
+          {
+            "ru": "Скорость обслуживания",
+            "en": "Service speed"
+          },
+          {
+            "ru": "Доля допов",
+            "en": "Attach rate"
+          },
+          "Food cost"
+        ]
+      },
+      {
+        "label": {
+          "ru": "Платформенные",
+          "en": "Platform"
+        },
+        "role": {
+          "ru": "ИТ/процессы",
+          "en": "IT/processes"
+        },
+        "items": [
+          {
+            "ru": "Аптайм касс/приложения",
+            "en": "POS/app uptime"
+          },
+          {
+            "ru": "Точность заказов",
+            "en": "Order accuracy"
+          },
+          {
+            "ru": "Учёт остатков",
+            "en": "Inventory accuracy"
+          }
+        ]
+      }
     ]
   },
   "counterMetrics": [
-    { "title": "Каннибализация", "note": "новые точки крадут выручку у старых — рост сети без роста сети" },
-    { "title": "Жалобы на качество/время", "note": "гонка за скоростью бьёт по продукту" }
+    {
+      "title": {
+        "ru": "Каннибализация",
+        "en": "Cannibalization"
+      },
+      "note": {
+        "ru": "новые точки крадут выручку у старых — рост сети без роста сети",
+        "en": "new locations steal old ones' sales — chain growth without growth"
+      }
+    },
+    {
+      "title": {
+        "ru": "Жалобы на качество/время",
+        "en": "Quality/time complaints"
+      },
+      "note": {
+        "ru": "гонка за скоростью бьёт по продукту",
+        "en": "the speed race hits the product"
+      }
+    }
   ],
   "companies": [
     {
-      "id": "dodo", "name": "Додо Пицца", "northStar": "Total Sales (франшиза на данных + доставка)",
-      "note": "технологичная франшиза: единая ИТ-платформа (Dodo IS), прозрачность для франчайзи, упор на доставку и скорость кухни.",
+      "id": "dodo",
+      "name": {
+        "ru": "Додо Пицца",
+        "en": "Dodo Pizza"
+      },
+      "northStar": {
+        "ru": "Total Sales (франшиза на данных + доставка)",
+        "en": "Total sales (data-driven franchise + delivery)"
+      },
+      "note": {
+        "ru": "технологичная франшиза: единая ИТ-платформа (Dodo IS), прозрачность для франчайзи, упор на доставку и скорость кухни.",
+        "en": "a tech-first franchise: one IT platform (Dodo IS), transparency for franchisees, a focus on delivery and kitchen speed."
+      },
       "root": {
-        "id": "do-sales", "level": 0, "title": "Total Sales", "formula": "Точки × Выручка с точки",
-        "note": "Масштаб через франшизу + цифровизация всех процессов кухни и доставки.",
+        "id": "do-sales",
+        "level": 0,
+        "title": "Total Sales",
+        "formula": {
+          "ru": "Точки × Выручка с точки",
+          "en": "Locations × Sales per location"
+        },
+        "note": {
+          "ru": "Масштаб через франшизу + цифровизация всех процессов кухни и доставки.",
+          "en": "Scale via franchising + digitization of every kitchen and delivery process."
+        },
         "children": [
-          { "id": "do-expand", "level": 1, "title": "Франшизная экспансия", "note": "Рост сети партнёрами.", "children": [
-            { "id": "do-franchisee", "level": 2, "title": "Юнит-экономика франчайзи", "note": "Прибыльность точки партнёра.", "children": [
-              { "id": "do-payback", "level": 3, "title": "Окупаемость пиццерии", "note": "Скорость выхода в плюс.", "children": [
-                { "id": "do-transparency", "level": 4, "title": "Прозрачность Dodo IS", "note": "Данные привлекают франчайзи." }
-              ] }
-            ] }
-          ] },
-          { "id": "do-ssales", "level": 1, "title": "Выручка точки", "note": "Доставка + зал.", "children": [
-            { "id": "do-delivery", "level": 2, "title": "Доля и скорость доставки", "note": "Ключевой канал.", "children": [
-              { "id": "do-time", "level": 3, "title": "Время приготовления+доставки", "note": "Обещание скорости." }
-            ] },
-            { "id": "do-check", "level": 2, "title": "Средний чек", "note": "Комбо и допы.", "children": [
-              { "id": "do-app", "level": 3, "title": "Заказы через приложение", "note": "Апсейл и лояльность в цифре." }
-            ] }
-          ] },
-          { "id": "do-ops", "level": 1, "title": "Операции кухни", "note": "Стандарт качества на данных.", "children": [
-            { "id": "do-speed", "level": 2, "title": "Скорость на станциях", "note": "Тайминги по чек-листам." },
-            { "id": "do-foodcost", "level": 2, "title": "Food cost / списания", "note": "Контроль себестоимости." }
-          ] }
+          {
+            "id": "do-expand",
+            "level": 1,
+            "title": {
+              "ru": "Франшизная экспансия",
+              "en": "Franchise expansion"
+            },
+            "note": {
+              "ru": "Рост сети руками партнёров.",
+              "en": "Chain growth through partners."
+            },
+            "children": [
+              {
+                "id": "do-franchisee",
+                "level": 2,
+                "title": {
+                  "ru": "Юнит-экономика франчайзи",
+                  "en": "Franchisee unit economics"
+                },
+                "note": {
+                  "ru": "Прибыльность точки партнёра — двигатель новых открытий.",
+                  "en": "Partner location profitability — the engine of new openings."
+                },
+                "children": [
+                  {
+                    "id": "do-payback",
+                    "level": 3,
+                    "metricId": "payback-period",
+                    "title": {
+                      "ru": "Окупаемость пиццерии",
+                      "en": "Pizzeria payback"
+                    },
+                    "note": {
+                      "ru": "Скорость выхода точки в плюс.",
+                      "en": "How fast a location turns profitable."
+                    },
+                    "children": [
+                      {
+                        "id": "do-transparency",
+                        "level": 4,
+                        "kind": "lever",
+                        "title": {
+                          "ru": "Прозрачность Dodo IS",
+                          "en": "Dodo IS transparency"
+                        },
+                        "note": {
+                          "ru": "Рычаг: открытые данные по выручке точек привлекают новых франчайзи.",
+                          "en": "Lever: open per-location revenue data attracts new franchisees."
+                        },
+                        "children": [
+                          {
+                            "id": "do-pipeline",
+                            "level": 5,
+                            "title": {
+                              "ru": "Очередь франчайзи",
+                              "en": "Franchisee pipeline"
+                            },
+                            "note": {
+                              "ru": "Заявки на открытие — топливо будущей экспансии.",
+                              "en": "Opening applications — the fuel of future expansion."
+                            },
+                            "metricId": "unit-payback"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "metricId": "unit-payback"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "do-ssales",
+            "level": 1,
+            "title": {
+              "ru": "Выручка точки",
+              "en": "Location sales"
+            },
+            "note": {
+              "ru": "Доставка + зал.",
+              "en": "Delivery + dine-in."
+            },
+            "children": [
+              {
+                "id": "do-delivery",
+                "level": 2,
+                "title": {
+                  "ru": "Доля и скорость доставки",
+                  "en": "Delivery share & speed"
+                },
+                "note": {
+                  "ru": "Ключевой канал бренда.",
+                  "en": "The brand's key channel."
+                },
+                "children": [
+                  {
+                    "id": "do-time",
+                    "level": 3,
+                    "title": {
+                      "ru": "Время приготовления+доставки",
+                      "en": "Cook+delivery time"
+                    },
+                    "note": {
+                      "ru": "Обещание скорости, зашитое в бренд.",
+                      "en": "The speed promise baked into the brand."
+                    },
+                    "children": [
+                      {
+                        "id": "do-ontime",
+                        "level": 4,
+                        "title": {
+                          "ru": "Доля вовремя",
+                          "en": "On-time share"
+                        },
+                        "note": {
+                          "ru": "Выполнение обещания в пиковые часы.",
+                          "en": "Keeping the promise at peak hours."
+                        },
+                        "metricId": "on-time-delivery"
+                      }
+                    ],
+                    "metricId": "delivery-time"
+                  }
+                ],
+                "metricId": "delivery-time"
+              },
+              {
+                "id": "do-check",
+                "level": 2,
+                "metricId": "aov",
+                "title": {
+                  "ru": "Средний чек",
+                  "en": "Average ticket"
+                },
+                "note": {
+                  "ru": "Комбо и допы.",
+                  "en": "Combos and add-ons."
+                },
+                "children": [
+                  {
+                    "id": "do-app",
+                    "level": 3,
+                    "title": {
+                      "ru": "Заказы через приложение",
+                      "en": "App orders"
+                    },
+                    "note": {
+                      "ru": "Апсейл и лояльность в цифровом канале.",
+                      "en": "Upsell and loyalty in the digital channel."
+                    },
+                    "metricId": "app-share"
+                  }
+                ]
+              }
+            ],
+            "metricId": "total-sales"
+          },
+          {
+            "id": "do-ops",
+            "level": 1,
+            "title": {
+              "ru": "Операции кухни",
+              "en": "Kitchen operations"
+            },
+            "note": {
+              "ru": "Стандарт качества на данных.",
+              "en": "A data-backed quality standard."
+            },
+            "children": [
+              {
+                "id": "do-speed",
+                "level": 2,
+                "title": {
+                  "ru": "Скорость на станциях",
+                  "en": "Station speed"
+                },
+                "note": {
+                  "ru": "Тайминги по чек-листам на каждом этапе кухни.",
+                  "en": "Checklist timings at every kitchen station."
+                },
+                "metricId": "delivery-time"
+              },
+              {
+                "id": "do-foodcost",
+                "level": 2,
+                "metricId": "gross-margin",
+                "title": {
+                  "ru": "Food cost / списания",
+                  "en": "Food cost / waste"
+                },
+                "note": {
+                  "ru": "Контроль себестоимости.",
+                  "en": "Cost-of-goods control."
+                }
+              }
+            ],
+            "kind": "group"
+          }
+        ],
+        "metricId": "total-sales"
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "УК/франчайзи",
+              "en": "HQ/franchisees"
+            },
+            "items": [
+              "Total Sales",
+              {
+                "ru": "Юнит-экономика точки",
+                "en": "Location unit economics"
+              },
+              {
+                "ru": "Роялти",
+                "en": "Royalties"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "маркетинг",
+              "en": "marketing"
+            },
+            "items": [
+              {
+                "ru": "Доля доставки",
+                "en": "Delivery share"
+              },
+              {
+                "ru": "Средний чек",
+                "en": "Average ticket"
+              },
+              {
+                "ru": "Заказы в приложении",
+                "en": "App orders"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "управляющий",
+              "en": "manager"
+            },
+            "items": [
+              {
+                "ru": "Время приготовления",
+                "en": "Cook time"
+              },
+              {
+                "ru": "Скорость станций",
+                "en": "Station speed"
+              },
+              "Food cost"
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": "Dodo IS",
+            "items": [
+              {
+                "ru": "Аптайм платформы",
+                "en": "Platform uptime"
+              },
+              {
+                "ru": "Точность заказов",
+                "en": "Order accuracy"
+              },
+              {
+                "ru": "Учёт остатков",
+                "en": "Inventory accuracy"
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "УК/франчайзи", "items": ["Total Sales", "Юнит-экономика точки", "Роялти"] },
-        { "label": "Продуктовые", "role": "маркетинг", "items": ["Доля доставки", "Средний чек", "Заказы в приложении"] },
-        { "label": "Операционные", "role": "управляющий", "items": ["Время приготовления", "Скорость станций", "Food cost"] },
-        { "label": "Платформенные", "role": "Dodo IS", "items": ["Аптайм платформы", "Точность заказов", "Учёт остатков"] }
-      ] },
       "counterMetrics": [
-        { "title": "Опоздания доставки", "note": "гонка за скоростью vs качество пиццы" },
-        { "title": "Каннибализация районов", "note": "плотность точек отъедает заказы друг у друга" }
+        {
+          "title": {
+            "ru": "Опоздания доставки",
+            "en": "Delivery lateness"
+          },
+          "note": {
+            "ru": "гонка за скоростью vs качество пиццы",
+            "en": "the speed race vs pizza quality"
+          }
+        },
+        {
+          "title": {
+            "ru": "Каннибализация районов",
+            "en": "District cannibalization"
+          },
+          "note": {
+            "ru": "плотность точек отъедает заказы друг у друга",
+            "en": "location density eats each other's orders"
+          }
+        }
       ]
     },
     {
-      "id": "starbucks", "name": "Starbucks", "northStar": "Total Sales (лояльность + ritual)",
-      "note": "ставка на программу лояльности, мобильный заказ и привычку «третьего места»; драйвер — частота и предзаказ.",
+      "id": "starbucks",
+      "name": "Starbucks",
+      "northStar": {
+        "ru": "Total Sales (лояльность + ritual)",
+        "en": "Total sales (loyalty + ritual)"
+      },
+      "note": {
+        "ru": "ставка на программу лояльности, мобильный заказ и привычку «третьего места»; драйвер — частота и предзаказ.",
+        "en": "a bet on the loyalty program, mobile ordering and the \"third place\" habit; frequency and pre-order drive it."
+      },
       "root": {
-        "id": "sb-sales", "level": 0, "title": "Total Sales", "formula": "Точки × Выручка с точки",
-        "note": "Маховик лояльности: Rewards + мобильное приложение растят частоту и средний чек.",
+        "id": "sb-sales",
+        "level": 0,
+        "title": "Total Sales",
+        "formula": {
+          "ru": "Точки × Выручка с точки",
+          "en": "Locations × Sales per location"
+        },
+        "note": {
+          "ru": "Маховик лояльности: Rewards + мобильное приложение растят частоту и средний чек.",
+          "en": "The loyalty flywheel: Rewards + the mobile app grow frequency and ticket."
+        },
         "children": [
-          { "id": "sb-expand", "level": 1, "title": "Экспансия", "note": "Новые точки в трафиковых местах.", "children": [
-            { "id": "sb-unit", "level": 2, "title": "Выручка новой точки", "note": "Окупаемость локации.", "children": [
-              { "id": "sb-location", "level": 3, "title": "Качество локации", "note": "Поток и видимость." }
-            ] }
-          ] },
-          { "id": "sb-ssales", "level": 1, "title": "Same-store sales", "note": "Главный драйвер бренда.", "children": [
-            { "id": "sb-loyalty", "level": 2, "title": "Программа Rewards", "note": "Узнаём гостя, растим частоту.", "children": [
-              { "id": "sb-mobile", "level": 3, "title": "Mobile Order & Pay", "note": "Предзаказ ускоряет и растит чек.", "children": [
-                { "id": "sb-freq", "level": 4, "title": "Визитов на участника", "note": "Частота лояльного гостя." }
-              ] }
-            ] },
-            { "id": "sb-check", "level": 2, "title": "Средний чек", "note": "Кастомизация и сезонные напитки." }
-          ] },
-          { "id": "sb-ops", "level": 1, "title": "Операции", "note": "Скорость в час пик.", "children": [
-            { "id": "sb-throughput", "level": 2, "title": "Пропускная способность", "note": "Очереди в пик — потерянные продажи." },
-            { "id": "sb-labor", "level": 2, "title": "Затраты на персонал", "note": "Баланс скорости и маржи." }
-          ] }
+          {
+            "id": "sb-expand",
+            "level": 1,
+            "title": {
+              "ru": "Экспансия",
+              "en": "Expansion"
+            },
+            "note": {
+              "ru": "Новые точки в трафиковых местах.",
+              "en": "New locations in high-footfall spots."
+            },
+            "children": [
+              {
+                "id": "sb-unit",
+                "level": 2,
+                "title": {
+                  "ru": "Выручка новой точки",
+                  "en": "New-location sales"
+                },
+                "note": {
+                  "ru": "Окупаемость локации.",
+                  "en": "Site payback."
+                },
+                "children": [
+                  {
+                    "id": "sb-location",
+                    "level": 3,
+                    "kind": "lever",
+                    "title": {
+                      "ru": "Качество локации",
+                      "en": "Site quality"
+                    },
+                    "note": {
+                      "ru": "Рычаг: поток и видимость — решают до открытия.",
+                      "en": "Lever: footfall and visibility — decided before opening."
+                    }
+                  }
+                ],
+                "metricId": "unit-payback"
+              }
+            ],
+            "kind": "group"
+          },
+          {
+            "id": "sb-ssales",
+            "level": 1,
+            "title": "Same-store sales",
+            "note": {
+              "ru": "Главный драйвер бренда.",
+              "en": "The brand's main driver."
+            },
+            "children": [
+              {
+                "id": "sb-loyalty",
+                "level": 2,
+                "kind": "lever",
+                "title": {
+                  "ru": "Программа Rewards",
+                  "en": "Rewards program"
+                },
+                "note": {
+                  "ru": "Рычаг: узнаём гостя, растим частоту и предоплаченный баланс.",
+                  "en": "Lever: identify the guest, grow frequency and preloaded balance."
+                },
+                "children": [
+                  {
+                    "id": "sb-mobile",
+                    "level": 3,
+                    "title": "Mobile Order & Pay",
+                    "note": {
+                      "ru": "Предзаказ ускоряет очередь и растит чек кастомизацией.",
+                      "en": "Pre-ordering speeds the line and grows the ticket via customization."
+                    },
+                    "children": [
+                      {
+                        "id": "sb-freq",
+                        "level": 4,
+                        "metricId": "purchase-frequency",
+                        "title": {
+                          "ru": "Визитов на участника",
+                          "en": "Visits per member"
+                        },
+                        "note": {
+                          "ru": "Частота лояльного гостя — сердце модели.",
+                          "en": "The loyal guest's frequency — the model's heart."
+                        },
+                        "children": [
+                          {
+                            "id": "sb-preload",
+                            "level": 5,
+                            "title": {
+                              "ru": "Предоплаченный баланс",
+                              "en": "Preloaded balance"
+                            },
+                            "note": {
+                              "ru": "Деньги на картах Rewards — беспроцентный кредит от гостей и привязка к бренду.",
+                              "en": "Money on Rewards cards — an interest-free loan from guests and a brand lock-in."
+                            },
+                            "metricId": "deposits"
+                          }
+                        ]
+                      }
+                    ],
+                    "metricId": "app-share"
+                  }
+                ]
+              },
+              {
+                "id": "sb-check",
+                "level": 2,
+                "metricId": "aov",
+                "title": {
+                  "ru": "Средний чек",
+                  "en": "Average ticket"
+                },
+                "note": {
+                  "ru": "Кастомизация и сезонные напитки.",
+                  "en": "Customization and seasonal drinks."
+                }
+              }
+            ],
+            "metricId": "same-store-sales"
+          },
+          {
+            "id": "sb-ops",
+            "level": 1,
+            "title": {
+              "ru": "Операции",
+              "en": "Operations"
+            },
+            "note": {
+              "ru": "Скорость в час пик.",
+              "en": "Peak-hour speed."
+            },
+            "children": [
+              {
+                "id": "sb-throughput",
+                "level": 2,
+                "title": {
+                  "ru": "Пропускная способность",
+                  "en": "Throughput"
+                },
+                "note": {
+                  "ru": "Очереди в пик — потерянные продажи.",
+                  "en": "Peak queues are lost sales."
+                },
+                "metricId": "provider-availability"
+              },
+              {
+                "id": "sb-labor",
+                "level": 2,
+                "title": {
+                  "ru": "Затраты на персонал",
+                  "en": "Labor costs"
+                },
+                "note": {
+                  "ru": "Баланс скорости и маржи.",
+                  "en": "The speed/margin balance."
+                },
+                "metricId": "contribution-margin"
+              }
+            ],
+            "kind": "group"
+          }
+        ],
+        "metricId": "total-sales"
+      },
+      "pyramid": {
+        "bands": [
+          {
+            "label": {
+              "ru": "Бизнесовые",
+              "en": "Business"
+            },
+            "role": {
+              "ru": "руководство",
+              "en": "leadership"
+            },
+            "items": [
+              "Total Sales",
+              "Same-store sales",
+              {
+                "ru": "Маржа точки",
+                "en": "Location margin"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Продуктовые",
+              "en": "Product"
+            },
+            "role": {
+              "ru": "маркетинг",
+              "en": "marketing"
+            },
+            "items": [
+              {
+                "ru": "Rewards-участники",
+                "en": "Rewards members"
+              },
+              {
+                "ru": "Средний чек",
+                "en": "Average ticket"
+              },
+              {
+                "ru": "Частота визитов",
+                "en": "Visit frequency"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Операционные",
+              "en": "Operational"
+            },
+            "role": {
+              "ru": "управляющий",
+              "en": "manager"
+            },
+            "items": [
+              "Mobile Order",
+              {
+                "ru": "Пропускная способность",
+                "en": "Throughput"
+              },
+              {
+                "ru": "Затраты на персонал",
+                "en": "Labor costs"
+              }
+            ]
+          },
+          {
+            "label": {
+              "ru": "Платформенные",
+              "en": "Platform"
+            },
+            "role": {
+              "ru": "ИТ",
+              "en": "IT"
+            },
+            "items": [
+              {
+                "ru": "Аптайм приложения",
+                "en": "App uptime"
+              },
+              {
+                "ru": "Точность заказов",
+                "en": "Order accuracy"
+              },
+              {
+                "ru": "Очереди предзаказа",
+                "en": "Pre-order queues"
+              }
+            ]
+          }
         ]
       },
-      "pyramid": { "bands": [
-        { "label": "Бизнесовые", "role": "руководство", "items": ["Total Sales", "Same-store sales", "Маржа точки"] },
-        { "label": "Продуктовые", "role": "маркетинг", "items": ["Rewards-участники", "Средний чек", "Частота визитов"] },
-        { "label": "Операционные", "role": "управляющий", "items": ["Mobile Order", "Пропускная способность", "Затраты на персонал"] },
-        { "label": "Платформенные", "role": "ИТ", "items": ["Аптайм приложения", "Точность заказов", "Очереди предзаказа"] }
-      ] },
       "counterMetrics": [
-        { "title": "Перегруз мобильных предзаказов", "note": "очереди в зале раздражают офлайн-гостей" },
-        { "title": "Размывание бренда скидками", "note": "акции растят трафик, но бьют по премиальности" }
+        {
+          "title": {
+            "ru": "Перегруз мобильных предзаказов",
+            "en": "Mobile pre-order overload"
+          },
+          "note": {
+            "ru": "очереди в зале раздражают офлайн-гостей",
+            "en": "in-store queues annoy walk-in guests"
+          }
+        },
+        {
+          "title": {
+            "ru": "Размывание бренда скидками",
+            "en": "Discount brand dilution"
+          },
+          "note": {
+            "ru": "акции растят трафик, но бьют по премиальности",
+            "en": "promos grow traffic but hit premium positioning"
+          }
+        }
       ]
     }
   ]

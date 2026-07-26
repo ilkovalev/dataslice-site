@@ -1,0 +1,152 @@
+[
+  {
+    "id": "token-volume",
+    "category": "platform",
+    "title": { "ru": "Объём токенов", "en": "Token volume" },
+    "aliases": ["токены", "usage api"],
+    "tex": { "ru": "\\text{Токены}=\\sum(\\text{входные}+\\text{выходные токены})", "en": "\\text{Tokens}=\\sum(\\text{input}+\\text{output tokens})" },
+    "desc": {
+      "ru": "Сколько токенов обработано за период. Для API-платформы это одновременно счётчик выручки и счётчик расходов — редкий случай, когда рост использования автоматически даёт деньги, но так же автоматически жжёт GPU. Поэтому объём токенов всегда читается вместе с маржой на токен.",
+      "en": "How many tokens were processed in a period. For an API platform it's simultaneously the revenue meter and the cost meter — a rare case where usage growth automatically earns money and just as automatically burns GPUs. So token volume is always read together with margin per token."
+    },
+    "pitfalls": {
+      "ru": [
+        "Входные и выходные токены стоят по-разному: суммировать их в одну цифру — терять экономику.",
+        "Концентрация: пара крупных приложений может давать треть объёма — их уход виден в отчётности сразу.",
+        "Кэширование и роутинг на дешёвые модели роняют объём при той же пользе — падение токенов не всегда плохая новость."
+      ],
+      "en": [
+        "Input and output tokens cost differently: summing them into one number loses the economics.",
+        "Concentration: a couple of large apps can drive a third of the volume — their exit shows up immediately.",
+        "Caching and routing to cheaper models reduce volume at the same usefulness — falling tokens isn't always bad news."
+      ]
+    },
+    "sql": "-- Token volume, revenue and margin per client\nSELECT props->>'client_id' AS client_id,\n       SUM((props->>'input_tokens')::bigint) AS input_tokens,\n       SUM((props->>'output_tokens')::bigint) AS output_tokens,\n       SUM((props->>'revenue')::numeric) AS revenue,\n       ROUND(100.0 * (SUM((props->>'revenue')::numeric)\n                    - SUM((props->>'compute_cost')::numeric))\n             / NULLIF(SUM((props->>'revenue')::numeric), 0), 1) AS gross_margin_pct\nFROM events\nWHERE event_name = 'llm_request'\n  AND ts >= date_trunc('month', now())\nGROUP BY 1\nORDER BY revenue DESC;",
+    "related": ["cost-per-user", "gross-margin", "nrr"]
+  },
+  {
+    "id": "model-quality",
+    "category": "platform",
+    "title": { "ru": "Качество модели", "en": "Model quality" },
+    "aliases": ["бенчмарки", "полезные ответы", "доля переспросов"],
+    "tex": { "ru": "\\text{Качество}=\\dfrac{\\text{ответы, решившие задачу}}{\\text{все ответы}}", "en": "\\text{Quality}=\\dfrac{\\text{answers that solved the task}}{\\text{all answers}}" },
+    "desc": {
+      "ru": "Насколько ответы модели решают задачу пользователя. Бенчмарки удобны для сравнения моделей, но продукту важнее поведенческий сигнал: принял ли пользователь ответ, не переспросил ли, вернулся ли завтра. Плохой ответ стоит дважды — деньги за инференс и переспрос.",
+      "en": "How well the model's answers solve the user's task. Benchmarks are convenient for comparing models, but a product cares more about behavioural signals: did the user accept the answer, did they retry, did they come back tomorrow. A bad answer costs twice — the inference and the retry."
+    },
+    "pitfalls": {
+      "ru": [
+        "Бенчмарки насыщаются и попадают в обучающие данные: высокий балл перестаёт означать пользу.",
+        "Лайки ставит меньшинство и обычно довольное — репрезентативности нет; поведенческие сигналы честнее.",
+        "Оптимизация «нравится пользователю» ведёт к угодливости: модель соглашается вместо того, чтобы быть правой."
+      ],
+      "en": [
+        "Benchmarks saturate and leak into training data: a high score stops meaning usefulness.",
+        "Thumbs come from a minority, usually a happy one — no representativeness; behavioural signals are more honest.",
+        "Optimizing \"the user likes it\" breeds sycophancy: the model agrees instead of being right."
+      ]
+    },
+    "sql": "-- Behavioural quality: retries, acceptance and next-day return\nSELECT date_trunc('week', ts) AS week,\n       COUNT(*) AS answers,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE props->>'user_action' = 'accepted')\n             / COUNT(*), 1) AS accepted_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE props->>'user_action' = 'retried')\n             / COUNT(*), 1) AS retried_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE (props->>'thumbs_down')::boolean)\n             / COUNT(*), 2) AS thumbs_down_pct\nFROM events\nWHERE event_name = 'llm_response'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["cost-per-user", "acceptance-rate", "nps-csat", "token-volume"]
+  },
+  {
+    "id": "uptime",
+    "category": "platform",
+    "title": { "ru": "Uptime / SLA — доступность", "en": "Uptime / SLA — availability" },
+    "aliases": ["доступность", "sla"],
+    "tex": { "ru": "\\text{Uptime}=\\dfrac{\\text{время работы}}{\\text{общее время}}\\times 100\\%", "en": "\\text{Uptime}=\\dfrac{\\text{time up}}{\\text{total time}}\\times 100\\%" },
+    "desc": {
+      "ru": "Доля времени, когда сервис доступен пользователям. Фундамент пирамиды метрик: пока сервис лежит, никакие продуктовые метрики не существуют. «Три девятки» (99.9%) — это до 43 минут простоя в месяц.",
+      "en": "The share of time the service is available to users. The foundation of the metric pyramid: while the service is down, no product metric exists. \"Three nines\" (99.9%) allows up to 43 minutes of downtime per month."
+    },
+    "pitfalls": {
+      "ru": [
+        "«Сервер отвечает» ≠ «пользователь может купить»: меряйте доступность ключевых сценариев, а не пинг.",
+        "Средний uptime по году прячет один страшный час в пиковый день распродажи — взвешивайте по трафику.",
+        "Деградация (медленно, но работает) в uptime не видна — нужна отдельная метрика латентности."
+      ],
+      "en": [
+        "\"Server responds\" ≠ \"user can buy\": measure availability of key journeys, not ping.",
+        "Yearly average uptime hides one terrible hour on peak sale day — weight by traffic.",
+        "Degradation (slow but alive) is invisible in uptime — you need a separate latency metric."
+      ]
+    },
+    "sql": "-- Success rate of key journey checks per day (synthetic monitoring events)\nSELECT ts::date AS day,\n       COUNT(*) AS checks,\n       COUNT(*) FILTER (WHERE props->>'status' = 'ok') AS ok,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE props->>'status' = 'ok') / COUNT(*), 3) AS uptime_pct\nFROM events\nWHERE event_name = 'synthetic_check' AND props->>'journey' = 'checkout'\nGROUP BY 1\nORDER BY 1;",
+    "related": ["latency-p95", "crash-rate"]
+  },
+  {
+    "id": "latency-p95",
+    "category": "platform",
+    "title": { "ru": "Латентность p95 / p99", "en": "Latency p95 / p99" },
+    "aliases": ["latency", "время ответа"],
+    "tex": { "ru": "p95=\\text{время, быстрее которого выполняются }95\\%\\text{ запросов}", "en": "p95=\\text{the time within which }95\\%\\text{ of requests complete}" },
+    "desc": {
+      "ru": "Перцентили времени ответа: p95 показывает, как себя чувствуют 5% самых «невезучих» запросов. Медленный продукт — это невидимый налог на все метрики выше: конверсия и удержание падают на сотнях миллисекунд задержки.",
+      "en": "Response-time percentiles: p95 shows how the unluckiest 5% of requests feel. A slow product is an invisible tax on every metric above: conversion and retention drop over hundreds of milliseconds of delay."
+    },
+    "pitfalls": {
+      "ru": [
+        "Среднее время ответа бесполезно: распределение с тяжёлым хвостом, среднее сидит между модой и хвостом.",
+        "p95 по всем эндпоинтам сразу — каша: медленный тяжёлый отчёт и медленный чекаут — разные проблемы.",
+        "Усреднение перцентилей по инстансам математически некорректно — агрегируйте сырые распределения."
+      ],
+      "en": [
+        "Mean response time is useless: heavy-tailed distribution, the mean sits between the mode and the tail.",
+        "A p95 across all endpoints is mush: a slow heavy report and a slow checkout are different problems.",
+        "Averaging percentiles across instances is mathematically wrong — aggregate raw distributions."
+      ]
+    },
+    "sql": "-- p50/p95/p99 latency by endpoint from request logs\nSELECT props->>'endpoint' AS endpoint,\n       COUNT(*) AS requests,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY (props->>'duration_ms')::int) AS p50_ms,\n       PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY (props->>'duration_ms')::int) AS p95_ms,\n       PERCENTILE_CONT(0.99) WITHIN GROUP (ORDER BY (props->>'duration_ms')::int) AS p99_ms\nFROM events\nWHERE event_name = 'api_request' AND ts >= now() - INTERVAL '1 day'\nGROUP BY 1\nORDER BY requests DESC;",
+    "related": ["uptime", "conversion-rate", "crash-rate"]
+  },
+  {
+    "id": "crash-rate",
+    "category": "platform",
+    "title": { "ru": "Crash Rate — доля падений", "en": "Crash rate" },
+    "aliases": ["крэши", "стабильность"],
+    "tex": { "ru": "\\text{Crash Rate}=\\dfrac{\\text{сессии с падением}}{\\text{все сессии}}", "en": "\\text{Crash rate}=\\dfrac{\\text{sessions with a crash}}{\\text{all sessions}}" },
+    "desc": {
+      "ru": "Доля сессий, оборвавшихся падением приложения. Прямой разрушитель доверия: пользователь, у которого приложение упало при оплате, часто не возвращается — и магазины приложений понижают нестабильные приложения в выдаче.",
+      "en": "The share of sessions that end in an app crash. A direct trust destroyer: a user whose app crashed at payment often never returns — and app stores demote unstable apps in rankings."
+    },
+    "pitfalls": {
+      "ru": [
+        "Крэши концентрируются в конкретных версиях ОС и устройствах — общий процент прячет сегмент, где всё горит.",
+        "ANR и зависания — не крэши технически, но для пользователя то же самое; считайте вместе.",
+        "После релиза метрика запаздывает на скорость раскатки — следите когортно по версии приложения."
+      ],
+      "en": [
+        "Crashes cluster in specific OS versions and devices — the overall rate hides a segment that's on fire.",
+        "ANRs and freezes technically aren't crashes, but to the user they are; count them together.",
+        "After a release the metric lags rollout speed — track by app-version cohort."
+      ]
+    },
+    "sql": "-- Crash-free sessions by app version\nSELECT props->>'app_version' AS version,\n       COUNT(DISTINCT props->>'session_id') AS sessions,\n       COUNT(DISTINCT props->>'session_id') FILTER (WHERE event_name = 'app_crash') AS crashed,\n       ROUND(100.0 * (1 - COUNT(DISTINCT props->>'session_id') FILTER (WHERE event_name = 'app_crash')\n             / NULLIF(COUNT(DISTINCT props->>'session_id')::numeric, 0)), 2) AS crash_free_pct\nFROM events\nGROUP BY 1\nORDER BY 1 DESC;",
+    "related": ["uptime", "latency-p95", "retention-n-day"]
+  },
+  {
+    "id": "cost-per-user",
+    "category": "platform",
+    "title": { "ru": "Cost-per-User / инференс-косты", "en": "Cost per user / inference cost" },
+    "aliases": ["стоимость пользователя", "cost to serve"],
+    "tex": { "ru": "\\text{Cost-per-User}=\\dfrac{\\text{инфраструктурные затраты}}{\\text{активные пользователи}}", "en": "\\text{Cost per user}=\\dfrac{\\text{infrastructure cost}}{\\text{active users}}" },
+    "desc": {
+      "ru": "Во сколько обходится обслуживание одного активного пользователя. Для AI-продуктов — вопрос выживания: инференс стоит реальных денег на каждый запрос, и активный бесплатный пользователь LLM-сервиса — это прямой убыток, а не «просто аудитория».",
+      "en": "How much serving one active user costs. For AI products it's existential: inference costs real money per request, and an active free user of an LLM service is a direct loss, not \"just audience\"."
+    },
+    "pitfalls": {
+      "ru": [
+        "Распределение экстремально скошено: 1% тяжёлых пользователей может съедать треть костов — смотрите хвост, вводите лимиты.",
+        "Средний кост скрывает разницу моделей/фич: дорогая функция в бесплатном тарифе — дыра в марже.",
+        "Снижение костов квантизацией/кэшем может ронять качество ответов — держите рядом метрику качества."
+      ],
+      "en": [
+        "The distribution is extremely skewed: 1% of heavy users can eat a third of costs — watch the tail, add limits.",
+        "The average cost hides model/feature differences: an expensive feature on the free tier is a margin hole.",
+        "Cutting costs via quantization/caching can degrade answer quality — keep a quality metric nearby."
+      ]
+    },
+    "sql": "-- Inference cost per user and the heavy tail\nWITH per_user AS (\n  SELECT user_id,\n         SUM((props->>'tokens')::int) AS tokens,\n         SUM((props->>'cost_usd')::numeric) AS cost\n  FROM events\n  WHERE event_name = 'llm_request'\n    AND ts >= date_trunc('month', now())\n  GROUP BY user_id\n)\nSELECT COUNT(*) AS users,\n       ROUND(AVG(cost), 4) AS avg_cost,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY cost) AS median_cost,\n       PERCENTILE_CONT(0.99) WITHIN GROUP (ORDER BY cost) AS p99_cost,\n       ROUND(100.0 * SUM(cost) FILTER (WHERE cost >= (\n         SELECT PERCENTILE_CONT(0.99) WITHIN GROUP (ORDER BY cost) FROM per_user\n       )) / NULLIF(SUM(cost), 0), 1) AS top1pct_cost_share\nFROM per_user;",
+    "related": ["gross-margin", "arpu", "dau-mau"]
+  }
+]

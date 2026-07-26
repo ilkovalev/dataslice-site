@@ -21,7 +21,7 @@
       "reveal": "Both the expectation and the variance DOUBLE (for independent variables they add up), and the shape moves closer to a bell. That is the seed of two things at once: why the mean has spread σ/√n (add n variances, divide by n²) and why sums/averages tend to normal (the CLT)."
     },
     {
-      "text": "Remember the three bricks: a random variable (a number from chance), E[X] (the center), Var[X] (the spread) and the rule \"variances of independent variables add\". Everything downstream is built from them: the standard error, confidence intervals, hypothesis testing, ANOVA and variance-reduction methods — it is all about expectations and variances of estimates."
+      "text": "Remember the three bricks — a random variable (a number from chance), E[X] (the center), Var[X] (the spread) — plus the rule \"variances of independent variables add\". Everything downstream is built from them: the standard error, confidence intervals, hypothesis testing, ANOVA and variance-reduction methods — it is all about expectations and variances of estimates."
     }
   ],
   "definitions": [

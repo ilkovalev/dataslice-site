@@ -24,7 +24,7 @@
       "text": "First the notation itself, or the formula looks scary. P(…) means \"the probability of …\". The vertical bar \"|\" reads \"given\". So P(sick | test +) is \"the probability of being sick GIVEN a positive test\". It is not the same as P(test + | sick) — the reverse: the probability of a positive test in someone who is already sick. Bayes' theorem is just a careful way to compute the same picture: P(sick | test +) = true alarms / all alarms. In our numbers that is 9 true out of (9 + 99) ≈ 8%. Under the chart sits the formula with live numbers: drag \"prevalence\" and \"accuracy\" and watch the result change. No magic — we divide the teal part of the bar by the whole bar."
     },
     {
-      "text": "The same logic works outside medicine. Fraud detection: fraud is rare (say 0.2% of transactions) and the detector is \"95% accurate\". On a million honest transactions, 5% errors means 50,000 false blocks against a handful of real ones. That is why a bank does not block on a single alarm but asks for confirmation: the cost of a false alarm (blocking an honest customer) is high too."
+      "text": "The same logic works outside medicine. Fraud detection: fraud is rare (say 0.2% of transactions) and the detector is \"95% accurate\". Out of a million transactions about 998,000 are honest, and 5% errors on those means roughly 50,000 false blocks against 1,900 fraudsters caught. That is why a bank does not block on a single alarm but asks for confirmation: the cost of a false alarm (blocking an honest customer) is high too."
     }
   ],
   "definitions": [

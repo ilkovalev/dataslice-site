@@ -126,7 +126,7 @@ export default function CriterionPicker({ locale = 'ru' }) {
         <div className="mt-3">
           <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-1">{en ? 'Reference distribution of the statistic' : 'Эталонное распределение статистики'}</div>
           <svg viewBox={`0 0 ${W} 140`} className="w-full h-auto select-none">
-            <RefDist crit={crit} />
+            <RefDist crit={crit} en={en} />
           </svg>
           <p className="text-xs text-gray-500 mt-1">{en ? (REF[crit].noteEn ?? REF[crit].note) : REF[crit].note}</p>
           <p className="text-xs text-gray-500 mt-1">{en ? (MECH[crit + 'En'] ?? MECH[crit]) : MECH[crit]}</p>
@@ -153,7 +153,7 @@ export default function CriterionPicker({ locale = 'ru' }) {
 // Эталонное (нулевое) распределение статистики выбранного критерия с хвостами
 // отсечения при α=5% (двусторонний). Для t — поверх нормального (пунктир),
 // чтобы видеть тяжёлые хвосты.
-function RefDist({ crit }) {
+function RefDist({ crit, en }) {
   const ref = REF[crit]
   const RH = 140
   const base = RH - 26

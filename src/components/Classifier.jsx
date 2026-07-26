@@ -63,7 +63,7 @@ export default function Classifier({ locale = 'ru' }) {
         <div className="text-sm space-y-1">
           {stat(en ? 'Precision' : 'Precision (точность)', precision, 'text-cyanink')}
           {stat(en ? 'Recall = TPR' : 'Recall = TPR (полнота)', recall, 'text-cyanink')}
-          {stat(en ? 'FPR (false alarms)' : 'FPR (ложные срабатывания)', fpr, 'text-amber-600')}
+          {stat(en ? 'FPR (false alarms)' : 'FPR (доля ложноположительных)', fpr, 'text-amber-600')}
           {stat(en ? 'Accuracy (share correct)' : 'Accuracy (доля верных)', accuracy, 'text-gray-700')}
         </div>
       </div>

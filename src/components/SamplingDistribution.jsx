@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useAutoRun, autoRunClass, autoRunLabel } from '../lib/useAutoRun.js'
 
 // ЦПТ в трёх панелях (как у Seeing Theory):
-//  1) генеральная совокупность (скошенная);
+//  1) генеральная совокупность (асимметричная);
 //  2) одна выборка — её точки и ВЫБОРОЧНОЕ СРЕДНЕЕ (видно отклонение от истинного);
 //  3) распределение выборочных средних — собирается «насыпкой» в колокол.
 const W = 560
@@ -81,7 +81,7 @@ export default function SamplingDistribution({ locale = 'ru' }) {
         <text x={sx(popMean)} y={A0 - 4} fill="#d9a300" fontSize="10" textAnchor="middle">{en ? 'true mean ' : 'истинное среднее '}{popMean.toFixed(1)}</text>
 
         {/* панель 1: совокупность */}
-        <text x={PAD} y={A0 + 8} fill="#6b7280" fontSize="10">{en ? '1 · population (skewed)' : '1 · генеральная совокупность (скошена)'}</text>
+        <text x={PAD} y={A0 + 8} fill="#6b7280" fontSize="10">{en ? '1 · population (skewed)' : '1 · генеральная совокупность (асимметрична)'}</text>
         {popBins.map((c, k) => {
           const h = (c / popMax) * (A1 - A0 - 14)
           return c ? <rect key={k} x={sx((k / BINS) * DOM) + 0.5} y={A1 - h} width={(W - 2 * PAD) / BINS - 1} height={h} fill="#9ca3af" opacity="0.55" /> : null

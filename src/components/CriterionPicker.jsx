@@ -35,7 +35,7 @@ const REF = {
 const METRICS = {
   means: { label: 'Средние (нормальные)', labelEn: 'Means (normal)', hint: 'непрерывная метрика, симметричный разброс — например, время на сайте', hintEn: 'a continuous metric with symmetric spread — e.g. time on site' },
   conversion: { label: 'Доля / конверсия', labelEn: 'Share / conversion', hint: 'бинарная метрика «купил / не купил»', hintEn: 'a binary bought / did-not metric' },
-  skew: { label: 'Скошенная с выбросами', labelEn: 'Skewed with outliers', hint: 'тяжёлый правый хвост — выручка, длительности', hintEn: 'a heavy right tail — revenue, durations' },
+  skew: { label: 'Асимметричная с выбросами', labelEn: 'Skewed with outliers', hint: 'тяжёлый правый хвост — выручка, длительности', hintEn: 'a heavy right tail — revenue, durations' },
 }
 const CRITERIA = { t: 't-тест', z: 'z-тест (доли)', u: 'Манна–Уитни' }
 const CRITERIA_EN = { t: 't-test', z: 'z-test (shares)', u: 'Mann–Whitney' }
@@ -56,12 +56,12 @@ const FEEDBACK = {
   conversion: {
     z: ['ok', 'Верно. Метрика — доля (купил/не купил). z-тест для долей сравнивает p̂A и p̂B — основной критерий A/B по конверсии.', 'Correct. The metric is a share (bought / did not). The z-test for shares compares p̂A and p̂B — the main A/B test for conversion.'],
     t: ['meh', 'Для долей обычно берут z-тест (или χ²). t-тест про средние; на больших n он близок, но это не его задача.', 'For shares one usually takes the z-test (or χ²). The t-test is about means; at large n it comes close, but it is not its job.'],
-    u: ['bad', 'Манна–Уитни — для порядковых/скошенных непрерывных метрик, а не для «да/нет». Здесь нужен z-тест.', 'Mann–Whitney is for ordinal/skewed continuous metrics, not yes/no. Here you need the z-test.'],
+    u: ['bad', 'Манна–Уитни — для порядковых и асимметричных непрерывных метрик, а не для «да/нет». Здесь нужен z-тест.', 'Mann–Whitney is for ordinal/skewed continuous metrics, not yes/no. Here you need the z-test.'],
   },
   skew: {
-    t: ['ok', 't-тест сравнивает средние — обычно именно это важно бизнесу (выручка, время). Но на СЫРЫХ скошенных данных его тащит выброс. Правильный путь — не менять вопрос, а обработать хвост (см. ниже) и применить t к среднему.', 'The t-test compares means — usually what the business cares about (revenue, time). But on RAW skewed data an outlier drags it. The right path is not to change the question but to treat the tail (below) and apply t to the mean.'],
+    t: ['ok', 't-тест сравнивает средние — обычно именно это важно бизнесу (выручка, время). Но на СЫРЫХ асимметричных данных его тащит выброс. Правильный путь — не менять вопрос, а обработать хвост (см. ниже) и применить t к среднему.', 'The t-test compares means — usually what the business cares about (revenue, time). But on RAW skewed data an outlier drags it. The right path is not to change the question but to treat the tail (below) and apply t to the mean.'],
     u: ['meh', 'Манна–Уитни устойчив к выбросу, НО сравнивает распределения (у кого чаще больше), а не средние. Берите его, только если вам действительно важен сдвиг распределения. Если важно среднее — обработайте выбросы и возьмите t.', 'Mann–Whitney shrugs off the outlier BUT compares distributions (who tends to be larger), not means. Take it only if the distribution shift truly matters. If the mean matters — treat the outliers and take t.'],
-    z: ['bad', 'z-тест — для долей, а тут непрерывная скошенная метрика.', 'The z-test is for shares, but this is a continuous skewed metric.'],
+    z: ['bad', 'z-тест — для долей, а тут непрерывная асимметричная метрика.', 'The z-test is for shares, but this is a continuous skewed metric.'],
   },
 }
 

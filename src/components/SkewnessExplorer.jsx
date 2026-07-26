@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react'
 
-// Явная визуализация скошенности. Слайдер α морфит распределение из
-// левоскошенного через симметричное в правоскошенное (skew-normal).
+// Явная визуализация асимметрии. Слайдер α морфит распределение из
+// левосторонней через симметричное в правостороннюю (skew-normal).
 // Видно, как длинный хвост тянет СРЕДНЕЕ в сторону хвоста, а МЕДИАНА
-// остаётся у пика — главный практический смысл скоса.
+// остаётся у пика — главный практический смысл асимметрии.
 const W = 560
 const H = 250
 const PAD = 34
@@ -76,11 +76,11 @@ export default function SkewnessExplorer({ locale = 'ru' }) {
 
       <div className="text-sm text-gray-700 mt-1">
         {en ? 'The tail stretches' : 'Хвост тянется'} <span className="text-cyanink font-medium">{dir}</span>. {en ? 'Mean' : 'Среднее'} = {mean.toFixed(2)}, {en ? 'median' : 'медиана'} = {median.toFixed(2)}, {en ? 'mode' : 'мода'} = {mode.toFixed(2)}.
-        {Math.abs(alpha) > 0.3 && <> {en ? 'The order "mode → median → mean" points in the direction of the skew.' : 'Порядок «мода → медиана → среднее» указывает направление скоса.'}</>}
+        {Math.abs(alpha) > 0.3 && <> {en ? 'The order "mode → median → mean" points in the direction of the skew.' : 'Порядок «мода → медиана → среднее» указывает направление асимметрии.'}</>}
       </div>
 
       <label className="block mt-4 text-sm">
-        <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Skewness (α): left ← symmetric → right' : 'Скошенность (α): влево ← симметрия → вправо'}</span><span className="tabular-nums text-cyanink">{alpha}</span></div>
+        <div className="flex justify-between text-gray-700 mb-1"><span>{en ? 'Skewness (α): left ← symmetric → right' : 'Асимметрия (α): влево ← симметрия → вправо'}</span><span className="tabular-nums text-cyanink">{alpha}</span></div>
         <input type="range" min="-8" max="8" step="1" value={alpha} onChange={(e) => setAlpha(Number(e.target.value))} className="w-full accent-accent" />
       </label>
     </div>

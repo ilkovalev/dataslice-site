@@ -28,7 +28,7 @@ function buildData() {
   for (let i = 0; i < 2400; i++) {
     const device = r() < 0.55 ? 'mobile' : 'desktop'
     const group = r() < 0.5 ? 'A' : 'B'
-    // выручка: лог-нормальная (скошенная) + редкие выбросы
+    // выручка: лог-нормальная (асимметричная) + редкие выбросы
     let revenue = Math.exp(2.2 + (device === 'desktop' ? 0.5 : 0) + 0.9 * (Math.sqrt(-2 * Math.log(r() || 1e-9)) * Math.cos(2 * Math.PI * r())))
     if (r() < 0.01) revenue *= 8 // выброс
     // конверсия: базовая зависит от устройства; эффект B РАЗНЫЙ по устройству
@@ -130,7 +130,7 @@ export default function DataCaseStudy({ locale = 'ru' }) {
     ]} fmt={pct} />, text: `CATE by segment: on mobile B is above A (a lift of ${(cate('mobile') * 100).toFixed(1)} pp), while on desktop B is BELOW A (${(cate('desktop') * 100).toFixed(1)} pp). The effect points in opposite directions — the average ATE hides it! Decision: roll B out only on mobile, keep A on desktop.` },
     { chart: null, text: `Analysis summary: 1) skewed data → median/percentiles; 2) outliers are real → don't remove; 3) the key segment is the device; 4) the ATE is significant, but 5) the CATE shows an opposite-direction effect — the decision is by segment. One dataset — almost the whole course: distributions, outliers, segments, A/B, ATE/CATE, causality.` },
   ] : [
-    { chart: <Hist />, text: `2400 пользователей, выручка на пользователя. Распределение скошено вправо: среднее (${mean.toFixed(0)}) заметно выше медианы (${median}). Вывод: типичного пользователя честнее описывать медианой, а не средним.` },
+    { chart: <Hist />, text: `2400 пользователей, выручка на пользователя. Распределение асимметрично вправо: среднее (${mean.toFixed(0)}) заметно выше медианы (${median}). Вывод: типичного пользователя честнее описывать медианой, а не средним.` },
     { chart: <Hist highlightOutliers />, text: `На полном диапазоне видны редкие выбросы (хвост до ${maxRev}). Это реальные крупные покупки, не ошибки. Решение: не удалять, но для «типичного» значения смотреть медиану и p95 (${p95}), а среднее использовать осторожно.` },
     { chart: <Bars items={[{ label: 'mobile', v: byDev('mobile') }, { label: 'desktop', v: byDev('desktop'), c: '#16a34a' }]} fmt={pct} />, text: `Конверсия сильно зависит от устройства: на desktop выше, чем на mobile. Это важный сегмент — если группы A/B случайно разбалансированы по устройству, сравнение исказится. Здесь рандомизация их уравняла.` },
     { chart: <Bars items={[{ label: 'A', v: cA, ci: ciHalf }, { label: 'B', v: cB, ci: ciHalf, c: '#16a34a' }]} fmt={pct} ci />, text: `A/B-итог (ATE): конверсия A = ${pct(cA)}, B = ${pct(cB)}. Разница ${pct(cB - cA)}, z = ${z.toFixed(2)}, p = ${pval < 0.001 ? '<0.001' : pval.toFixed(3)}. ${pval < 0.05 ? 'Значимо, и интервалы почти не перекрываются.' : 'Не значимо — интервалы перекрываются.'} Но средний эффект — ещё не вся правда.` },
@@ -140,7 +140,7 @@ export default function DataCaseStudy({ locale = 'ru' }) {
       { label: 'desk·A', v: conv(data.filter((d) => d.device === 'desktop' && d.group === 'A')), c: '#9ca3af' },
       { label: 'desk·B', v: conv(data.filter((d) => d.device === 'desktop' && d.group === 'B')), c: '#dc4d4d' },
     ]} fmt={pct} />, text: `CATE по сегментам: на mobile B выше A (лифт ${(cate('mobile') * 100).toFixed(1)} п.п.), а на desktop B НИЖЕ A (${(cate('desktop') * 100).toFixed(1)} п.п.). Эффект разнонаправленный — средний ATE его прячет! Решение: катить B только на mobile, на desktop оставить A.` },
-    { chart: null, text: `Итог разбора: 1) скошенные данные → медиана/перцентили; 2) выбросы реальны → не удалять; 3) ключевой сегмент — устройство; 4) ATE значим, но 5) CATE показывает разнонаправленный эффект — решение сегментное. Один датасет — почти весь курс: распределения, выбросы, сегменты, A/B, ATE/CATE, причинность.` },
+    { chart: null, text: `Итог разбора: 1) асимметричные данные → медиана/перцентили; 2) выбросы реальны → не удалять; 3) ключевой сегмент — устройство; 4) ATE значим, но 5) CATE показывает разнонаправленный эффект — решение сегментное. Один датасет — почти весь курс: распределения, выбросы, сегменты, A/B, ATE/CATE, причинность.` },
   ]
 
   return (

@@ -46,7 +46,7 @@ export default function ROC({ locale = 'ru' }) {
         <line x1={sx(cur.fpr)} y1={sy(cur.tpr)} x2={sx(cur.fpr)} y2={sy(0)} stroke="#fbbf24" strokeWidth="1" strokeDasharray="3 3" opacity="0.7" />
         <line x1={sx(cur.fpr)} y1={sy(cur.tpr)} x2={sx(0)} y2={sy(cur.tpr)} stroke="#fbbf24" strokeWidth="1" strokeDasharray="3 3" opacity="0.7" />
         <circle cx={sx(cur.fpr)} cy={sy(cur.tpr)} r="6" fill="#fbbf24" />
-        <text x={W / 2} y={H - 10} fill="#6b7280" fontSize="11" textAnchor="middle">{en ? 'FPR (false alarms) →' : 'FPR (ложные срабатывания) →'}</text>
+        <text x={W / 2} y={H - 10} fill="#6b7280" fontSize="11" textAnchor="middle">{en ? 'FPR (false alarms) →' : 'FPR (доля ложноположительных) →'}</text>
         <text x={16} y={H / 2} fill="#6b7280" fontSize="11" textAnchor="middle" transform={`rotate(-90 16 ${H / 2})`}>{en ? 'TPR (spam caught) →' : 'TPR (пойман спам) →'}</text>
         <text x={W - PAD - 6} y={PAD + 14} fill="#2ab8eb" fontSize="13" textAnchor="end" fontWeight="600">AUC {auc.toFixed(2)}</text>
       </svg>

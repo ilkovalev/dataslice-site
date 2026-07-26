@@ -109,7 +109,7 @@ export default function PowerCurve({ locale = 'ru' }) {
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs mt-1 mb-1">
         <span className="text-gray-500"><span className="inline-block w-3 h-0.5 align-middle bg-[#9ca3af]" /> {en ? 'H0: no effect' : 'H0: эффекта нет'}</span>
         <span className="text-cyanink"><span className="inline-block w-3 h-0.5 align-middle bg-[#2ab8eb]" /> {en ? 'H1: the effect is real' : 'H1: эффект есть'}</span>
-        <span className="text-[#dc4d4d]">■ α — {en ? 'false alarm' : 'ложное срабатывание'} ({(alpha * 100).toFixed(0)}%)</span>
+        <span className="text-[#dc4d4d]">■ α — {en ? 'false alarm' : 'ложноположительный результат'} ({(alpha * 100).toFixed(0)}%)</span>
         <span className="text-[#c69214]">■ β — {en ? 'missed effect' : 'пропуск эффекта'} ({((1 - curPower) * 100).toFixed(0)}%)</span>
         <span className="text-cyanink">■ {en ? 'power' : 'мощность'} = 1−β ({(curPower * 100).toFixed(0)}%)</span>
       </div>

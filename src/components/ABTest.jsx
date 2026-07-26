@@ -110,7 +110,7 @@ export default function ABTest({ locale = 'ru' }) {
           <span className="text-sm text-gray-700">
             {en ? 'intervals separated in' : 'интервалы разошлись в'} <b className="text-cyanink">{tally.sep}</b> {en ? `of ${tally.total} runs` : `из ${tally.total} прогонов`}
             ({((tally.sep / tally.total) * 100).toFixed(0)}%)
-            {rateA === rateB && <span className="text-[#f87171] text-xs ml-1">{en ? '— there is no true difference, these are false positives' : '— истинной разницы нет, это ложные срабатывания'}</span>}
+            {rateA === rateB && <span className="text-[#f87171] text-xs ml-1">{en ? '— there is no true difference, these are false positives' : '— истинной разницы нет, это ложноположительные результаты'}</span>}
           </span>
         )}
       </div>

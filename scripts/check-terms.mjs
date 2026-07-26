@@ -20,7 +20,9 @@ const rel = (p) => path.relative(root, p)
 // (Так и было пропущено «ложное срабатывание» в hypothesis-test.)
 const W = '[а-яё]*' // русское окончание
 const RULES = [
-  { re: /скошенн[а-яё]*|перекош[а-яё]+|(?<![а-яё])скос(?![а-яё])/gi, msg: 'скошенность → асимметрия' },
+  // Основа «скош», а не «скошенн»: краткие формы («данные скошены») пишутся
+  // с одной «н» и проходили мимо. «скос» — с любым окончанием, «скоса» тоже.
+  { re: /(?<![а-яё])(скош[а-яё]+|скос[а-яё]*|перекош[а-яё]+)(?![а-яё])/gi, msg: 'скошенность → асимметрия' },
   { re: new RegExp(`ложн${W}\\s+тревог${W}`, 'gi'), msg: 'ложная тревога → ложноположительный результат' },
   { re: new RegExp(`ложн${W}\\s+срабатыван${W}`, 'gi'), msg: 'ложное срабатывание → ложноположительный результат' },
   { re: /ошибк[а-яё]*\s+(?:I|II)\s+рода/g, msg: 'ошибка I рода → ошибка первого рода (словом)' },
@@ -83,10 +85,29 @@ function checkDuplicateIds(dir) {
 }
 
 // --- прогон -------------------------------------------------------------
+// Пятая поверхность: подписи внутри виджетов. Их легко забыть — они не в
+// контенте, а в коде, — и там дольше всего жили «скошенная совокупность»
+// и «ложное срабатывание» уже после того, как уроки были вычищены.
+function collectWidgets(dir) {
+  const out = []
+  for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.jsx'))) {
+    const full = path.join(dir, f)
+    const src = fs.readFileSync(full, 'utf8')
+    // строковые литералы и текст между тегами — всё, что видит пользователь
+    for (const m of src.matchAll(/'([^'\\\n]{6,})'|>([^<>{}\n]{6,})</g)) {
+      const text = m[1] ?? m[2]
+      if (!/[а-яё]/i.test(text)) continue
+      out.push({ file: rel(full), path: `строка ${src.slice(0, m.index).split('\n').length}`, text })
+    }
+  }
+  return out
+}
+
 const fields = [
   ...collectJson(path.join(root, 'src/content/lessons')),
   ...collectJs(path.join(root, 'src/content/tooltipTerms.js'), /def:\s*'((?:[^'\\]|\\.)*)'/g),
   ...collectJs(path.join(root, 'src/content/glossary.js'), /def:\s*'((?:[^'\\]|\\.)*)'/g),
+  ...collectWidgets(path.join(root, 'src/components')),
 ]
 
 const problems = []

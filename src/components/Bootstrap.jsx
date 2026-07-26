@@ -86,7 +86,7 @@ export default function Bootstrap({ locale = 'ru' }) {
     <div className="rounded-xl border border-black/10 bg-panel p-5">
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none">
         {/* ВЕРХ: гистограмма исходной выборки */}
-        <text x={PAD} y={18} fill="#6b7280" fontSize="10">{en ? 'the original sample (right-skewed) — we draw n values from it with replacement' : 'исходная выборка (скошена вправо) — тянем из неё n значений с возвратом'}</text>
+        <text x={PAD} y={18} fill="#6b7280" fontSize="10">{en ? 'the original sample (right-skewed) — we draw n values from it with replacement' : 'исходная выборка (асимметрична вправо) — тянем из неё n значений с возвратом'}</text>
         {tCounts.map((c, k) => {
           const h = (c / tMaxC) * (TBASE - TTOP)
           const x0 = ax(tMin + k * tBinW), x1 = ax(tMin + (k + 1) * tBinW)

@@ -56,8 +56,8 @@ export default function FeatureClassifier({ locale = 'ru' }) {
         </g>
         <line x1={PAD} y1={H - PAD} x2={W - PAD} y2={H - PAD} stroke="#d6cebf" strokeWidth="1.5" />
         <line x1={PAD} y1={PAD} x2={PAD} y2={H - PAD} stroke="#d6cebf" strokeWidth="1.5" />
-        <text x={W - PAD} y={H - PAD + 20} fill="#9a907c" fontSize="11" textAnchor="end">{en ? 'feature 1: share of links →' : 'фича 1: доля ссылок →'}</text>
-        <text x={PAD - 6} y={PAD - 12} fill="#9a907c" fontSize="11">{en ? 'feature 2: "urgent/money"' : 'фича 2: «срочно/деньги»'}</text>
+        <text x={W - PAD} y={H - PAD + 20} fill="#9a907c" fontSize="11" textAnchor="end">{en ? 'feature 1: share of links →' : 'признак 1: доля ссылок →'}</text>
+        <text x={PAD - 6} y={PAD - 12} fill="#9a907c" fontSize="11">{en ? 'feature 2: "urgent/money"' : 'признак 2: «срочно/деньги»'}</text>
         {dots0}
         {dots1}
       </svg>

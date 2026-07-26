@@ -10,8 +10,8 @@
       "text": "First, where power comes from at all. The top chart shows two distributions of our estimate of the between-group difference. The gray bell on the left — the world with NO effect (H0): the difference is zero on average, but the estimate wanders around zero due to chance. The blue bell on the right — the world with a real effect (H1): the estimate wanders around the true difference. Horizontal axis — what difference we might measure."
     },
     {
-      "text": "The black dashed line is the critical value (the statistic's threshold): to its right we declare \"effect found\". Both errors are now visible at once. The red zone — the slice of the GRAY bell right of the threshold: no effect, yet we \"found\" one (a false alarm, α). The yellow zone — the slice of the BLUE bell left of the threshold: the effect exists, yet we overlooked it (a miss, β). The blue zone to the right is power itself: the share of cases where we caught the real effect (1 − β).",
-      "predict": "Slide the σ (spread) slider to the left, toward small. What happens to the yellow β zone?",
+      "text": "The black dashed line is the critical value (the statistic's threshold): to its right we declare \"effect found\". Both errors are now visible at once. The yellow zone — the slice of the GRAY bell right of the threshold: no effect, yet we \"found\" one (a false positive, α). The red zone — the slice of the BLUE bell left of the threshold: the effect exists, yet we overlooked it (a miss, β). The blue zone to the right is power itself: the share of cases where we caught the real effect (1 − β).",
+      "predict": "Slide the σ (spread) slider to the left, toward small. What happens to the red β zone?",
       "reveal": "It shrinks. Smaller σ → narrower bells that barely overlap → almost no misses, power grows. Growing n does the same: the standard error σ/√n falls and the bells tighten."
     },
     {

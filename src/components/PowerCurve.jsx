@@ -92,8 +92,8 @@ export default function PowerCurve({ locale = 'ru' }) {
       <svg viewBox={`0 0 ${W} ${HD}`} className="w-full h-auto select-none">
         <line x1={PADX} y1={base} x2={W - PADX} y2={base} stroke="#d6cebf" strokeWidth="1.5" />
         {/* заливки */}
-        <path d={area(0, crit, xhi)} fill="#dc4d4d" opacity="0.30" />
-        <path d={area(diff, xlo, crit)} fill="#fbbf24" opacity="0.35" />
+        <path d={area(0, crit, xhi)} fill="#fbbf24" opacity="0.35" />
+        <path d={area(diff, xlo, crit)} fill="#dc4d4d" opacity="0.30" />
         <path d={area(diff, crit, xhi)} fill="#2ab8eb" opacity="0.16" />
         {/* кривые */}
         <path d={curvePts(0)} fill="none" stroke="#9ca3af" strokeWidth="2" />
@@ -109,8 +109,8 @@ export default function PowerCurve({ locale = 'ru' }) {
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs mt-1 mb-1">
         <span className="text-gray-500"><span className="inline-block w-3 h-0.5 align-middle bg-[#9ca3af]" /> {en ? 'H0: no effect' : 'H0: эффекта нет'}</span>
         <span className="text-cyanink"><span className="inline-block w-3 h-0.5 align-middle bg-[#2ab8eb]" /> {en ? 'H1: the effect is real' : 'H1: эффект есть'}</span>
-        <span className="text-[#dc4d4d]">■ α — {en ? 'false alarm' : 'ложноположительный результат'} ({(alpha * 100).toFixed(0)}%)</span>
-        <span className="text-[#c69214]">■ β — {en ? 'missed effect' : 'пропуск эффекта'} ({((1 - curPower) * 100).toFixed(0)}%)</span>
+        <span className="text-[#c69214]">■ α — {en ? 'false alarm' : 'ложноположительный результат'} ({(alpha * 100).toFixed(0)}%)</span>
+        <span className="text-[#dc4d4d]">■ β — {en ? 'missed effect' : 'пропуск эффекта'} ({((1 - curPower) * 100).toFixed(0)}%)</span>
         <span className="text-cyanink">■ {en ? 'power' : 'мощность'} = 1−β ({(curPower * 100).toFixed(0)}%)</span>
       </div>
 
@@ -154,7 +154,7 @@ export default function PowerCurve({ locale = 'ru' }) {
           <input type="range" min="0.01" max="0.1" step="0.01" value={alpha} onChange={(e) => setAlpha(Number(e.target.value))} className="w-full accent-accent" />
         </label>
       </div>
-      <p className="text-xs text-gray-500 leading-relaxed mt-3">{en ? <>The metric is the average receipt, {MU} ₽. We control not the mean difference directly (the business goal sets it) but the MDE — the minimum % lift we want to catch reliably; it sets the center of the blue H1 (+{Math.round(diff)} ₽). The top chart shows two distributions of the estimate: gray under "no effect" (H0), blue under "the effect is real" (H1). The threshold splits the axis into decisions: red right of the threshold under H0 is α (noise taken for effect), yellow left of it under H1 is β (a real effect overlooked). Smaller σ or bigger n narrow the bells → β falls, power grows. The bottom chart folds this into the power-vs-n curve: n is chosen to fit the MDE, not the other way around.</> : <>Метрика — средний чек, {MU} ₽. Управляем не разницей средних напрямую (её задаёт бизнес-цель), а MDE — минимальным приростом в %, который хотим уверенно ловить; он и задаёт центр синей H1 (+{Math.round(diff)} ₽). Верхний график — два распределения оценки: серое при «эффекта нет» (H0), синее при «эффект есть» (H1). Порог делит ось на решения: красное справа от порога под H0 — α (приняли шум за эффект), жёлтое слева под H1 — β (проглядели реальный эффект). Меньше σ или больше n сужают колокола → β падает, мощность растёт. Нижний график собирает это в кривую «мощность от n»: под заданный MDE подбирают n, а не наоборот.</>}</p>
+      <p className="text-xs text-gray-500 leading-relaxed mt-3">{en ? <>The metric is the average order value, {MU} ₽. We control not the mean difference directly (the business goal sets it) but the MDE — the minimum % lift we want to catch reliably; it sets the center of the blue H1 (+{Math.round(diff)} ₽). The top chart shows two distributions of the estimate: gray under "no effect" (H0), blue under "the effect is real" (H1). The threshold splits the axis into decisions: yellow right of the threshold under H0 is α (noise taken for effect), red left of it under H1 is β (a real effect overlooked). Smaller σ or bigger n narrow the bells → β falls, power grows. The bottom chart folds this into the power-vs-n curve: n is chosen to fit the MDE, not the other way around.</> : <>Метрика — средний чек, {MU} ₽. Управляем не разницей средних напрямую (её задаёт бизнес-цель), а MDE — минимальным приростом в %, который хотим уверенно ловить; он и задаёт центр синей H1 (+{Math.round(diff)} ₽). Верхний график — два распределения оценки: серое при «эффекта нет» (H0), синее при «эффект есть» (H1). Порог делит ось на решения: жёлтое справа от порога под H0 — α (приняли шум за эффект), красное слева под H1 — β (проглядели реальный эффект). Меньше σ или больше n сужают колокола → β падает, мощность растёт. Нижний график собирает это в кривую «мощность от n»: под заданный MDE подбирают n, а не наоборот.</>}</p>
     </div>
   )
 }

@@ -97,7 +97,7 @@ export default function HypothesisTest({ locale = 'ru' }) {
 
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm">
         <span className="text-gray-700">{en ? 'critical value = ' : 'критич. значение = '}{twoSided ? '±' : ''}{crit.toFixed(0)} ₽ {en ? '(computed)' : '(расчётное)'}</span>
-        <span className="text-[#d9a300]">α {en ? '(false alarm)' : '(ложноположительный результат)'}: {(alpha * 100).toFixed(0)}%</span>
+        <span className="text-[#d9a300]">α {en ? '(false positive)' : '(ложноположительный результат)'}: {(alpha * 100).toFixed(0)}%</span>
         <span className="text-[#f87171]">β {en ? '(miss)' : '(пропуск)'}: {(beta * 100).toFixed(1)}%</span>
         <span className="text-[#2ab8eb]">{en ? 'Power' : 'Мощность'} (1−β): {(power * 100).toFixed(1)}%</span>
       </div>

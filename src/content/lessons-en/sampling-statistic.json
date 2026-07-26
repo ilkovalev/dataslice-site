@@ -43,8 +43,8 @@
     }
   ],
   "practice": [
-    "This frame instantly changes how you read any number. \"Conversion is 12%\" is not the truth but one realization of a random estimate; the right question is \"how wide is its sampling distribution?\". Intervals and significance testing grow naturally from here.",
-    "And this is also why sample size matters so much: it directly squeezes the estimate's sampling distribution, i.e. reduces its random wandering around the truth."
+    "The idea that every estimate is random changes how you read any number in a report. \"Conversion is 12%\" sounds like a fact, but it is not the truth — it is one realization of a random estimate: collect the data for a different week and you would get 11% or 13%, while the real conversion never moved. So the number alone, without a sense of its spread, is nearly useless: 12% from a sample of 50 and 12% from a sample of 50,000 are two completely different degrees of confidence, even though the figure is the same. The right question to ask of any estimate is not \"what is it?\" but \"how widely could it have scattered?\".",
+    "Two practical conclusions follow. First: an estimate is judged as an instrument — a good one is unbiased (on average it hits the truth rather than missing to one side every time) and narrow (it varies little from sample to sample). Second: that spread is under your control — the larger the sample, the more tightly estimates cluster around the truth. So \"how much data to collect\" is not a technical question but the main lever of precision."
   ],
   "realLife": [
     "Polls, ratings, quality measurements, product metrics — everywhere you hold only a sample-based estimate. A professional automatically keeps its sampling distribution in mind and never confuses \"the number we got\" with \"the truth\".",

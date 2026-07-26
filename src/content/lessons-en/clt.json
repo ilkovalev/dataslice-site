@@ -46,8 +46,8 @@
     }
   ],
   "practice": [
-    "It is thanks to the CLT that polling 1,500 people yields a reliable estimate of a whole country's mood — no need to ask everyone. A random sample's mean is predictably close to the truth.",
-    "And the larger the sample, the narrower the error bell, i.e. the more precise the estimate — which is why sample size is always center stage."
+    "The main consequence of the CLT feels like a miracle: a tiny part lets you judge the whole. A single sample does lie, of course — by chance it catches somewhat richer or somewhat poorer people, and its mean will not match the truth. But it lies predictably: the means of different samples scatter around the true value in a neat bell, not at random. And once we know the shape of that scatter, we know how far our one sample could have missed. That is why polling 1,500 people reliably gauges the mood of a whole country: what matters is not the share of people covered, but that a random sample of sufficient size misses by a predictably small amount.",
+    "How small is set by the standard error σ/√n, and it hides an annoying detail: precision grows as the square root of sample size, not in proportion to it. Halving the error takes four times the data. The first few hundred observations cut the uncertainty sharply, after which each additional thousand adds less and less — which is why polls stop at around 1,500: the error is already about 2–3%, and going further is expensive and nearly pointless."
   ],
   "realLife": [
     "Quality control checks the mean of 30 parts, not the whole batch. Ratings and indexes average samples. All of it works because means behave predictably.",

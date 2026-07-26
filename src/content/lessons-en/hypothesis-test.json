@@ -12,10 +12,10 @@
     {
       "text": "Choosing α has a price.",
       "predict": "Increase α (say, from 5% to 15%) — the critical value slides toward zero, and declaring \"there is an effect\" becomes easier. What happens to the two errors?",
-      "reveal": "They pull in opposite directions. Larger α — the threshold moves toward zero, we catch real effects more often (fewer misses, β↓), but we also cry \"effect!\" more often where there is none (more false alarms — that IS α↑). There is no ideal α — only a trade-off. That is why the critical value is not eyeballed but set through α."
+      "reveal": "They pull in opposite directions. Larger α — the threshold moves toward zero, we catch real effects more often (fewer misses, β↓), but we also cry \"effect!\" more often where there is none (more false positives — that IS α↑). There is no ideal α — only a trade-off. That is why the critical value is not eyeballed but set through α."
     },
     {
-      "text": "Let's name things. α (the yellow area) — a false alarm, Type I error: declaring an effect that does not exist. β (the red area) — a miss, Type II error: overlooking a real effect. Power (1−β) — the chance of catching a true effect. And the p-value (next step, separate chart) — how easily the observed result could arise in the \"gray\" world with no effect: a small p means chance is a poor explanation."
+      "text": "Let's name things. α (the yellow area) — a false positive, Type I error: declaring an effect that does not exist. β (the red area) — a miss, Type II error: overlooking a real effect. Power (1−β) — the chance of catching a true effect. And the p-value (next step, separate chart) — how easily the observed result could arise in the \"gray\" world with no effect: a small p means chance is a poor explanation."
     },
     {
       "text": "Now — what the p-value is, on its own chart. The gray bell is how the result would \"wander\" purely by chance IF there is no effect (H0). Suppose our experiment measured some result (the blue line). The p-value is the red tail area beyond it: the probability of getting a result this far from zero, or farther, when no effect exists.",
@@ -47,7 +47,7 @@
     },
     {
       "term": "Type I error (α)",
-      "text": "a false alarm: declaring an effect that does not exist. The significance level is the allowed α (often 5%)."
+      "text": "a false positive: declaring an effect that does not exist. The significance level is the allowed α (often 5%)."
     },
     {
       "term": "Type II error (β) and power",
@@ -60,7 +60,7 @@
   ],
   "decision": "Before the test, fix the default action (\"don't ship\") and the threshold α. The test changes the decision in one direction only: p-value below the threshold — ship. In every other case we stay with the default — which is not \"we proved there is no effect\".",
   "practice": [
-    "Picture a drug trial. H0 — \"does not help\", H1 — \"helps\". A false alarm: approving a placebo. A miss: rejecting a working drug. The costs differ, so the threshold (significance level) is chosen deliberately, not \"5% by habit\".",
+    "Picture a drug trial. H0 — \"does not help\", H1 — \"helps\". A false positive: approving a placebo. A miss: rejecting a working drug. The costs differ, so the threshold (significance level) is chosen deliberately, not \"5% by habit\".",
     "And remember the law of large numbers: on a tiny sample any \"difference\" may be noise. A sufficient sample size is part of an honest test."
   ],
   "realLife": [
@@ -73,7 +73,7 @@
     "Why you cannot \"prove H1 directly\". We cannot enumerate every way the effect might exist, but we can compute exactly how a world WITHOUT the effect (H0) behaves. So the logic is always by contradiction: show that what we observed is too improbable for the H0 world. This is an asymmetry — as in court: we reject the presumption of innocence given strong evidence, but \"not rejected\" does not mean \"innocence proven\"."
   ],
   "assumptions": [
-    "A p-value is honest for one pre-specified question. Many metrics, segments, or stopping the test \"once it looks significant\" turn 5% false alarms into tens of percent — see the lessons on multiple comparisons and peeking.",
+    "A p-value is honest for one pre-specified question. Many metrics, segments, or stopping the test \"once it looks significant\" turn 5% false positives into tens of percent — see the lessons on multiple comparisons and peeking.",
     "A small p does not mean a large or important effect: on a huge sample even +0.01% becomes significant. Look at the effect size and the confidence interval, not only the 0.05 threshold."
   ],
   "nextLabel": "How to compare two means in practice? → Statistical tests: which one to pick",

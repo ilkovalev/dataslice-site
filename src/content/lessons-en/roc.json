@@ -12,7 +12,7 @@
     {
       "text": "The ends of the curve reveal its meaning.",
       "predict": "Move the threshold to the most lenient (marking almost everything as spam). Where does the dot land, and what does that mean?",
-      "reveal": "The top right corner: caught all the spam (TPR 100%) but drowned everything in false alarms (FPR 100%). The strictest threshold is the bottom left corner: no false alarms, no spam caught either. A good classifier hugs the top LEFT corner — catches a lot, errs little."
+      "reveal": "The top right corner: caught all the spam (TPR 100%) but drowned everything in false positives (FPR 100%). The strictest threshold is the bottom left corner: no false positives, no spam caught either. A good classifier hugs the top LEFT corner — catches a lot, errs little."
     },
     {
       "text": "The gray diagonal is random guessing (a coin flip): TPR always equals FPR, no use at all. The higher the curve rises above the diagonal, the better the model tells the classes apart. The area under the curve (filled in teal) is the AUC."
@@ -39,7 +39,7 @@
     },
     {
       "term": "TPR and FPR",
-      "text": "TPR — the share of the target class caught (recall); FPR — the share of false alarms among the \"clean\" ones."
+      "text": "TPR — the share of the target class caught (recall); FPR — the share of false positives among the \"clean\" ones."
     },
     {
       "term": "AUC",
@@ -53,7 +53,7 @@
   ],
   "practice": [
     "AUC is the standard metric for comparing classifiers: models in credit scoring, medicine and anti-fraud are chosen by it. Conveniently, AUC depends neither on the threshold nor on how rare the class is — so it is more honest than the \"share of correct answers\", which deceives under imbalance.",
-    "But AUC is about ranking overall, not about a specific decision. Having chosen a model by AUC, you still set the operating point (the threshold) separately: by what costs more — a miss or a false alarm. On heavily imbalanced tasks you additionally look at the PR curve (precision against recall)."
+    "But AUC is about ranking overall, not about a specific decision. Having chosen a model by AUC, you still set the operating point (the threshold) separately: by what costs more — a miss or a false positive. On heavily imbalanced tasks you additionally look at the PR curve (precision against recall)."
   ],
   "realLife": [
     "From radar, ROC migrated to medicine (how well a test separates the sick from the healthy) and from there to all of machine learning: disease detectors, anti-fraud, recommender systems, credit models.",

@@ -26,7 +26,7 @@
       "reveal": "z = (192 − 178) / 7 = 2. That is +2σ: taller than roughly 97–98% of people. The same trick converts any value into \"how rare is this\" regardless of units — height, test scores, part tolerances are all scored the same way."
     },
     {
-      "text": "Why is the bell so common? When a quantity is the sum of many small independent random influences, they partially cancel out and the result clusters near the middle. Human height, measurement errors, part deviations on an assembly line all work this way. Not a coincidence but a consequence of a deep fact we will reach in the sampling module (the central limit theorem)."
+      "text": "Where does the bell come from — and why so often? Picture a quantity made up of many small independent chance influences, none of them dominant. Some push the result up, some down, and across many terms these pushes cancel out on average. For a value to land at the very edge, almost all the influences would have to conspire and pull the same way — which is extremely unlikely. So the result most often lands somewhere in the middle, occasionally a little off to the side, and almost never at the edge. That is how the bell grows. It is also why human height, measurement errors and part deviations on an assembly line fall into it: each of those is a sum of many small influences. Not a coincidence but a consequence of the central limit theorem, which we will reach in the sampling module."
     }
   ],
   "definitions": [
@@ -57,8 +57,9 @@
     }
   ],
   "practice": [
-    "Knowing only μ and σ you can answer questions like \"what share of people are taller than 190 cm\" or \"how unusual is this result\" — without having the data itself.",
-    "Many techniques rest on normality: 3σ quality control, group comparisons, \"norm\" estimates. That is why recognizing the bell by shape matters."
+    "The main gift of the bell is describing a whole mountain of data with just two numbers. Normally, to say anything about a quantity you need the data itself. But if the shape is normal, then μ (where the centre sits) and σ (how widely everything spreads) contain the rest: to answer \"what share of people are taller than 190 cm\", μ = 178 and σ = 7 is enough — no census required. Two numbers stand in for thousands of observations without losing anything that matters.",
+    "The second gift is a common language for things that cannot be compared. Height in centimetres, test scores in points, a part's deviation in microns do not line up directly. But the z-score puts any value on one scale — \"how many σ it sits from the centre\" — and a person 192 cm tall (z = 2) turns out to be exactly as unusual as a student scoring two sigmas above average. That is why z-scores are everywhere, from medical norms to credit scoring.",
+    "And the practical upshot: all of this holds only while the shape really is bell-like. So the first step is not computing σ and percentages but looking at the histogram and making sure you have a bell in front of you, not an asymmetric tail pretending to be one."
   ],
   "realLife": [
     "Adult height fits the bell almost perfectly. Medical norms are built the same way: values near the middle count as \"normal\", and deviation is measured in σ.",

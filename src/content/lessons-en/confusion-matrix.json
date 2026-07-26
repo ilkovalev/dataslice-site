@@ -15,7 +15,7 @@
       "reveal": "Recall grows (we catch more spam) while precision falls (we snag real emails along with the spam). Moving the threshold, you always trade one for the other — you cannot raise both at once, only pick a balance."
     },
     {
-      "text": "The same numbers also go by their \"medical\" names. TPR (true positive rate) IS recall: the share of the target class caught. FPR (false positive rate) is the share of false alarms among the \"clean\" ones: FP / (FP + TN). Remember the TPR/FPR pair — the ROC curve grows out of it in the next lesson."
+      "text": "The same numbers also go by their \"medical\" names. TPR (true positive rate) IS recall: the share of the target class caught. FPR (false positive rate) is the share of false positives among the \"clean\" ones: FP / (FP + TN). Remember the TPR/FPR pair — the ROC curve grows out of it in the next lesson."
     },
     {
       "text": "Now raise the \"class separability\".",
@@ -26,7 +26,7 @@
       "text": "The main trap is accuracy, the share of correct answers (TP + TN) / total. On balanced classes it is reasonable, but on a rare class it deceives brutally. If spam is only 1%, the model \"nothing is spam\" is right 99% of the time — accuracy is huge, recall is zero, usefulness is zero. That is why on rare classes you watch precision and recall, not overall accuracy."
     },
     {
-      "text": "Which metric to choose is dictated by the cost of the error. Losing an important email hurts → protect precision (threshold higher). Missing a fraudulent transaction or a disease is dangerous → sacrifice precision for recall (threshold lower). There is no universal answer: first decide what costs more — a false alarm or a miss — and tune the threshold to that."
+      "text": "Which metric to choose is dictated by the cost of the error. Losing an important email hurts → protect precision (threshold higher). Missing a fraudulent transaction or a disease is dangerous → sacrifice precision for recall (threshold lower). There is no universal answer: first decide what costs more — a false positive or a miss — and tune the threshold to that."
     }
   ],
   "definitions": [

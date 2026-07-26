@@ -45,6 +45,7 @@
     }
   ],
   "practice": [
+    "At first the bootstrap feels like cheating: how can you learn about an estimate's reliability without collecting anything new, just by reshuffling the same data? The secret is that the sample itself is our best (and only) map of the population. Draw values from it at random with replacement and you get a \"pseudo-sample\" — the kind you might have collected on a parallel attempt. Compute the metric on a thousand such pseudo-samples and you see with your own eyes how much it varies from sample to sample — the very uncertainty formulas used to be derived for.",
     "The bootstrap is the workhorse when formulas are missing or data is non-normal: a confidence interval for median revenue, for conversion at small counts, for any custom dashboard metric.",
     "The same principle underlies many machine-learning methods (bagging, random forests): train models on resampled datasets and average."
   ],

@@ -31,7 +31,7 @@ export default function BayesGrid({ locale = 'ru' }) {
         <rect x={PAD} y={28} width={tpW} height={34} fill="#2ab8eb" opacity="0.85" />
         <rect x={PAD + tpW} y={28} width={barW - tpW} height={34} fill="#fbbf24" opacity="0.7" />
         <text x={PAD + 6} y={50} fill="#ffffff" fontSize="12">{en ? 'actually sick: ' : 'реально больны: '}{Math.round(tp)}</text>
-        <text x={W - PAD - 6} y={78} fill="#fbbf24" fontSize="11" textAnchor="end">{en ? 'false alarms: ' : 'ложноположительные: '}{Math.round(fp)}</text>
+        <text x={W - PAD - 6} y={78} fill="#fbbf24" fontSize="11" textAnchor="end">{en ? 'false positives: ' : 'ложноположительные: '}{Math.round(fp)}</text>
       </svg>
 
       <div className="mt-3 text-lg">

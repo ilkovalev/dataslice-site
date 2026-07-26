@@ -12,13 +12,13 @@
     {
       "text": "But ROC/AUC also flatter under heavy imbalance.",
       "predict": "Why can AUC be high (0.95) while in practice almost everyone marked \"fraudster\" is honest?",
-      "reveal": "Because FPR is computed against the HUGE mass of honest users: even FPR = 2% with 99.8% honest gives an avalanche of false alarms, far outnumbering the handful of real fraudsters. ROC doesn't feel this (it is about shares within classes), while precision collapses. AUC is high, yet the system is unusable."
+      "reveal": "Because FPR is computed against the HUGE mass of honest users: even FPR = 2% with 99.8% honest gives an avalanche of false positives, far outnumbering the handful of real fraudsters. ROC doesn't feel this (it is about shares within classes), while precision collapses. AUC is high, yet the system is unusable."
     },
     {
       "text": "That is why on a rare class you look at the PR curve — precision against recall (it is in front of you). Shrink the \"rare class share\" — the curve sags, and precision at recall 80% drops, even though ROC-AUC barely moves. PR is more honest than ROC precisely because precision feels the rarity of the class."
     },
     {
-      "text": "F1 helps roll it into one number — the harmonic mean of precision and recall: it is high only when BOTH are high. The harmonic (not the ordinary) mean punishes skew hard: recall 100% at precision 2% gives F1 ≈ 4%, not 51%. When the cost of a miss and a false alarm differ, Fβ is used, tilted the needed way."
+      "text": "F1 helps roll it into one number — the harmonic mean of precision and recall: it is high only when BOTH are high. The harmonic (not the ordinary) mean punishes skew hard: recall 100% at precision 2% gives F1 ≈ 4%, not 51%. When the cost of a miss and a false positive differ, Fβ is used, tilted the needed way."
     },
     {
       "text": "What to do about the imbalance itself: tune the threshold to the cost of the error (rather than leaving 0.5), weight the classes during training, sometimes re-sample (down/up-sampling). But the metric is chosen FOR the task: for a rare important class — precision/recall/PR-AUC, not accuracy and not bare ROC-AUC."
@@ -31,7 +31,7 @@
     { "term": "Weighting / re-sampling", "text": "remedies for imbalance: class weights during training, down/up-sampling of the rare class." }
   ],
   "practice": [
-    "The first question in classification: how rare is the class? If rare and important (fraud, disease) — set accuracy and bare ROC-AUC aside and look at precision/recall, PR-AUC, F1, tuning the threshold to the cost of a miss vs a false alarm.",
+    "The first question in classification: how rare is the class? If rare and important (fraud, disease) — set accuracy and bare ROC-AUC aside and look at precision/recall, PR-AUC, F1, tuning the threshold to the cost of a miss vs a false positive.",
     "A high AUC under heavy imbalance is a reason not to celebrate but to check precision at the operating threshold: it often turns out that 95% of the alerts are false and the system is drowning."
   ],
   "realLife": [

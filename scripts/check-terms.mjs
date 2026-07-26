@@ -72,6 +72,38 @@ function collectJs(file, reField) {
   return out
 }
 
+// --- рассинхрон локалей --------------------------------------------------
+// Русский текст правят чаще английского, и перевод отстаёт незаметно: абзац
+// расширили в RU, EN остался прежним. Так в bootstrap и normal-distribution
+// в EN вообще не хватало по одному пункту practice, а десяток полей был
+// вдвое короче оригинала. Ловим и разное число элементов, и обрубки.
+function checkLocaleSync(ruDir, enDir) {
+  const out = []
+  const enById = {}
+  for (const f of fs.readdirSync(enDir).filter((x) => x.endsWith('.json'))) {
+    const j = JSON.parse(fs.readFileSync(path.join(enDir, f), 'utf8'))
+    enById[j.id] = j
+  }
+  for (const f of fs.readdirSync(ruDir).filter((x) => x.endsWith('.json'))) {
+    const ru = JSON.parse(fs.readFileSync(path.join(ruDir, f), 'utf8'))
+    const en = enById[ru.id]
+    if (!en) continue
+    for (const key of ['beats', 'practice', 'realLife', 'assumptions', 'definitions', 'deepDive']) {
+      const a = (ru[key] ?? []).length
+      const b = (en[key] ?? []).length
+      if (a !== b) out.push(`${ru.id}.${key}: в RU ${a} элементов, в EN ${b} — перевод отстал`)
+    }
+    for (const [p, s] of walk(ru)) {
+      if (SKIP_KEYS.test(p) || s.length < 200) continue
+      const e = p.split(/[.[\]]+/).filter(Boolean).reduce((o, k) => o?.[k], en)
+      if (typeof e === 'string' && e.length / s.length < 0.62) {
+        out.push(`${ru.id}.${p}: EN вдвое короче RU (${s.length} → ${e.length}) — вероятно, устаревший перевод`)
+      }
+    }
+  }
+  return out
+}
+
 // --- дубли id -----------------------------------------------------------
 function checkDuplicateIds(dir) {
   const seen = {}
@@ -124,6 +156,7 @@ for (const f of fields) {
 }
 problems.push(...checkDuplicateIds(path.join(root, 'src/content/lessons')))
 problems.push(...checkDuplicateIds(path.join(root, 'src/content/lessons-en')))
+problems.push(...checkLocaleSync(path.join(root, 'src/content/lessons'), path.join(root, 'src/content/lessons-en')))
 
 if (problems.length) {
   console.error(`\n✗ проверка терминов: ${problems.length} замечаний (канон — src/content/TERMS.md)\n`)

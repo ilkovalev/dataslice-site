@@ -15,7 +15,7 @@
       "reveal": "At zero the lines are parallel — the test's effect is the same on mobile and desktop (no interaction). As it grows they diverge and may cross: on mobile the test helps, on desktop it hurts. That IS the interaction — factor A's effect depends on B's level. The average effect here is deceptive (remember ATE/CATE and Simpson): an interaction is the statistical name of a heterogeneous effect."
     },
     {
-      "text": "How to read the result: three tests. The main effect of A (averaged over B), the main effect of B (averaged over A), and the A×B interaction. If the interaction is significant, the main effects are interpreted with care: saying \"the design helps\" is meaningless — you must say \"helps on iOS, hurts on Android\"."
+      "text": "How to read the result: three tests. The main effect of A (averaged over B), the main effect of B (averaged over A), and the A×B interaction. If the interaction is significant, the main effects are interpreted with care: saying \"the design helps\" is meaningless — you must say \"helps on mobile, hurts on desktop\"."
     },
     {
       "text": "The link to what you know. Two-way ANOVA is again a special case of regression: y on two categorical factors plus their product (the interaction term). And the \"interaction\" here is exactly the CATE/heterogeneity from A/B testing, just in variance packaging."
@@ -25,10 +25,22 @@
     }
   ],
   "definitions": [
-    { "term": "Two-way ANOVA", "text": "analysis of two factors at once: their main effects and the interaction." },
-    { "term": "Main effect", "text": "the effect of one factor averaged over the levels of the other." },
-    { "term": "Interaction (A×B)", "text": "one factor's effect depends on the other's level; the statistical name of a heterogeneous effect." },
-    { "term": "Link to regression", "text": "two-way ANOVA = a regression on two categorical factors and their product." }
+    {
+      "term": "Two-way ANOVA",
+      "text": "analysis of two factors at once: their main effects and the interaction."
+    },
+    {
+      "term": "Main effect",
+      "text": "the effect of one factor averaged over the levels of the other."
+    },
+    {
+      "term": "Interaction (A×B)",
+      "text": "one factor's effect depends on the other's level; the statistical name of a heterogeneous effect."
+    },
+    {
+      "term": "Link to regression",
+      "text": "two-way ANOVA = a regression on two categorical factors and their product."
+    }
   ],
   "practice": [
     "With several factors, don't run a pile of separate tests — two-way ANOVA (or a regression with an interaction) takes them apart jointly and honestly catches where the effect depends on the conditions.",

@@ -6,7 +6,9 @@
   "description": "Лид-магнит DataSlice: интерактивная статистика (стр.1) + иерархии метрик по индустриям (стр.2)",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/check-terms.mjs",
     "build": "vite build",
+    "check-terms": "node scripts/check-terms.mjs",
     "postbuild": "cp dist/index.html dist/404.html && node scripts/prerender.mjs",
     "preview": "vite preview"
   },

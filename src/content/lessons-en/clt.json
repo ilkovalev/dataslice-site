@@ -42,7 +42,7 @@
     {
       "term": "Standard error",
       "formula": "σ / √n",
-      "text": "the width of the distribution of sample means: how far a sample mean typically strays from the truth. Falls like √n."
+      "text": "the width of the distribution of sample means: how far a sample mean typically strays from the truth. It shrinks as 1/√n: halving it takes four times the data."
     }
   ],
   "practice": [

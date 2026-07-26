@@ -42,7 +42,7 @@
     },
     {
       "term": "Stratification",
-      "formula": "Var_страт = Σ wₖ·σ²ₖ",
+      "formula": "Var_strat = Σ wₖ·σ²ₖ",
       "text": "comparison within homogeneous strata (country, platform): the between-stratum share σ²_between / σ²_total leaves the variance."
     }
   ],

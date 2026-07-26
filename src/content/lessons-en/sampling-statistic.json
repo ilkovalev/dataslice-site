@@ -51,8 +51,8 @@
     "That is why serious reports show not a bare point but an estimate with an interval — an honest admission that it is a random variable, not a verdict."
   ],
   "deepDive": [
-    "Формально оценка — это функция от случайной выборки, поэтому она сама случайная величина. У неё есть математическое ожидание (куда она целится в среднем) и дисперсия (как сильно гуляет). Несмещённость — это «ожидание оценки = оцениваемое»; эффективность — «при той же выборке дисперсия меньше».",
-    "Дальше мы увидим, что для среднего это распределение имеет ширину σ/√n и стремится к нормальному (ЦПТ) — но сама идея «оценка случайна и имеет распределение» верна для любой статистики, даже когда формулы нет (тогда выручает бутстреп)."
+    "Formally an estimate is a function of a random sample, so it is itself a random variable. It has an expectation (where it aims on average) and a variance (how much it wanders). Unbiasedness means \"expectation of the estimate = the thing being estimated\"; efficiency means \"smaller variance at the same sample size\".",
+    "We will see next that for the mean this distribution has width σ/√n and tends to the normal one (the CLT) — but the idea itself, that an estimate is random and has a distribution, holds for any statistic, even when there is no formula for it (that is when the bootstrap comes to the rescue)."
   ],
   "assumptions": [
     "The formula for the standard error, σ/√n (meet it properly in the next lesson), assumes independent observations. If rows are clustered (several visits by one person, cities, ad campaigns), the effective n is smaller than the row count — the real error is larger than the formula says.",

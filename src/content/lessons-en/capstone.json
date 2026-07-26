@@ -1,0 +1,35 @@
+{
+  "id": "capstone",
+  "module": 12,
+  "title": "Wrapping up: your path through data",
+  "tier": 1,
+  "intro": "You've made it to the end. Let's look back at the route — and see that every topic adds up to a single story about how numbers turn into knowledge.",
+  "beats": [
+    {
+      "text": "We started with a simple question: how do you describe a pile of numbers? We found the center (mean, median, mode) and the spread (standard deviation), learned to see the shape of data — and noticed that shapes have long tails, which is exactly when the mean starts lying to you."
+    },
+    {
+      "text": "Then we accepted that data is random. The law of large numbers and the central limit theorem showed that the chaos of individual observations adds up to predictable averages. That is what lets us judge the whole world from a sample — while stating the uncertainty honestly with a confidence interval."
+    },
+    {
+      "text": "Next we learned to decide: real effect or coincidence? That brought hypotheses, p-values and the two kinds of error, sample size and power, an honest A/B test — and traps like peeking. These are the tools of evidence-based decisions."
+    },
+    {
+      "text": "Then we moved from «is there a difference» to «can we predict»: relationships and regression, caution with causality and Simpson's paradox, and then classification — the threshold, the confusion matrix, ROC and the risk of overfitting. That's already a bridge into machine learning. We also went through the traps that catch even experienced analysts: survivorship bias, multiple comparisons, Goodhart's law."
+    },
+    {
+      "text": "At the end we added two views from above. The Bayesian one: probability is a degree of belief, and data updates it rather than handing down a «significant / not significant» verdict. And analysis of variance: how to compare several groups at once without breaking the result into a pile of pairwise tests."
+    },
+    {
+      "text": "What to take with you: data almost always carries randomness, so an honest conclusion reports not just a number but its uncertainty; it remembers sample size, the difference between correlation and causation, and the cost of each kind of error. With this set you already look at numbers differently from most people."
+    }
+  ],
+  "practice": [
+    "These ideas aren't classroom theory, they're a daily filter. You see an «average salary» — you think of the median and the tail. You see «12% versus 10%» — you ask about sample size and the interval. You see a confident conclusion drawn from data — you check whether correlation got mistaken for causation.",
+    "That is what separates someone who understands data from someone who just looks at pretty numbers."
+  ],
+  "realLife": [
+    "The best next step is practice on your own data. Take something you actually care about: your personal spending, stats from a game you play, an open dataset — and walk the route: describe it, build the distribution, look for relationships, test a hypothesis.",
+    "Understanding sticks when you're dragging the sliders on your own questions about real numbers, not on our examples."
+  ]
+}

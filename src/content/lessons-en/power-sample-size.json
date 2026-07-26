@@ -52,7 +52,7 @@
     },
     {
       "term": "Sensitivity",
-      "formula": "d = разница / σ",
+      "formula": "d = difference / σ",
       "text": "a test's ability to notice small effects. Grows with effect size and sample, falls with the spread σ."
     }
   ],

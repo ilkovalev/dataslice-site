@@ -58,8 +58,8 @@
     "With strong skew and small n the mean's distribution has not yet turned normal — you need a bigger sample. Dependent or clustered data (one user contributing many observations) effectively shrinks the real n."
   ],
   "deepDive": [
-    "Почему именно колокол? Среднее — это сумма n независимых вкладов, делённая на n. Каждое наблюдение тянет среднее то вверх, то вниз; при сложении эти случайные отклонения частично гасят друг друга, и крайние комбинации (все наблюдения разом большие) астрономически редки — поэтому результат кучкуется у центра симметрично. Удивительно то, что форма исходных данных при этом почти не важна: складывая много независимых вкладов, мы всегда приходим к нормальной форме.",
-    "Откуда √n: дисперсии независимых складываются (из прошлого урока), поэтому Var(суммы) = n·σ², а деление на n уменьшает дисперсию в n² раз → Var(среднего) = σ²/n, и σ(среднего) = σ/√n. Корень — прямое следствие того, что складываются именно дисперсии (квадраты), а не сами разбросы."
+    "Why a bell, of all shapes? The mean is a sum of n independent contributions divided by n. Every observation pulls the mean up or down; when you add them up those random deviations partly cancel each other out, and extreme combinations (every observation large at once) are astronomically rare — so the result piles up symmetrically around the center. The surprising part is that the shape of the original data barely matters: add up many independent contributions and you always arrive at the normal shape.",
+    "Where the √n comes from: variances of independent quantities add up (from the previous lesson), so Var(sum) = n·σ², and dividing by n shrinks the variance by a factor of n² → Var(mean) = σ²/n, and σ(mean) = σ/√n. The square root is a direct consequence of the fact that it is variances (squares) that add, not the spreads themselves."
   ],
   "nextLabel": "One mean is not enough. How to show an estimate's uncertainty honestly? → Confidence intervals",
   "related": [

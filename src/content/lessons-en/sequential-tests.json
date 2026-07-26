@@ -15,6 +15,12 @@
       "reveal": "Yes — if you \"distribute\" the error budget across the checks in advance. That is exactly what sequential methods do: each interim check uses a stricter threshold, so the total Type I error stays at 5%. You pay in strictness for the right to look often."
     },
     {
+      "text": "But HOW does the method earn the right to look whenever you like? It all comes down to one shift. We stop watching the p-value (which jumps around anew at every sample size) and start accumulating an \"evidence counter\" — the likelihood ratio: how many times more likely the observed data is if the effect IS there than if it is NOT. Each new observation nudges that counter up or down a little. The whole trick is in how it behaves WHEN THERE IS NO EFFECT: then it is a fair game — on average the counter stays put, there is nowhere for it to grow."
+    },
+    {
+      "text": "And a fair game cannot be beaten in the long run. Hence the guarantee: the probability that the evidence counter EVER climbs to 20 (that is 1/0.05) does not exceed 5% — no matter how much you peek at it. So the rule \"stop as soon as the evidence reaches 20×\" holds the Type I error at 5% by itself, for any number of looks. Here is the key: the guarantee lives in the stopping rule itself, not in a fixed sample size — which is exactly why you may look continuously without a penalty. This is the essence of the SPRT (Wald's sequential test)."
+    },
+    {
       "text": "Two working families. Group sequential (O'Brien–Fleming, Pocock boundaries): planned interim \"cuts\" with tightened thresholds and the option to stop early — born in clinical trials. Always-valid p-values / mSPRT: special p-values and intervals you may look at ANY moment, as many times as you like. There are a lot of names here, and memorizing them isn't the point — that's the platform's job. The one thing worth keeping: if you want to watch a test in flight, there's a purpose-built mode for that, and you switch it on BEFORE the start, not by eyeballing the threshold."
     },
     {
@@ -29,6 +35,11 @@
       "term": "Sequential test",
       "text": "a method that allows repeated in-flight checks while controlling the overall Type I error.",
       "simple": "a design in which interim looks are permitted in advance."
+    },
+    {
+      "term": "Likelihood ratio (SPRT)",
+      "text": "the accumulated \"evidence counter\": how many times more likely the data is when the effect is present than when it is absent. With no effect it does not grow on average (a fair game), so it rarely reaches high values.",
+      "simple": "an evidence counter for the effect; the \"stop at 20×\" rule holds the error at 5% for any number of looks."
     },
     {
       "term": "Group sequential",

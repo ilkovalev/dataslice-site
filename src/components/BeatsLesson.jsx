@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { widgets } from './widgets.js'
 import Paragraphs from './Paragraphs.jsx'
 import Formula from './Formula.jsx'
 import { gloss } from './Glossed.jsx'
 import { STR, prefix } from '../lib/i18n.js'
+import { tgLink } from '../lib/links.js'
+import { track } from '../lib/analytics.js'
 
 // Урок в beats-модели: один постоянный виджет + последовательность «бит».
 // Каждый бит — проза + состояние/подсветка виджета + опц. предсказание→раскрытие.
@@ -20,6 +22,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
   const [i, setI] = useState(0)
   const [revealed, setRevealed] = useState(false)
   const [resetKey, setResetKey] = useState(0)
+  const [introOpen, setIntroOpen] = useState(false)
   const widgetRef = useRef(null)
   const summaryRef = useRef(null)
   useEffect(() => setRevealed(false), [i])
@@ -50,8 +53,27 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
 
   return (
     <article className="max-w-7xl lesson-enter">
-      <h1 className="text-left text-2xl md:text-3xl font-bold tracking-tight mb-3">{lesson.title}</h1>
-      {lesson.intro && <p className="text-gray-700 leading-[1.8] mb-6 max-w-[68ch]">{gloss(lesson.intro)}</p>}
+      <h1 className="text-left text-2xl md:text-3xl font-bold tracking-tight mb-2 md:mb-3">{lesson.title}</h1>
+      {/* На мобильном интро свёрнуто до двух строк: вместе с ним виджет уезжал
+          почти на два экрана вниз, а продукт продаётся именно интерактивом.
+          На md+ показываем целиком — там места хватает. */}
+      {lesson.intro && (
+        <p
+          className={`text-gray-700 leading-[1.8] mb-4 md:mb-6 max-w-[68ch] ${
+            introOpen ? '' : 'line-clamp-2 md:line-clamp-none'
+          }`}
+        >
+          {gloss(lesson.intro)}
+        </p>
+      )}
+      {lesson.intro && !introOpen && (
+        <button
+          onClick={() => setIntroOpen(true)}
+          className="md:hidden text-xs text-cyanink hover:underline py-2 -mt-2 mb-2"
+        >
+          {t.introMore}
+        </button>
+      )}
 
       <div className={Widget ? 'grid md:grid-cols-3 gap-8 items-start' : ''}>
         {Widget && (
@@ -61,7 +83,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
                 <button
                   onClick={() => setResetKey((k) => k + 1)}
                   title={t.resetChartTitle}
-                  className="text-xs px-2.5 py-1.5 rounded-md border border-black/10 text-gray-500 hover:bg-black/5"
+                  className="text-xs px-2.5 py-[13px] -my-[7px] sm:py-1.5 sm:my-0 rounded-md border border-black/10 text-gray-500 hover:bg-black/5"
                 >
                   {t.resetChart}
                 </button>
@@ -74,20 +96,31 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
               aria-label={lesson.title}
               className="rounded-[1.15rem] bg-black/[0.04] ring-1 ring-black/5 p-1.5 shadow-[0_10px_36px_rgba(32,36,46,0.07)]"
             >
-              <Widget key={`${widgetId}-${resetKey}`} {...widgetProps} locale={locale} highlight={beat.widget?.highlight} />
+              {/* Виджеты грузятся лениво (см. widgets.js). Заглушка держит
+                  высоту, чтобы страница не прыгала в момент подгрузки чанка. */}
+              <Suspense fallback={<div className="min-h-[320px]" aria-hidden />}>
+                <Widget key={`${widgetId}-${resetKey}`} {...widgetProps} locale={locale} highlight={beat.widget?.highlight} />
+              </Suspense>
             </div>
           </div>
         )}
 
         <div className={Widget ? '' : 'max-w-[68ch]'}>
+          {/* Полоска остаётся тонкой (6px), а нажимается кнопка целиком: паддинги
+              доводят зону до 44px, не превращая индикатор в бруски. Отрицательный
+              margin съедает прибавку, чтобы виджет не уехал ниже по странице. */}
           <div className="flex gap-1.5 mb-4">
             {lesson.beats.map((_, k) => (
               <button
                 key={k}
                 onClick={() => setI(k)}
                 aria-label={t.step(k + 1)}
-                className={`h-1.5 rounded-full transition-all ${k === i ? 'w-6 bg-accent' : 'w-3 bg-black/12 hover:bg-black/20'}`}
-              />
+                className="py-[19px] -my-[19px] bg-transparent flex items-center"
+              >
+                <span
+                  className={`block h-1.5 rounded-full transition-all ${k === i ? 'w-6 bg-accent' : 'w-3 bg-black/12 hover:bg-black/20'}`}
+                />
+              </button>
             ))}
           </div>
 
@@ -102,7 +135,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
                 {!revealed && (
                   <button
                     onClick={() => setRevealed(true)}
-                    className="mt-2 text-xs px-2.5 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10"
+                    className="mt-2 text-xs px-2.5 py-2 sm:py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10"
                   >
                     {t.revealAnswer}
                   </button>
@@ -117,18 +150,37 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
             )}
           </div>
 
+          {/* Оффер в середине урока: до этой правки первая просьба подписаться
+              встречалась только на 90% скролла, и все, кто отвалился раньше,
+              не видели её ни разу. Показываем на третьем бите и только в
+              достаточно длинных уроках — в коротких блок в конце и так рядом. */}
+          {i === 2 && lesson.beats.length >= 5 && (
+            <p className="text-sm text-gray-600 mb-4">
+              {t.ctaInline}{' '}
+              <a
+                href={tgLink('inline')}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => track('tg_click', { place: 'inline' })}
+                className="text-cyanink hover:underline"
+              >
+                {t.ctaInlineLink}
+              </a>
+            </p>
+          )}
+
           <div className="flex items-center gap-3 flex-wrap">
             <button
               disabled={i === 0}
               onClick={() => setI(i - 1)}
-              className="text-sm text-gray-500 disabled:opacity-30 hover:text-gray-800 transition-colors"
+              className="text-sm py-3 text-gray-500 disabled:opacity-30 hover:text-gray-800 transition-colors"
             >
               {t.back}
             </button>
             {!last && (
               <button
                 onClick={() => setI(i + 1)}
-                className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-cyanink text-white hover:opacity-90 transition-opacity"
+                className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-3 sm:py-2 rounded-lg bg-cyanink text-white hover:opacity-90 transition-opacity"
               >
                 {t.next} <span aria-hidden>→</span>
               </button>
@@ -136,7 +188,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
             {last && (
               <button
                 onClick={() => summaryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-lg bg-cyanink text-white hover:opacity-90 transition-opacity"
+                className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-3 sm:py-2 rounded-lg bg-cyanink text-white hover:opacity-90 transition-opacity"
               >
                 {t.lessonSummary} <span aria-hidden>↓</span>
               </button>
@@ -144,7 +196,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
             {Widget && (
               <button
                 onClick={() => widgetRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                className="md:hidden text-xs text-cyanink hover:underline"
+                className="md:hidden text-xs py-3.5 text-cyanink hover:underline"
               >
                 {t.toChart}
               </button>
@@ -160,10 +212,10 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
           {/* Левая колонка: смысл и применение */}
           <div className="space-y-6">
             <div>
-              <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-2">{lesson.practiceTitle || t.whatItMeans}</div>
+              <h2 className="text-xs uppercase tracking-wider text-cyanink/80 mb-2">{lesson.practiceTitle || t.whatItMeans}</h2>
               {lesson.decision && (
                 <div className="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/5 px-4 py-3">
-                  <div className="text-xs uppercase tracking-wider text-emerald-700 mb-1.5">{t.decisionLabel}</div>
+                  <h2 className="text-xs uppercase tracking-wider text-emerald-700 mb-1.5">{t.decisionLabel}</h2>
                   <p className="text-sm text-gray-700 leading-[1.8]">{lesson.decision}</p>
                 </div>
               )}
@@ -171,7 +223,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
             </div>
             {lesson.realLife && (
               <div className="rounded-lg border border-sky-500/30 bg-sky-500/5 px-4 py-3">
-                <div className="text-xs uppercase tracking-wider text-sky-600/90 mb-2">{lesson.realLifeTitle || t.whereItAppears}</div>
+                <h2 className="text-xs uppercase tracking-wider text-sky-600/90 mb-2">{lesson.realLifeTitle || t.whereItAppears}</h2>
                 <Paragraphs text={lesson.realLife} className="text-sm text-gray-700 leading-[1.8]" />
               </div>
             )}
@@ -183,7 +235,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
               <details open className="group">
                 <summary className="cursor-pointer select-none list-none flex items-center gap-1.5 text-xs uppercase tracking-wider text-cyanink/80 mb-2">
                   <span aria-hidden className="text-[9px] transition-transform group-open:rotate-90">▶</span>
-                  {t.definitions}
+                  <h2 className="text-xs uppercase tracking-wider">{t.definitions}</h2>
                 </summary>
                 <dl className="space-y-3">
                   {lesson.definitions.map((d) => (
@@ -201,7 +253,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
             )}
             {lesson.assumptions && (
               <div className="rounded-lg border border-amber-400/40 bg-amber-400/[0.07] px-4 py-3">
-                <div className="text-xs uppercase tracking-wider text-amber-600 mb-2">{t.whenItLies}</div>
+                <h2 className="text-xs uppercase tracking-wider text-amber-600 mb-2">{t.whenItLies}</h2>
                 <Paragraphs text={lesson.assumptions} className="text-sm text-gray-700 leading-[1.8]" />
               </div>
             )}
@@ -226,7 +278,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
                   <Link
                     key={r.id}
                     to={`${prefix(locale)}/stats/${r.id}`}
-                    className="text-xs px-2.5 py-1 rounded-full border border-accent/30 text-cyanink hover:bg-accent/10 transition-colors"
+                    className="text-xs px-2.5 py-2 sm:py-1 rounded-full border border-accent/30 text-cyanink hover:bg-accent/10 transition-colors"
                   >
                     {r.label}
                   </Link>

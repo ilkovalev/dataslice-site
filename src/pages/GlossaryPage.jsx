@@ -1,9 +1,20 @@
-import { useState } from 'react'
+import { Suspense, lazy, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { glossary } from '../content/glossary.js'
 import { glossaryEn } from '../content/glossary-en.js'
 import SubscribeCTA from '../components/SubscribeCTA.jsx'
 import { useLocale, prefix, STR } from '../lib/i18n.js'
+
+// Карта «метрика → индустрия» подставляется при сборке (см. vite.config.js):
+// карточка живёт внутри дерева, поэтому ссылке нужен ещё и id индустрии.
+const METRIC_INDUSTRY = __METRIC_INDUSTRY__
+
+// Отдельным чанком: KaTeX тянет ~296 KB, а глоссарий должен открываться быстро.
+const Formula = lazy(() => import('../components/Formula.jsx'))
+
+// Якорь секции из названия группы. Группы русские и английские, поэтому
+// транслитерацией не заморачиваемся — берём кодовые точки, лишь бы стабильно.
+const slug = (s) => 'g-' + [...s.toLowerCase()].map((c) => (/[a-z0-9]/.test(c) ? c : c.charCodeAt(0).toString(36))).join('')
 
 export default function GlossaryPage() {
   const locale = useLocale()
@@ -26,9 +37,9 @@ export default function GlossaryPage() {
 
   return (
     <div>
-      {/* Список терминов держим узким (читаемая строка), а CTA ниже — на всю
-          ширину контента, как на уроках и /metrics. */}
-      <div className="max-w-3xl">
+      {/* До lg список узкий — читаемая строка. На широком экране разворачиваем
+          и раскладываем в две колонки: при 1440px правая половина пустовала. */}
+      <div className="max-w-3xl lg:max-w-6xl">
       <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">{t.glossaryH1}</h1>
       <p className="text-gray-600 mb-5">{t.glossarySub}</p>
 
@@ -37,7 +48,7 @@ export default function GlossaryPage() {
         value={q}
         onChange={(e) => setQ(e.target.value)}
         placeholder={t.glossarySearch}
-        className="w-full mb-6 bg-ink border border-black/15 rounded-md px-3 py-2 text-sm focus:border-accent/50 outline-none"
+        className="w-full max-w-3xl mb-6 bg-ink border border-black/15 rounded-md px-3 py-2 text-sm focus:border-accent/50 outline-none"
       />
 
       {groups.length === 0 && (
@@ -47,12 +58,37 @@ export default function GlossaryPage() {
         </div>
       )}
 
+      {/* Якорная навигация по группам: список из 74 терминов вытягивался почти
+          на 5000px, и добраться до «Бизнес-метрик» можно было только скроллом. */}
+      {groups.length > 1 && (
+        <nav className="flex flex-wrap gap-2 mb-6">
+          {groups.map((g) => (
+            <a
+              key={g.group}
+              href={`#${slug(g.group)}`}
+              className="text-xs px-2.5 py-2 sm:py-1 rounded-full border border-black/10 text-gray-600 hover:bg-black/5 transition-colors"
+            >
+              {g.group} <span className="text-gray-400">{g.terms.length}</span>
+            </a>
+          ))}
+        </nav>
+      )}
+
       {groups.map((g) => (
-        <section key={g.group} className="mb-8">
-          <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-3">{g.group}</div>
-          <dl className="space-y-3">
+        <section key={g.group} id={slug(g.group)} className="mb-8 scroll-mt-24">
+          <h2 className="text-xs uppercase tracking-wider text-cyanink/80 mb-3">{g.group}</h2>
+          {/* На широком экране — две колонки: правая половина пустовала,
+              а список шёл одной лентой. break-inside-avoid не даёт термину
+              разорваться между колонками. */}
+          {/* Интервал между записями крупный: у термина теперь до трёх частей
+              (название, определение, формула), и при тесном шаге формула
+              зрительно прилипала к следующему термину. */}
+          {/* Отступ задаём margin-bottom на самих записях, а не утилитой
+              space-y: её правило `> * + *` перебивает mb-* по специфичности,
+              и в две колонки интервал обнулялся. */}
+          <dl className="lg:columns-2 lg:gap-10">
             {g.terms.map((term) => (
-              <div key={term.term}>
+              <div key={term.term} className="break-inside-avoid mb-7">
                 <dt className="text-gray-900 font-medium">
                   {term.term}
                   {term.lesson && (
@@ -63,8 +99,29 @@ export default function GlossaryPage() {
                       {t.glossaryLesson}
                     </Link>
                   )}
+                  {/* Ссылка на карточку метрики: рядом с глоссарием лежат
+                      формулы и готовый SQL, но раздел «Бизнес-метрики» вёл в
+                      никуда — из 43 терминов ссылку имел один. */}
+                  {term.metric && METRIC_INDUSTRY[term.metric] && (
+                    <Link
+                      to={`${p}/metrics?tab=industries&ind=${METRIC_INDUSTRY[term.metric]}&metric=${term.metric}`}
+                      className="ml-2 text-xs font-normal text-cyanink hover:underline"
+                    >
+                      {t.glossaryMetric}
+                    </Link>
+                  )}
                 </dt>
-                <dd className="text-sm text-gray-600 leading-snug">{term.def}</dd>
+                <dd className="text-sm text-gray-600 leading-relaxed mt-0.5">{term.def}</dd>
+                {/* Формула — только там, где она реально проясняет термин.
+                    KaTeX (296 KB) грузится лениво: до его прихода строка видна
+                    как обычный моноширинный текст, читать глоссарий это не мешает. */}
+                {term.formula && (
+                  <dd className="mt-2 text-[13px] text-cyanink">
+                    <Suspense fallback={<span className="font-mono">{term.formula}</span>}>
+                      <Formula tex={term.formula} />
+                    </Suspense>
+                  </dd>
+                )}
               </div>
             ))}
           </dl>

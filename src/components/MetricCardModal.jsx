@@ -99,7 +99,7 @@ export default function MetricCardModal({ node, catalog, categories, onClose }) 
           {sql && (
             <div>
               <div className="text-xs uppercase tracking-wider text-gray-500 mb-1">{t.metricCardSql}</div>
-              <SqlBlock sql={sql} copyLabel={t.metricCardCopy} copiedLabel={t.metricCardCopied} />
+              <SqlBlock sql={sql} copyLabel={t.metricCardCopy} copiedLabel={t.metricCardCopied} selectedLabel={t.metricCardSelected} />
               <div className="mt-1.5 text-[11px] text-gray-400 leading-snug">{t.metricCardSchema}</div>
             </div>
           )}

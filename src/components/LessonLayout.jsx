@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { widgets } from './widgets.js'
 import BeatsLesson from './BeatsLesson.jsx'
 import Paragraphs from './Paragraphs.jsx'
@@ -46,7 +47,7 @@ export default function LessonLayout({ lesson, locale = 'ru', onComplete, onNext
 
       <Step label="Потрогать">
         <p className="text-gray-700 mb-3">{interaction.prompt}</p>
-        {Widget ? <Widget only={interaction.only} /> : <div className="text-gray-500">виджет «{interaction.widget}» ещё не готов</div>}
+        {Widget ? <Suspense fallback={<div className="min-h-[320px]" aria-hidden />}><Widget only={interaction.only} /></Suspense> : <div className="text-gray-500">виджет «{interaction.widget}» ещё не готов</div>}
         {interaction.expected && (
           <p className="mt-3 text-sm text-gray-600">
             <span className="text-gray-700">Что заметить:</span> {interaction.expected}

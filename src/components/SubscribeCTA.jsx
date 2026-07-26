@@ -2,6 +2,7 @@
 // Оформление — soft-skill: Double-Bezel («стекло в лотке») + кнопка-в-кнопке.
 import { track } from '../lib/analytics.js'
 import { STR } from '../lib/i18n.js'
+import { tgLink } from '../lib/links.js'
 
 export default function SubscribeCTA({ locale = 'ru', heading, text }) {
   const t = STR[locale]
@@ -22,12 +23,15 @@ export default function SubscribeCTA({ locale = 'ru', heading, text }) {
             <div className="font-semibold text-lg text-gray-900">{heading}</div>
             <p className="text-sm text-gray-700 leading-relaxed mt-1 max-w-xl">{text}</p>
           </div>
+          {/* На мобильном кнопка занимает всю ширину: фиксированная ширина плюс
+              whitespace-nowrap вылезали за карточку с overflow-hidden, и стрелка
+              с хвостом подписи обрезались (замерено: iPhone SE +67px за экран). */}
           <a
-            href="https://t.me/dataslice"
+            href={tgLink('cta')}
             target="_blank"
             rel="noreferrer"
             onClick={() => track('tg_click', { place: 'cta' })}
-            className="group shrink-0 inline-flex items-center gap-3 pl-5 pr-1.5 py-1.5 rounded-full bg-cyanink text-white font-semibold whitespace-nowrap transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.98]"
+            className="group w-full sm:w-auto sm:shrink-0 inline-flex items-center justify-center sm:justify-start gap-3 px-5 py-3 sm:pl-5 sm:pr-1.5 sm:py-1.5 rounded-full bg-cyanink text-white font-semibold transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.98]"
           >
             {t.ctaButton}
             <span

@@ -150,7 +150,7 @@ export default function MultipleComparisons({ locale = 'ru' }) {
         </label>
       </div>
 
-      <div className="flex gap-2 mt-3">
+      <div className="flex flex-wrap max-w-full gap-2 mt-3">
         <button onClick={run} className="text-xs px-3 py-1 rounded-md bg-cyanink text-white hover:opacity-90">{en ? 'run the tests' : 'запустить тесты'}</button>
         <button onClick={() => setTests([])} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">{en ? 'reset' : 'сбросить'}</button>
       </div>

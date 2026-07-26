@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 // Блок SQL-кода с подсветкой. Токенизатор самописный: SQL в справочнике
 // авторский и одного диалекта (PostgreSQL), поэтому полноценная библиотека
@@ -46,15 +46,38 @@ function tokenize(sql) {
   return out
 }
 
-export default function SqlBlock({ sql, copyLabel = 'копировать', copiedLabel = '✓ скопировано' }) {
-  const [copied, setCopied] = useState(false)
+export default function SqlBlock({
+  sql,
+  copyLabel = 'копировать',
+  copiedLabel = '✓ скопировано',
+  selectedLabel = 'выделено — скопируйте вручную',
+}) {
+  // 'idle' | 'copied' | 'selected' — 'selected' это фолбэк: во встроенном браузере
+  // Telegram (основной источник трафика), в Safari и вне secure-контекста
+  // clipboard.writeText отклоняется, и без обработки кнопка молча ничего не делала.
+  const [state, setState] = useState('idle')
+  const preRef = useRef(null)
   if (!sql) return null
   const tokens = tokenize(sql)
+  // Буфер недоступен — выделяем код за пользователя, дальше он копирует сам.
+  const selectFallback = () => {
+    const pre = preRef.current
+    if (!pre) return
+    const range = document.createRange()
+    range.selectNodeContents(pre)
+    const sel = window.getSelection()
+    sel.removeAllRanges()
+    sel.addRange(range)
+    setState('selected')
+    setTimeout(() => setState('idle'), 3000)
+  }
   const copy = () => {
-    navigator.clipboard?.writeText(sql).then(() => {
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
-    })
+    const done = navigator.clipboard?.writeText(sql)
+    if (!done) return selectFallback()
+    done.then(() => {
+      setState('copied')
+      setTimeout(() => setState('idle'), 1500)
+    }, selectFallback)
   }
   // Кнопка копирования — отдельной строкой над кодом, а не поверх него:
   // при горизонтальном скролле кода (узкие экраны) наложение съедало текст.
@@ -65,10 +88,10 @@ export default function SqlBlock({ sql, copyLabel = 'копировать', copi
           onClick={copy}
           className="text-[11px] px-2 py-0.5 rounded border border-black/10 bg-white/80 text-gray-500 hover:text-cyanink hover:border-accent/40"
         >
-          {copied ? copiedLabel : copyLabel}
+          {state === 'copied' ? copiedLabel : state === 'selected' ? selectedLabel : copyLabel}
         </button>
       </div>
-      <pre className="overflow-x-auto px-3 pb-3 pt-1 font-mono text-[12.5px] leading-relaxed text-gray-800">
+      <pre ref={preRef} className="overflow-x-auto px-3 pb-3 pt-1 font-mono text-[12.5px] leading-relaxed text-gray-800">
         <code>
           {tokens.map((t, i) => (t.cls ? <span key={i} className={t.cls}>{t.text}</span> : t.text))}
         </code>

@@ -11,3 +11,4 @@ _*.mjs
 # Отчёты (reports/*.md, goal-progress.md) — версионируем, шоты/метрики — нет.
 .claude/skills/design-review/reports/shots/
 .claude/skills/design-review/reports/scan-behavior.json
+_*.png

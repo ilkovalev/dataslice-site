@@ -108,7 +108,7 @@ export default function Histogram({ unit = '', data: initial, bins: initialBins 
         <input type="range" min="3" max="14" step="1" value={bins} onChange={(e) => setBins(Number(e.target.value))} className="w-full accent-accent" />
       </label>
 
-      <div className="flex gap-2 mt-3">
+      <div className="flex flex-wrap max-w-full gap-2 mt-3">
         <button onClick={() => setData((d) => [...d, 90])} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{l.addBoss}</button>
         <button onClick={() => setData([...base])} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-600 hover:bg-black/5">{l.reset}</button>
       </div>

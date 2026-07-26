@@ -2,16 +2,13 @@ import { Suspense, lazy } from 'react'
 import { NavLink, Navigate, Route, Routes, useLocation, Link } from 'react-router-dom'
 import { track } from './lib/analytics.js'
 import { useLocale, prefix, switchLocalePath, STR } from './lib/i18n.js'
-
-// Редирект с сохранением query/hash: проверка счётчика Метрики (и любые
-// utm-метки) приходят параметрами на «/» — терять их при переадресации нельзя.
-function ToStats({ en = false }) {
-  const { search, hash } = useLocation()
-  return <Navigate to={`${en ? '/en' : ''}/stats${search}${hash}`} replace />
-}
+import { tgLink, TG_FEEDBACK } from './lib/links.js'
+import LandingPage from './pages/LandingPage.jsx'
 
 // Каждая страница — свой чанк: курс (уроки + виджеты) не грузится
 // тем, кто пришёл за метриками или глоссарием, и наоборот.
+// Лендинг — исключение: он в основном чанке, потому что это страница входа,
+// и лишний раунд-трип за чанком тут дороже всего.
 const StatsPage = lazy(() => import('./pages/StatsPage.jsx'))
 const MetricsPage = lazy(() => import('./pages/MetricsPage.jsx'))
 const GlossaryPage = lazy(() => import('./pages/GlossaryPage.jsx'))
@@ -34,7 +31,15 @@ export default function App() {
       <header className="sticky top-0 z-10">
         <div className="border-b border-accent/20 bg-accent/10 backdrop-blur">
         <div className="max-w-[1600px] mx-auto px-4 py-2 sm:py-0 sm:h-14 lg:h-14 flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span className="order-1 font-semibold whitespace-nowrap sm:mr-4">{t.brand} <span aria-hidden>🍕</span></span>
+          {/* Логотип ведёт на главную — привычный способ вернуться на лендинг.
+              Дублируется явным пунктом «Главная» в навигации: на клик по
+              названию догадывается не каждый, а с уроков выхода не было вовсе. */}
+          <Link
+            to={p || '/'}
+            className="order-1 font-semibold whitespace-nowrap sm:mr-4 hover:text-cyanink transition-colors"
+          >
+            {t.brand} <span aria-hidden>🍕</span>
+          </Link>
           <span className="order-2 ml-auto flex items-center gap-2 sm:order-3">
             <Link
               to={switchLocalePath(pathname, otherLocale)}
@@ -44,7 +49,7 @@ export default function App() {
               {otherLocale}
             </Link>
             <a
-              href="https://t.me/dataslice"
+              href={tgLink('header')}
               target="_blank"
               rel="noreferrer"
               onClick={() => track('tg_click', { place: 'header' })}
@@ -54,6 +59,7 @@ export default function App() {
             </a>
           </span>
           <nav className="order-3 w-full flex gap-1 overflow-x-auto sm:order-2 sm:w-auto">
+            <NavLink to={p || '/'} end className={linkClass}>{t.navHome}</NavLink>
             <NavLink to={`${p}/stats`} className={linkClass}>{t.navStats}</NavLink>
             <NavLink to={`${p}/metrics`} className={linkClass}>{t.navMetrics}</NavLink>
             <NavLink to={`${p}/glossary`} className={linkClass}>{t.navGlossary}</NavLink>
@@ -64,28 +70,28 @@ export default function App() {
       <main className="max-w-[1600px] mx-auto px-4 py-8 md:py-12">
         <Suspense fallback={null}>
           <Routes>
-            <Route path="/" element={<ToStats />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/stats" element={<StatsPage />} />
             <Route path="/stats/:lessonSlug" element={<StatsPage />} />
             <Route path="/metrics" element={<MetricsPage />} />
             <Route path="/glossary" element={<GlossaryPage />} />
-            <Route path="/en" element={<ToStats en />} />
+            <Route path="/en" element={<LandingPage />} />
             <Route path="/en/stats" element={<StatsPage />} />
             <Route path="/en/stats/:lessonSlug" element={<StatsPage />} />
             <Route path="/en/metrics" element={<MetricsPage />} />
             <Route path="/en/glossary" element={<GlossaryPage />} />
-            <Route path="*" element={<ToStats />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
       </main>
       <footer className="border-t border-black/10 mt-8">
         <div className="max-w-[1600px] mx-auto px-4 py-6 text-sm text-gray-600">
           {t.footerText}{' '}
-          <a href="https://t.me/dataslice" target="_blank" rel="noreferrer" onClick={() => track('tg_click', { place: 'footer' })} className="text-cyanink hover:underline">{t.brand} 🍕</a>{' '}
+          <a href={tgLink('footer')} target="_blank" rel="noreferrer" onClick={() => track('tg_click', { place: 'footer' })} className="text-cyanink hover:underline">{t.brand} 🍕</a>{' '}
           — {t.footerTail}{' '}
-          <a href="https://t.me/dataslice" target="_blank" rel="noreferrer" onClick={() => track('tg_click', { place: 'footer' })} className="text-cyanink hover:underline">{t.footerSubscribe}</a>{' '}
+          <a href={tgLink('footer')} target="_blank" rel="noreferrer" onClick={() => track('tg_click', { place: 'footer' })} className="text-cyanink hover:underline">{t.footerSubscribe}</a>{' '}
           <span className="text-gray-400">·</span>{' '}
-          <a href="https://t.me/dataslice/109" target="_blank" rel="noreferrer" onClick={() => track('feedback_click')} className="text-cyanink hover:underline">{t.footerFeedback}</a>
+          <a href={TG_FEEDBACK} target="_blank" rel="noreferrer" onClick={() => track('feedback_click')} className="text-cyanink hover:underline">{t.footerFeedback}</a>
         </div>
       </footer>
     </div>

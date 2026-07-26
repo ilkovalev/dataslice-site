@@ -152,7 +152,7 @@ export default function DataCaseStudy({ locale = 'ru' }) {
       </div>
       {body[step].chart}
       <p className="text-sm text-gray-700 mt-2 leading-relaxed">{body[step].text}</p>
-      <div className="flex gap-2 mt-3">
+      <div className="flex flex-wrap max-w-full gap-2 mt-3">
         <button disabled={step === 0} onClick={() => setStep(step - 1)} className="text-sm px-3 py-1.5 rounded-md border border-black/15 text-gray-700 disabled:opacity-30 hover:bg-black/5">{en ? 'Back' : 'Назад'}</button>
         {step < STEPS.length - 1 && <button onClick={() => setStep(step + 1)} className="text-sm px-3 py-1.5 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">{en ? 'Next' : 'Дальше'}</button>}
       </div>

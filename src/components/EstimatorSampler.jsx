@@ -65,7 +65,7 @@ export default function EstimatorSampler({ locale = 'ru' }) {
       <div className="flex flex-wrap items-center gap-2 mb-3">
         <span className="text-xs text-gray-500">{en ? 'Estimate:' : 'Оценка:'}</span>
         {STATS.map((s) => (
-          <button key={s.id} onClick={() => pick(s.id)} className={`text-xs px-2.5 py-1 rounded-md border ${stat === s.id ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{s.label}</button>
+          <button key={s.id} onClick={() => pick(s.id)} className={`text-xs px-2.5 py-1 rounded-md border ${stat === s.id ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{en ? s.labelEn : s.label}</button>
         ))}
       </div>
 

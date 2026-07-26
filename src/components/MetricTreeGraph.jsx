@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { gloss } from './Glossed.jsx'
 import MetricCardModal from './MetricCardModal.jsx'
 import { useLocale, STR } from '../lib/i18n.js'
@@ -180,6 +181,15 @@ export default function MetricTreeGraph({ tree, defaultDepth, plain = false, cla
   const [scale, setScale] = useState(1)
   const [selected, setSelected] = useState(null) // узел с открытой карточкой
   const [catalog, setCatalog] = useState(catalogCache)
+  const [sp, setSp] = useSearchParams()
+  const patch = (next) => {
+    const p = new URLSearchParams(sp)
+    for (const [k, v] of Object.entries(next)) {
+      if (v == null || v === '') p.delete(k)
+      else p.set(k, v)
+    }
+    setSp(p, { replace: true })
+  }
   useLayoutEffect(() => {
     const el = boxRef.current
     if (!el) return
@@ -208,10 +218,31 @@ export default function MetricTreeGraph({ tree, defaultDepth, plain = false, cla
     return () => (window.cancelIdleCallback ?? clearTimeout)(id)
   }, [])
 
+  // Открытая карточка отражается в URL (?metric=<id>). Без этого на конкретную
+  // метрику нельзя сослаться — ни постом в канал, ни из глоссария, где 42 из 43
+  // бизнес-терминов были тупиками именно потому, что вести было некуда.
+  // plain — режим иллюстрации, там карточек нет и URL трогать нечего.
   const openCard = (n) => {
     setSelected(n)
+    if (n.metricId && !plain) patch({ metric: n.metricId })
     if (!catalogCache) loadCatalog().then(setCatalog)
   }
+  const closeCard = () => {
+    setSelected(null)
+    if (!plain) patch({ metric: null })
+  }
+
+  // Приход по ссылке с ?metric= — открываем карточку, когда узел есть в дереве.
+  const wanted = plain ? null : sp.get('metric')
+  useEffect(() => {
+    if (!wanted) return
+    if (selected?.metricId === wanted) return
+    const n = nodes.find((x) => x.metricId === wanted)
+    if (n) {
+      setSelected(n)
+      if (!catalogCache) loadCatalog().then(setCatalog)
+    }
+  }, [wanted, nodes, selected])
 
   const toggle = (id) => {
     setCollapsed((prev) => {
@@ -336,7 +367,7 @@ export default function MetricTreeGraph({ tree, defaultDepth, plain = false, cla
           node={selected}
           catalog={catalog?.byId}
           categories={catalog?.categories}
-          onClose={() => setSelected(null)}
+          onClose={closeCard}
         />
       )}
     </div>

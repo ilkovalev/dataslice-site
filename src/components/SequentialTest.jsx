@@ -192,7 +192,7 @@ export default function SequentialTest({ locale = 'ru' }) {
         </div>
       )}
 
-      <div className="flex gap-2 mt-3">
+      <div className="flex flex-wrap max-w-full gap-2 mt-3">
         <button onClick={() => run(1)} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{en ? '+1 test' : '+1 тест'}</button>
         <button onClick={() => run(50)} className="text-xs px-3 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{en ? '+50 tests' : '+50 тестов'}</button>
         <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{running ? (en ? '⏸ stop' : '⏸ стоп') : (en ? '▶ auto-run' : '▶ автопрогон')}</button>

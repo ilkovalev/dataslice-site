@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import LessonLayout from '../components/LessonLayout.jsx'
 import SubscribeCTA from '../components/SubscribeCTA.jsx'
-import { lessons, lessonsByModule } from '../content/lessons/index.js'
-import { lessonsEnById } from '../content/lessons-en/index.js'
+import { lessons, lessonsByModule, loadLesson } from '../content/lessons/index.js'
 import { track } from '../lib/analytics.js'
 import { useLocale, prefix, STR } from '../lib/i18n.js'
 
@@ -35,18 +34,21 @@ function saveProgress(lessonId, completed) {
 }
 const saved = loadProgress()
 
-// Урок в текущей локали: для en берём перевод, если он есть,
-// иначе русский оригинал с пометкой.
-function localizedLesson(ruLesson, locale) {
-  if (locale !== 'en') return ruLesson
-  const en = lessonsEnById[ruLesson.id]
-  if (en) return { ...ruLesson, ...en }
-  return { ...ruLesson, _untranslated: true }
+// Заголовок урока в текущей локали. Работает по лёгкому индексу: навигации
+// и оглавлению полный текст урока не нужен, а тянуть его ради заголовка —
+// значит вернуть в чанк весь курс.
+function localizedLesson(entry, locale) {
+  if (!entry) return entry
+  return { ...entry, title: (locale === 'en' && entry.titleEn) || entry.title }
 }
 
 // Ссылка на урок: системный share на мобильном, копирование на десктопе.
 function ShareButton({ lesson, locale, t }) {
   const [copied, setCopied] = useState(false)
+  // Ссылка, которую не удалось положить в буфер: в Telegram-браузере и Safari
+  // clipboard.writeText отклоняется, поэтому показываем URL и даём скопировать руками.
+  const [manual, setManual] = useState('')
+  const manualRef = useRef(null)
   async function share() {
     const url = `https://data-slice.ru${prefix(locale)}/stats/${lesson.id}`
     track('share', { id: lesson.id })
@@ -58,16 +60,53 @@ function ShareButton({ lesson, locale, t }) {
       await navigator.clipboard.writeText(url)
       setCopied(true)
       setTimeout(() => setCopied(false), 1600)
-    } catch { /* нет clipboard — молча */ }
+    } catch {
+      setManual(url)
+    }
   }
+  // Поле появилось — сразу выделяем его целиком, чтобы осталось одно движение.
+  useEffect(() => {
+    if (manual && manualRef.current) manualRef.current.select()
+  }, [manual])
   return (
-    <button
-      onClick={share}
-      title={t.shareTitle}
-      className="shrink-0 text-xs px-2.5 py-1.5 rounded-md border border-black/10 text-gray-600 hover:bg-black/5 transition-colors"
-    >
-      {copied ? t.shareCopied : t.share}
-    </button>
+    <div className="shrink-0">
+      <button
+        onClick={share}
+        title={t.shareTitle}
+        className="w-full text-xs px-2.5 py-[13px] -my-[7px] sm:py-1.5 sm:my-0 rounded-md border border-black/10 text-gray-600 hover:bg-black/5 transition-colors"
+      >
+        {copied ? t.shareCopied : t.share}
+      </button>
+      {manual && (
+        <div className="mt-1.5 text-[11px] text-gray-500">
+          {t.shareManual}
+          <input
+            ref={manualRef}
+            readOnly
+            value={manual}
+            onFocus={(e) => e.target.select()}
+            className="mt-1 w-64 max-w-full px-1.5 py-1 rounded border border-black/10 bg-white font-mono text-[11px] text-gray-700"
+          />
+        </div>
+      )}
+    </div>
+  )
+}
+
+// Полоса прогресса по курсу. Вынесена отдельно, потому что на десктопе стоит
+// в сайдбаре, а на мобильном — под уроком, чтобы не отжимать виджет вниз.
+function ProgressCard({ completed, total, t }) {
+  const pct = Math.round((completed.size / total) * 100)
+  return (
+    <div className="rounded-xl border border-black/10 bg-panel/70 p-4">
+      <div className="flex items-baseline justify-between text-sm mb-1.5">
+        <span className="font-medium text-gray-900">{t.progress}</span>
+        <span className="text-gray-500">{t.done(completed.size, total)}</span>
+      </div>
+      <div className="h-2 rounded-full bg-black/10 overflow-hidden">
+        <div className="h-full rounded-full bg-gradient-to-r from-accent to-brand transition-all" style={{ width: `${pct}%` }} />
+      </div>
+    </div>
   )
 }
 
@@ -76,28 +115,24 @@ function ShareButton({ lesson, locale, t }) {
 function Sidebar({ activeModule, lessonId, globalIdx, completed, onModule, onLesson, locale, t }) {
   const [open, setOpen] = useState(false) // раскрытие списка уроков на мобильном
   const total = lessons.length
-  const pct = Math.round((completed.size / total) * 100)
   const cur = lessons[globalIdx]
   const currentTitle = cur ? localizedLesson(cur, locale).title : ''
   // на мобильном после выбора урока список сворачиваем — сразу видно контент
   const selectLesson = (l) => { onLesson(l); setOpen(false) }
   return (
     <aside className="md:sticky md:top-20 md:self-start">
-      <div className="rounded-xl border border-black/10 bg-panel/70 p-4">
-        <div className="flex items-baseline justify-between text-sm mb-1.5">
-          <span className="font-medium text-gray-900">{t.progress}</span>
-          <span className="text-gray-500">{t.done(completed.size, total)}</span>
-        </div>
-        <div className="h-2 rounded-full bg-black/10 overflow-hidden">
-          <div className="h-full rounded-full bg-gradient-to-r from-accent to-brand transition-all" style={{ width: `${pct}%` }} />
-        </div>
+      {/* На мобильном карточка прогресса живёт под уроком (см. ProgressCard
+          ниже по странице): она занимала ~60px над виджетом, а виджет и без
+          того начинался почти на два экрана вниз. */}
+      <div className="hidden md:block">
+        <ProgressCard completed={completed} total={total} t={t} />
       </div>
 
       {/* мобильный переключатель: сворачивает/разворачивает список уроков */}
       <button
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="md:hidden mt-3 w-full flex items-center justify-between gap-2 rounded-lg border border-black/10 bg-panel/70 px-3 py-2 text-sm text-gray-700"
+        className="md:hidden mt-3 w-full flex items-center justify-between gap-2 rounded-lg border border-black/10 bg-panel/70 px-3 py-[11px] text-sm text-gray-700"
       >
         <span className="truncate text-left"><span className="text-gray-400 mr-1.5">{open ? t.collapse : t.toc} ·</span>{currentTitle}</span>
         <span className={`shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} aria-hidden>▾</span>
@@ -173,6 +208,20 @@ export default function StatsPage() {
   const next = globalIdx >= 0 && globalIdx < lessons.length - 1 ? lessons[globalIdx + 1] : null
   const activeModule = current?.module ?? null
 
+  // Полный текст урока грузится отдельным чанком: в индексе лежат только
+  // заголовки и модули. Пока чанк едет, каркас страницы уже отрисован —
+  // меняется одна колонка, а не вся страница.
+  const [full, setFull] = useState(null)
+  const currentId = current?.id
+  useEffect(() => {
+    if (!currentId) { setFull(null); return }
+    let alive = true
+    loadLesson(currentId, locale).then((l) => { if (alive) setFull(l) })
+    // Гонку гасим флагом: при быстром переключении уроков ответ на прошлый
+    // запрос мог прийти позже и подменить уже открытый урок.
+    return () => { alive = false }
+  }, [currentId, locale])
+
   // Голый /stats или неизвестный slug → на последний открытый (или первый) урок.
   // Сохраняем query/hash (проверка Метрики, utm-метки) при авторедиректе.
   useEffect(() => {
@@ -216,10 +265,12 @@ export default function StatsPage() {
   return (
     <div>
       {/* Раздел-эйбрау: не конкурирует с заголовком урока (который теперь h1).
-          Хлебные крошки читаются как «Раздел → Модуль → Урок». */}
+          Хлебные крошки читаются как «Раздел → Модуль → Урок».
+          Строка-оффер («N бесплатных интерактивных уроков…») отсюда убрана:
+          её смысл переехал на лендинг, а на уроке она была лишней и отодвигала
+          виджет ещё дальше вниз по странице. */}
       <div className="mb-6">
         <div className="text-xs uppercase tracking-wider text-gray-500">{t.statsH1}</div>
-        <p className="text-sm text-gray-500 leading-relaxed mt-0.5 max-w-2xl">{t.statsSub(lessons.length)}</p>
       </div>
 
       <div className="md:grid md:grid-cols-[248px_minmax(0,1fr)] md:gap-8">
@@ -234,26 +285,43 @@ export default function StatsPage() {
           t={t}
         />
 
-        <div className="min-w-0 mt-8 md:mt-0">
-          <div className="text-xs text-gray-500 mb-4 flex items-center justify-between gap-3 flex-wrap">
+        {/* flex + order на мобильном: подпись модуля и «поделиться» уезжают
+            под урок, чтобы виджет попал в первый экран. На md+ порядок обычный. */}
+        <div className="min-w-0 mt-8 md:mt-0 flex flex-col md:block">
+          <div className="order-2 md:order-none mt-6 md:mt-0 text-xs text-gray-500 mb-4 flex items-center justify-between gap-3 flex-wrap">
             <span><span aria-hidden>{moduleIcons[current.module]}</span> {t.module(current.module, t.modules[current.module])}</span>
             <ShareButton lesson={current} locale={locale} t={t} />
           </div>
 
-          {current._untranslated && (
-            <div className="mb-4 rounded-lg border border-amber-400/40 bg-amber-400/[0.08] px-4 py-2.5 text-sm text-gray-700">
+          <div className="order-3 md:hidden">
+            <ProgressCard completed={completed} total={lessons.length} t={t} />
+          </div>
+
+          {full?._untranslated && (
+            <div className="order-1 md:order-none mb-4 rounded-lg border border-amber-400/40 bg-amber-400/[0.08] px-4 py-2.5 text-sm text-gray-700">
               {t.untranslated}
             </div>
           )}
 
-          <LessonLayout
-            lesson={current}
-            locale={locale}
-            onComplete={() => markComplete(current.id)}
-            onNext={next ? () => goLesson(next) : undefined}
-          />
+          <div className="order-1 md:order-none">
+            {full ? (
+              <LessonLayout
+                lesson={full}
+                locale={locale}
+                onComplete={() => markComplete(current.id)}
+                onNext={next ? () => goLesson(next) : undefined}
+              />
+            ) : (
+              // Заголовок из индекса рисуем сразу: он уже есть, и страница
+              // не выглядит пустой, пока едет чанк с текстом урока.
+              <article className="max-w-7xl">
+                <h1 className="text-left text-2xl md:text-3xl font-bold tracking-tight mb-2 md:mb-3">{current.title}</h1>
+                <div className="min-h-[60vh]" aria-hidden />
+              </article>
+            )}
+          </div>
 
-          <nav className="mt-12 pt-5 border-t border-black/10 flex justify-between gap-3">
+          <nav className="order-4 md:order-none mt-12 pt-5 border-t border-black/10 flex justify-between gap-3">
             {prevLoc ? (
               <button onClick={() => goLesson(prev)} className="text-left text-sm text-gray-700 hover:text-cyanink max-w-[45%]">
                 <div className="text-gray-500 text-xs">{t.prevArrow}</div>
@@ -267,7 +335,7 @@ export default function StatsPage() {
               </button>
             ) : <span />}
           </nav>
-          <div className="mt-10">
+          <div className="order-5 md:order-none mt-10">
             {next
               ? <SubscribeCTA locale={locale} />
               : <SubscribeCTA locale={locale} heading={t.ctaFinalHeading} text={t.ctaFinalText} />}

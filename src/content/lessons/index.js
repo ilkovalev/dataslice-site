@@ -1,77 +1,52 @@
-// Реестр уроков стр. 1, сгруппированный по модулю.
-// Каждый урок — отдельный JSON по шаблону концепт-юнита.
-import centerMeasures from './center-measures.json'
-import spread from './spread.json'
-import histogram from './histogram.json'
-import percentiles from './percentiles.json'
-import outliers from './outliers.json'
-import normalDistribution from './normal-distribution.json'
-import discreteDistributions from './discrete-distributions.json'
-import continuousDistributions from './continuous-distributions.json'
-import skewTail from './skew-tail.json'
-import identifyDistribution from './identify-distribution.json'
-import probabilityBasics from './probability-basics.json'
-import probabilityLln from './probability-lln.json'
-import samplingStatistic from './sampling-statistic.json'
-import clt from './clt.json'
-import hypothesisIntro from './hypothesis-intro.json'
-import hypothesisTest from './hypothesis-test.json'
-import evidencePyramid from './evidence-pyramid.json'
-import abTest from './ab-test.json'
-import experimentMetrics from './experiment-metrics.json'
-import segmentsCate from './segments-cate.json'
-import abProcess from './ab-process.json'
-import regression from './regression.json'
-import correlationTypes from './correlation-types.json'
-import regressionMetrics from './regression-metrics.json'
-import regressionAssumptions from './regression-assumptions.json'
-import multipleRegression from './multiple-regression.json'
-import causality from './causality.json'
-import classification from './classification.json'
-import confusionMatrix from './confusion-matrix.json'
-import conditionalBayes from './conditional-bayes.json'
-import randomVariable from './random-variable.json'
-import confidenceIntervals from './confidence-intervals.json'
-import simpsonParadox from './simpson-paradox.json'
-import regressionToMean from './regression-to-mean.json'
-import powerSampleSize from './power-sample-size.json'
-import networkEffects from './network-effects.json'
-import peeking from './peeking.json'
-import sequentialTests from './sequential-tests.json'
-import roc from './roc.json'
-import classImbalance from './class-imbalance.json'
-import overfitting from './overfitting.json'
-import bootstrap from './bootstrap.json'
-import tTest from './t-test.json'
-import ciVsPvalue from './ci-vs-pvalue.json'
-import varianceReduction from './variance-reduction.json'
-import survivorshipBias from './survivorship-bias.json'
-import multipleComparisons from './multiple-comparisons.json'
-import dataLeakage from './data-leakage.json'
-import goodhart from './goodhart.json'
-import bayesianInference from './bayesian-inference.json'
-import bayesianAb from './bayesian-ab.json'
-import naiveBayes from './naive-bayes.json'
-import anova from './anova.json'
-import posthocAnova from './posthoc-anova.json'
-import twoWayAnova from './two-way-anova.json'
-import capstoneProject from './capstone-project.json'
-
-export const lessons = [
-  centerMeasures, spread, histogram, percentiles, outliers,
-  probabilityBasics, probabilityLln, conditionalBayes, randomVariable,
-  normalDistribution, discreteDistributions, continuousDistributions, skewTail, identifyDistribution,
-  samplingStatistic, clt, confidenceIntervals, bootstrap,
-  hypothesisIntro, hypothesisTest, tTest, ciVsPvalue, powerSampleSize, varianceReduction,
-  evidencePyramid, abTest, experimentMetrics, segmentsCate, multipleComparisons, abProcess, networkEffects, peeking, sequentialTests,
-  regression, correlationTypes, regressionMetrics, regressionAssumptions, multipleRegression, causality,
-  classification, confusionMatrix, roc, classImbalance, overfitting,
-  survivorshipBias, simpsonParadox, regressionToMean, dataLeakage, goodhart,
-  bayesianInference, bayesianAb, naiveBayes, anova, posthocAnova, twoWayAnova,
-  capstoneProject,
-]
+// Реестр уроков стр. 1.
+//
+// Раньше здесь было 57 статических импортов JSON, и весь курс в двух локалях
+// лежал в чанке страницы: ~1 MB отдавалось ради одного открытого урока.
+// Теперь модуль отдаёт только ЛЁГКИЙ ИНДЕКС (id, модуль, заголовки) — этого
+// хватает навигации, оглавлению и прогрессу, — а полный текст урока грузится
+// отдельным чанком по требованию через loadLesson().
+//
+// Индекс собирается при сборке из самих JSON (см. vite.config.js): порядок
+// берётся из массива в прежнем реестре, поэтому последовательность курса
+// не зависит от имён файлов и не разъезжается с содержимым.
+export const lessons = __LESSON_INDEX__
 
 export const lessonsByModule = lessons.reduce((acc, l) => {
   ;(acc[l.module] ||= []).push(l)
   return acc
 }, {})
+
+export const lessonsById = Object.fromEntries(lessons.map((l) => [l.id, l]))
+
+// Ленивые загрузчики. Ключ глоба — путь к файлу, а имя файла не всегда равно
+// id урока (например, t-test.json несёт id stat-criteria), поэтому путь берём
+// из индекса, а не собираем из id.
+const ruFiles = import.meta.glob('./*.json')
+const enFiles = import.meta.glob('../lessons-en/*.json')
+
+const cache = new Map()
+
+// Возвращает полный урок: русский текст, поверх него — английский, если он
+// есть. Флаг _untranslated поднимает баннер «перевода пока нет».
+export async function loadLesson(id, locale = 'ru') {
+  const key = `${id}:${locale}`
+  if (cache.has(key)) return cache.get(key)
+
+  const meta = lessonsById[id]
+  if (!meta) return null
+
+  const loadRu = ruFiles[`./${meta.file}`]
+  if (!loadRu) return null
+  const ru = (await loadRu()).default
+
+  if (locale !== 'en') {
+    cache.set(key, ru)
+    return ru
+  }
+
+  const loadEn = meta.fileEn ? enFiles[`../lessons-en/${meta.fileEn}`] : null
+  const en = loadEn ? (await loadEn()).default : null
+  const merged = en ? { ...ru, ...en } : { ...ru, _untranslated: true }
+  cache.set(key, merged)
+  return merged
+}

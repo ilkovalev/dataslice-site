@@ -1,115 +1,71 @@
-// Общий реестр интерактивов: id из lesson → компонент.
+// Реестр интерактивов: id из lesson → ленивый импорт компонента.
 // Используется и классическим LessonLayout, и BeatsLesson.
-import DistributionExplorer from './DistributionExplorer.jsx'
-import SkewnessExplorer from './SkewnessExplorer.jsx'
-import CenterMeasures from './CenterMeasures.jsx'
-import TwoTeams from './TwoTeams.jsx'
-import Histogram from './Histogram.jsx'
-import PercentileExplorer from './PercentileExplorer.jsx'
-import OutlierActions from './OutlierActions.jsx'
-import CoinFlips from './CoinFlips.jsx'
-import EventsProbability from './EventsProbability.jsx'
-import SamplingDistribution from './SamplingDistribution.jsx'
-import EstimatorSampler from './EstimatorSampler.jsx'
-import HypothesisTest from './HypothesisTest.jsx'
-import ABTest from './ABTest.jsx'
-import Interference from './Interference.jsx'
-import MetricRoles from './MetricRoles.jsx'
-import EvidencePyramid from './EvidencePyramid.jsx'
-import ABProcess from './ABProcess.jsx'
-import Regression from './Regression.jsx'
-import RegressionMetrics from './RegressionMetrics.jsx'
-import MultipleRegression from './MultipleRegression.jsx'
-import ResidualDiagnostics from './ResidualDiagnostics.jsx'
-import CorrelationShapes from './CorrelationShapes.jsx'
-import RegressionToMean from './RegressionToMean.jsx'
-import Classifier from './Classifier.jsx'
-import FeatureClassifier from './FeatureClassifier.jsx'
-import PRCurve from './PRCurve.jsx'
-import BayesGrid from './BayesGrid.jsx'
-import RandomVariable from './RandomVariable.jsx'
-import PriorPosterior from './PriorPosterior.jsx'
-import BayesianAB from './BayesianAB.jsx'
-import NaiveBayes from './NaiveBayes.jsx'
-import ANOVA from './ANOVA.jsx'
-import InteractionPlot from './InteractionPlot.jsx'
-import PairwiseIntervals from './PairwiseIntervals.jsx'
-import DataCaseStudy from './DataCaseStudy.jsx'
-import ConfidenceIntervals from './ConfidenceIntervals.jsx'
-import CIvsP from './CIvsP.jsx'
-import SimpsonParadox from './SimpsonParadox.jsx'
-import CausalDiagram from './CausalDiagram.jsx'
-import PowerCurve from './PowerCurve.jsx'
-import Peeking from './Peeking.jsx'
-import ROC from './ROC.jsx'
-import Overfitting from './Overfitting.jsx'
-import DataLeakage from './DataLeakage.jsx'
-import SurvivorshipBias from './SurvivorshipBias.jsx'
-import MultipleComparisons from './MultipleComparisons.jsx'
-import Goodhart from './Goodhart.jsx'
-import Bootstrap from './Bootstrap.jsx'
-import TTest from './TTest.jsx'
-import ZTest from './ZTest.jsx'
-import MannWhitney from './MannWhitney.jsx'
-import VarianceReduction from './VarianceReduction.jsx'
-import CriterionPicker from './CriterionPicker.jsx'
-import PValueExplorer from './PValueExplorer.jsx'
-import SequentialTest from './SequentialTest.jsx'
+//
+// Раньше все 55 виджетов импортировались статически и целиком лежали в чанке
+// страницы уроков: ~1 MB отдавалось ради одного открытого урока. Теперь каждый
+// виджет — свой чанк и грузится, только когда его урок реально открыт.
+import { lazy } from 'react'
 
-export const widgets = {
-  distribution: DistributionExplorer,
-  skewness: SkewnessExplorer,
-  'center-measures': CenterMeasures,
-  'two-teams': TwoTeams,
-  histogram: Histogram,
-  'percentile-explorer': PercentileExplorer,
-  'outlier-actions': OutlierActions,
-  'coin-flips': CoinFlips,
-  'events-probability': EventsProbability,
-  'sampling-distribution': SamplingDistribution,
-  'estimator-sampler': EstimatorSampler,
-  'hypothesis-test': HypothesisTest,
-  'ab-test': ABTest,
-  interference: Interference,
-  'metric-roles': MetricRoles,
-  'evidence-pyramid': EvidencePyramid,
-  'ab-process': ABProcess,
-  regression: Regression,
-  'regression-metrics': RegressionMetrics,
-  'multiple-regression': MultipleRegression,
-  'residual-diagnostics': ResidualDiagnostics,
-  'correlation-shapes': CorrelationShapes,
-  'regression-to-mean': RegressionToMean,
-  classifier: Classifier,
-  'feature-classifier': FeatureClassifier,
-  'pr-curve': PRCurve,
-  'bayes-grid': BayesGrid,
-  'random-variable': RandomVariable,
-  'prior-posterior': PriorPosterior,
-  'bayesian-ab': BayesianAB,
-  'naive-bayes': NaiveBayes,
-  anova: ANOVA,
-  'interaction-plot': InteractionPlot,
-  'pairwise-intervals': PairwiseIntervals,
-  'data-case-study': DataCaseStudy,
-  'confidence-intervals': ConfidenceIntervals,
-  'ci-vs-p': CIvsP,
-  'simpson-paradox': SimpsonParadox,
-  'causal-diagram': CausalDiagram,
-  'power-curve': PowerCurve,
-  peeking: Peeking,
-  roc: ROC,
-  overfitting: Overfitting,
-  'data-leakage': DataLeakage,
-  survivorship: SurvivorshipBias,
-  'multiple-comparisons': MultipleComparisons,
-  goodhart: Goodhart,
-  bootstrap: Bootstrap,
-  't-test': TTest,
-  'z-test': ZTest,
-  'mann-whitney': MannWhitney,
-  'variance-reduction': VarianceReduction,
-  'criterion-picker': CriterionPicker,
-  'p-value-explorer': PValueExplorer,
-  'sequential-test': SequentialTest,
+const loaders = {
+  distribution: () => import('./DistributionExplorer.jsx'),
+  skewness: () => import('./SkewnessExplorer.jsx'),
+  'center-measures': () => import('./CenterMeasures.jsx'),
+  'two-teams': () => import('./TwoTeams.jsx'),
+  histogram: () => import('./Histogram.jsx'),
+  'percentile-explorer': () => import('./PercentileExplorer.jsx'),
+  'outlier-actions': () => import('./OutlierActions.jsx'),
+  'coin-flips': () => import('./CoinFlips.jsx'),
+  'events-probability': () => import('./EventsProbability.jsx'),
+  'sampling-distribution': () => import('./SamplingDistribution.jsx'),
+  'estimator-sampler': () => import('./EstimatorSampler.jsx'),
+  'hypothesis-test': () => import('./HypothesisTest.jsx'),
+  'ab-test': () => import('./ABTest.jsx'),
+  interference: () => import('./Interference.jsx'),
+  'metric-roles': () => import('./MetricRoles.jsx'),
+  'evidence-pyramid': () => import('./EvidencePyramid.jsx'),
+  'ab-process': () => import('./ABProcess.jsx'),
+  regression: () => import('./Regression.jsx'),
+  'regression-metrics': () => import('./RegressionMetrics.jsx'),
+  'multiple-regression': () => import('./MultipleRegression.jsx'),
+  'residual-diagnostics': () => import('./ResidualDiagnostics.jsx'),
+  'correlation-shapes': () => import('./CorrelationShapes.jsx'),
+  'regression-to-mean': () => import('./RegressionToMean.jsx'),
+  classifier: () => import('./Classifier.jsx'),
+  'feature-classifier': () => import('./FeatureClassifier.jsx'),
+  'pr-curve': () => import('./PRCurve.jsx'),
+  'bayes-grid': () => import('./BayesGrid.jsx'),
+  'random-variable': () => import('./RandomVariable.jsx'),
+  'prior-posterior': () => import('./PriorPosterior.jsx'),
+  'bayesian-ab': () => import('./BayesianAB.jsx'),
+  'naive-bayes': () => import('./NaiveBayes.jsx'),
+  anova: () => import('./ANOVA.jsx'),
+  'interaction-plot': () => import('./InteractionPlot.jsx'),
+  'pairwise-intervals': () => import('./PairwiseIntervals.jsx'),
+  'data-case-study': () => import('./DataCaseStudy.jsx'),
+  'confidence-intervals': () => import('./ConfidenceIntervals.jsx'),
+  'ci-vs-p': () => import('./CIvsP.jsx'),
+  'simpson-paradox': () => import('./SimpsonParadox.jsx'),
+  'causal-diagram': () => import('./CausalDiagram.jsx'),
+  'power-curve': () => import('./PowerCurve.jsx'),
+  peeking: () => import('./Peeking.jsx'),
+  roc: () => import('./ROC.jsx'),
+  overfitting: () => import('./Overfitting.jsx'),
+  'data-leakage': () => import('./DataLeakage.jsx'),
+  survivorship: () => import('./SurvivorshipBias.jsx'),
+  'multiple-comparisons': () => import('./MultipleComparisons.jsx'),
+  goodhart: () => import('./Goodhart.jsx'),
+  bootstrap: () => import('./Bootstrap.jsx'),
+  't-test': () => import('./TTest.jsx'),
+  'z-test': () => import('./ZTest.jsx'),
+  'mann-whitney': () => import('./MannWhitney.jsx'),
+  'variance-reduction': () => import('./VarianceReduction.jsx'),
+  'criterion-picker': () => import('./CriterionPicker.jsx'),
+  'p-value-explorer': () => import('./PValueExplorer.jsx'),
+  'sequential-test': () => import('./SequentialTest.jsx'),
 }
+
+// React.lazy на каждый id, созданный один раз: пересоздание на рендере
+// размонтировало бы виджет и сбрасывало его состояние.
+export const widgets = Object.fromEntries(
+  Object.entries(loaders).map(([id, load]) => [id, lazy(load)]),
+)

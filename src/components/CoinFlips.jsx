@@ -118,7 +118,7 @@ export default function CoinFlips({ locale = 'ru' }) {
         <input type="range" min="0.05" max="0.95" step="0.05" value={p} onChange={(e) => { setP(Number(e.target.value)); reset() }} className="w-full accent-accent" />
       </label>
 
-      <div className="flex gap-2 mt-3">
+      <div className="flex flex-wrap max-w-full gap-2 mt-3">
         <button onClick={() => { setRunning(false); flip(10) }} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{en ? '+10 flips' : '+10 бросков'}</button>
         <button onClick={() => { setRunning(false); flip(100) }} className="text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">{en ? '+100 flips' : '+100 бросков'}</button>
         <button onClick={() => setRunning((r) => !r)} className={autoRunClass(running)}>{autoRunLabel(running, locale)}</button>

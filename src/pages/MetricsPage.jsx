@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useMemo } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import MetricTreeGraph from '../components/MetricTreeGraph.jsx'
 import MetricPyramid from '../components/MetricPyramid.jsx'
 import Framework from '../components/Framework.jsx'
@@ -10,14 +10,36 @@ import { useLocale, STR } from '../lib/i18n.js'
 export default function MetricsPage() {
   const locale = useLocale()
   const t = STR[locale]
-  const [mode, setMode] = useState('basics') // basics | industries — вводная первой
-  const [activeId, setActiveId] = useState(industries[0].id)
-  const [companyId, setCompanyId] = useState(null)
-  const [view, setView] = useState('tree') // tree | pyramid
+  // Состояние живёт в URL, а не в useState: иначе ссылку на «дерево метрик
+  // Netflix» нельзя отправить в канал — /metrics всегда открывался бы на
+  // «Основах». Раздача деревьев постами и есть главный сценарий этого раздела.
+  // Параметры отсутствуют → ровно прежнее поведение по умолчанию.
+  const [sp, setSp] = useSearchParams()
   // Деревья хранятся в двуязычной схеме {ru, en} — резолвим в строки локали.
   const localized = useMemo(() => industries.map((i) => resolveIndustry(i, locale)), [locale])
-  const active = localized.find((i) => i.id === activeId)
-  const company = active.companies?.find((c) => c.id === companyId)
+
+  const mode = sp.get('tab') === 'industries' ? 'industries' : 'basics'
+  // Значения из URL проверяем: по чужой или устаревшей ссылке страница должна
+  // открыться на дефолте, а не упасть.
+  const active = localized.find((i) => i.id === sp.get('ind')) ?? localized[0]
+  const company = active.companies?.find((c) => c.id === sp.get('co'))
+  const view = sp.get('view') === 'pyramid' ? 'pyramid' : 'tree'
+
+  // Обновление параметров: пустые значения из URL убираем, чтобы ссылка
+  // оставалась короткой, а дефолтное состояние выглядело как чистый /metrics.
+  const patch = (next, replace = false) => {
+    const p = new URLSearchParams(sp)
+    for (const [k, v] of Object.entries(next)) {
+      if (v == null || v === '') p.delete(k)
+      else p.set(k, v)
+    }
+    setSp(p, { replace })
+  }
+  const setMode = (m) => patch({ tab: m === 'industries' ? 'industries' : null })
+  // metric сбрасываем вместе со сменой дерева: иначе карточка из прошлой
+  // индустрии всплыла бы заново, случайно совпав по id.
+  const setCompanyId = (id) => patch({ co: id, metric: null })
+  const setView = (v) => patch({ view: v === 'pyramid' ? 'pyramid' : null })
 
   // Резолвим, что показывать: своё дерево компании или базовое индустрии.
   const resolved = company
@@ -25,9 +47,7 @@ export default function MetricsPage() {
     : { root: active.root, counterMetrics: active.counterMetrics, pyramid: active.pyramid, northStar: active.northStar }
 
   function goIndustry(id) {
-    setActiveId(id)
-    setCompanyId(null)
-    setMode('industries')
+    patch({ tab: 'industries', ind: id, co: null, metric: null })
   }
 
   const tab = (m, label) => (
@@ -67,7 +87,7 @@ export default function MetricsPage() {
               onClick={() => goIndustry(ind.id)}
               title={ind.archetype}
               className={`text-sm px-3 py-1 rounded-md border transition-colors ${
-                ind.id === activeId ? 'border-accent/50 text-cyanink bg-accent/15 font-medium' : 'border-black/10 text-gray-600 hover:bg-black/5'
+                ind.id === active.id ? 'border-accent/50 text-cyanink bg-accent/15 font-medium' : 'border-black/10 text-gray-600 hover:bg-black/5'
               }`}
             >
               {ind.industry}
@@ -86,9 +106,9 @@ export default function MetricsPage() {
           </div>
           {active.companies && (
             <div className="flex flex-wrap gap-2">
-              <button onClick={() => setCompanyId(null)} className={`text-sm px-3 py-1 rounded-md border ${!companyId ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{t.metricsBase}</button>
+              <button onClick={() => setCompanyId(null)} className={`text-sm px-3 py-1 rounded-md border ${!company ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{t.metricsBase}</button>
               {active.companies.map((c) => (
-                <button key={c.id} onClick={() => setCompanyId(c.id)} className={`text-sm px-3 py-1 rounded-md border ${c.id === companyId ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{c.name}</button>
+                <button key={c.id} onClick={() => setCompanyId(c.id)} className={`text-sm px-3 py-1 rounded-md border ${c.id === company?.id ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{c.name}</button>
               ))}
             </div>
           )}

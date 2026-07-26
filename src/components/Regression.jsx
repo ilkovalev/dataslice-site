@@ -98,7 +98,7 @@ export default function Regression({ locale = 'ru' }) {
         {showSquares && <span className="text-[#d9a300]">{en ? 'sum of squares' : 'сумма квадратов'} = {sse.toFixed(0)}</span>}
       </div>
 
-      <div className="flex items-center justify-between mt-3">
+      <div className="flex flex-wrap items-center justify-between gap-2 max-w-full mt-3">
         <p className="text-xs text-gray-500">{en ? 'Drag the points. The slope b₁ is how much y grows per +1 in x; r is the strength of the relationship from −1 to +1.' : 'Перетаскивайте точки. Наклон b₁ — на сколько растёт y при +1 по x; r — сила связи от −1 до +1.'}</p>
         <button onClick={() => setShowSquares((s) => !s)} className="shrink-0 text-xs px-2.5 py-1 rounded-md border border-black/15 text-gray-700 hover:bg-black/5">
           {showSquares ? (en ? 'hide the squares' : 'скрыть квадраты') : (en ? 'show the squared errors' : 'показать квадраты ошибок')}

@@ -144,7 +144,37 @@ try {
   // пропатченный файл, и canonical с hreflang задваивались бы.
   fs.mkdirSync(path.join(dist, 'en'), { recursive: true })
   fs.copyFileSync(path.join(dist, 'en.html'), path.join(dist, 'en/index.html'))
-  console.log(`prerendered ${n} pages (+ en/index.html копией)`)
+
+  // Sitemap собираем здесь же, из того же списка маршрутов. Раньше он лежал
+  // в public/ и правился руками — и отстал: 68 URL вместо 122, без лендинга,
+  // без /en и без единого английского урока (они появились уже после того,
+  // как файл написали). Пока источник один, разъехаться нечему.
+  // lastmod берём из даты изменения исходного JSON, а не из даты сборки:
+  // иначе каждая пересборка помечала бы весь сайт как обновлённый.
+  const srcMtime = (r) => {
+    const id = r.url.match(/\/stats\/(.+)$/)?.[1]
+    const dir = r.lang === 'en' ? lessonsEnDir : lessonsDir
+    if (id) {
+      const f = fs.readdirSync(dir).find((x) => x.endsWith('.json') && JSON.parse(fs.readFileSync(path.join(dir, x), 'utf8')).id === id)
+      if (f) return fs.statSync(path.join(dir, f)).mtime
+    }
+    return new Date()
+  }
+  const seen = new Set()
+  const entries = []
+  for (const r of routes) {
+    // В карту сайта — только канонические адреса: у /stats canonical ведёт
+    // на первый урок, дублировать его отдельной строкой незачем.
+    if (r.canonical !== `${SITE}${r.url === '/' ? '/' : r.url}`) continue
+    if (seen.has(r.canonical)) continue
+    seen.add(r.canonical)
+    entries.push(`  <url><loc>${r.canonical}</loc><lastmod>${srcMtime(r).toISOString().slice(0, 10)}</lastmod></url>`)
+  }
+  fs.writeFileSync(
+    path.join(dist, 'sitemap.xml'),
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries.join('\n')}\n</urlset>\n`,
+  )
+  console.log(`prerendered ${n} pages (+ en/index.html копией, sitemap: ${entries.length} URL)`)
 } finally {
   server.kill()
 }

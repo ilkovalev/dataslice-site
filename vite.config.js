@@ -27,11 +27,23 @@ const order = [
   ...fs.readFileSync('src/content/lessons/order.js', 'utf8').matchAll(/'([\w-]+\.json)'/g),
 ].map((m) => m[1])
 
-const enById = {}
-for (const f of jsonFiles('src/content/lessons-en')) {
-  const l = read(path.join('src/content/lessons-en', f))
-  enById[l.id] = { file: f, title: l.title }
+// Два файла с одним id — тихая потеря контента: реестр EN собирается глобом
+// в объект, поздний файл молча затирает ранний, а какой именно поздний —
+// зависит от порядка обхода файловой системы. Так `stat-criteria.json`
+// перекрывался `t-test.json`, и правки могли уходить в невидимый файл.
+function readById(dir) {
+  const out = {}
+  const seen = {}
+  for (const f of jsonFiles(dir)) {
+    const l = read(path.join(dir, f))
+    if (seen[l.id]) throw new Error(`${dir}: id «${l.id}» в двух файлах — ${seen[l.id]} и ${f}`)
+    seen[l.id] = f
+    out[l.id] = { file: f, title: l.title }
+  }
+  return out
 }
+readById('src/content/lessons') // проверка на дубли, результат не нужен
+const enById = readById('src/content/lessons-en')
 
 const LESSON_INDEX = order.map((f) => {
   const l = read(path.join('src/content/lessons', f))

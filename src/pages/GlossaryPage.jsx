@@ -1,5 +1,5 @@
 import { Suspense, lazy, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { glossary } from '../content/glossary.js'
 import { glossaryEn } from '../content/glossary-en.js'
 import SubscribeCTA from '../components/SubscribeCTA.jsx'
@@ -21,7 +21,19 @@ export default function GlossaryPage() {
   const t = STR[locale]
   const p = prefix(locale)
   const data = locale === 'en' ? glossaryEn : glossary
-  const [q, setQ] = useState('')
+  // ?q= приходит из поиска по сайту: термин без разбора в уроке открывается
+  // здесь, и строка должна быть уже заполнена — иначе человек попадает
+  // в общий список из 83 терминов и ищет заново.
+  const [params, setParams] = useSearchParams()
+  const [q, setQRaw] = useState(params.get('q') || '')
+  const setQ = (v) => {
+    setQRaw(v)
+    // запрос живёт в адресе: ссылку на выдачу можно отправить как есть
+    const next = new URLSearchParams(params)
+    if (v.trim()) next.set('q', v)
+    else next.delete('q')
+    setParams(next, { replace: true })
+  }
   const query = q.trim().toLowerCase()
 
   // Ищем по названию, определению и синонимам (рус/англ/аббревиатуры).

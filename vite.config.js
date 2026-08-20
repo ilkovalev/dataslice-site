@@ -76,6 +76,72 @@ for (const f of jsonFiles('src/content/industries')) {
   for (const id of seen) if (!metricIndustry[id]) metricIndustry[id] = d.id
 }
 
+// --- Поисковый индекс -----------------------------------------------------
+// Поиск идёт по трём поверхностям сразу: темы курса, термины глоссария и
+// бизнес-метрики. Индекс собирается здесь, а не в рантайме, по той же причине,
+// что и всё остальное: уроки — это ~865 KB, каталог метрик ещё ~350 KB, а
+// поиску хватает заголовков и ключевых слов. Сам индекс тоже не в основном
+// чанке — он грузится своим чанком при первом открытии поиска
+// (см. src/content/searchIndex.js).
+//
+// Из урока берём заголовок, первую фразу интро и термины из definitions:
+// человек ищет «сезонность» или «MAPE», а не цитату из середины текста.
+function buildSearchIndex(locale) {
+  const en = locale === 'en'
+  const out = []
+
+  for (const meta of LESSON_INDEX) {
+    const dir = en && meta.fileEn ? 'src/content/lessons-en' : 'src/content/lessons'
+    const file = en && meta.fileEn ? meta.fileEn : meta.file
+    const l = read(path.join(dir, file))
+    const terms = (l.definitions || []).map((d) => d.term)
+    // первая фраза интро: достаточно, чтобы отличить урок в выдаче,
+    // и не тащит в индекс всю прозу курса
+    const lead = (l.intro || '').split(/(?<=[.!?])\s/)[0] || ''
+    out.push({ k: 'l', id: l.id, m: l.module, t: l.title, s: lead.slice(0, 130), w: terms.join(' · ') })
+  }
+
+  const glossSrc = fs.readFileSync(en ? 'src/content/glossary-en.js' : 'src/content/glossary.js', 'utf8')
+  // Глоссарий — обычный JS-модуль, читать его парсером ради сборки индекса
+  // избыточно: поля вытаскиваем регэкспом по одной записи за раз.
+  for (const m of glossSrc.matchAll(/\{\s*term:\s*'((?:[^'\\]|\\.)*)'[\s\S]*?\}/g)) {
+    const entry = m[0]
+    const field = (name) => entry.match(new RegExp(name + ":\\s*'((?:[^'\\\\]|\\\\.)*)'"))?.[1] || ''
+    const aliases = [...entry.matchAll(/aliases:\s*\[([^\]]*)\]/g)]
+      .flatMap((a) => [...a[1].matchAll(/'([^']*)'/g)].map((x) => x[1]))
+    const metric = field('metric') || undefined
+    out.push({
+      k: 'g',
+      t: m[1].replace(/\\'/g, "'"),
+      s: field('def').replace(/\\'/g, "'").slice(0, 130),
+      w: aliases.join(' · '),
+      lesson: field('lesson') || undefined,
+      metric,
+      // без id индустрии карточку метрики не открыть: она живёт внутри дерева
+      ind: metric ? metricIndustry[metric] : undefined,
+    })
+  }
+
+  for (const f of jsonFiles('src/content/metrics')) {
+    for (const mt of read(path.join('src/content/metrics', f))) {
+      const title = mt.title?.[locale] || mt.title?.ru
+      if (!title) continue
+      out.push({
+        k: 'm',
+        id: mt.id,
+        t: title,
+        s: (mt.desc?.[locale] || mt.desc?.ru || '').slice(0, 130),
+        w: (mt.aliases || []).join(' · '),
+        ind: metricIndustry[mt.id],
+      })
+    }
+  }
+  return out
+}
+
+const SEARCH_RU = buildSearchIndex('ru')
+const SEARCH_EN = buildSearchIndex('en')
+
 // Сайт раздаётся из корня кастомного домена data-slice.ru → base '/'.
 export default defineConfig({
   base: '/',
@@ -88,5 +154,7 @@ export default defineConfig({
     __N_TERMS__: N_TERMS,
     __METRIC_INDUSTRY__: JSON.stringify(metricIndustry),
     __LESSON_INDEX__: JSON.stringify(LESSON_INDEX),
+    __SEARCH_RU__: JSON.stringify(SEARCH_RU),
+    __SEARCH_EN__: JSON.stringify(SEARCH_EN),
   },
 })

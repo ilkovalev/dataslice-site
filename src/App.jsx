@@ -1,9 +1,11 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { NavLink, Navigate, Route, Routes, useLocation, Link } from 'react-router-dom'
 import { track } from './lib/analytics.js'
 import { useLocale, prefix, switchLocalePath, STR } from './lib/i18n.js'
 import { tgLink, TG_FEEDBACK } from './lib/links.js'
 import LandingPage from './pages/LandingPage.jsx'
+
+const SiteSearch = lazy(() => import('./components/SiteSearch.jsx'))
 
 // Каждая страница — свой чанк: курс (уроки + виджеты) не грузится
 // тем, кто пришёл за метриками или глоссарием, и наоборот.
@@ -24,6 +26,28 @@ export default function App() {
   const p = prefix(locale)
   const { pathname } = useLocation()
   const otherLocale = locale === 'en' ? 'ru' : 'en'
+  const [searchOpen, setSearchOpen] = useState(false)
+
+  // ⌘K / Ctrl+K — привычная комбинация для поиска; «/» тоже открывает, но
+  // только когда фокус не в поле ввода, иначе слэш перестал бы печататься.
+  useEffect(() => {
+    function onKey(e) {
+      const typing = e.target.closest?.('input, textarea, select')
+      if ((e.key === 'k' || e.key === 'л') && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        setSearchOpen((v) => {
+          if (!v) track('search_open', { place: 'hotkey' })
+          return !v
+        })
+      } else if (e.key === '/' && !typing && !searchOpen) {
+        e.preventDefault()
+        track('search_open', { place: 'hotkey' })
+        setSearchOpen(true)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [searchOpen])
   return (
     <div className="min-h-screen">
       <div className="h-1 bg-gradient-to-r from-accent to-brand" />
@@ -41,6 +65,15 @@ export default function App() {
             {t.brand} <span aria-hidden>🍕</span>
           </Link>
           <span className="order-2 ml-auto flex items-center gap-2 sm:order-3">
+            <button
+              onClick={() => { setSearchOpen(true); track('search_open', { place: 'header' }) }}
+              title={`${t.searchButton} (⌘K)`}
+              aria-label={t.searchButton}
+              className="text-sm px-3 py-1.5 rounded-full border border-black/10 text-gray-600 hover:bg-black/5 transition-colors inline-flex items-center gap-1.5 min-h-[44px] sm:min-h-0"
+            >
+              <span aria-hidden>🔍</span>
+              <span className="hidden sm:inline">{t.searchButton}</span>
+            </button>
             <Link
               to={switchLocalePath(pathname, otherLocale)}
               title={otherLocale === 'en' ? 'English version' : 'Русская версия'}
@@ -67,6 +100,9 @@ export default function App() {
         </div>
         </div>
       </header>
+      <Suspense fallback={null}>
+        {searchOpen && <SiteSearch open={searchOpen} onClose={() => setSearchOpen(false)} />}
+      </Suspense>
       <main className="max-w-[1600px] mx-auto px-4 py-8 md:py-12">
         <Suspense fallback={null}>
           <Routes>

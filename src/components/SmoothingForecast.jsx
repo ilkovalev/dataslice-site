@@ -74,16 +74,16 @@ export default function SmoothingForecast({ locale = 'ru', method: initial = 'ma
         <text x={sx(cut - 1) + 4} y={14} fill="#9a907c" fontSize="9.5">{en ? 'hidden' : 'спрятано'}</text>
 
         {/* факт: обучающая часть тёмная, спрятанная — серая */}
-        <path d={train.map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.6" />
-        <path d={test.map((v, i) => `${i ? 'L' : 'M'}${sx(cut + i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.6" opacity="0.3" />
+        <path d={train.map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.1" />
+        <path d={test.map((v, i) => `${i ? 'L' : 'M'}${sx(cut + i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.1" opacity="0.3" />
 
         {/* сглаженная линия и прогноз */}
-        <path d={fitted.map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke={color} strokeWidth="2" />
+        <path d={fitted.map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke={color} strokeWidth="1.5" />
         <path
           d={[fitted[fitted.length - 1], ...forecast]
             .map((v, i) => `${i ? 'L' : 'M'}${sx(cut - 1 + i).toFixed(1)},${sy(v).toFixed(1)}`)
             .join(' ')}
-          fill="none" stroke={color} strokeWidth="2" strokeDasharray="5 4"
+          fill="none" stroke={color} strokeWidth="1.5" strokeDasharray="5 4"
         />
         <text x={4} y={30} fill="#9a907c" fontSize="9">{Math.round(hi)}</text>
         <text x={4} y={176} fill="#9a907c" fontSize="9">{Math.round(lo)}</text>

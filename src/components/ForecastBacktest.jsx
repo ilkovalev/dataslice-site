@@ -62,13 +62,13 @@ export default function ForecastBacktest({ locale = 'ru' }) {
         <text x={PAD_L + 4} y={32} fill="#9a907c" fontSize="9.5">{en ? 'training data' : 'обучающая часть'}</text>
         <line x1={sx(f.cut - 1)} y1={20} x2={sx(f.cut - 1)} y2={152} stroke="#d6cebf" strokeWidth="1.2" strokeDasharray="4 3" />
 
-        <path d={s.y.map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.5" opacity="0.35" />
-        <path d={s.y.slice(0, f.cut).map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.6" />
+        <path d={s.y.map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1" opacity="0.35" />
+        <path d={s.y.slice(0, f.cut).map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.1" />
 
         {showNaive && (
-          <path d={f.naive.map((v, i) => `${i ? 'L' : 'M'}${sx(f.cut + i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#9a907c" strokeWidth="1.8" strokeDasharray="4 3" />
+          <path d={f.naive.map((v, i) => `${i ? 'L' : 'M'}${sx(f.cut + i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#9a907c" strokeWidth="1.3" strokeDasharray="4 3" />
         )}
-        <path d={f.model.map((v, i) => `${i ? 'L' : 'M'}${sx(f.cut + i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2ab8eb" strokeWidth="2.2" />
+        <path d={f.model.map((v, i) => `${i ? 'L' : 'M'}${sx(f.cut + i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2ab8eb" strokeWidth="1.6" />
 
         {/* отметки всех точек отсечения */}
         {ORIGINS.map((c, i) => (

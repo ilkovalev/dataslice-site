@@ -70,9 +70,9 @@ export default function TimeSeriesDecomposition({ highlight, locale = 'ru' }) {
                   stroke="#d6cebf" strokeWidth="1" strokeDasharray="3 3"
                 />
               )}
-              <path d={path(r.values, top, lo, hi)} fill="none" stroke={r.color} strokeWidth={r.key === 'data' ? 1.8 : 1.6} />
+              <path d={path(r.values, top, lo, hi)} fill="none" stroke={r.color} strokeWidth={r.key === 'data' ? 1.2 : 1.1} />
               {r.extra && (
-                <path d={path(r.extra, top, lo, hi)} fill="none" stroke={COLORS.trend} strokeWidth="2" opacity="0.85" />
+                <path d={path(r.extra, top, lo, hi)} fill="none" stroke={COLORS.trend} strokeWidth="1.5" opacity="0.85" />
               )}
               {/* подписи шкалы прижаты к своим краям панели: рядом друг с другом
                   они читались как одно двузначное число */}

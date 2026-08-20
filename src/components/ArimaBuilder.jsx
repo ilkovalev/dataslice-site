@@ -79,15 +79,15 @@ export default function ArimaBuilder({ locale = 'ru' }) {
           </g>
         ))}
 
-        <path d={train.map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.6" />
-        <path d={test.map((v, i) => `${i ? 'L' : 'M'}${sx(CUT + i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.6" opacity="0.3" />
+        <path d={train.map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.1" />
+        <path d={test.map((v, i) => `${i ? 'L' : 'M'}${sx(CUT + i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.1" opacity="0.3" />
         <path
           d={forecast.map((v, i) => `${i ? 'L' : 'M'}${sx(CUT + i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')}
-          fill="none" stroke="#2ab8eb" strokeWidth="2.2"
+          fill="none" stroke="#2ab8eb" strokeWidth="1.6"
         />
         {/* промах именно в день акции — ради него и нужен X */}
         {pi >= 0 && (
-          <line x1={sx(CUT + pi)} y1={sy(test[pi])} x2={sx(CUT + pi)} y2={sy(forecast[pi])} stroke="#e0575b" strokeWidth="2" opacity="0.8" />
+          <line x1={sx(CUT + pi)} y1={sy(test[pi])} x2={sx(CUT + pi)} y2={sy(forecast[pi])} stroke="#e0575b" strokeWidth="1.5" opacity="0.8" />
         )}
         <text x={4} y={30} fill="#9a907c" fontSize="9">{Math.round(hi)}</text>
         <text x={4} y={176} fill="#9a907c" fontSize="9">{Math.round(lo)}</text>

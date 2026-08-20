@@ -76,7 +76,7 @@ export default function Stationarity({ locale = 'ru' }) {
         <text x={PAD_L} y={top - 2} fill="#9a907c" fontSize="9.5">{name}</text>
         <path
           d={values.map((v, i) => (i < WIN ? '' : `${i === WIN ? 'M' : 'L'}${sx(i).toFixed(1)},${gy(v).toFixed(1)}`)).join(' ')}
-          fill="none" stroke={color} strokeWidth="1.8"
+          fill="none" stroke={color} strokeWidth="1.3"
         />
       </g>
     )
@@ -90,7 +90,7 @@ export default function Stationarity({ locale = 'ru' }) {
         {(d > 0 || seasonal) && lo < 0 && hi > 0 && (
           <line x1={PAD_L} y1={sy(0)} x2={W - 12} y2={sy(0)} stroke="#d6cebf" strokeWidth="1" strokeDasharray="3 3" />
         )}
-        <path d={y.map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.6" />
+        <path d={y.map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.1" />
         <text x={4} y={30} fill="#9a907c" fontSize="9">{Math.round(hi)}</text>
         <text x={4} y={128} fill="#9a907c" fontSize="9">{Math.round(lo)}</text>
 

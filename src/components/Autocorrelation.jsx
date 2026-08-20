@@ -56,12 +56,12 @@ export default function Autocorrelation({ locale = 'ru', kind: initialKind = 're
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none">
         {/* --- ряд --- */}
         <text x={32} y={14} fill="#9a907c" fontSize="10.5">{en ? 'the series' : 'сам ряд'}</text>
-        <path d={y.map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.6" />
+        <path d={y.map((v, i) => `${i ? 'L' : 'M'}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(' ')} fill="none" stroke="#2a2f3a" strokeWidth="1.1" />
         {/* пары, разнесённые на лаг: показываем каждую пятую, иначе каша */}
         {y.map((v, i) =>
           i >= lag && i % 5 === 0 ? (
             <g key={i}>
-              <line x1={sx(i - lag)} y1={sy(y[i - lag])} x2={sx(i)} y2={sy(v)} stroke="#2ab8eb" strokeWidth="1" opacity="0.55" />
+              <line x1={sx(i - lag)} y1={sy(y[i - lag])} x2={sx(i)} y2={sy(v)} stroke="#2ab8eb" strokeWidth="0.8" opacity="0.55" />
               <circle cx={sx(i - lag)} cy={sy(y[i - lag])} r="2.4" fill="#2ab8eb" />
               <circle cx={sx(i)} cy={sy(v)} r="2.4" fill="#2ab8eb" />
             </g>

@@ -1,6 +1,6 @@
 {
   "id": "two-way-anova",
-  "module": 11,
+  "module": 12,
   "title": "Two-way ANOVA and interactions",
   "tier": 1,
   "intro": "One-way ANOVA compares groups by ONE factor. But in life factors come several at a time: the plan and the channel; the drug and the age. Two-way ANOVA takes them apart together — and catches the most interesting thing: the interaction, when the effect of one factor depends on the other.",

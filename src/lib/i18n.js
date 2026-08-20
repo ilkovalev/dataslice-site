@@ -119,8 +119,9 @@ export const STR = {
     docTitle: '«Кусочек пиццы» — интерактивная статистика и метрики',
     modules: {
       1: 'Описательная статистика', 2: 'Вероятность', 3: 'Распределения', 4: 'От выборки к миру',
-      5: 'Проверка гипотез', 6: 'Эксперименты: A/B', 7: 'Связи и регрессия', 8: 'Классификация',
-      9: 'Ловушки данных', 10: 'Байесовский вывод', 11: 'Дисперсионный анализ', 12: 'Капстоун',
+      5: 'Проверка гипотез', 6: 'Эксперименты: A/B', 7: 'Связи и регрессия', 8: 'Временные ряды и прогноз',
+      9: 'Классификация', 10: 'Ловушки данных', 11: 'Байесовский вывод', 12: 'Дисперсионный анализ',
+      13: 'Капстоун',
     },
     landing: {
       h1: 'Аналитика, которую можно потрогать',
@@ -241,8 +242,9 @@ export const STR = {
     docTitle: 'DataSlice — interactive statistics and metric trees',
     modules: {
       1: 'Descriptive statistics', 2: 'Probability', 3: 'Distributions', 4: 'From sample to world',
-      5: 'Hypothesis testing', 6: 'Experiments: A/B', 7: 'Relationships & regression', 8: 'Classification',
-      9: 'Data traps', 10: 'Bayesian inference', 11: 'Analysis of variance', 12: 'Capstone',
+      5: 'Hypothesis testing', 6: 'Experiments: A/B', 7: 'Relationships & regression', 8: 'Time series & forecasting',
+      9: 'Classification', 10: 'Data traps', 11: 'Bayesian inference', 12: 'Analysis of variance',
+      13: 'Capstone',
     },
     landing: {
       h1: 'Analytics you can touch',

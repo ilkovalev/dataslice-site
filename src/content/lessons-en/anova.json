@@ -1,6 +1,6 @@
 {
   "id": "anova",
-  "module": 11,
+  "module": 12,
   "title": "Analysis of variance (ANOVA): comparing many groups",
   "tier": 1,
   "intro": "The t-test and z-test compare TWO groups. But A/B tests often have several variants (A/B/C/D), and life has many categories: conversion by country, revenue by plan. Comparing them pairwise is dangerous, and that is what analysis of variance — ANOVA — is for. Move the sliders and watch the ratio of spreads, F.",

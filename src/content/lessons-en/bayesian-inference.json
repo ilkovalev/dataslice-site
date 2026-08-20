@@ -1,6 +1,6 @@
 {
   "id": "bayesian-inference",
-  "module": 10,
+  "module": 11,
   "title": "Bayesian inference: updating beliefs with data",
   "tier": 1,
   "intro": "Everything so far was the frequentist approach: the true value is considered fixed, and we ask \"how surprising is the data if the hypothesis is true\". The Bayesian approach looks differently: our knowledge of a quantity is a distribution of confidence, which the data UPDATES. Move the prior belief and the data — watch the posterior get born.",

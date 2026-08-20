@@ -1,6 +1,6 @@
 {
   "id": "posthoc-anova",
-  "module": 11,
+  "module": 12,
   "title": "After ANOVA: which groups actually differ",
   "tier": 1,
   "intro": "ANOVA only says \"there is a difference somewhere\". But the business needs \"WHICH group is better\". The naive answer — run t-tests for all pairs — leads straight into the multiple comparisons trap. That is why special post-hoc procedures follow ANOVA.",

@@ -1,6 +1,6 @@
 {
   "id": "goodhart",
-  "module": 9,
+  "module": 10,
   "title": "Goodhart's law: the metric as a target",
   "tier": 1,
   "intro": "The last trap is about the metrics themselves. As soon as a metric is made a target, people start gaming it, and it stops reflecting what it was introduced for.",

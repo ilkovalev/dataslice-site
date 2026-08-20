@@ -1,6 +1,6 @@
 {
   "id": "regression-to-mean",
-  "module": 9,
+  "module": 10,
   "title": "Regression to the mean",
   "tier": 1,
   "intro": "The worst stores improved after a \"performance review\". The best employees did more modestly after a bonus. It looks like the intervention worked — but often it is an illusion, pure statistics. Its name is regression to the mean, and it fools even the experienced. Move the \"share of luck\" and watch the extremes roll back.",

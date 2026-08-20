@@ -1,6 +1,6 @@
 {
   "id": "class-imbalance",
-  "module": 8,
+  "module": 9,
   "title": "Class imbalance: when ROC deceives",
   "tier": 1,
   "intro": "Fraud — 0.2% of transactions. A disease — 1% of patients. When the target class is rare, the usual metrics start lying, and ROC/AUC look deceptively good. Let's see how to evaluate a classifier honestly on a rare class. Shrink the rare class share and change the separability — watch the PR curve and the AUC.",

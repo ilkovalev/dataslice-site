@@ -29,10 +29,22 @@
     }
   ],
   "definitions": [
-    { "term": "Confounder", "text": "a common cause of X and Y. Creates a spurious relationship; it must be controlled for." },
-    { "term": "Collider", "text": "a common consequence of X and Y. Controlling for a collider creates a spurious relationship — it must not be controlled for." },
-    { "term": "Mediator", "text": "the intermediate link X → Z → Y. Controlling for a mediator blocks the real effect." },
-    { "term": "Causal diagram (DAG)", "text": "a graph of \"cause → effect\" arrows; it tells you what to control for and what not to." }
+    {
+      "term": "Confounder",
+      "text": "a common cause of X and Y. Creates a spurious relationship; it must be controlled for."
+    },
+    {
+      "term": "Collider",
+      "text": "a common consequence of X and Y. Controlling for a collider creates a spurious relationship — it must not be controlled for."
+    },
+    {
+      "term": "Mediator",
+      "text": "the intermediate link X → Z → Y. Controlling for a mediator blocks the real effect."
+    },
+    {
+      "term": "Causal diagram (DAG)",
+      "text": "a graph of \"cause → effect\" arrows; it tells you what to control for and what not to."
+    }
   ],
   "practice": [
     "The practical skill: before \"adding a control\", draw the arrows. Is the variable a common cause? Control for it. A common consequence (a collider)? Absolutely not. A link in the effect? Depends on the question. Mindlessly controlling for \"everything\" is as dangerous as controlling for nothing.",
@@ -46,5 +58,5 @@
     "Any causal conclusion from observational data rests on an ASSUMED diagram of arrows, which cannot be verified from the data alone. Got the diagram wrong — got wrong what to control for.",
     "Controlling removes only the ACCOUNTED-FOR confounders. There may always remain an unknown one — which is why an experiment beats any observational adjustment."
   ],
-  "nextLabel": "What if you need to predict a category, not a number? → Classification"
+  "nextLabel": "Regression over time works differently → What a series is made of"
 }

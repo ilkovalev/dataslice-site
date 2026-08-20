@@ -1,0 +1,75 @@
+{
+  "id": "autocorrelation",
+  "module": 8,
+  "title": "Autocorrelation: today looks like yesterday",
+  "tier": 1,
+  "intro": "In regression the observations are independent: one row knows nothing about its neighbour. In a series that is false — today's revenue resembles yesterday's, and this Sunday resembles the last one. Such a link of a series with itself is called autocorrelation, and it has two sides. The bad one: ordinary regression on such data understates its own error and produces an overconfident forecast. The good one: if today depends on yesterday, then the past of the series can predict its future — and every model ahead stands on that.",
+  "widget": "autocorrelation",
+  "beats": [
+    {
+      "text": "Take the series and shift a copy of it by one day. You get pairs: the value yesterday and the value today. Each pair is a dot on the right panel, and the cyan segments on the left connect the days the pairs are made of. The number r under the panel is the ordinary correlation from the previous module, computed on those pairs."
+    },
+    {
+      "text": "The same operation works for any shift: two days, three, seven. Each shift is called a lag and gives its own r. Together they form the bottom panel, the correlogram. One bar is one lag.",
+      "predict": "Switch to «pure noise» and look at the correlogram. What happens to the bars?",
+      "reveal": "Almost all of them land inside the grey band, that is, they are indistinguishable from zero. In pure noise the past says nothing about the future — there is nothing to predict, and the best possible guess for tomorrow is the mean."
+    },
+    {
+      "text": "Now switch to «trend». The picture is different: the bars are tall and decay slowly, lag after lag.",
+      "predict": "Why does a growing series show high correlation even at lag 15 — does a day really influence a day two weeks later?",
+      "reveal": "No, there is no influence across two weeks. Both values simply sit on a common climb: early days are small, late days are large, so the pairs move together at any shift. A slowly decaying correlogram is a sign not of memory in the series but of non-stationarity: its mean is drifting. That is the subject of the next lesson."
+    },
+    {
+      "text": "The «seasonality» mode gives a third pattern: a comb. The bars are tall at lags 7, 14, 21 and dip in between.",
+      "predict": "Set the lag to exactly 7 and look at the right panel. How do the dots fall?",
+      "reveal": "They stretch into a rising band, and the correlation jumps to about 0.8 against 0.4 at the neighbouring lags: Saturday resembles last Saturday, Tuesday resembles last Tuesday. A peak of the correlogram at multiples of the period is the most reliable way to find the period of the cycle from the data itself rather than from the calendar."
+    },
+    {
+      "text": "The grey band around zero is the boundary of chance, roughly ±2/√n. A bar inside it proves nothing: such a correlation is easy to get from random numbers. The logic is the same as with a confidence interval — first ask whether the value is distinguishable from zero, and only then discuss its size."
+    },
+    {
+      "text": "An important consequence for analytics, not just for forecasting. Autocorrelation violates the assumption of independent observations — the very one t-tests and confidence intervals rest on. Neighbouring days largely carry the same information, so the effective sample size is smaller than the number of rows, the standard error is understated, and the intervals come out narrower than they should be.",
+      "predict": "What does that lead to in practice if you compare two weeks «before» and «after» with an ordinary t-test on daily values?",
+      "reveal": "The test will see 14 independent observations where there are far fewer, and will declare significant a difference explained by the common trend. That is why effects on time series are estimated with models that account for autocorrelation, or against a control group — not by comparing days one by one."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Lag",
+      "text": "a shift of the series back by a given number of steps: lag 1 is yesterday's value, lag 7 is the value a week ago."
+    },
+    {
+      "term": "Autocorrelation",
+      "formula": "r_k = corr(y_t, y_{t−k})",
+      "text": "the correlation of a series with itself shifted by k steps."
+    },
+    {
+      "term": "Correlogram (ACF)",
+      "text": "a plot of autocorrelation across all lags at once; its shape of decay identifies the type of series and the period of the cycle."
+    },
+    {
+      "term": "Significance band",
+      "formula": "±1.96/√n",
+      "text": "the boundaries within which an autocorrelation cannot be told apart from chance."
+    }
+  ],
+  "practice": [
+    "The correlogram is a working diagnostic, not decoration. Slow decay says the series needs differencing; peaks at multiples of a lag name the seasonal period; everything inside the significance band means there is nothing to model.",
+    "After a model is fitted, the correlogram is plotted again — this time on the residuals. If structure remains in them, the model has not taken all of the pattern and is worth extending. Residuals that look like pure noise are the main sign that a model is sufficient.",
+    "Alongside the ACF one usually looks at the partial autocorrelation (PACF): it shows the link at lag k with the influence of the intermediate days removed. The pair ACF and PACF is the classical way to pick the orders p and q — which is what the ARIMA lesson is about."
+  ],
+  "realLife": [
+    "Autocorrelation is present in almost everything measured over time: temperature, server load, traffic jams, attendance. Today's value is usually closer to yesterday's than to the yearly average.",
+    "Autocorrelation is what makes «tomorrow will be like today» work — the simplest weather forecast, and one that is hard to beat one day ahead.",
+    "The opposite case is negative autocorrelation: a large value is systematically followed by a small one. Inventory after a delivery behaves that way, and so does output after an intense training session."
+  ],
+  "assumptions": [
+    "Autocorrelation measures a linear link — just like ordinary correlation. A nonlinear dependence on the past (a spike after a threshold, say) can give r near zero while the series is genuinely predictable.",
+    "The ±1.96/√n band is derived assuming there are no real correlations at all. Across many lags some bars will cross it by chance: these are the same multiple comparisons as in the module on hypotheses."
+  ],
+  "deepDive": [
+    "Why you cannot simply add «yesterday's value» as a feature to a regression and forget about autocorrelation: the estimate of the lag coefficient is biased downwards in finite samples (bias of order 1/n), and if autocorrelation remains in the model's residuals, the estimates stop being consistent at all. Hence a separate class of models rather than the trick «let's add a lag as a feature».",
+    "Formally, a series whose autocorrelation is nonzero only at lag 1 is an MA(1), and a series with an exponentially decaying ACF is an AR(1). «Decays smoothly» versus «cuts off at lag q» is the language in which a correlogram hints at the structure of a model."
+  ],
+  "nextLabel": "A slowly decaying correlogram is a signal → Stationarity"
+}

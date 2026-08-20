@@ -1,0 +1,81 @@
+{
+  "id": "arima-family",
+  "module": 8,
+  "title": "ARIMA, SARIMA, SARIMAX: what each letter adds",
+  "tier": 1,
+  "intro": "The second big family of forecasting models describes a series through its own past: through past values and past errors. The name of a model reads as a list of the mechanisms switched on, and here each of them is a separate toggle. The series is the one from the previous lessons, but a promo day has been placed inside the forecast horizon on purpose: it cannot be predicted by looking inside the series alone, and it shows why the family needed its last letter.",
+  "widget": "arima-builder",
+  "beats": [
+    {
+      "text": "AR — autoregression, the number p. The model predicts today's value as a weighted sum of p past ones: φ₁ on yesterday, φ₂ on the day before. This is a literal use of the autocorrelation from the second lesson: if neighbouring days are linked, the past makes a fine predictor. The φ coefficients are shown under the chart."
+    },
+    {
+      "text": "I — integration, the number d, exactly the differencing from the third lesson. The model works not with the series itself but with its increments, and adds the forecast back up at the end.",
+      "predict": "Set d = 0 with S and X switched off and look at the forecast. What happens to it on a growing series?",
+      "reveal": "The forecast bends downwards and flattens out: AR on a non-stationary series pulls the prediction towards the mean of the training part instead of continuing the growth. A difference of d = 1 removes the trend and the forecast rises with the series. Curiously, MAPE can end up lower than for ARIMA(1,1,0): a straight line without a seasonal part misses in its own way. One metric decides nothing — you have to look at the number and at the shape of the forecast."
+    },
+    {
+      "text": "MA — moving average, the number q. The name is misleading: this is not the mean of the last few days from the previous lesson, but a dependence on past errors. The model remembers how far off it was yesterday and applies a correction θ for that miss. The contribution lives exactly q steps and then vanishes — so the MA part affects the near end of the horizon rather than the forecast as a whole.",
+      "predict": "Switch q = 1 on and check whether the forecast changed at the far end of the horizon.",
+      "reveal": "The far end barely moves: the correction for yesterday's error dies out after the first step. The MA part works on short-term forecasts and on smoothing out one-off spikes, not on the shape of the forecast overall."
+    },
+    {
+      "text": "The three letters together are ARIMA(p, d, q). The trouble is that no letter of it holds a weekly cycle, and on a series with seasonality that shows immediately.",
+      "predict": "Keep ARIMA(1,1,1) and switch S on. How much does the error on the hidden days change?",
+      "reveal": "It drops roughly threefold. S adds the same pair of mechanisms, but at the seasonal lag: the link of a day with the same day one week earlier. The full name is written SARIMA(p,d,q)(P,D,Q)ₘ, where the second bracket holds the seasonal orders and m is the period. Formally these are separate factors, but the meaning is simple: the model has gained a memory one week long."
+    },
+    {
+      "text": "That leaves the promo day — the vertical purple line inside the horizon. The red bar shows the forecast's miss on exactly that day.",
+      "predict": "Try to remove that miss by raising p and q. Does it work?",
+      "reveal": "No. No number of lags helps: the cause of the spike lies outside the series — it is a marketing decision, not a property of past sales. Switch X on, and the model receives the promo calendar as an external feature: it estimates the lift β from past promos and adds it to the future days when a promo is scheduled. The miss on the promo day drops roughly fourfold. The overall MAPE barely changes — one day out of fourteen gets lost in the average — which is exactly why the final number is not the only thing to look at."
+    },
+    {
+      "text": "This closes the circle. The module started by separating the question «what happens next» from the question «what drives the metric» in the regression module. In SARIMAX the two are joined again: factors come back inside the forecast — promos, holidays, price — while the series accounts for everything else that has no explanation from outside."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "AR (p)",
+      "formula": "y_t = c + φ₁y_{t−1} + … + φ_p y_{t−p} + ε_t",
+      "text": "autoregression: today's value as a weighted sum of p past ones."
+    },
+    {
+      "term": "MA (q)",
+      "formula": "y_t = c + ε_t + θ₁ε_{t−1} + … + θ_q ε_{t−q}",
+      "text": "a dependence on past forecast errors; the correction lives q steps."
+    },
+    {
+      "term": "ARIMA (p, d, q)",
+      "text": "autoregression and moving average applied to a series differenced d times."
+    },
+    {
+      "term": "SARIMA",
+      "formula": "(p,d,q)(P,D,Q)ₘ",
+      "text": "ARIMA with the same mechanisms duplicated at the seasonal lag m."
+    },
+    {
+      "term": "SARIMAX",
+      "text": "SARIMA with external (exogenous) features: promos, holidays, price. Their future values must be known in advance."
+    }
+  ],
+  "practice": [
+    "The orders p and q are classically picked from the ACF and PACF plots, but in practice they are more often searched automatically by an information criterion such as AIC — that is what auto_arima does. Manual selection remains a way to understand the series rather than to win accuracy.",
+    "The X part demands discipline: the values of an external feature must be known across the whole forecast horizon. A promo calendar and holidays are known; «traffic» or an exchange rate are not, and can only be plugged in via a forecast of their own, whose error passes into the main model.",
+    "The check that a model is adequate is the correlogram of its residuals. If structure remains there, the orders were chosen poorly; formally this is tested by the Ljung — Box test, whose null hypothesis «there is no autocorrelation in the residuals» is one you actually hope not to reject."
+  ],
+  "realLife": [
+    "SARIMAX is the workhorse of demand forecasting: the promo calendar, holidays and price go in as features, while the weekly and yearly cycles are described by the seasonal part.",
+    "Prophet, NeuralProphet and similar libraries solve the same problem in another language — an explicit decomposition with holidays as a separate block. The idea «describe external events with features, everything else with the structure of the series» is shared with SARIMAX.",
+    "For hundreds or thousands of series at once (demand per item, say) fitting an ARIMA to each becomes expensive. Then teams move either to ETS or to global models trained across all series together."
+  ],
+  "assumptions": [
+    "ARIMA is linear and assumes coefficients constant over time. A regime change — a new pricing policy, entering a new market — violates that, and the model has to be refitted on the new period rather than fed a longer history.",
+    "Forecast confidence intervals are computed assuming the residuals are uncorrelated with constant spread. If they are not, the intervals come out optimistically narrow and the forecast looks more confident than it is.",
+    "An external feature in X describes an association, not causation — exactly like a regression coefficient. Promos coinciding with a rise in sales may simply mean promos were scheduled on days that were going to be good anyway."
+  ],
+  "deepDive": [
+    "Why the letter MA is not about the mean of the last few days: MA(q) represents a series as a weighted sum of the last q random shocks. AR and MA are dual — a stationary AR(1) unfolds into an infinite MA, and vice versa. The point of the split is economy: what takes infinitely many terms in one language takes a single coefficient in the other.",
+    "The seasonal part of SARIMA multiplies the non-seasonal one rather than adding to it: the operator looks like φ(B)Φ(Bᵐ)(1−B)^d(1−Bᵐ)^D y_t. The practical consequence is that the model also describes interactions between lags — the link between yesterday and «yesterday one week ago», for instance, appears automatically without a parameter of its own."
+  ],
+  "nextLabel": "How to tell whether a forecast is actually good → Backtesting and metrics"
+}

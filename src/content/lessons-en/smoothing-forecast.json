@@ -1,0 +1,73 @@
+{
+  "id": "smoothing-forecast",
+  "module": 8,
+  "title": "Moving average and exponential smoothing",
+  "tier": 1,
+  "intro": "The honest way to test a forecasting method is to hide part of the data from it. The last two weeks on the chart are grey: the methods never saw them, and MAPE is computed on exactly those days. The three methods on offer differ in one thing — what they remember about the past. A moving average remembers the last few days with equal weight, exponential smoothing remembers every day with a decaying one, and Holt–Winters additionally keeps the trend and the seasonality as separate numbers.",
+  "widget": "smoothing-forecast",
+  "beats": [
+    {
+      "text": "A moving average as a forecast works crudely: take the mean of the last few days and declare it the answer for every day ahead. Hence the flat dashed line. The right panel shows what that answer is made of: inside the window every day has the same weight, outside it the weight is zero.",
+      "predict": "Move the window down to 2 days, then up to 21. What happens to the smoothed line and to the error?",
+      "reveal": "A short window repeats every wobble of the series — the method mistakes noise for signal. A long window gives a smooth line, but reacts to changes late and shaves off the weekly peaks. This is the same trade-off between overfitting and underfitting as in the classification module, only along the time axis."
+    },
+    {
+      "text": "Exponential smoothing fixes the crudeness of a window. The weight does not cut off at a boundary, it decays smoothly: yesterday gets weight α, the day before α·(1−α), and so on. Every past day takes part, but the further back, the weaker its say.",
+      "predict": "Set α = 0.05 and then α = 0.9. Which forecast is the steadier one, and which reacts faster?",
+      "reveal": "Small α puts almost all the weight on the distant past: the line is smooth but never keeps up with change. Large α puts almost all of it on yesterday: the line chases the noise. The trade-off is the same as with the window, but it is controlled by one number and does not require chopping off history."
+    },
+    {
+      "text": "Both methods share a weakness, visible in the forecast: it is flat. Neither the trend nor the weekly cycle is carried into the future, because the method stores only the level — a single number.",
+      "predict": "Look at the grey fact beyond the boundary and at the flat forecast. Where will the error be largest — at the start of the horizon or at its end?",
+      "reveal": "At the end, and for two reasons at once: the series keeps growing while the forecast stands still, and inside each week the fact rises and falls around a flat line. The error accumulates with the horizon — a general property of forecasting we will come back to in the last lesson."
+    },
+    {
+      "text": "Holt–Winters is built for exactly this: it stores three numbers instead of one — level, trend and seasonal profile — and updates each with its own smoothing coefficient. The level answers «where we are now», the trend «where we are heading», the seasonal profile the shape of the week.",
+      "predict": "Switch to Holt–Winters. How is its forecast different from the flat line of the previous methods?",
+      "reveal": "The forecast rises and repeats the weekly wave: it carries both the trend and the seasonality. The error on the hidden days drops noticeably. That is what «the method works with the decomposition» means — it keeps the three parts from the first lesson and extends each one separately."
+    },
+    {
+      "text": "Exponential smoothing is often dismissed as «too simple». In practice the ETS family, to which Holt–Winters belongs, regularly matches complex models — and on short, noisy series beats them. Meanwhile it has no stationarity requirements and almost nothing to tune. Next we look at the second big family: the one built not on decomposition but on autocorrelation."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Moving average",
+      "formula": "ŷ = (y_t + … + y_{t−w+1}) / w",
+      "text": "the mean of the last w observations; as a forecast it gives a flat line across the whole horizon."
+    },
+    {
+      "term": "Exponential smoothing",
+      "formula": "L_t = α·y_t + (1−α)·L_{t−1}",
+      "text": "the level of a series updated by every new observation; the weight of past days decays geometrically."
+    },
+    {
+      "term": "Smoothing coefficient (α)",
+      "formula": "0 < α < 1",
+      "text": "how much of a new observation the method takes into the level: larger α means faster reaction and more noise."
+    },
+    {
+      "term": "Holt–Winters (ETS)",
+      "text": "exponential smoothing with separate components for level, trend and seasonality; the forecast keeps both the growth and the cycle."
+    }
+  ],
+  "practice": [
+    "In reports a moving average is used less for forecasting than for smoothing the chart: MA(7) removes the weekly sawtooth and makes the dynamics readable. As a forecast it serves mainly as a baseline.",
+    "Holt–Winters is a sensible working baseline for metrics with a pronounced week or year: sales, orders, attendance. In statsmodels it is ExponentialSmoothing with the trend and seasonal parameters.",
+    "The parameters α, β, γ are not tuned by hand: libraries estimate them from the data by minimising the error on history. Manual tuning is only needed when there is a substantive requirement — for instance, to react to a level shift faster than history suggests."
+  ],
+  "realLife": [
+    "Demand forecasting in retail was built on exponential smoothing for decades: the method is cheap to compute and robust, and a chain has tens of thousands of such series.",
+    "«Average speed over the last 5 minutes» in a navigator and «average load» in monitoring are the same moving average, applied to a stream.",
+    "In the M-series forecasting competitions simple methods from this family regularly placed above complex models — especially on short series with few observations."
+  ],
+  "assumptions": [
+    "Both simple methods assume the level changes slowly and without structure. A sharp shift — a price change, a launch in a new city — is picked up late, and the smaller α is, the later.",
+    "Additive seasonality in Holt–Winters assumes a constant size of the cycle. If the swings grow with the level, the multiplicative variant or a log of the series is needed."
+  ],
+  "deepDive": [
+    "Simple exponential smoothing and ARIMA are not rivals but relatives: smoothing with parameter α is exactly an ARIMA(0,1,1) model with θ = α−1. Holt's method with a trend corresponds to ARIMA(0,2,2). The difference is in the language of description: ETS talks about the components of a series, ARIMA about autocorrelation — and the resulting forecast can coincide.",
+    "Not every ETS model can be written as an ARIMA: variants with multiplicative seasonality and with a damped trend fall outside linear ARIMA models. The damped trend, by the way, is the most practical of them: it extends the growth but gradually reins it in, so on a long horizon it does not fly off to infinity the way plain Holt does."
+  ],
+  "nextLabel": "The second family — built on autocorrelation → ARIMA, SARIMA, SARIMAX"
+}

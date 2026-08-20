@@ -1,6 +1,6 @@
 {
   "id": "confusion-matrix",
-  "module": 8,
+  "module": 9,
   "title": "The confusion matrix: precision, recall and the accuracy trap",
   "tier": 1,
   "intro": "A classifier has four possible outcomes, and collapsing them into one \"share of correct answers\" is dangerous. To measure quality honestly, the outcomes are laid out in a confusion matrix, and metrics are computed from it to fit the specific task. Move the threshold and the class separability — all the numbers recompute.",

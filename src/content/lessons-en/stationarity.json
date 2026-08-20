@@ -1,0 +1,77 @@
+{
+  "id": "stationarity",
+  "module": 8,
+  "title": "Stationarity: why a series gets differenced",
+  "tier": 1,
+  "intro": "Forecasting models learn from the past and carry what they learned into the future. Carrying it over only makes sense while the rules of the game stay the same: the mean holds its place, the spread does not grow, the link between neighbouring days is the same at the start and at the end. A series with that property is called stationary. Growing revenue does not have it — and it is brought into shape by moving from the values themselves to their increments.",
+  "widget": "stationarity",
+  "beats": [
+    {
+      "text": "Below the chart run two gauges: a rolling mean and a rolling spread, both over a two-week window. That is the eyeball test for stationarity. On the raw series the mean line crawls steadily upwards — the series is growing, so its mean depends on the moment you look at it."
+    },
+    {
+      "text": "The d = 1 button switches the series to its first difference: instead of «how much there was that day» it shows «how much it changed since yesterday». The trend disappears: steady growth of 0.6 per day turns into a constant addition of 0.6 that the series simply wobbles around.",
+      "predict": "What happens to the rolling-mean gauge after the first difference?",
+      "reveal": "It flattens out: the increments oscillate around a constant level, and the mean line loses its direction. This is exactly what the letter I in ARIMA means — integrated: the model works not with the series itself but with its differences, and then adds the forecast back up."
+    },
+    {
+      "text": "A difference can also be taken at the seasonal lag — the «seasonal difference» button. Then each day has the same weekday one week earlier subtracted from it: Monday minus last Monday.",
+      "predict": "Which part does such a difference remove, and what happens to the weekly sawtooth on the chart?",
+      "reveal": "Seasonality goes away: identical weekdays share the same seasonal addition, and subtracting cancels it. The sawtooth disappears. An ordinary difference fights the trend, a seasonal one fights the cycle; they are different tools and are taken independently of each other."
+    },
+    {
+      "text": "It is tempting to take more differences and make the series completely flat. That is a bad idea.",
+      "predict": "Set d = 2 and look at the amplitude of the series and at the spread gauge. What changed compared with d = 1?",
+      "reveal": "The swings grew noticeably: each difference subtracts one random value from another, and the noise variance adds up. The series becomes flatter in its mean but noisier in its spread — and noise cannot be forecast. The practical rule: d = 1 almost always, d = 2 rarely, more than that almost never."
+    },
+    {
+      "text": "The formal check for stationarity is the Dickey — Fuller test (ADF) and its relatives. Its null hypothesis is «the series is non-stationary», so a small p-value means non-stationarity has been rejected. This is a rare case where rejecting the null is the good news, and it is easy to get the direction of the conclusion wrong."
+    },
+    {
+      "text": "So the series has been taken apart, checked for memory and brought to a stationary form. Next comes forecasting itself, starting with methods that require none of those checks: the moving average and exponential smoothing."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Stationarity",
+      "text": "the property of a series whose mean, spread and structure of dependence between observations do not change over time."
+    },
+    {
+      "term": "Differencing",
+      "formula": "Δy_t = y_t − y_{t−1}",
+      "text": "moving from the values of a series to their increments; removes the trend."
+    },
+    {
+      "term": "Seasonal difference",
+      "formula": "Δ₇y_t = y_t − y_{t−7}",
+      "text": "subtracting the value exactly one period earlier; removes seasonality."
+    },
+    {
+      "term": "Order of integration (d)",
+      "text": "how many times a series was differenced to make it stationary; the letter I in ARIMA."
+    },
+    {
+      "term": "Dickey — Fuller test (ADF)",
+      "text": "a formal check for stationarity; the null hypothesis is that the series is non-stationary, so a small p-value speaks in favour of stationarity."
+    }
+  ],
+  "practice": [
+    "The routine is standard: look at the chart and the correlogram, take a difference, look again. If after the first difference the correlogram stops decaying slowly, that much differencing is enough.",
+    "Automatic selection (auto_arima and friends) picks d by stationarity tests on its own. It is still worth checking: on short series the tests are unstable, and an extra difference costs more than a missing one.",
+    "Series in money and in counts are often better logged before differencing. Then the difference of logs reads as a relative increment — «so many percent versus yesterday» — and a spread that grows with the level is stabilised."
+  ],
+  "realLife": [
+    "Stock prices are nearly non-stationary, while their daily returns are nearly stationary. That is why finance models the return rather than the price: precisely the move to a difference of logs.",
+    "Inflation is published not as a price level but as the increment over the previous period — the same first difference in everyday language.",
+    "The «year over year» comparison in reporting is essentially a seasonal difference with period 12: a way to remove the annual cycle and part of the trend in one go."
+  ],
+  "assumptions": [
+    "Differencing cures non-stationarity in the mean, but not in the spread. If the size of the swings grows with the level, a transformation comes first — a log or Box — Cox — and only then the difference.",
+    "Stationarity is an assumption of the model, not a property of the business. A change in pricing policy, a launch in a new country or a pandemic make the past unfit to carry into the future, and no amount of differencing will fix that: the series has to be cut into periods."
+  ],
+  "deepDive": [
+    "There are two kinds of non-stationarity and they are treated differently. A series with a deterministic trend (values wobbling around a straight line) only needs to be cleaned by a regression on time. A series with a stochastic trend — a random walk where each value equals yesterday's plus noise — is not cured by a regression on time, it needs a difference. Confusing them is expensive: an extra difference on the first inflates noise, a missing one on the second leaves false predictability.",
+    "The same effect produces spurious regression: take two independent random walks, regress one on the other, and R² comes out high with a confidently significant t-statistic — although there is no relationship at all. The famous «correlations» between cheese consumption and the divorce rate live on exactly this: both series simply grow."
+  ],
+  "nextLabel": "The simplest ways to predict tomorrow → Moving average and smoothing"
+}

@@ -1,6 +1,6 @@
 {
   "id": "classification",
-  "module": 8,
+  "module": 9,
   "title": "Classification: how a machine assigns an object to a class",
   "tier": 1,
   "intro": "Regression predicts a number. But often you need to predict a category: spam or not spam, sick or healthy, will the customer churn or stay. That is classification. Before counting errors, let's understand the principle itself — how a machine decides which class an object belongs to at all. Move the sliders and watch the line divide the classes.",

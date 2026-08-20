@@ -1,0 +1,84 @@
+{
+  "id": "forecast-backtest",
+  "module": 8,
+  "title": "How good is the forecast: backtesting and metrics",
+  "tier": 1,
+  "intro": "A model trained on the whole history always looks convincing: the line passes close to the data. But the quality of a forecast is measured not by how it described the past, but by how it handled what it had never seen. Hence backtesting: cut the history at some point, forecast the next two weeks, compare with the fact, move the point and repeat. The three windows on the chart switch with a click.",
+  "widget": "forecast-backtest",
+  "beats": [
+    {
+      "text": "First rule: the split runs along time, not at random. In ordinary machine learning the test part is drawn at random, and rightly so — there the observations are independent. In a series neighbouring days are nearly identical, so a randomly chosen test Tuesday ends up surrounded by a training Monday and Wednesday.",
+      "predict": "What will the metric show if the test days are picked scattered across the whole series?",
+      "reveal": "It will show an implausibly good result: the model will be reconstructing a day from its own neighbours rather than forecasting the future. That is data leakage — the same mistake as in the module on traps, only with a calendar as its source. The real quality will be noticeably worse than promised."
+    },
+    {
+      "text": "Second rule: one split is not enough. Switch between windows 1, 2 and 3 and look at the MAPE of each. The numbers differ noticeably although the model and the series are the same — the periods simply turned out to be of different difficulty. An estimate from a single window is an estimate from a single observation, and it should not be relied upon."
+    },
+    {
+      "text": "The bottom panel is the average error by forecast step, computed across all windows at once.",
+      "predict": "How does the error behave from the first day of the horizon to the fourteenth?",
+      "reveal": "It grows. The further the horizon, the less of the known past remains in it and the more accumulated uncertainty it carries. So «forecast accuracy of 95%» without naming the horizon is a meaningless phrase: tomorrow and a month ahead are different problems with different numbers."
+    },
+    {
+      "text": "Third rule: a metric needs a baseline. The grey dashed line is the seasonal naive forecast: «it will be like the same day one week ago». No parameters, no training.",
+      "predict": "Compare the MAPE of the model and of the baseline in each of the three windows. Does the complex model always win?",
+      "reveal": "No. In the first window the seasonal naive forecast is twice as accurate as SARIMA, in the second it loses to it clearly, in the third they run level — and averaged over the three windows the difference between them is a fraction of a percent. This is a normal and frequent outcome: on a short series with a strong weekly cycle a simple rule is hard to beat. The value of a backtest is precisely that it shows this before rollout rather than after."
+    },
+    {
+      "text": "The metrics themselves are chosen for the task. MAE is the average miss in the units of the metric, read directly: «on average we are off by 6 orders». RMSE squares the misses and so punishes large ones harder — taken when one big miss is worse than several small ones. MAPE turns the error into percent and allows comparison across series of different scale.",
+      "predict": "MAPE has an unpleasant quirk. What happens if the series contains days with zero or near-zero values?",
+      "reveal": "Dividing by the fact gives infinity or enormous values — a single quiet day can ruin the metric entirely. On top of that MAPE is asymmetric: it punishes an over-forecast less than an under-forecast, so optimising for it systematically biases forecasts downwards. For series with zeros the choice is MASE — the error divided by the error of a naive forecast."
+    },
+    {
+      "text": "And the last thing worth taking from the module as a whole: a forecast is not a point but a range. A single number will always be wrong, the only question is by how much. A useful forecast states an interval and a horizon, and decisions on top of it are made with slack — as with any decision from sampled data."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Backtest",
+      "text": "testing a forecast on history: training only on data before the cut-off point and comparing the forecast with the fact after it."
+    },
+    {
+      "term": "Rolling origin",
+      "text": "repeating the backtest with several cut-off points; gives a distribution of the error instead of a single number."
+    },
+    {
+      "term": "MAE",
+      "formula": "MAE = (1/n)·Σ|y − ŷ|",
+      "text": "the mean absolute error in the units of the metric."
+    },
+    {
+      "term": "RMSE",
+      "formula": "RMSE = √((1/n)·Σ(y − ŷ)²)",
+      "text": "the root of the mean squared error; punishes large misses harder."
+    },
+    {
+      "term": "MAPE",
+      "formula": "MAPE = (100/n)·Σ|y − ŷ| / |y|",
+      "text": "the mean error as a percentage of the fact; undefined at zero values and asymmetric."
+    },
+    {
+      "term": "Naive forecast",
+      "text": "a baseline without a model: «tomorrow like today» or «like the same day one week ago». A model that fails to beat it is not needed."
+    }
+  ],
+  "practice": [
+    "The horizon of a backtest is chosen by how far ahead the forecast is actually needed. If purchasing plans are made two weeks out, testing the model one day ahead is pointless — the number will be pretty and irrelevant.",
+    "A report on forecast quality is worth writing in three numbers: metric, horizon, baseline. «MAPE 8% over 14 days, the seasonal naive gives 11%» is substantive. «Accuracy 92%» is not.",
+    "The backtest error is systematically more optimistic than the future one: the model and its orders were picked while looking at that same history. To account for it, the final check is made on a period that took part neither in the selection nor in the debugging."
+  ],
+  "realLife": [
+    "In demand forecasting the cost of an error is asymmetric: under-ordering means lost sales, over-ordering means write-offs. Then instead of MAE one takes a metric with different penalties for the sign of the miss — and optimises a quantile of the distribution rather than a point.",
+    "In finance a backtest is a mandatory procedure for any strategy, and that is where its pitfalls are best studied: overfitting to a period, survivorship bias in the instrument set, and using data that was not yet known at the time.",
+    "Weather forecasts have long been published probabilistically: «60% chance of rain» rather than «it will rain». Forecasts of business metrics are moving the same way — an interval is more useful than a point."
+  ],
+  "assumptions": [
+    "A backtest assumes the future is built like the past. If the history holds no pandemic, no competitor leaving the market and no change of pricing policy, the backtest says nothing about how the model behaves under such conditions.",
+    "Comparing models by a metric on one and the same period is multiple comparisons: the more variants you try, the higher the chance the winner won by luck. Across dozens of configurations a difference of a fraction of a percent means nothing."
+  ],
+  "deepDive": [
+    "MASE solves both problems of MAPE at once: the model's error is divided by the average error of a naive forecast on the training sample. One means «as good as naive», 0.7 means «30% better than naive». The metric is defined at zeros, symmetric, and comparable across series of different scale — which is why it became the standard in forecasting competitions.",
+    "For interval forecasts point metrics are no use at all: an interval is judged by coverage (what share of facts landed inside the 95% interval — it should be about 95%) and by the pinball loss, which penalises both a miss and excessive width. A model with a perfect MAE and permanently narrow intervals is more dangerous than an honest model with wide ones."
+  ],
+  "nextLabel": "What if you need to predict a category, not a number? → Classification"
+}

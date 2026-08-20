@@ -1,6 +1,6 @@
 {
   "id": "naive-bayes",
-  "module": 10,
+  "module": 11,
   "title": "Naive Bayes as a classifier",
   "tier": 1,
   "intro": "Bayes' theorem can be turned into a working classifier. Naive Bayes has been filtering spam for decades and is still strong as a fast baseline. It directly applies everything we know about conditional probability and the base rate.",

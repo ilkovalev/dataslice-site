@@ -1,6 +1,6 @@
 {
   "id": "overfitting",
-  "module": 8,
+  "module": 9,
   "title": "Overfitting and honest validation (train/test)",
   "tier": 1,
   "intro": "A model can be made arbitrarily complex and forced to pass perfectly through every training point. But that is not the goal: the model must work on NEW data it has never seen. Here hides the main trap of machine learning — and the reason all the metrics (AUC, RMSE) must be measured the right way.",

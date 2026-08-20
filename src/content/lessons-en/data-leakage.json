@@ -1,6 +1,6 @@
 {
   "id": "data-leakage",
-  "module": 9,
+  "module": 10,
   "title": "Data leakage",
   "tier": 1,
   "intro": "The most insidious trap of machine learning — the model shines on the test set and falls apart in production. Often the culprit is leakage: information that will not exist at the real moment of prediction accidentally seeped into training. The model \"peeked at the answer\" — and fooled everyone, including its authors.",

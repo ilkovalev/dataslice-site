@@ -62,6 +62,12 @@ const loaders = {
   'criterion-picker': () => import('./CriterionPicker.jsx'),
   'p-value-explorer': () => import('./PValueExplorer.jsx'),
   'sequential-test': () => import('./SequentialTest.jsx'),
+  'ts-decomposition': () => import('./TimeSeriesDecomposition.jsx'),
+  autocorrelation: () => import('./Autocorrelation.jsx'),
+  stationarity: () => import('./Stationarity.jsx'),
+  'smoothing-forecast': () => import('./SmoothingForecast.jsx'),
+  'arima-builder': () => import('./ArimaBuilder.jsx'),
+  'forecast-backtest': () => import('./ForecastBacktest.jsx'),
 }
 
 // React.lazy на каждый id, созданный один раз: пересоздание на рендере

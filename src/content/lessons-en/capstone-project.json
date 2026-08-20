@@ -1,6 +1,6 @@
 {
   "id": "capstone-project",
-  "module": 12,
+  "module": 13,
   "title": "Capstone: analyzing a real dataset end to end",
   "tier": 1,
   "intro": "Time to put it all together. Before you is one dataset — 2400 users with revenue, device, A/B group and whether they purchased. We'll walk it through the whole analyst's path: from the first glance to an honest decision. The widget is step-by-step: click through stages 1–6 and watch each tool of the course come into play.",

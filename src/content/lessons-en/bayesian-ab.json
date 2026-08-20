@@ -1,6 +1,6 @@
 {
   "id": "bayesian-ab",
-  "module": 10,
+  "module": 11,
   "title": "Bayesian A/B: the probability that B beats A",
   "tier": 1,
   "intro": "A frequentist A/B answers evasively: \"p = 0.04, we reject H0\". The business wants it simple: \"what is the probability that B is better than A, and how much do we lose if we're wrong?\". The Bayesian approach answers these questions directly. Move the prior and the data — the posterior updates.",

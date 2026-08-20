@@ -1,0 +1,76 @@
+{
+  "id": "ts-decomposition",
+  "module": 8,
+  "title": "What a series is made of: trend, seasonality, noise",
+  "tier": 1,
+  "intro": "Regression in the previous module answered the question «what drives the metric». The second question a business asks is «what happens next», and you cannot answer it by plugging time into that same regression. A line on a dashboard is several movements at once: a slow climb, a weekly cycle and random wobble. Until they are separated, a Sunday bump is easily mistaken for the result of your own work. The sliders set the strength of each part; the «decompose» button shows them one by one.",
+  "widget": "ts-decomposition",
+  "beats": [
+    {
+      "text": "In front of you is daily revenue over three months — an ordinary chart from a report. The line goes up, but it jumps around: a rise here, a dip there, and it is not obvious which part is a pattern and which is chance. The first step with a series is not to forecast it, but to take that line apart. Press «decompose»."
+    },
+    {
+      "text": "There are three parts. Trend — where the metric is going overall, once the daily ripple is removed. Seasonality — a cycle that repeats with a known period: weekdays against weekends, December against July. Residual — whatever neither of those explains. The top line is exactly the sum of the three below it.",
+      "predict": "Set seasonality to zero and look at the top line. How does the feel of the chart change?",
+      "reveal": "Without seasonality you are left with a steady climb plus noise — the picture becomes boring and understandable. It is the weekly cycle that creates the sawtooth which makes every Monday look like a collapse and every Saturday worth reporting as growth."
+    },
+    {
+      "text": "The cyan line on the top panel is the trend estimated by a seven-day moving average. In real life nobody shows you the true parts, and the trend has to be estimated. The window length is set equal to the period of the cycle: averaging over a full week cancels the weekly swings and leaves the slow movement.",
+      "predict": "Push noise to the maximum. Will the cyan line become jagged too?",
+      "reveal": "Barely: averaging over seven days damps independent random deviations, and the line stays smooth. This is a general property — the same effect as in the law of large numbers: the more values you average, the smaller the spread of the average."
+    },
+    {
+      "text": "Decomposition comes in additive and multiplicative flavours. Additive is what is on the screen: the parts add up, and the weekly wave has the same amplitude at the start and at the end. Multiplicative means the parts multiply, and the size of the swings grows with the level: a business that doubled also gets twice the absolute weekend lift. That is more often true to life, and such a series is usually logged to bring it back to the additive case."
+    },
+    {
+      "text": "The practical point of decomposition is to clear a report of what would have happened anyway. A weekend lift is seasonality, not the effect of your launch. Hence the habit of comparing year over year or week over week: it crudely cancels seasonality by matching the same points of the cycle.",
+      "predict": "Seasonality at maximum, trend at zero. Can you say the metric is growing?",
+      "reveal": "No: the series oscillates around a constant level. Yet any two points inside a week will show «growth» or «decline» of tens of percent — depending on which ones you pick. Without decomposition such a chart will serve any position chosen in advance."
+    },
+    {
+      "text": "So the series is taken apart into three pieces. The residual, though, is not always pure chance: structure often remains in it — structure you cannot see by eye, only with a dedicated tool. That is where the next lesson starts."
+    }
+  ],
+  "definitions": [
+    {
+      "term": "Time series",
+      "text": "a sequence of values of a metric ordered in time with a fixed step: day, week, month."
+    },
+    {
+      "term": "Trend",
+      "text": "the slow directed movement of a series that remains once cyclical and random fluctuations are removed."
+    },
+    {
+      "term": "Seasonality",
+      "text": "a fluctuation with a known period that repeats from cycle to cycle: day of week, month of year, hour of day."
+    },
+    {
+      "term": "Residual",
+      "text": "what is left of the series after the trend and the seasonality are subtracted."
+    },
+    {
+      "term": "Additive and multiplicative decomposition",
+      "formula": "y = T + S + E   or   y = T · S · E",
+      "text": "the parts either add up (the size of the cycle stays constant) or multiply (the size grows with the level)."
+    }
+  ],
+  "practice": [
+    "The first thing worth doing with any metric over time is to look at it decomposed rather than raw. In pandas and statsmodels that is one line: seasonal_decompose or STL. After that, discussing whether the metric «dropped» only makes sense on the trend.",
+    "The period comes from the domain, it is not tuned: 7 for daily data, 24 for hourly, 12 for monthly. Get it wrong and the seasonality leaks into the residual, which makes the decomposition meaningless.",
+    "Calendar effects are not described by seasonality: Black Friday, national holidays, shifted weekends. They land in the residual and look like outliers until they are fed into the model as separate features — which is what the SARIMAX lesson is about."
+  ],
+  "realLife": [
+    "Retail lives on a weekly cycle: Friday and Saturday bring noticeably more than weekdays. Food delivery adds a daily one: the lunch and evening peaks.",
+    "Trend and seasonality are easy to confuse in a short window. Three rising days inside a weekly wave are not a trend, they are the upswing of the cycle.",
+    "Government statistics publish «seasonally adjusted» figures for exactly this reason: without the adjustment, comparing January with December is meaningless — and decisions are made by comparison."
+  ],
+  "assumptions": [
+    "Decomposition assumes the period of the cycle is known and constant. Moving holidays (Easter, lunar calendars) and shifted weekends break that assumption — they are usually handled by separate features.",
+    "A moving average as a trend estimate is undefined at the edges: the first and last days have no full window. The edge is exactly where a forecaster needs it most, and exactly where the trend estimate is least reliable."
+  ],
+  "deepDive": [
+    "Classical decomposition by moving average is the simplest of the methods. STL (Seasonal-Trend decomposition using Loess) is more flexible: trend and seasonality are estimated iteratively by local regression, the seasonal shape is allowed to change slowly over time, and the method is robust to outliers. For series longer than a couple of years it is usually the one to take.",
+    "Splitting into «trend» and «seasonality» is a convention, not a property of nature. The same series can be decomposed differently by changing the window length: a short window assigns part of the slow movement to the trend, a long one pushes it into the residual. So the correct phrasing is «the trend at this level of smoothing», not «the true trend of the series»."
+  ],
+  "nextLabel": "There is still structure in the residual → Autocorrelation"
+}

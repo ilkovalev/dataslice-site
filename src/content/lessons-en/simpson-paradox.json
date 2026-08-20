@@ -1,6 +1,6 @@
 {
   "id": "simpson-paradox",
-  "module": 9,
+  "module": 10,
   "title": "Simpson's paradox",
   "tier": 1,
   "intro": "The next trap hides in the relationships between quantities themselves. Sometimes the trend visible in the data as a whole flips completely once you split it into groups. This is Simpson's paradox — it wrecks naive conclusions and regularly catches even seasoned analysts.",

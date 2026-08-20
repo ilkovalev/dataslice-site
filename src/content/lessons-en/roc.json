@@ -1,6 +1,6 @@
 {
   "id": "roc",
-  "module": 8,
+  "module": 9,
   "title": "The ROC curve and AUC",
   "tier": 1,
   "intro": "In the previous lesson we moved the threshold and saw precision and recall trade off. But there are infinitely many thresholds, and tying yourself to one is unappealing. The ROC curve shows the classifier's behavior at all thresholds at once, and AUC rolls its quality into a single number. Move the threshold and the class separability — the curve and the point respond live.",

@@ -73,6 +73,27 @@ function GlossaryPreview() {
   )
 }
 
+function RoadmapsPreview() {
+  const steps = [
+    { x: 14, y: 52 },
+    { x: 62, y: 39 },
+    { x: 110, y: 26 },
+    { x: 158, y: 13 },
+  ]
+  return (
+    <svg {...SW}>
+      <path d="M22,56 L70,43 L118,30 L166,17" stroke="#d6cebf" strokeWidth="1.6" fill="none" />
+      {steps.map((s, i) => (
+        <g key={i}>
+          <rect x={s.x} y={s.y} width="30" height="12" rx="3" fill="#2ab8eb" opacity={0.25 + i * 0.2} />
+          <rect x={s.x + 4} y={s.y + 15} width="22" height="4" rx="2" fill="#20242e" opacity="0.16" />
+        </g>
+      ))}
+      <circle cx="173" cy="9" r="3.4" fill="#0a6c97" />
+    </svg>
+  )
+}
+
 function Door({ preview, title, count, what, who, to, open, accent }) {
   return (
     <Link
@@ -135,7 +156,7 @@ export default function LandingPage() {
           с готовым SQL — самый недооценённый актив, он спрятан за вкладкой. */}
       <section className="mt-4">
         <h2 className="sr-only">{l.doorsTitle}</h2>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <Door
             preview={<StatsPreview meanLabel={l.previewMean} medianLabel={l.previewMedian} />}
             title={l.statsTitle}
@@ -164,6 +185,15 @@ export default function LandingPage() {
             to={`${p}/glossary`}
             open={l.open}
           />
+          <Door
+            preview={<RoadmapsPreview />}
+            title={l.roadmapsTitle}
+            count={l.roadmapsCount(__N_ROADMAPS__)}
+            what={l.roadmapsWhat}
+            who={l.roadmapsWho}
+            to={`${p}/roadmaps`}
+            open={l.open}
+          />
         </div>
       </section>
 
@@ -175,6 +205,7 @@ export default function LandingPage() {
           <Scenario text={l.scenario1} linkText={l.scenario1Links} to={`${p}/stats/hypothesis-test`} />
           <Scenario text={l.scenario2} linkText={l.scenario2Links} to={`${p}/metrics`} />
           <Scenario text={l.scenario3} linkText={l.scenario3Links} to={`${p}/glossary`} />
+          <Scenario text={l.scenario4} linkText={l.scenario4Links} to={`${p}/roadmaps`} />
         </ul>
       </section>
 

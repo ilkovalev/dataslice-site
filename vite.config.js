@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import fs from 'fs'
 import path from 'path'
+import { roadmaps, roles } from './src/content/roadmaps.js'
 
 // Числа для лендинга считаем из данных на этапе сборки и подставляем литералами.
 // Импортировать реестры в рантайме нельзя: уроки — это ~865 KB чанк, каталог
@@ -18,6 +19,10 @@ const N_INDUSTRIES = jsonFiles('src/content/industries').length
 const N_METRICS = jsonFiles('src/content/metrics')
   .reduce((sum, f) => sum + read(path.join('src/content/metrics', f)).length, 0)
 const N_TERMS = (fs.readFileSync('src/content/glossary.js', 'utf8').match(/\{\s*term:/g) || []).length
+// Число треков — тоже из данных: карточка на лендинге не должна врать, когда
+// в роудмапы добавится пятая профессия. Подставляется литералом: импортировать
+// модуль в чанк лендинга нельзя — это ~30 KB контента ради одной цифры.
+const N_ROADMAPS = roadmaps.length
 
 // Лёгкий индекс уроков: только то, что нужно навигации (порядок, модуль,
 // заголовки). Полный JSON урока грузится отдельным чанком по требованию —
@@ -136,6 +141,31 @@ function buildSearchIndex(locale) {
       })
     }
   }
+
+  // Роудмапы: три трека и роли внутри них. Ищут их именно по названию
+  // профессии («дата инженер», «BI-аналитик», «ML-инженер»), и до появления
+  // этих записей такой запрос не находил на сайте ничего.
+  //
+  // Этапы треков в индекс не идут сознательно: их заголовки («Junior»,
+  // «Middle») повторяются во всех треках и в выдаче выглядели бы десятком
+  // одинаковых строк. Этап открывается внутри трека.
+  const loc = (v) => (typeof v === 'string' ? v : v?.[locale] || v?.ru || '')
+  for (const r of roadmaps) {
+    out.push({
+      k: 'r',
+      id: r.id,
+      t: loc(r.title),
+      s: loc(r.tagline).slice(0, 130),
+      w: (r.aliases?.[locale] || r.aliases?.ru || []).join(' · '),
+    })
+  }
+  for (const n of roles) {
+    // Роль своего URL не имеет и живёт блоком внутри трека, к которому
+    // привязана. Поэтому в записи лежит id трека: ссылка открывает нужный трек
+    // и прокручивает к блоку. Без трека выдача приводила бы на страницу, где
+    // этой роли в списке нет: блок показывает только роли выбранного трека.
+    out.push({ k: 'r', t: loc(n.title), s: loc(n.vs).split(/(?<=[.!?])\s/)[0].slice(0, 130), nb: n.track })
+  }
   return out
 }
 
@@ -152,6 +182,7 @@ export default defineConfig({
     __N_INDUSTRIES__: N_INDUSTRIES,
     __N_METRICS__: N_METRICS,
     __N_TERMS__: N_TERMS,
+    __N_ROADMAPS__: N_ROADMAPS,
     __METRIC_INDUSTRY__: JSON.stringify(metricIndustry),
     __LESSON_INDEX__: JSON.stringify(LESSON_INDEX),
     __SEARCH_RU__: JSON.stringify(SEARCH_RU),

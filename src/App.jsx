@@ -14,6 +14,7 @@ const SiteSearch = lazy(() => import('./components/SiteSearch.jsx'))
 const StatsPage = lazy(() => import('./pages/StatsPage.jsx'))
 const MetricsPage = lazy(() => import('./pages/MetricsPage.jsx'))
 const GlossaryPage = lazy(() => import('./pages/GlossaryPage.jsx'))
+const RoadmapsPage = lazy(() => import('./pages/RoadmapsPage.jsx'))
 
 // min-h-[44px] на мобильном — комфортная тап-зона (WCAG); на sm+ шапка снова компактная.
 const linkBase = 'px-3 py-1.5 rounded-full text-sm transition-colors inline-flex items-center min-h-[44px] sm:min-h-0'
@@ -96,6 +97,7 @@ export default function App() {
             <NavLink to={`${p}/stats`} className={linkClass}>{t.navStats}</NavLink>
             <NavLink to={`${p}/metrics`} className={linkClass}>{t.navMetrics}</NavLink>
             <NavLink to={`${p}/glossary`} className={linkClass}>{t.navGlossary}</NavLink>
+            <NavLink to={`${p}/roadmaps`} className={linkClass}>{t.navRoadmaps}</NavLink>
           </nav>
         </div>
         </div>
@@ -111,11 +113,13 @@ export default function App() {
             <Route path="/stats/:lessonSlug" element={<StatsPage />} />
             <Route path="/metrics" element={<MetricsPage />} />
             <Route path="/glossary" element={<GlossaryPage />} />
+            <Route path="/roadmaps" element={<RoadmapsPage />} />
             <Route path="/en" element={<LandingPage />} />
             <Route path="/en/stats" element={<StatsPage />} />
             <Route path="/en/stats/:lessonSlug" element={<StatsPage />} />
             <Route path="/en/metrics" element={<MetricsPage />} />
             <Route path="/en/glossary" element={<GlossaryPage />} />
+            <Route path="/en/roadmaps" element={<RoadmapsPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>

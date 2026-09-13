@@ -4,14 +4,15 @@ import { STR, prefix, useLocale } from '../lib/i18n.js'
 import { track } from '../lib/analytics.js'
 import { loadSearchIndex } from '../content/searchIndex.js'
 
-// Поиск по всему сайту: темы курса, термины глоссария, бизнес-метрики.
+// Поиск по всему сайту: темы курса, термины глоссария, бизнес-метрики,
+// профессии из роудмапов.
 // Раньше искать можно было только внутри глоссария, и человек, пришедший
 // со словом «сезонность» или «MAPE», не находил ни урока, ни метрики.
 //
 // Индекс грузится своим чанком при первом открытии (см. content/searchIndex.js):
 // в основном чанке ему делать нечего — большинство посетителей поиск не откроют.
 
-const GROUPS = ['l', 'g', 'm']
+const GROUPS = ['l', 'g', 'm', 'r']
 const MAX_PER_GROUP = 6
 
 // Совпадение ищем по началу слова, а не по любой подстроке: «сезон» должно
@@ -72,7 +73,7 @@ export default function SiteSearch({ open, onClose }) {
       if (s) scored.push({ e, s })
     }
     scored.sort((a, b) => b.s - a.s)
-    // Держим все три поверхности в выдаче: иначе 60 уроков вытесняют
+    // Держим все четыре поверхности в выдаче: иначе 60 уроков вытесняют
     // единственную подходящую метрику, ради которой поиск и открывали.
     const out = []
     for (const g of GROUPS) {
@@ -84,6 +85,9 @@ export default function SiteSearch({ open, onClose }) {
   const linkFor = (e) => {
     if (e.k === 'l') return `${p}/stats/${e.id}`
     if (e.k === 'm') return e.ind ? `${p}/metrics?tab=industries&ind=${e.ind}&metric=${e.id}` : `${p}/metrics`
+    // У роли в nb лежит её трек: блок показывает роли только выбранного
+    // трека, поэтому без трека ссылка привела бы не туда.
+    if (e.k === 'r') return e.nb ? `${p}/roadmaps?role=${e.nb}#roles` : `${p}/roadmaps?role=${e.id}`
     if (e.lesson) return `${p}/stats/${e.lesson}`
     if (e.metric && e.ind) return `${p}/metrics?tab=industries&ind=${e.ind}&metric=${e.metric}`
     return `${p}/glossary?q=${encodeURIComponent(e.t)}`
@@ -115,7 +119,7 @@ export default function SiteSearch({ open, onClose }) {
 
   if (!open) return null
 
-  const label = { l: t.searchGroupLessons, g: t.searchGroupTerms, m: t.searchGroupMetrics }
+  const label = { l: t.searchGroupLessons, g: t.searchGroupTerms, m: t.searchGroupMetrics, r: t.searchGroupRoadmaps }
   let lastGroup = null
 
   return (

@@ -1,0 +1,314 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "У сети физических точек воронка привязана к географии: клиента приводит не реклама, а вывеска в его районе. AARRR здесь читается на уровне точки, а не сети — среднее по сети скрывает и провальные, и образцовые рестораны.",
+      "en": "For a physical chain the funnel is tied to geography: the customer is brought by a sign in their neighbourhood, not by an ad. AARRR here is read per location, not per chain — the chain average hides both the failing and the exemplary restaurants."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Основной канал привлечения — открытие точки в правильном месте. Всё остальное работает поверх трафика, который создаёт сама локация.",
+          "en": "The main acquisition channel is opening a location in the right place. Everything else works on top of the traffic the location itself creates."
+        },
+        "metrics": [
+          {
+            "metricId": "traffic",
+            "label": {
+              "ru": "Число чеков на точку",
+              "en": "Tickets per location"
+            },
+            "def": {
+              "ru": "Гостей и чеков за период по точке; сравнивать точки можно только с поправкой на локацию и время работы.",
+              "en": "Guests and tickets per period per location; locations compare only with an adjustment for site and opening hours."
+            }
+          },
+          {
+            "metricId": "cac",
+            "def": {
+              "ru": "Затраты на нового гостя, включая скидку на первый заказ; в сетях считается по точке — стоимость привлечения в разных районах разная.",
+              "en": "Cost per new guest including the first-order discount; in chains it's computed per location — acquisition costs differ by district."
+            }
+          },
+          {
+            "metricId": "app-share",
+            "label": {
+              "ru": "Заказы через приложение",
+              "en": "App orders"
+            },
+            "def": {
+              "ru": "Доля заказов из приложения: единственный способ узнать гостя по имени и вернуть его без скидки на витрине.",
+              "en": "The share of app orders: the only way to know a guest by name and bring them back without a discount at the counter."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активация — второй визит. Первый визит происходит из любопытства или по географии, а второй означает, что еда и обслуживание сработали.",
+          "en": "Activation is the second visit. The first happens from curiosity or geography; the second means the food and service worked."
+        },
+        "metrics": [
+          {
+            "metricId": "repeat-rate",
+            "label": {
+              "ru": "Конверсия во второй визит",
+              "en": "Second-visit conversion"
+            },
+            "def": {
+              "ru": "Доля новых гостей, вернувшихся за 30 дней; узнать её можно только по приложению или программе лояльности.",
+              "en": "The share of new guests returning within 30 days; knowable only through the app or loyalty program."
+            }
+          },
+          {
+            "metricId": "delivery-time",
+            "label": {
+              "ru": "Скорость обслуживания",
+              "en": "Service speed"
+            },
+            "def": {
+              "ru": "Время от заказа до выдачи; в фастфуде это главный фактор и повторного визита, и пропускной способности в пик.",
+              "en": "Time from order to handover; in fast food it's the main driver of both the repeat visit and peak throughput."
+            }
+          },
+          {
+            "metricId": "activation-rate",
+            "label": {
+              "ru": "Вступление в программу лояльности",
+              "en": "Loyalty program signup"
+            },
+            "def": {
+              "ru": "Доля новых гостей, зарегистрировавшихся в программе: без неё гость остаётся анонимным чеком.",
+              "en": "The share of new guests who joined the program: without it the guest stays an anonymous receipt."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Гость возвращается за предсказуемостью: одинаковая пицца в любой точке сети — это и есть продукт. Разброс между точками важнее среднего по сети.",
+          "en": "The guest returns for predictability: the same pizza at any location is the product. The spread between locations matters more than the chain average."
+        },
+        "metrics": [
+          {
+            "metricId": "purchase-frequency",
+            "label": {
+              "ru": "Визитов на гостя в месяц",
+              "en": "Visits per guest per month"
+            },
+            "def": {
+              "ru": "Частота у известных гостей из программы лояльности; по анонимным чекам её посчитать нельзя.",
+              "en": "Frequency among known loyalty-program guests; anonymous receipts can't yield it."
+            }
+          },
+          {
+            "metricId": "same-store-sales",
+            "label": {
+              "ru": "Same-store sales (LFL)",
+              "en": "Same-store sales (LFL)"
+            },
+            "def": {
+              "ru": "Рост продаж точек, работавших и год назад: очищает картину от новых открытий и показывает, крепнет ли сам бренд.",
+              "en": "Sales growth of locations open a year ago: it strips out new openings and shows whether the brand itself is strengthening."
+            }
+          },
+          {
+            "metricId": "complaint-rate",
+            "def": {
+              "ru": "Жалобы на качество и время на тысячу чеков, в разрезе точки — метрика, по которой находят проблемный ресторан до падения выручки.",
+              "en": "Quality and timing complaints per thousand receipts, by location — the metric that finds a failing restaurant before revenue drops."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "Ресторан рекомендуют соседям и коллегам, и география рекомендации совпадает с зоной охвата точки. Отзывы на картах здесь работают как реферальный слой.",
+          "en": "A restaurant is recommended to neighbours and colleagues, and the referral's geography matches the location's catchment. Map reviews work as the referral layer here."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat",
+            "label": {
+              "ru": "Оценки и отзывы на картах",
+              "en": "Ratings and map reviews"
+            },
+            "def": {
+              "ru": "Средняя оценка точки и её динамика; для локального бизнеса это витрина, которую видят до первого визита.",
+              "en": "A location's average rating and its trend; for a local business it's the storefront people see before their first visit."
+            }
+          },
+          {
+            "metricId": "referral-share",
+            "def": {
+              "ru": "Доля новых участников программы по приглашению существующих гостей.",
+              "en": "The share of new program members invited by existing guests."
+            }
+          },
+          {
+            "metricId": "invite-conversion",
+            "def": {
+              "ru": "Доля приглашений, закончившихся визитом, а не установкой приложения.",
+              "en": "The share of invites ending in a visit rather than an app install."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Продажи сети растут двумя разными способами: открытием точек и ростом существующих. Смешивать их — самый удобный способ обмануть себя в отчётности.",
+          "en": "Chain sales grow two different ways: opening locations and growing existing ones. Blending them is the most convenient way to fool yourself in reporting."
+        },
+        "metrics": [
+          {
+            "metricId": "total-sales",
+            "def": {
+              "ru": "Суммарные продажи сети; читаются только вместе с числом точек, иначе рост от стройки выглядит ростом бизнеса.",
+              "en": "Total chain sales; only read together with the location count, or construction-driven growth looks like business growth."
+            }
+          },
+          {
+            "metricId": "aov",
+            "label": {
+              "ru": "Средний чек",
+              "en": "Average ticket"
+            },
+            "def": {
+              "ru": "Средний чек по точке; растёт от допродаж и от цен — второе даёт цифру без роста и с риском для трафика.",
+              "en": "Average ticket per location; it grows from upsell and from prices — the latter gives the number without growth and at traffic risk."
+            }
+          },
+          {
+            "metricId": "gross-margin",
+            "label": {
+              "ru": "Food cost и списания",
+              "en": "Food cost and waste"
+            },
+            "def": {
+              "ru": "Себестоимость продукта и потери от списаний; в общепите маржа делается на кухне, а не в маркетинге.",
+              "en": "Cost of goods and waste losses; in food service margin is made in the kitchen, not in marketing."
+            }
+          },
+          {
+            "metricId": "contribution-margin",
+            "label": {
+              "ru": "Прибыль точки",
+              "en": "Location profit"
+            },
+            "def": {
+              "ru": "Что остаётся с точки после аренды, персонала и продуктов — цифра, по которой решают закрывать или масштабировать формат.",
+              "en": "What's left from a location after rent, staff and food — the figure behind decisions to close or scale a format."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "В офлайне продукт делают люди на смене, поэтому качество нестабильно по определению. HEART здесь про разброс между точками, а не про среднее по сети.",
+      "en": "Offline, the product is made by people on shift, so quality is unstable by definition. HEART here is about the spread between locations, not the chain average."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Гость получил то же, что в прошлый раз, и не ждал дольше обещанного.",
+          "en": "The guest got the same as last time and didn't wait longer than promised."
+        },
+        "signal": {
+          "ru": "Оценки после заказа по точкам, жалобы на качество и время, отзывы на картах.",
+          "en": "Post-order ratings by location, quality and timing complaints, map reviews."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "complaint-rate"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Сеть стала регулярным выбором, а не местом, куда заходят раз в квартал.",
+          "en": "The chain became a regular choice rather than a once-a-quarter stop."
+        },
+        "signal": {
+          "ru": "Визитов на участника программы, доля заказов через приложение.",
+          "en": "Visits per program member, the share of app orders."
+        },
+        "metrics": [
+          {
+            "metricId": "purchase-frequency"
+          },
+          {
+            "metricId": "app-share"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые позиции меню и форматы заказа доходят до гостей и до кухни.",
+          "en": "New menu items and ordering formats reach both guests and the kitchen."
+        },
+        "signal": {
+          "ru": "Доля чеков с новой позицией и доля точек, освоивших формат.",
+          "en": "The share of receipts containing the new item and the share of locations that mastered the format."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Существующие точки продают больше год к году, а не только новые открытия дают рост.",
+          "en": "Existing locations sell more year over year rather than growth coming only from new openings."
+        },
+        "signal": {
+          "ru": "LFL по точкам и доля гостей, вернувшихся в тот же ресторан.",
+          "en": "LFL by location and the share of guests returning to the same restaurant."
+        },
+        "metrics": [
+          {
+            "metricId": "same-store-sales"
+          },
+          {
+            "metricId": "repeat-rate"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Заказ собран правильно и выдан за обещанное время, включая час пик.",
+          "en": "The order is assembled correctly and handed over within the promised time, peak hour included."
+        },
+        "signal": {
+          "ru": "Доля заказов вовремя, ошибки в составе, пропускная способность в пик.",
+          "en": "The on-time share, assembly errors, peak throughput."
+        },
+        "metrics": [
+          {
+            "metricId": "on-time-delivery"
+          },
+          {
+            "metricId": "error-rate"
+          },
+          {
+            "metricId": "utilization"
+          }
+        ]
+      }
+    ]
+  }
+}

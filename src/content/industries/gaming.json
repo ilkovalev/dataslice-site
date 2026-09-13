@@ -169,7 +169,7 @@
                     ]
                   }
                 ],
-                "metricId": "retention-n-day"
+                "metricId": "funnel-dropoff"
               }
             ]
           }
@@ -228,7 +228,7 @@
                       "ru": "Чем раньше игрок платит, тем выше его итоговый LTV — но давить рано опасно.",
                       "en": "The earlier a player pays, the higher their eventual LTV — but pushing too early backfires."
                     },
-                    "metricId": "paying-share"
+                    "metricId": "ttv"
                   }
                 ],
                 "metricId": "paying-share"
@@ -268,10 +268,10 @@
                       "ru": "Доля выручки от топ-1% платящих — риск: уход десятка китов заметен в отчётности.",
                       "en": "Revenue share from the top 1% of payers — a risk: a dozen whales leaving shows up in the P&L."
                     },
-                    "metricId": "arppu"
+                    "metricId": "whale-concentration"
                   }
                 ],
-                "metricId": "arppu"
+                "metricId": "whale-concentration"
               }
             ]
           }
@@ -845,7 +845,7 @@
                     "metricId": "active-days"
                   }
                 ],
-                "metricId": "course-completion"
+                "metricId": "funnel-dropoff"
               }
             ],
             "kind": "group"

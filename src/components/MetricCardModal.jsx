@@ -7,10 +7,10 @@ import { useLocale, STR, loc } from '../lib/i18n.js'
 import { track } from '../lib/analytics.js'
 
 // Детальная карточка метрики: формула, описание, SQL, подводные камни.
-// Открывается по клику на узел дерева. Данные берутся из справочника
+// Открывается по клику на узел дерева или на метрику фреймворка. Данные — из справочника
 // (catalog, по node.metricId) с возможным контекстным override в node.detail.
 // На десктопе — модалка по центру, на мобильных — bottom-sheet.
-export default function MetricCardModal({ node, catalog, categories, onClose }) {
+export default function MetricCardModal({ node, catalog, categories, onClose, contextLabel }) {
   const locale = useLocale()
   const t = STR[locale]
   // related-чипы заменяют содержимое карточки на соседнюю метрику каталога;
@@ -120,7 +120,7 @@ export default function MetricCardModal({ node, catalog, categories, onClose }) 
 
           {metric && n?.note && (
             <div className="rounded-lg border border-black/10 bg-black/[0.03] px-3.5 py-2.5 text-sm text-gray-600">
-              <span className="text-gray-900 font-medium">{t.metricCardInTree}:</span> {gloss(n.note)}
+              <span className="text-gray-900 font-medium">{contextLabel ?? t.metricCardInTree}:</span> {gloss(n.note)}
             </div>
           )}
 

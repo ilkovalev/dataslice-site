@@ -1348,7 +1348,7 @@
                           {
                             "id": "fb-meaningful",
                             "level": 5,
-                            "metricId": "nps-csat",
+                            "metricId": "connected-pairs",
                             "title": {
                               "ru": "Осмысленные взаимодействия",
                               "en": "Meaningful interactions"

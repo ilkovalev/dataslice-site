@@ -1,0 +1,285 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "У подписки решение принимается дважды: один раз при подключении и потом каждый месяц заново. Поэтому воронка не заканчивается оплатой — она с неё начинается.",
+      "en": "A subscription decision is made twice: once at signup and then anew every month. So the funnel doesn't end at payment — it starts there."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Привлечение в стриминге привязано к релизам: крупная премьера двигает подписки сильнее любой кампании, и это же делает канальные метрики нестабильными.",
+          "en": "Streaming acquisition is tied to releases: a major premiere moves signups more than any campaign, which is also what makes channel metrics unstable."
+        },
+        "metrics": [
+          {
+            "metricId": "cac",
+            "def": {
+              "ru": "Затраты на нового подписчика; окупаемость считается через месяцы жизни подписки, а не через первый платёж.",
+              "en": "Spend per new subscriber; payback is computed across the subscription's lifetime months, not the first payment."
+            }
+          },
+          {
+            "metricId": "traffic",
+            "def": {
+              "ru": "Трафик на посадочные с разбивкой на брендовый и небрендовый: всплеск на релизе — брендовый и заканчивается вместе с шумихой.",
+              "en": "Landing-page traffic split into brand and non-brand: a release spike is brand traffic and ends with the buzz."
+            }
+          },
+          {
+            "metricId": "organic-share",
+            "def": {
+              "ru": "Доля подписок без оплаченного клика; растёт от разговоров о премьере, а не от медиаплана.",
+              "en": "The share of signups without a paid click; it grows from premiere conversation rather than the media plan."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активация — первый досмотренный тайтл. Пока человек ничего не досмотрел, он оплатил намерение, а не привычку, и отменит на первом же продлении.",
+          "en": "Activation is the first title watched through. Until something is finished the person paid for an intention rather than a habit, and will cancel at the first renewal."
+        },
+        "metrics": [
+          {
+            "metricId": "activation-rate",
+            "label": {
+              "ru": "Первый досмотренный тайтл",
+              "en": "First title finished"
+            },
+            "def": {
+              "ru": "Доля новых подписчиков, досмотревших хотя бы один фильм или эпизод за первую неделю.",
+              "en": "The share of new subscribers who finished at least one film or episode in week one."
+            }
+          },
+          {
+            "metricId": "ttv",
+            "label": {
+              "ru": "Время до первого просмотра",
+              "en": "Time to first play"
+            },
+            "def": {
+              "ru": "Медианное время от оплаты до первого запуска контента; каждый лишний день здесь читается в отмене через месяц.",
+              "en": "Median time from payment to first play; every extra day here shows up as a cancellation a month later."
+            }
+          },
+          {
+            "metricId": "search-success",
+            "label": {
+              "ru": "Нашёл, что посмотреть",
+              "en": "Found something to watch"
+            },
+            "def": {
+              "ru": "Доля сессий, закончившихся запуском контента, а не выходом из каталога после долгого листания.",
+              "en": "The share of sessions ending in a play rather than an exit after long browsing."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Отток подписки — главный враг модели, и он приходит не от недовольства, а от простоя: месяц без просмотров почти гарантирует отмену на продлении.",
+          "en": "Subscription churn is the model's main enemy, and it comes not from dissatisfaction but from idleness: a month without viewing nearly guarantees a cancellation at renewal."
+        },
+        "metrics": [
+          {
+            "metricId": "active-days",
+            "def": {
+              "ru": "Дней с просмотром в месяц; ноль или один — самый сильный предиктор отмены, сильнее любого опроса.",
+              "en": "Days with viewing per month; zero or one is the strongest cancellation predictor, stronger than any survey."
+            }
+          },
+          {
+            "metricId": "churn-rate",
+            "def": {
+              "ru": "Доля подписчиков, отменивших за месяц; добровольный и вынужденный отток считаются раздельно — лечатся они по-разному.",
+              "en": "The share of subscribers cancelling in a month; voluntary and involuntary churn are counted separately — they're fixed differently."
+            }
+          },
+          {
+            "metricId": "retention-n-day",
+            "label": {
+              "ru": "Дожитие когорты по месяцам",
+              "en": "Cohort survival by month"
+            },
+            "def": {
+              "ru": "Доля когорты, платящая на 3-й, 6-й и 12-й месяц; кривая выходит на плато там, где подписка стала фоновой тратой.",
+              "en": "The share of the cohort still paying at month 3, 6 and 12; the curve flattens where the subscription became a background expense."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "Рекомендации в стриминге идут через контент: обсуждают сериал, а не сервис. Шеринг и семейные подписки — измеримая часть этого канала.",
+          "en": "Streaming referrals travel through content: people discuss the show, not the service. Sharing and family plans are the measurable part of this channel."
+        },
+        "metrics": [
+          {
+            "metricId": "share-rate",
+            "def": {
+              "ru": "Доля просмотров, из которых ссылка на тайтл ушла наружу; концентрируется на нескольких хитах.",
+              "en": "The share of views from which a title link went outward; it concentrates on a handful of hits."
+            }
+          },
+          {
+            "metricId": "referral-share",
+            "def": {
+              "ru": "Доля новых подписок по реферальной ссылке или приглашению в семейный тариф.",
+              "en": "The share of new subscriptions from a referral link or a family-plan invite."
+            }
+          },
+          {
+            "metricId": "nps-csat",
+            "def": {
+              "ru": "Готовность рекомендовать сервис; в стриминге почти целиком определяется свежестью каталога.",
+              "en": "Willingness to recommend the service; in streaming it's driven almost entirely by catalogue freshness."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Выручка подписки — база платящих × ARPU. Первое растят удержанием, второе — тарифами и апсейлом, и второе всегда бьёт по первому.",
+          "en": "Subscription revenue is the paying base × ARPU. The first grows through retention, the second through pricing and upsell, and the second always hits the first."
+        },
+        "metrics": [
+          {
+            "metricId": "retained-subscribers",
+            "def": {
+              "ru": "Число активных платящих на конец периода: накопленный итог всех решений о привлечении и удержании.",
+              "en": "The count of active paying subscribers at period end: the accumulated result of every acquisition and retention decision."
+            }
+          },
+          {
+            "metricId": "arpu",
+            "def": {
+              "ru": "Выручка на подписчика; растёт от повышения цен и от перехода на дорогие тарифы — это разные истории с разной ценой в оттоке.",
+              "en": "Revenue per subscriber; it grows from price hikes and from upgrades to premium tiers — different stories with different churn costs."
+            }
+          },
+          {
+            "metricId": "trial-to-paid",
+            "def": {
+              "ru": "Доля начавших пробный период, дошедших до оплаты; надёжнее смотреть дожитие до второго списания.",
+              "en": "The share of trial starters who reach payment; survival to the second charge is the more reliable read."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "Подписчик может месяцами платить и не смотреть. Выручка этого не покажет, HEART покажет — и покажет заранее.",
+      "en": "A subscriber can pay for months without watching. Revenue won't show that; HEART will — and will show it early."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Подписчик считает, что каталог стоит своих денег, и не сравнивает цену с конкурентом каждый месяц.",
+          "en": "The subscriber feels the catalogue is worth the money and doesn't price-compare with a competitor every month."
+        },
+        "signal": {
+          "ru": "Опросы удовлетворённости каталогом, оценки в сторах, жалобы на качество стрима.",
+          "en": "Catalogue satisfaction surveys, store ratings, stream quality complaints."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "app-rating"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Контент досматривают, а не бросают на середине первой серии.",
+          "en": "Content is watched through rather than abandoned midway through episode one."
+        },
+        "signal": {
+          "ru": "Доля досмотров, часы просмотра на подписчика, число активных дней.",
+          "en": "Completion share, viewing hours per subscriber, active-day count."
+        },
+        "metrics": [
+          {
+            "metricId": "video-completion"
+          },
+          {
+            "metricId": "time-spent"
+          },
+          {
+            "metricId": "active-days"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые форматы и разделы каталога находят свою аудиторию.",
+          "en": "New formats and catalogue sections find their audience."
+        },
+        "signal": {
+          "ru": "Доля подписчиков, запустивших контент нового раздела за 30 дней.",
+          "en": "The share of subscribers who played content from the new section within 30 days."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Подписку продлевают, потому что смотрят, а не потому что забыли отменить.",
+          "en": "The subscription renews because it's watched, not because cancelling was forgotten."
+        },
+        "signal": {
+          "ru": "Доля платящих без единого просмотра за месяц и возвраты ушедших на релизах.",
+          "en": "The share of payers with zero views in a month and win-backs on new releases."
+        },
+        "metrics": [
+          {
+            "metricId": "churn-rate"
+          },
+          {
+            "metricId": "win-back"
+          },
+          {
+            "metricId": "retention-n-day"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Человек находит, что посмотреть, и включает без задержек и обрывов.",
+          "en": "The person finds something to watch and plays it without delays or drops."
+        },
+        "signal": {
+          "ru": "Доля сессий без запуска, время до старта воспроизведения, обрывы стрима.",
+          "en": "The share of sessions without a play, time to playback start, stream drops."
+        },
+        "metrics": [
+          {
+            "metricId": "search-success"
+          },
+          {
+            "metricId": "latency-p95"
+          },
+          {
+            "metricId": "error-rate"
+          }
+        ]
+      }
+    ]
+  }
+}

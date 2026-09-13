@@ -1,0 +1,325 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "F2P-игра живёт на разнице между LTV игрока и ценой его установки. Воронка короткая и быстрая: решение остаться принимается в первые минуты, решение заплатить — в первые дни.",
+      "en": "An F2P game lives on the gap between a player's LTV and the price of their install. The funnel is short and fast: the decision to stay is made in the first minutes, the decision to pay in the first days."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Аудитория покупается. Органика в мобильных играх появляется только после того, как игра стала заметной в витрине стора.",
+          "en": "The audience is bought. Organic reach in mobile games appears only after the game becomes visible in the store's charts."
+        },
+        "metrics": [
+          {
+            "metricId": "installs",
+            "def": {
+              "ru": "Установки за день, раздельно по гео и платформе: смешивать iOS и Android нельзя — CPI и платёжеспособность различаются кратно.",
+              "en": "Daily installs, split by geo and platform: iOS and Android can't be pooled — CPI and spending power differ several-fold."
+            }
+          },
+          {
+            "metricId": "cac",
+            "label": {
+              "ru": "CPI — цена установки",
+              "en": "CPI — cost per install"
+            },
+            "def": {
+              "ru": "Затраты кампании, делённые на её установки; сравниваются не с текущим платежом, а с LTV когорты на том же горизонте.",
+              "en": "Campaign spend divided by its installs; compared not with a current payment but with the cohort's LTV over the same horizon."
+            }
+          },
+          {
+            "metricId": "roas",
+            "label": {
+              "ru": "ROAS D7 / D30",
+              "en": "ROAS D7 / D30"
+            },
+            "def": {
+              "ru": "Доля затрат на установку, вернувшаяся платежами к 7-му и 30-му дню жизни когорты — по ней UA-команда решает, масштабировать ли кампанию.",
+              "en": "The share of install spend returned in payments by the cohort's day 7 and day 30 — the number the UA team scales campaigns on."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активация здесь — не установка и не регистрация, а прохождение обучающего цикла и возврат на следующий день.",
+          "en": "Activation here is neither the install nor the signup: it is finishing the tutorial loop and coming back the next day."
+        },
+        "metrics": [
+          {
+            "metricId": "onboarding-completion",
+            "label": {
+              "ru": "Прохождение FTUE",
+              "en": "FTUE completion"
+            },
+            "def": {
+              "ru": "Доля установивших, дошедших до конца обучающего сценария; отвалы считаются пошагово — обычно один-два шага дают половину потерь.",
+              "en": "The share of installers who finish the tutorial; drop-off is counted step by step — usually one or two steps account for half the loss."
+            }
+          },
+          {
+            "metricId": "retention-n-day",
+            "label": {
+              "ru": "Retention D1",
+              "en": "D1 retention"
+            },
+            "def": {
+              "ru": "Доля когорты, вернувшейся на следующий день после установки — первый и самый быстрый сигнал, что core-loop затягивает.",
+              "en": "The share of the cohort returning the day after install — the first and fastest signal that the core loop hooks."
+            }
+          },
+          {
+            "metricId": "ttv",
+            "label": {
+              "ru": "Время до первой награды",
+              "en": "Time to first reward"
+            },
+            "def": {
+              "ru": "Медианное время от запуска до первой значимой награды; считается только по дошедшим, поэтому рядом держат долю не дошедших вовсе.",
+              "en": "Median time from launch to the first meaningful reward; measured only over those who got there, so the never-reached share is kept beside it."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Удержание в играх решает всё: оно определяет и размер аудитории, и число дней, за которые игрок успеет заплатить.",
+          "en": "Retention decides everything in games: it sets both the audience size and the number of days over which a player can pay."
+        },
+        "metrics": [
+          {
+            "metricId": "retention-n-day",
+            "label": {
+              "ru": "Retention D7 / D30",
+              "en": "D7 / D30 retention"
+            },
+            "def": {
+              "ru": "Доля когорты, активной на 7-й и 30-й день; выход кривой на плато означает, что у игры появилось ядро.",
+              "en": "The share of the cohort active on day 7 and day 30; a curve that flattens into a plateau means the game has a core."
+            }
+          },
+          {
+            "metricId": "sessions-per-user",
+            "label": {
+              "ru": "Сессий в день",
+              "en": "Sessions per day"
+            },
+            "def": {
+              "ru": "Число заходов активного игрока за сутки — двигается энергией, дейликами и календарём событий LiveOps.",
+              "en": "How many times an active player opens the game per day — moved by energy systems, dailies and the LiveOps event calendar."
+            }
+          },
+          {
+            "metricId": "active-days",
+            "label": {
+              "ru": "Активных дней в месяц",
+              "en": "Active days per month"
+            },
+            "def": {
+              "ru": "Сколько дней из 30 игрок заходил в игру: метрика привычки, отделяющая ядро от случайно заглянувших.",
+              "en": "How many of 30 days the player opened the game: the habit metric that separates the core from casual visitors."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "В мобильных играх рекомендации почти всегда идут через социальный слой: клан, гильдия, совместный режим.",
+          "en": "In mobile games referrals almost always run through the social layer: a clan, a guild, a co-op mode."
+        },
+        "metrics": [
+          {
+            "metricId": "viral-coefficient",
+            "label": {
+              "ru": "K-фактор",
+              "en": "K-factor"
+            },
+            "def": {
+              "ru": "Сколько новых игроков приводит один существующий: приглашений на игрока × конверсия приглашения.",
+              "en": "How many new players one existing player brings: invites per player × invite conversion."
+            }
+          },
+          {
+            "metricId": "invite-conversion",
+            "label": {
+              "ru": "Конверсия приглашения в клан",
+              "en": "Clan invite conversion"
+            },
+            "def": {
+              "ru": "Доля отправленных приглашений, закончившихся установкой; считается на закрытых когортах — свежие приглашения ещё не приняты.",
+              "en": "The share of sent invites that ended in an install; measured on closed cohorts — fresh invites haven't been accepted yet."
+            }
+          },
+          {
+            "metricId": "referral-share",
+            "label": {
+              "ru": "Доля установок по приглашению",
+              "en": "Referred install share"
+            },
+            "def": {
+              "ru": "Доля установок с реферальным кодом или ссылкой друга среди всех установок за период.",
+              "en": "The share of installs carrying a referral code or a friend's link among all installs in the period."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Виртуальная экономика раскладывается на два независимых рычага: сколько игроков платит и сколько платит каждый. Третий множитель — сколько дней он вообще остаётся в игре.",
+          "en": "The virtual economy splits into two independent levers: how many players pay and how much each pays. The third factor is how many days they stay at all."
+        },
+        "metrics": [
+          {
+            "metricId": "paying-share",
+            "label": {
+              "ru": "Конверсия в платящих",
+              "en": "Payer conversion"
+            },
+            "def": {
+              "ru": "Доля активных, сделавших хотя бы один платёж за период; в F2P обычно единицы процентов.",
+              "en": "The share of active players making at least one payment in the period; in F2P usually low single digits."
+            }
+          },
+          {
+            "metricId": "arppu",
+            "def": {
+              "ru": "Средний платёж платящего за период; из-за скошенности распределения читается только вместе с медианой.",
+              "en": "The average payer's spend in the period; because the distribution is skewed it only reads together with the median."
+            }
+          },
+          {
+            "metricId": "arpdau",
+            "def": {
+              "ru": "Выручка за день на активного игрока — сводит конверсию и чек в одно число, реагирующее на изменения экономики за сутки.",
+              "en": "Daily revenue per active player — it folds conversion and ticket into one number that reacts to economy changes within a day."
+            }
+          },
+          {
+            "metricId": "whale-concentration",
+            "label": {
+              "ru": "Концентрация выручки («киты»)",
+              "en": "Revenue concentration (whales)"
+            },
+            "def": {
+              "ru": "Доля bookings от верхнего процента платящих: мера того, насколько месячная отчётность зависит от десятков людей.",
+              "en": "The share of bookings from the top percent of payers: how much the monthly P&L depends on dozens of people."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "HEART в игре смотрит на качество опыта, которое дерево метрик пропускает: баланс, ощущение честности и то, работает ли игра технически.",
+      "en": "HEART in a game looks at the experience quality the metric tree skips: balance, the sense of fairness and whether the game works technically."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Игрок доволен балансом и не чувствует, что победу продают за деньги.",
+          "en": "The player is happy with the balance and doesn't feel that wins are sold for money."
+        },
+        "signal": {
+          "ru": "Оценки в сторе после обновлений баланса и доля жалоб на pay-to-win.",
+          "en": "Store ratings after balance updates and the share of pay-to-win complaints."
+        },
+        "metrics": [
+          {
+            "metricId": "app-rating"
+          },
+          {
+            "metricId": "nps-csat"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Игрок проводит в игре осмысленное время, а не заходит на минуту за дейликом.",
+          "en": "The player spends meaningful time in the game rather than dropping in for a minute of dailies."
+        },
+        "signal": {
+          "ru": "Длина и число сессий, участие в событиях LiveOps.",
+          "en": "Session length and count, participation in LiveOps events."
+        },
+        "metrics": [
+          {
+            "metricId": "sessions-per-user"
+          },
+          {
+            "metricId": "session-depth"
+          },
+          {
+            "metricId": "active-days"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые режимы и события доходят до игроков, а не остаются в патчноуте.",
+          "en": "New modes and events reach players instead of staying in the patch notes."
+        },
+        "signal": {
+          "ru": "Доля DAU, зашедших в новый режим в первые две недели после релиза.",
+          "en": "The share of DAU that entered the new mode within two weeks of release."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "У игры есть ядро, которое остаётся на месяцы, а не только на первую неделю.",
+          "en": "The game has a core that stays for months, not just the first week."
+        },
+        "signal": {
+          "ru": "Выход кривой удержания на плато после D30 и отток ядра.",
+          "en": "The retention curve flattening after D30 and churn within the core."
+        },
+        "metrics": [
+          {
+            "metricId": "retention-n-day"
+          },
+          {
+            "metricId": "churn-rate"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Игрок делает то, за чем зашёл: попадает в матч, покупает, продолжает прогресс.",
+          "en": "The player does what they came for: gets into a match, buys, continues progressing."
+        },
+        "signal": {
+          "ru": "Успешные входы в матч, успешные покупки, отсутствие вылетов.",
+          "en": "Successful match joins, successful purchases, no crashes."
+        },
+        "metrics": [
+          {
+            "metricId": "task-success-rate"
+          },
+          {
+            "metricId": "error-rate"
+          },
+          {
+            "metricId": "crash-rate"
+          }
+        ]
+      }
+    ]
+  }
+}

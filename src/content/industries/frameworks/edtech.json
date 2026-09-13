@@ -1,0 +1,310 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "EdTech продаёт результат, а результат требует от ученика работы. Поэтому воронка не заканчивается оплатой: между покупкой и ценностью лежат месяцы усилий, на которых теряется большинство.",
+      "en": "EdTech sells an outcome, and an outcome requires work from the learner. So the funnel doesn't end at payment: months of effort lie between the purchase and the value, and most people are lost along the way."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Спрос на обучение сезонный и эмоциональный: люди приходят от чувства, что отстают. Канал определяет всё остальное — трафик из рекламы и трафик из рекомендаций учатся по-разному.",
+          "en": "Demand for learning is seasonal and emotional: people arrive feeling they're falling behind. The channel determines everything else — ad traffic and referral traffic study differently."
+        },
+        "metrics": [
+          {
+            "metricId": "cac",
+            "label": {
+              "ru": "CAC ученика",
+              "en": "Learner CAC"
+            },
+            "def": {
+              "ru": "Затраты на оплатившего курс, включая работу отдела продаж; в длинных программах она сопоставима с рекламой.",
+              "en": "Cost per paying learner including sales-team effort; in long programs that rivals the ad spend."
+            }
+          },
+          {
+            "metricId": "conversion-rate",
+            "label": {
+              "ru": "Конверсия лида в ученика",
+              "en": "Lead-to-learner conversion"
+            },
+            "def": {
+              "ru": "Доля оставивших заявку, дошедших до оплаты; в длинных программах решение принимается неделями, и когорту закрывает только время.",
+              "en": "The share of leads reaching payment; in long programs the decision takes weeks, and only time closes the cohort."
+            }
+          },
+          {
+            "metricId": "organic-share",
+            "def": {
+              "ru": "Доля учеников без оплаченного клика: рекомендации выпускников — самый дешёвый и самый доходящий канал.",
+              "en": "The share of learners without a paid click: alumni referrals are the cheapest channel with the highest completion."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активация — не оплата, а первые уроки, сделанные самостоятельно. Ученик, не начавший за первую неделю, почти наверняка не начнёт вовсе.",
+          "en": "Activation isn't payment but the first lessons done independently. A learner who hasn't started in week one almost certainly never will."
+        },
+        "metrics": [
+          {
+            "metricId": "activation-rate",
+            "label": {
+              "ru": "Первые уроки за неделю",
+              "en": "First lessons in week one"
+            },
+            "def": {
+              "ru": "Доля оплативших, прошедших несколько первых уроков за 7 дней; порог подбирают по данным, а не по интуиции.",
+              "en": "The share of payers who completed the first few lessons within 7 days; the threshold is fitted from data, not intuition."
+            }
+          },
+          {
+            "metricId": "onboarding-completion",
+            "label": {
+              "ru": "Вход в программу",
+              "en": "Program entry"
+            },
+            "def": {
+              "ru": "Доля дошедших до конца вводного блока: доступы, знакомство с куратором, первое задание.",
+              "en": "The share finishing the intro block: access, meeting the mentor, the first assignment."
+            }
+          },
+          {
+            "metricId": "ttv",
+            "label": {
+              "ru": "Время до первого результата",
+              "en": "Time to first result"
+            },
+            "def": {
+              "ru": "Медиана до первого выполненного задания с обратной связью — момент, когда обучение становится осязаемым.",
+              "en": "The median to the first completed assignment with feedback — the moment learning becomes tangible."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Удержание в обучении измеряется доходимостью, и она честнее любых опросов: доучившийся получил результат, бросивший — нет, как бы он ни оценивал курс.",
+          "en": "Retention in education is measured by completion, and it's more honest than any survey: whoever finished got the outcome, whoever quit didn't, whatever they rated the course."
+        },
+        "metrics": [
+          {
+            "metricId": "course-completion",
+            "def": {
+              "ru": "Доля начавших, дошедших до конца программы; вместе с ней смотрят номер модуля, на котором происходит массовый отвал.",
+              "en": "The share of starters who finish the program; read together with the module number where the mass drop-off happens."
+            }
+          },
+          {
+            "metricId": "active-days",
+            "label": {
+              "ru": "Учебная привычка",
+              "en": "Study habit"
+            },
+            "def": {
+              "ru": "Дней с занятиями в месяц; регулярность предсказывает доходимость лучше, чем объём сделанного за раз.",
+              "en": "Days with study per month; regularity predicts completion better than the volume done in one sitting."
+            }
+          },
+          {
+            "metricId": "funnel-dropoff",
+            "label": {
+              "ru": "Точки отвала по модулям",
+              "en": "Drop-off by module"
+            },
+            "def": {
+              "ru": "Потери по каждому модулю: обычно один-два модуля дают половину всего отвала, и чинить надо их.",
+              "en": "Losses per module: usually one or two modules account for half the drop-off, and those are what to fix."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "Рекомендуют не курс, а собственный результат. Поэтому реферальный канал в EdTech работает только у тех, кто доучился, — и его размер ограничен доходимостью.",
+          "en": "People recommend their own outcome rather than the course. So EdTech's referral channel works only among those who finished — and its size is capped by completion."
+        },
+        "metrics": [
+          {
+            "metricId": "referral-share",
+            "def": {
+              "ru": "Доля учеников по рекомендации; считается отдельно от выпускников и от бросивших — это разные источники.",
+              "en": "The share of learners from referrals; counted separately for graduates and quitters — different sources."
+            }
+          },
+          {
+            "metricId": "nps-csat",
+            "label": {
+              "ru": "NPS выпускников",
+              "en": "Graduate NPS"
+            },
+            "def": {
+              "ru": "Опрос после окончания программы; опрос в середине измеряет усталость, а не качество обучения.",
+              "en": "A survey after the program ends; a mid-course survey measures fatigue rather than teaching quality."
+            }
+          },
+          {
+            "metricId": "invite-conversion",
+            "def": {
+              "ru": "Доля приглашений от выпускников, закончившихся оплатой; в длинных программах считается на окне в квартал.",
+              "en": "The share of graduate invites ending in payment; in long programs measured on a quarterly window."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Деньги в EdTech приходят вперёд, а обязательства — потом. Из-за этого выручка растёт раньше, чем становится понятно, довольны ли ученики, и возвраты приходят с лагом в месяцы.",
+          "en": "In EdTech the money comes first and the obligations later. So revenue grows before anyone knows whether learners are happy, and refunds arrive months behind."
+        },
+        "metrics": [
+          {
+            "metricId": "revenue",
+            "def": {
+              "ru": "Выручка за период с учётом того, что часть её ещё не отработана: признание по мере прохождения программы честнее кассового.",
+              "en": "Revenue for the period, accounting for the part not yet delivered: recognizing it as the program progresses is more honest than cash-basis."
+            }
+          },
+          {
+            "metricId": "return-rate",
+            "label": {
+              "ru": "Возвраты и рассрочки",
+              "en": "Refunds and instalments"
+            },
+            "def": {
+              "ru": "Доля возвращённых оплат и невыплаченных рассрочек; приходит с лагом и всегда занижена в свежем месяце.",
+              "en": "The share of refunded payments and defaulted instalments; it lags and is always understated in the current month."
+            }
+          },
+          {
+            "metricId": "repeat-rate",
+            "label": {
+              "ru": "Повторные и смежные курсы",
+              "en": "Repeat and adjacent courses"
+            },
+            "def": {
+              "ru": "Доля учеников, купивших второй курс; в EdTech это возможно только после реального результата на первом.",
+              "en": "The share of learners buying a second course; in EdTech that's only possible after a real result on the first."
+            }
+          },
+          {
+            "metricId": "ltv",
+            "def": {
+              "ru": "Накопленная выручка ученика за вычетом возвратов; сравнивается с CAC канала, из которого он пришёл.",
+              "en": "A learner's accumulated revenue net of refunds; compared with the CAC of the channel they came from."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "Ученик может быть доволен курсом и ничему не научиться. HEART в EdTech держит рядом две вещи: приятно ли учиться и получается ли.",
+      "en": "A learner can enjoy a course and learn nothing. HEART in EdTech keeps two things side by side: is studying pleasant and is it working."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Ученик считает, что курс стоил денег и времени, а не только денег.",
+          "en": "The learner feels the course was worth the money and the time, not just the money."
+        },
+        "signal": {
+          "ru": "Оценки уроков, NPS выпускников, доля жалоб на кураторов и материалы.",
+          "en": "Lesson ratings, graduate NPS, complaints about mentors and materials."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "complaint-rate"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Учатся регулярно и делают задания, а не открывают видео фоном.",
+          "en": "Study is regular and assignments get done rather than videos playing in the background."
+        },
+        "signal": {
+          "ru": "Дней с занятиями в месяц, доля сданных заданий, глубина сессии.",
+          "en": "Study days per month, the share of submitted assignments, session depth."
+        },
+        "metrics": [
+          {
+            "metricId": "active-days"
+          },
+          {
+            "metricId": "session-depth"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые форматы — тренажёры, разборы, проекты — доходят до учеников.",
+          "en": "New formats — drills, code reviews, projects — reach learners."
+        },
+        "signal": {
+          "ru": "Доля учеников, попробовавших формат за 30 дней после запуска.",
+          "en": "The share of learners who tried the format within 30 days of launch."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Ученик доходит до конца программы, а не бросает на третьем модуле.",
+          "en": "The learner reaches the end of the program instead of quitting at module three."
+        },
+        "signal": {
+          "ru": "Доходимость по когортам и точки массового отвала.",
+          "en": "Completion by cohort and the mass drop-off points."
+        },
+        "metrics": [
+          {
+            "metricId": "course-completion"
+          },
+          {
+            "metricId": "churn-rate"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Задание получается сделать, а если нет — помощь приходит быстро.",
+          "en": "The assignment can be completed, and if not, help arrives fast."
+        },
+        "signal": {
+          "ru": "Доля сданных с первой попытки, время до проверки, доля застрявших на задании.",
+          "en": "The first-attempt pass share, time to review, the share stuck on an assignment."
+        },
+        "metrics": [
+          {
+            "metricId": "task-success-rate"
+          },
+          {
+            "metricId": "resolution-time"
+          },
+          {
+            "metricId": "time-on-task"
+          }
+        ]
+      }
+    ]
+  }
+}

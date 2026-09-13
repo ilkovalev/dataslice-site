@@ -21,9 +21,9 @@ export default function GlossaryPage() {
   const t = STR[locale]
   const p = prefix(locale)
   const data = locale === 'en' ? glossaryEn : glossary
-  // ?q= приходит из поиска по сайту: термин без разбора в уроке открывается
-  // здесь, и строка должна быть уже заполнена — иначе человек попадает
-  // в общий список из 83 терминов и ищет заново.
+  // ?q= приходит из поиска по сайту и из пунктов роудмапа: термин без разбора
+  // в уроке открывается здесь, и строка должна быть уже заполнена — иначе
+  // человек попадает в общий список из сотни терминов и ищет заново.
   const [params, setParams] = useSearchParams()
   const [q, setQRaw] = useState(params.get('q') || '')
   const setQ = (v) => {

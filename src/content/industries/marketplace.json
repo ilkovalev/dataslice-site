@@ -267,7 +267,7 @@
                         "metricId": "seller-retention"
                       }
                     ],
-                    "metricId": "seller-retention"
+                    "metricId": "ttv"
                   }
                 ]
               },
@@ -393,7 +393,7 @@
                           "ru": "Собрали то, что заказано: ошибки сборки → возвраты и жалобы.",
                           "en": "Picked what was ordered: picking errors → returns and complaints."
                         },
-                        "metricId": "on-time-delivery"
+                        "metricId": "error-rate"
                       }
                     ],
                     "metricId": "on-time-delivery"
@@ -759,7 +759,7 @@
                   {
                     "id": "oz-speed",
                     "level": 3,
-                    "metricId": "time-to-match",
+                    "metricId": "delivery-time",
                     "title": {
                       "ru": "Срок доставки",
                       "en": "Delivery time"

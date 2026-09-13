@@ -252,7 +252,7 @@
                   "ru": "Чеков в час в обеденный пик — физический потолок выручки точки.",
                   "en": "Tickets per hour at lunch peak — the location's physical revenue ceiling."
                 },
-                "metricId": "provider-availability"
+                "metricId": "utilization"
               }
             ],
             "metricId": "delivery-time"
@@ -908,7 +908,7 @@
                   "ru": "Очереди в пик — потерянные продажи.",
                   "en": "Peak queues are lost sales."
                 },
-                "metricId": "provider-availability"
+                "metricId": "utilization"
               },
               {
                 "id": "sb-labor",

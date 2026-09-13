@@ -1,0 +1,308 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "У AI-продукта воронка обычная, а экономика нет: каждое использование стоит денег. Поэтому вовлечённость здесь одновременно метрика успеха и статья расходов, и читать её в отрыве от маржи бессмысленно.",
+      "en": "An AI product has a normal funnel and abnormal economics: every use costs money. So engagement here is both a success metric and a cost line, and reading it apart from margin is pointless."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Приток идёт двумя разными путями: разработчики приходят в API через документацию и сарафан, обычные пользователи — через продукт и его известность. Это два бизнеса с общей моделью.",
+          "en": "Inflow arrives two different ways: developers come to the API through docs and word of mouth, consumers through the product and its fame. Two businesses sharing one model."
+        },
+        "metrics": [
+          {
+            "metricId": "cac",
+            "def": {
+              "ru": "Затраты на нового платящего; окупаемость упирается в стоимость инференса — здесь она не приближается к нулю с масштабом.",
+              "en": "Cost per new paying user; payback runs into inference cost, which here doesn't approach zero with scale."
+            }
+          },
+          {
+            "metricId": "organic-share",
+            "def": {
+              "ru": "Доля пришедших без оплаченного клика: у AI-продуктов на волне интереса она аномально высока и падает вместе с новизной.",
+              "en": "The share arriving without a paid click: for AI products riding a hype wave it's abnormally high and falls with the novelty."
+            }
+          },
+          {
+            "metricId": "referral-share",
+            "def": {
+              "ru": "Доля пришедших по рекомендации; в разработческом сегменте это основной канал — инструмент показывают коллеге.",
+              "en": "The share arriving via referral; in the developer segment it's the main channel — the tool gets shown to a colleague."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активация — первый ответ, которым человек воспользовался. Попробовать модель легко, поэтому активацией считается не первый запрос, а первый принятый результат.",
+          "en": "Activation is the first answer the person actually used. Trying a model is easy, so activation isn't the first request but the first accepted result."
+        },
+        "metrics": [
+          {
+            "metricId": "acceptance-rate",
+            "label": {
+              "ru": "Доля принятых ответов",
+              "en": "Accepted answer share"
+            },
+            "def": {
+              "ru": "Доля результатов, которые пользователь взял в работу: принял правку, скопировал ответ, отправил дальше.",
+              "en": "The share of outputs the user put to work: accepted an edit, copied the answer, sent it onward."
+            }
+          },
+          {
+            "metricId": "activation-rate",
+            "label": {
+              "ru": "Первый полезный сценарий",
+              "en": "First useful scenario"
+            },
+            "def": {
+              "ru": "Доля новых, дошедших до задачи, ради которой продукт и нужен, а не остановившихся на пробном вопросе.",
+              "en": "The share of new users reaching the task the product exists for rather than stopping at a test question."
+            }
+          },
+          {
+            "metricId": "ttv",
+            "def": {
+              "ru": "Медиана от регистрации до первого принятого результата; в инструментах для разработчиков считается в минутах, а не днях.",
+              "en": "The median from signup to the first accepted result; in developer tools it's counted in minutes, not days."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Удержание в AI-продуктах ломается на однообразии: первые впечатления яркие, а привычка складывается только там, где инструмент встроился в ежедневную работу.",
+          "en": "Retention in AI products breaks on sameness: first impressions are vivid, but a habit forms only where the tool embedded itself into daily work."
+        },
+        "metrics": [
+          {
+            "metricId": "active-days",
+            "def": {
+              "ru": "Дней с использованием в месяц; отличает встроенный в работу инструмент от игрушки, которую открыли трижды.",
+              "en": "Days with usage per month; it separates a tool embedded in work from a toy opened three times."
+            }
+          },
+          {
+            "metricId": "retention-n-day",
+            "label": {
+              "ru": "Retention D30 по сценариям",
+              "en": "D30 retention by scenario"
+            },
+            "def": {
+              "ru": "Удержание в разрезе основного сценария: у кода, текста и поиска кривые расходятся сильно.",
+              "en": "Retention sliced by main scenario: code, writing and search curves diverge widely."
+            }
+          },
+          {
+            "metricId": "adoption-depth",
+            "label": {
+              "ru": "Ширина сценариев",
+              "en": "Scenario breadth"
+            },
+            "def": {
+              "ru": "Сколько разных задач пользователь решает продуктом: один сценарий уходит вместе с модой, три остаются.",
+              "en": "How many different tasks the user solves with the product: one scenario leaves with the hype, three stay."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "AI-инструменты распространяются демонстрацией: коллеге показывают результат, а не рассказывают о продукте. Расшаренный диалог здесь работает лучше реферальной программы.",
+          "en": "AI tools spread by demonstration: a colleague is shown the result rather than told about the product. A shared conversation works better here than a referral program."
+        },
+        "metrics": [
+          {
+            "metricId": "share-rate",
+            "label": {
+              "ru": "Расшаренные диалоги",
+              "en": "Shared conversations"
+            },
+            "def": {
+              "ru": "Доля сессий, из которых ссылка на диалог ушла наружу — самый естественный вирусный контур такого продукта.",
+              "en": "The share of sessions from which a conversation link went outward — this product's most natural viral loop."
+            }
+          },
+          {
+            "metricId": "viral-coefficient",
+            "def": {
+              "ru": "Сколько новых пользователей приводит один существующий через демонстрации и расшаренные результаты.",
+              "en": "How many new users one existing user brings through demos and shared results."
+            }
+          },
+          {
+            "metricId": "invite-conversion",
+            "label": {
+              "ru": "Распространение внутри команды",
+              "en": "Spread inside a team"
+            },
+            "def": {
+              "ru": "Доля приглашений коллег, закончившихся активным использованием, а не заведённой учёткой.",
+              "en": "The share of colleague invites ending in active use rather than a created login."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Выручка растёт с использованием, но с ним же растёт и себестоимость. Единственная метрика, которая держит эту модель честной, — маржа после инференс-костов.",
+          "en": "Revenue grows with usage, and so does cost of goods. The only metric that keeps this model honest is margin after inference costs."
+        },
+        "metrics": [
+          {
+            "metricId": "token-volume",
+            "def": {
+              "ru": "Объём обработанных токенов: одновременно база выручки в API и главная статья расходов.",
+              "en": "Tokens processed: simultaneously the API revenue base and the main cost line."
+            }
+          },
+          {
+            "metricId": "mrr",
+            "label": {
+              "ru": "Подписки (B2C и Pro)",
+              "en": "Subscriptions (B2C and Pro)"
+            },
+            "def": {
+              "ru": "Регулярная выручка подписок; у тяжёлых пользователей фиксированная цена может не покрывать их инференс.",
+              "en": "Recurring subscription revenue; for heavy users a flat price may not cover their inference."
+            }
+          },
+          {
+            "metricId": "cost-per-user",
+            "def": {
+              "ru": "Стоимость инференса на активного пользователя; растёт с длиной контекста и падает от кэширования и роутинга моделей.",
+              "en": "Inference cost per active user; it grows with context length and falls with caching and model routing."
+            }
+          },
+          {
+            "metricId": "contribution-margin",
+            "label": {
+              "ru": "Маржа после инференса",
+              "en": "Margin after inference"
+            },
+            "def": {
+              "ru": "Что остаётся с пользователя после costs модели; в AI это может быть отрицательным при растущей выручке.",
+              "en": "What's left from a user after model costs; in AI this can be negative while revenue grows."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "Модель уверенно отвечает и когда права, и когда нет. HEART в AI-продукте существует ради одного вопроса: полезен ли ответ на самом деле или только выглядит убедительно.",
+      "en": "The model answers confidently whether it's right or wrong. HEART in an AI product exists for one question: is the answer actually useful or merely convincing."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Пользователь доверяет ответам настолько, что не перепроверяет каждый в другом источнике.",
+          "en": "The user trusts the answers enough not to double-check each one elsewhere."
+        },
+        "signal": {
+          "ru": "Оценки ответов, доля жалоб на выдумки, опросы о доверии к инструменту.",
+          "en": "Answer ratings, complaints about fabrications, trust surveys about the tool."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "complaint-rate"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Инструментом решают рабочие задачи, а не задают ему вопросы из любопытства.",
+          "en": "The tool is used to solve work tasks rather than answer curiosity questions."
+        },
+        "signal": {
+          "ru": "Запросов на пользователя, длина диалогов, число активных дней.",
+          "en": "Requests per user, conversation length, active days."
+        },
+        "metrics": [
+          {
+            "metricId": "sessions-per-user"
+          },
+          {
+            "metricId": "session-depth"
+          },
+          {
+            "metricId": "active-days"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые модели и режимы доходят до пользователей и реально меняют их сценарии.",
+          "en": "New models and modes reach users and actually change their scenarios."
+        },
+        "signal": {
+          "ru": "Доля запросов в новом режиме и число сценариев на пользователя.",
+          "en": "The share of requests in the new mode and scenarios per user."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          },
+          {
+            "metricId": "adoption-depth"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Продукт остаётся в ежедневной работе после того, как схлынул интерес к новизне.",
+          "en": "The product stays in daily work after the novelty interest fades."
+        },
+        "signal": {
+          "ru": "Дожитие когорт по месяцам и доля пользователей с тремя и более сценариями.",
+          "en": "Cohort survival by month and the share of users with three or more scenarios."
+        },
+        "metrics": [
+          {
+            "metricId": "retention-n-day"
+          },
+          {
+            "metricId": "churn-rate"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Ответ решает задачу с первого раза и без переспрашивания.",
+          "en": "The answer solves the task the first time, with no follow-up clarification."
+        },
+        "signal": {
+          "ru": "Доля принятых результатов, доля переформулировок, задержка ответа.",
+          "en": "The accepted-output share, the rephrase share, response latency."
+        },
+        "metrics": [
+          {
+            "metricId": "acceptance-rate"
+          },
+          {
+            "metricId": "model-quality"
+          },
+          {
+            "metricId": "latency-p95"
+          }
+        ]
+      }
+    ]
+  }
+}

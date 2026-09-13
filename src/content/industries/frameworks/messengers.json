@@ -1,0 +1,286 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "Мессенджер живёт сетевым эффектом: ценность для одного человека задаётся тем, сколько его знакомых уже здесь. Поэтому воронка меряется парами и связями, а не отдельными пользователями.",
+      "en": "A messenger lives on network effects: the value to one person is set by how many of their contacts are already here. So the funnel is measured in pairs and links, not in individual users."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Почти весь приток идёт через приглашения знакомых. Платные каналы работают на узнаваемость, а не на установки — установить мессенджер, где никого нет, бессмысленно.",
+          "en": "Almost all inflow comes through invites from contacts. Paid channels build awareness rather than installs — installing a messenger where nobody is makes no sense."
+        },
+        "metrics": [
+          {
+            "metricId": "installs",
+            "def": {
+              "ru": "Установки за период; для мессенджера читаются вместе с долей тех, кто нашёл в приложении хотя бы одного знакомого.",
+              "en": "Installs per period; for a messenger they're read together with the share who found at least one contact inside."
+            }
+          },
+          {
+            "metricId": "organic-share",
+            "def": {
+              "ru": "Доля установок без оплаченного клика: витрина стора, приглашения, упоминания — у зрелого мессенджера это почти весь приток.",
+              "en": "The share of installs without a paid click: store discovery, invites, mentions — in a mature messenger that's nearly all inflow."
+            }
+          },
+          {
+            "metricId": "cac",
+            "def": {
+              "ru": "Затраты на нового активного; сравниваются не с выручкой, а с ценностью новой связи в сети — прямой монетизации у пользователя может не быть.",
+              "en": "Spend per new active user; compared not with revenue but with the value of a new link in the network — the user may not monetize directly."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активация в мессенджере — это не регистрация, а первый диалог, который дошёл до ответа. Одностороннее сообщение сети не создаёт.",
+          "en": "Activation in a messenger isn't a signup but a first conversation that got a reply. A one-way message creates no network."
+        },
+        "metrics": [
+          {
+            "metricId": "connected-pairs",
+            "label": {
+              "ru": "Первые связанные пары",
+              "en": "First connected pairs"
+            },
+            "def": {
+              "ru": "Сколько собеседников с двусторонним обменом набрал новичок за первую неделю: порог обычно два-три, ниже него удержание обваливается.",
+              "en": "How many two-way conversation partners a newcomer gained in week one: the threshold is usually two or three, below which retention collapses."
+            }
+          },
+          {
+            "metricId": "activation-rate",
+            "label": {
+              "ru": "Активация (первый диалог)",
+              "en": "Activation (first conversation)"
+            },
+            "def": {
+              "ru": "Доля новых, отправивших и получивших сообщение в первые сутки; односторонняя отправка в числитель не идёт.",
+              "en": "The share of new users who both sent and received a message in the first day; one-way sends don't count."
+            }
+          },
+          {
+            "metricId": "reply-rate",
+            "def": {
+              "ru": "Доля первых сообщений новичка, на которые ответили — измеряет, попал ли он в живую часть сети.",
+              "en": "The share of a newcomer's first messages that got a reply — it measures whether they landed in the live part of the network."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Удержание здесь близко к сотне процентов у тех, кто перенёс в мессенджер важные контакты, и почти нулевое у остальных. Среднее по базе не описывает ни тех, ни других.",
+          "en": "Retention here is near a hundred percent for those who moved important contacts in, and near zero for the rest. The base average describes neither group."
+        },
+        "metrics": [
+          {
+            "metricId": "stickiness",
+            "def": {
+              "ru": "DAU / MAU: у мессенджера, ставшего основным, показатель близок к предельному — редкий случай, когда высокая липкость не признак залипания.",
+              "en": "DAU / MAU: for a messenger that became primary it sits close to the ceiling — a rare case where high stickiness isn't a doomscrolling signal."
+            }
+          },
+          {
+            "metricId": "retention-n-day",
+            "label": {
+              "ru": "Retention D30 по числу связей",
+              "en": "D30 retention by link count"
+            },
+            "def": {
+              "ru": "Удержание в разрезе числа собеседников: кривые для одной связи и для пяти расходятся в разы.",
+              "en": "Retention sliced by conversation-partner count: the curves for one link and for five differ several-fold."
+            }
+          },
+          {
+            "metricId": "active-days",
+            "def": {
+              "ru": "Дней с перепиской в месяц; для основного мессенджера это почти все дни, и падение метрики — ранний признак ухода.",
+              "en": "Days with conversation per month; for a primary messenger that's nearly every day, and a drop is an early departure signal."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "Приглашение в мессенджере встроено в продукт: чтобы написать человеку, которого здесь нет, его надо позвать. Это делает реферальный слой основным каналом роста.",
+          "en": "Invitation is built into a messenger: to write to someone who isn't here you have to invite them. That makes the referral layer the main growth channel."
+        },
+        "metrics": [
+          {
+            "metricId": "invite-conversion",
+            "def": {
+              "ru": "Доля приглашений, закончившихся установкой и первым диалогом; считается на закрытых когортах — приглашение принимают не сразу.",
+              "en": "The share of invites ending in an install and a first conversation; measured on closed cohorts — invites aren't accepted immediately."
+            }
+          },
+          {
+            "metricId": "viral-coefficient",
+            "def": {
+              "ru": "Приглашений на пользователя × их конверсия: значение выше единицы означает самоподдерживающийся рост без рекламы.",
+              "en": "Invites per user × their conversion: a value above one means self-sustaining growth with no ads."
+            }
+          },
+          {
+            "metricId": "referral-share",
+            "def": {
+              "ru": "Доля новых, пришедших по приглашению знакомого, среди всех новых за период.",
+              "en": "The share of new users arriving via a contact's invite among all new users in the period."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Монетизировать переписку между людьми опасно: реклама и платные функции в личных чатах бьют по доверию, на котором держится сеть. Поэтому деньги ищут в бизнес-слое и в подписке.",
+          "en": "Monetizing conversations between people is risky: ads and paid features in private chats damage the trust the network rests on. So the money is sought in the business layer and in subscriptions."
+        },
+        "metrics": [
+          {
+            "metricId": "mrr",
+            "label": {
+              "ru": "Подписка (Premium)",
+              "en": "Subscription (Premium)"
+            },
+            "def": {
+              "ru": "Регулярная выручка платных подписок; конверсия в них считается от активных, а не от всей базы.",
+              "en": "Recurring revenue from paid subscriptions; conversion into them is measured against actives, not the whole base."
+            }
+          },
+          {
+            "metricId": "ad-coverage",
+            "label": {
+              "ru": "Реклама в публичном слое",
+              "en": "Ads in the public layer"
+            },
+            "def": {
+              "ru": "Плотность рекламы в каналах и публичных лентах; в личные чаты не заходит — там она стоит доверия.",
+              "en": "Ad density in channels and public feeds; it stays out of private chats, where it would cost trust."
+            }
+          },
+          {
+            "metricId": "arpu",
+            "def": {
+              "ru": "Выручка на активного пользователя; у коммуникационных сетей она на порядок ниже, чем у соцсетей с лентой.",
+              "en": "Revenue per active user; in communication networks it's an order of magnitude below feed-based social networks."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "Сообщения можно нарастить спамом и уведомлениями. HEART отделяет живое общение от шума, который его имитирует.",
+      "en": "Message volume can be inflated with spam and notifications. HEART separates live conversation from the noise imitating it."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Человек доверяет мессенджеру личную переписку и не считает его источником шума.",
+          "en": "The person trusts the messenger with private conversation and doesn't see it as a noise source."
+        },
+        "signal": {
+          "ru": "Жалобы на спам и рассылки, отключения уведомлений, опросы доверия.",
+          "en": "Spam and broadcast complaints, notification opt-outs, trust surveys."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "complaint-rate"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Общение двустороннее: люди переписываются, а не получают уведомления от ботов.",
+          "en": "Conversation is two-way: people talk rather than receive bot notifications."
+        },
+        "signal": {
+          "ru": "Сообщений на пару, доля отвеченных, число активных диалогов.",
+          "en": "Messages per pair, the answered share, the count of live conversations."
+        },
+        "metrics": [
+          {
+            "metricId": "messages-sent"
+          },
+          {
+            "metricId": "reply-rate"
+          },
+          {
+            "metricId": "connected-pairs"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые механики — звонки, группы, боты — доходят до людей, а не остаются функцией в меню.",
+          "en": "New mechanics — calls, groups, bots — reach people instead of remaining a menu item."
+        },
+        "signal": {
+          "ru": "Доля активных, воспользовавшихся механикой за 30 дней после запуска.",
+          "en": "The share of active users who used the mechanic within 30 days of launch."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Мессенджер остаётся основным, а не вторым, куда пишут по остаточному принципу.",
+          "en": "The messenger stays primary rather than becoming the second one people write to as an afterthought."
+        },
+        "signal": {
+          "ru": "Доля пользователей с ежедневной перепиской и отток по числу связей.",
+          "en": "The share of users with daily conversation and churn by link count."
+        },
+        "metrics": [
+          {
+            "metricId": "retention-n-day"
+          },
+          {
+            "metricId": "churn-rate"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Сообщение уходит и доходит: с первой попытки, быстро, включая слабую сеть и большие файлы.",
+          "en": "A message sends and arrives: first try, fast, including on weak networks and with large files."
+        },
+        "signal": {
+          "ru": "Доля неотправленных сообщений, задержка доставки, ошибки на загрузке файлов.",
+          "en": "The share of failed sends, delivery latency, file-upload errors."
+        },
+        "metrics": [
+          {
+            "metricId": "task-success-rate"
+          },
+          {
+            "metricId": "error-rate"
+          },
+          {
+            "metricId": "latency-p95"
+          }
+        ]
+      }
+    ]
+  }
+}

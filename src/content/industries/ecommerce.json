@@ -282,7 +282,7 @@
                           "ru": "Операционная цель контент-команды: закрыть «немые» карточки.",
                           "en": "The content team's operational target: fix \"mute\" product pages."
                         },
-                        "metricId": "conversion-rate"
+                        "kind": "lever"
                       }
                     ]
                   },
@@ -492,7 +492,7 @@
                           "ru": "Финальная мера пользы блока: рекомендация дошла до корзины и до денег.",
                           "en": "The block's final utility: the recommendation made it to the cart and to money."
                         },
-                        "metricId": "conversion-rate"
+                        "metricId": "feature-adoption"
                       }
                     ]
                   }
@@ -653,7 +653,7 @@
                       "ru": "Проникновение программы в заказы; мёртвая программа не влияет на повторные.",
                       "en": "Program penetration into orders; a dead program moves no repeats."
                     },
-                    "metricId": "repeat-rate"
+                    "metricId": "feature-adoption"
                   }
                 ]
               }

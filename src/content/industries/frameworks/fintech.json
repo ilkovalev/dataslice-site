@@ -1,0 +1,308 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "В финтехе воронка не заканчивается открытием счёта: счёт открывают легко и забрасывают ещё легче. Всё решает переход в статус основного банка — до него клиент стоит денег и не приносит их.",
+      "en": "In fintech the funnel doesn't end at account opening: accounts are opened easily and abandoned even more so. Everything hinges on becoming the primary bank — before that the customer costs money and brings none."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Привлечение упирается в регуляторный барьер: между заявкой и клиентом стоит проверка личности, на которой теряется значимая часть заявок.",
+          "en": "Acquisition runs into a regulatory barrier: identity verification sits between the application and the customer, and a meaningful share of applications is lost there."
+        },
+        "metrics": [
+          {
+            "metricId": "cac",
+            "def": {
+              "ru": "Затраты на клиента, прошедшего проверку личности; считать по заявкам нельзя — до счёта доходят не все.",
+              "en": "Cost per identity-verified customer; counting per application is wrong — not everyone reaches an account."
+            }
+          },
+          {
+            "metricId": "funnel-dropoff",
+            "label": {
+              "ru": "Отвал на онбординге и KYC",
+              "en": "Onboarding and KYC drop-off"
+            },
+            "def": {
+              "ru": "Потери по шагам: анкета, документы, проверка, выпуск карты — каждый шаг стоит процентов конверсии.",
+              "en": "Losses by step: form, documents, verification, card issuance — each step costs conversion points."
+            }
+          },
+          {
+            "metricId": "organic-share",
+            "def": {
+              "ru": "Доля клиентов, пришедших без оплаченного клика: рекомендации, поиск по бренду, переход из экосистемы.",
+              "en": "The share of customers arriving without a paid click: referrals, brand search, an ecosystem hand-off."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активирован клиент, который завёл деньги и совершил первую операцию. Открытый счёт с нулевым балансом — это расход на выпуск карты и ничего больше.",
+          "en": "An activated customer is one who funded the account and made a first transaction. An open account with a zero balance is a card-issuance expense and nothing more."
+        },
+        "metrics": [
+          {
+            "metricId": "activation-rate",
+            "label": {
+              "ru": "Первое пополнение и операция",
+              "en": "First funding and transaction"
+            },
+            "def": {
+              "ru": "Доля новых, пополнивших счёт и совершивших операцию за 30 дней; два события считаются вместе, поодиночке они мало значат.",
+              "en": "The share of new customers who funded and transacted within 30 days; the two events count together — separately they mean little."
+            }
+          },
+          {
+            "metricId": "ttv",
+            "label": {
+              "ru": "Время до первой операции",
+              "en": "Time to first transaction"
+            },
+            "def": {
+              "ru": "Медиана от одобрения до первой траты; растягивается на дни доставкой карты, и каждый день здесь стоит активации.",
+              "en": "The median from approval to first spend; card delivery stretches it into days, and each day here costs activation."
+            }
+          },
+          {
+            "metricId": "deposits",
+            "label": {
+              "ru": "Остатки новых клиентов",
+              "en": "New customers' balances"
+            },
+            "def": {
+              "ru": "Средний остаток на счёте в первый месяц; отделяет клиента, который принёс зарплату, от того, кто завёл счёт про запас.",
+              "en": "The average balance in month one; it separates the customer who brought their salary from one who opened an account just in case."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Удержание в банкинге — это доля основного банка в тратах клиента. Формально клиент не уходит годами, фактически он перестаёт платить вашей картой за неделю.",
+          "en": "Retention in banking is the primary-bank share of a customer's spending. Formally the customer stays for years; in practice they stop paying with your card within a week."
+        },
+        "metrics": [
+          {
+            "metricId": "tpv",
+            "label": {
+              "ru": "Доля в тратах клиента",
+              "en": "Share of customer spend"
+            },
+            "def": {
+              "ru": "Обороты по карте на клиента; падение при формально активном счёте означает, что основным стал другой банк.",
+              "en": "Card turnover per customer; a drop with a formally active account means another bank became primary."
+            }
+          },
+          {
+            "metricId": "products-per-customer",
+            "def": {
+              "ru": "Сколько продуктов у клиента: с каждым следующим отток падает, потому что переносить всё разом слишком дорого.",
+              "en": "How many products a customer holds: each additional one lowers churn, because moving everything at once is too costly."
+            }
+          },
+          {
+            "metricId": "churn-rate",
+            "label": {
+              "ru": "Отток primary-статуса",
+              "en": "Primary-status churn"
+            },
+            "def": {
+              "ru": "Доля клиентов, переставших быть активными по тратам; закрытие счёта происходит намного позже и метрику запаздывает.",
+              "en": "The share of customers who stopped being spend-active; account closure happens much later and lags the metric."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "Финансовый продукт рекомендуют осторожно и оттого убедительно: приведённые по совету клиенты приносят больше остатков и уходят реже.",
+          "en": "A financial product is recommended cautiously and therefore convincingly: referred customers bring larger balances and churn less."
+        },
+        "metrics": [
+          {
+            "metricId": "referral-share",
+            "def": {
+              "ru": "Доля новых клиентов по реферальной программе; их остатки и обороты считаются отдельно от остальных каналов.",
+              "en": "The share of new customers from the referral program; their balances and turnover are tracked apart from other channels."
+            }
+          },
+          {
+            "metricId": "invite-conversion",
+            "def": {
+              "ru": "Доля приглашений, дошедших до открытого и пополненного счёта, а не до заявки.",
+              "en": "The share of invites reaching a funded, open account rather than an application."
+            }
+          },
+          {
+            "metricId": "nps-csat",
+            "def": {
+              "ru": "Готовность рекомендовать банк; в финансах она сильнее всего связана с опытом решения проблемы, а не с тарифами.",
+              "en": "Willingness to recommend the bank; in finance it correlates most with problem-resolution experience rather than pricing."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Банк зарабатывает на трёх источниках: процентная маржа, комиссии и продажа доп-продуктов. Против них стоит стоимость риска, и без неё выручка ничего не значит.",
+          "en": "A bank earns from three sources: interest margin, fees and add-on products. Cost of risk sits against them, and without it revenue means nothing."
+        },
+        "metrics": [
+          {
+            "metricId": "tpv",
+            "def": {
+              "ru": "Платёжный оборот: база для комиссионного дохода и главный признак того, что банк стал основным.",
+              "en": "Payment volume: the base for fee income and the main sign the bank became primary."
+            }
+          },
+          {
+            "metricId": "nim",
+            "label": {
+              "ru": "Процентная маржа (NIM)",
+              "en": "Net interest margin"
+            },
+            "def": {
+              "ru": "Разница между доходом по кредитам и стоимостью привлечённых средств; двигается ставкой ЦБ сильнее, чем действиями банка.",
+              "en": "The gap between lending income and the cost of funds; it moves with the central-bank rate more than with anything the bank does."
+            }
+          },
+          {
+            "metricId": "take-rate",
+            "label": {
+              "ru": "Комиссионный доход",
+              "en": "Fee income"
+            },
+            "def": {
+              "ru": "Interchange и комиссии за операции, отнесённые к обороту; устойчивее процентного дохода к смене ставок.",
+              "en": "Interchange and transaction fees relative to turnover; more stable than interest income when rates move."
+            }
+          },
+          {
+            "metricId": "cost-of-risk",
+            "def": {
+              "ru": "Потери по кредитному портфелю; выручку от кредитования читают только вместе с ней, иначе рост означает смягчение скоринга.",
+              "en": "Losses on the loan book; lending revenue is only read together with it, or growth just means a loosened scorecard."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "В финансах цена ошибки высокая, и качество опыта измеряется не удовольствием, а отсутствием тревоги: перевод дошёл, деньги на месте, проблему решили.",
+      "en": "In finance the cost of a mistake is high, and experience quality is measured not by delight but by the absence of anxiety: the transfer arrived, the money is there, the problem was solved."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Клиент спокоен за свои деньги и знает, что проблему решат без похода в отделение.",
+          "en": "The customer is calm about their money and knows a problem will be solved without a branch visit."
+        },
+        "signal": {
+          "ru": "Оценки после обращений, время решения тикета, доля повторных обращений по той же проблеме.",
+          "en": "Post-contact ratings, ticket resolution time, the share of repeat contacts about the same issue."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "resolution-time"
+          },
+          {
+            "metricId": "ces"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Приложение открывают для операций, а не только чтобы посмотреть баланс.",
+          "en": "The app is opened to transact, not only to check the balance."
+        },
+        "signal": {
+          "ru": "Операций на клиента в месяц, число активных дней, доля операций в приложении.",
+          "en": "Transactions per customer per month, active days, the share of in-app transactions."
+        },
+        "metrics": [
+          {
+            "metricId": "purchase-frequency"
+          },
+          {
+            "metricId": "active-days"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые продукты — вклады, инвестиции, страховки — доходят до существующих клиентов.",
+          "en": "New products — deposits, investments, insurance — reach existing customers."
+        },
+        "signal": {
+          "ru": "Доля клиентов, подключивших продукт за 90 дней после запуска.",
+          "en": "The share of customers who enabled the product within 90 days of launch."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          },
+          {
+            "metricId": "products-per-customer"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Банк остаётся основным: сюда приходит зарплата и отсюда идут повседневные траты.",
+          "en": "The bank stays primary: the salary arrives here and daily spending goes out from here."
+        },
+        "signal": {
+          "ru": "Доля в тратах клиента, число продуктов, отток по активности.",
+          "en": "Share of customer spend, product count, activity-based churn."
+        },
+        "metrics": [
+          {
+            "metricId": "churn-rate"
+          },
+          {
+            "metricId": "tpv"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Перевод, платёж и оформление продукта проходят с первой попытки.",
+          "en": "A transfer, a payment and a product application go through on the first attempt."
+        },
+        "signal": {
+          "ru": "Доля успешных платежей, отказы по операциям, ложные срабатывания антифрода.",
+          "en": "Payment success rate, transaction declines, false positives from fraud checks."
+        },
+        "metrics": [
+          {
+            "metricId": "payment-success"
+          },
+          {
+            "metricId": "task-success-rate"
+          },
+          {
+            "metricId": "fraud-rate"
+          }
+        ]
+      }
+    ]
+  }
+}

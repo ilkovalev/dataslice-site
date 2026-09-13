@@ -473,5 +473,55 @@
     },
     "sql": "-- Search success: click within session and no follow-up reformulation\nWITH search_sessions AS (\n  SELECT s.session_id,\n         MAX((e.event_name = 'result_click')::int) AS clicked,\n         MAX((e.event_name = 'query_reformulate')::int) AS reformulated\n  FROM sessions s\n  JOIN events e ON e.user_id = s.user_id\n   AND e.ts BETWEEN s.started_at AND s.started_at + INTERVAL '30 minutes'\n  WHERE EXISTS (SELECT 1 FROM events q WHERE q.user_id = s.user_id\n                  AND q.event_name = 'search_query'\n                  AND q.ts BETWEEN s.started_at AND s.started_at + INTERVAL '30 minutes')\n  GROUP BY s.session_id\n)\nSELECT COUNT(*) AS search_sessions,\n       ROUND(100.0 * SUM(CASE WHEN clicked = 1 AND reformulated = 0 THEN 1 ELSE 0 END)\n             / COUNT(*), 1) AS success_pct\nFROM search_sessions;",
     "related": ["session-depth", "nps-csat"]
+  },
+  {
+    "id": "invite-conversion",
+    "category": "engagement",
+    "title": { "ru": "Конверсия приглашения", "en": "Invite conversion" },
+    "aliases": ["конверсия приглашения", "invite conversion", "приглашения"],
+    "tex": { "ru": "K=\\text{приглашений на пользователя}\\times \\text{конверсия приглашения}", "en": "K=\\text{invites per user}\\times \\text{invite conversion}" },
+    "desc": {
+      "ru": "Доля отправленных приглашений, которые превратились в зарегистрированного пользователя. Второй множитель вирального коэффициента: K складывается из числа приглашений на человека и их конверсии, и эти два рычага чинятся по-разному — первый механикой продукта, второй качеством первого экрана приглашённого.",
+      "en": "The share of sent invites that turned into a registered user. The second factor of the viral coefficient: K is invites per person times their conversion, and the two levers are fixed differently — the first by product mechanics, the second by the quality of the invitee's first screen."
+    },
+    "pitfalls": {
+      "ru": [
+        "Приглашение и его приём разнесены во времени: конверсия свежих приглашений всегда занижена, считайте по закрытым когортам.",
+        "Массовая рассылка по адресной книге поднимает число приглашений и роняет их конверсию — K может не измениться при заметно худшем опыте.",
+        "Приглашённый в чат или документ и приглашённый в продукт — разные события: первый может пользоваться, так и не став пользователем."
+      ],
+      "en": [
+        "An invite and its acceptance are separated in time: fresh invites' conversion is always understated — measure on closed cohorts.",
+        "A bulk address-book blast raises invite count and drops their conversion — K may stay flat with a noticeably worse experience.",
+        "Being invited to a chat or document and being invited into the product are different events: the first may use it without ever becoming a user."
+      ]
+    },
+    "sql": "-- Invites per inviter, invite conversion and the resulting K\nWITH invites AS (\n  SELECT inviter_user_id, invite_id, created_at,\n         accepted_user_id\n  FROM invitations\n  WHERE created_at < now() - INTERVAL '14 days'\n)\nSELECT date_trunc('month', created_at) AS month,\n       COUNT(DISTINCT inviter_user_id) AS inviters,\n       COUNT(*) AS invites_sent,\n       ROUND(COUNT(*)::numeric / NULLIF(COUNT(DISTINCT inviter_user_id), 0), 2) AS invites_per_user,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE accepted_user_id IS NOT NULL) / COUNT(*), 1) AS invite_cr_pct,\n       ROUND(COUNT(*) FILTER (WHERE accepted_user_id IS NOT NULL)::numeric\n         / NULLIF(COUNT(DISTINCT inviter_user_id), 0), 3) AS k_factor\nFROM invites\nGROUP BY 1\nORDER BY 1;",
+    "related": ["viral-coefficient", "referral-share", "share-rate", "activation-rate"]
+  },
+  {
+    "id": "bounce-rate",
+    "category": "engagement",
+    "title": { "ru": "Bounce Rate — доля отказов", "en": "Bounce rate" },
+    "aliases": ["отказы", "bounce rate", "пустые сессии"],
+    "tex": { "ru": "\\text{Bounce}=\\dfrac{\\text{сессии без целевого действия}}{\\text{все сессии}}", "en": "\\text{Bounce}=\\dfrac{\\text{sessions with no meaningful action}}{\\text{all sessions}}" },
+    "desc": {
+      "ru": "Доля сессий, закончившихся без осмысленного действия: зашёл, посмотрел один экран, ушёл. Быстрый индикатор несоответствия ожидания и содержимого — обычно ломается либо обещание в объявлении, либо скорость загрузки, либо релевантность выдачи.",
+      "en": "The share of sessions that ended without a meaningful action: arrived, saw one screen, left. A fast indicator of a mismatch between expectation and content — usually the ad's promise, the load speed or the relevance of results is what broke."
+    },
+    "pitfalls": {
+      "ru": [
+        "Отказ не всегда провал: справочная страница, ответившая на вопрос за десять секунд, даёт отказ и довольного человека.",
+        "Определение «целевого действия» решает всё: без него отказом считается сессия без второго экрана, и метрика измеряет навигацию, а не пользу.",
+        "Мобильный и десктопный трафик, а также источники дают разный базовый уровень — сравнивайте внутри сегмента."
+      ],
+      "en": [
+        "A bounce isn't always a failure: a reference page that answered the question in ten seconds produces a bounce and a happy person.",
+        "The definition of \"meaningful action\" decides everything: without one a bounce is any session without a second screen, and the metric measures navigation, not value.",
+        "Mobile and desktop traffic, and different sources, have different baselines — compare within a segment."
+      ]
+    },
+    "sql": "-- Bounce rate by source: sessions with no meaningful action\nWITH sess AS (\n  SELECT s.session_id, s.utm_source, s.device,\n         COUNT(e.*) FILTER (WHERE e.event_name IN ('search', 'view_item', 'add_to_cart', 'play')) AS actions\n  FROM sessions s\n  LEFT JOIN events e ON e.session_id = s.session_id\n  WHERE s.started_at >= now() - INTERVAL '30 days'\n  GROUP BY 1, 2, 3\n)\nSELECT COALESCE(utm_source, 'direct') AS source, device,\n       COUNT(*) AS sessions,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE actions = 0) / COUNT(*), 1) AS bounce_pct\nFROM sess\nGROUP BY 1, 2\nHAVING COUNT(*) > 100\nORDER BY bounce_pct DESC;",
+    "related": ["session-depth", "conversion-rate", "latency-p95", "search-success"]
   }
 ]

@@ -90,7 +90,7 @@
                           "ru": "Выпускники приводят новых — самый дешёвый и качественный канал.",
                           "en": "Graduates bring newcomers — the cheapest and best-quality channel."
                         },
-                        "metricId": "viral-coefficient"
+                        "metricId": "referral-share"
                       }
                     ]
                   }
@@ -163,7 +163,7 @@
                           "ru": "Где именно бросают: сложный модуль чинится контентом, скучный — форматом.",
                           "en": "Exactly where learners quit: a hard module is fixed with content, a boring one with format."
                         },
-                        "metricId": "course-completion"
+                        "metricId": "funnel-dropoff"
                       }
                     ],
                     "metricId": "course-completion"
@@ -214,7 +214,7 @@
                 }
               }
             ],
-            "metricId": "course-completion"
+            "metricId": "learning-outcome"
           },
           {
             "id": "monet",
@@ -831,7 +831,7 @@
                               "ru": "Долгое ожидание фидбека — главный операционный предиктор отвала.",
                               "en": "Slow feedback is the main operational dropout predictor."
                             },
-                            "metricId": "complaint-rate"
+                            "metricId": "resolution-time"
                           }
                         ],
                         "metricId": "course-completion"
@@ -882,7 +882,7 @@
                     }
                   }
                 ],
-                "metricId": "course-completion"
+                "metricId": "learning-outcome"
               },
               {
                 "id": "sk-repeat",

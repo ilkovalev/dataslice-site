@@ -238,7 +238,7 @@
           {
             "id": "delivery-time",
             "level": 2,
-            "metricId": "time-to-match",
+            "metricId": "delivery-time",
             "title": {
               "ru": "Время доставки",
               "en": "Delivery time"
@@ -650,7 +650,7 @@
               {
                 "id": "ye-time",
                 "level": 2,
-                "metricId": "time-to-match",
+                "metricId": "delivery-time",
                 "title": {
                   "ru": "Время доставки",
                   "en": "Delivery time"
@@ -965,7 +965,7 @@
               {
                 "id": "dd-time",
                 "level": 2,
-                "metricId": "time-to-match",
+                "metricId": "delivery-time",
                 "title": {
                   "ru": "Время доставки",
                   "en": "Delivery time"

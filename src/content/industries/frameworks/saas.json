@@ -1,0 +1,306 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "B2B SaaS растёт не приходом новых, а тем, что старые не уходят и покупают больше. Воронка длинная: между первым касанием и решением о продлении проходят месяцы.",
+      "en": "B2B SaaS grows not from newcomers but from old customers staying and buying more. The funnel is long: months pass between first touch and the renewal decision."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Покупатель и пользователь — разные люди. Метрики привлечения считаются по аккаунтам, но продукт видят сотрудники.",
+          "en": "The buyer and the user are different people. Acquisition metrics are counted per account, but employees are the ones who see the product."
+        },
+        "metrics": [
+          {
+            "metricId": "cac",
+            "label": {
+              "ru": "CAC аккаунта",
+              "en": "Account CAC"
+            },
+            "def": {
+              "ru": "Затраты маркетинга и продаж на одного нового клиента; в B2B включает работу сейлзов, а не только рекламу.",
+              "en": "Marketing and sales spend per new customer; in B2B it includes sales work, not just ads."
+            }
+          },
+          {
+            "metricId": "organic-share",
+            "def": {
+              "ru": "Доля новых аккаунтов, пришедших без оплаченного клика: контент, поиск по бренду, рекомендации в отрасли.",
+              "en": "The share of new accounts arriving without a paid click: content, brand search, industry word of mouth."
+            }
+          },
+          {
+            "metricId": "win-rate",
+            "label": {
+              "ru": "Win Rate сделок",
+              "en": "Deal win rate"
+            },
+            "def": {
+              "ru": "Доля квалифицированных сделок, закрытых оплатой; вместе с длиной цикла определяет пропускную способность продаж.",
+              "en": "The share of qualified deals closed with payment; together with cycle length it sets sales throughput."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активирован не тот, кто завёл аккаунт, а тот, кто перенёс в продукт настоящую работу и получил результат.",
+          "en": "The activated user isn't the one who created an account, but the one who moved real work into the product and got a result."
+        },
+        "metrics": [
+          {
+            "metricId": "activation-rate",
+            "def": {
+              "ru": "Доля новых аккаунтов, дошедших до ключевого действия (первый проект, первая интеграция, первый отчёт) за 14 дней.",
+              "en": "The share of new accounts reaching the key action (first project, first integration, first report) within 14 days."
+            }
+          },
+          {
+            "metricId": "ttv",
+            "def": {
+              "ru": "Медианное время от регистрации до первой пользы; рядом смотрят долю аккаунтов, не дошедших до неё вовсе.",
+              "en": "Median time from signup to first value; the share of accounts that never reach it is watched alongside."
+            }
+          },
+          {
+            "metricId": "onboarding-completion",
+            "label": {
+              "ru": "Прохождение внедрения",
+              "en": "Onboarding completion"
+            },
+            "def": {
+              "ru": "Доля аккаунтов, завершивших настройку: подключены источники, заведены пользователи, назначены роли.",
+              "en": "The share of accounts that finished setup: sources connected, users created, roles assigned."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Удержание в B2B меряется не возвратами в приложение, а продлением контракта — и предсказывается глубиной внедрения задолго до него.",
+          "en": "B2B retention is measured by contract renewal rather than app returns — and is predicted by adoption depth long before that."
+        },
+        "metrics": [
+          {
+            "metricId": "adoption-depth",
+            "def": {
+              "ru": "Доля оплаченных мест, активных за 30 дней, и число освоенных ключевых сценариев — лучший ранний предиктор непродления.",
+              "en": "The share of paid seats active in 30 days and the number of key workflows adopted — the best early predictor of non-renewal."
+            }
+          },
+          {
+            "metricId": "churn-rate",
+            "label": {
+              "ru": "Отток аккаунтов и выручки",
+              "en": "Logo and revenue churn"
+            },
+            "def": {
+              "ru": "Отток логотипов и отток выручки считаются раздельно: уход мелких клиентов при удержании крупных даёт совсем разные картины.",
+              "en": "Logo churn and revenue churn are counted separately: losing small clients while keeping big ones paints two different pictures."
+            }
+          },
+          {
+            "metricId": "health-score",
+            "def": {
+              "ru": "Составная оценка риска ухода по активности, тикетам, платежам и смене контактных лиц; калибруется на исторических оттоках.",
+              "en": "A composite churn-risk score from activity, tickets, payments and champion turnover; calibrated on historical churn."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "Главный реферальный канал B2B-инструмента — распространение внутри компании и переход сотрудников в новые команды.",
+          "en": "The main referral channel of a B2B tool is spread inside the company and employees moving to new teams."
+        },
+        "metrics": [
+          {
+            "metricId": "invite-conversion",
+            "label": {
+              "ru": "Конверсия приглашения коллеги",
+              "en": "Colleague invite conversion"
+            },
+            "def": {
+              "ru": "Доля приглашений внутри аккаунта, закончившихся активным пользователем, а не просто заведённой учёткой.",
+              "en": "The share of in-account invites that end in an active user rather than just a created login."
+            }
+          },
+          {
+            "metricId": "viral-coefficient",
+            "def": {
+              "ru": "Сколько новых аккаунтов приводит один существующий: сарафан по отрасли и уход сотрудников с продуктом в новые компании.",
+              "en": "How many new accounts one existing account brings: industry word of mouth and employees taking the product to new companies."
+            }
+          },
+          {
+            "metricId": "nps-csat",
+            "label": {
+              "ru": "NPS — готовность рекомендовать",
+              "en": "NPS — willingness to recommend"
+            },
+            "def": {
+              "ru": "Опрос владельцев аккаунтов; в B2B считается по ролям — у админа и у рядового пользователя разный опыт.",
+              "en": "A survey of account owners; in B2B it's read by role — an admin and a rank-and-file user have different experiences."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Деньги приходят не от новых сделок, а от расширения существующих. NRR выше 100% означает рост без единого нового клиента.",
+          "en": "The money comes from expanding existing deals rather than new ones. NRR above 100% means growth with zero new customers."
+        },
+        "metrics": [
+          {
+            "metricId": "mrr",
+            "def": {
+              "ru": "Регулярная выручка на конец месяца, разложенная на новую, расширение, сжатие и отток.",
+              "en": "Recurring revenue at month end, decomposed into new, expansion, contraction and churn."
+            }
+          },
+          {
+            "metricId": "expansion-mrr",
+            "def": {
+              "ru": "Прирост от апгрейдов, докупки мест и подключения модулей; показывается рядом с contraction, иначе картина приукрашена.",
+              "en": "The increase from upgrades, extra seats and add-ons; shown next to contraction, or the picture is flattered."
+            }
+          },
+          {
+            "metricId": "nrr",
+            "def": {
+              "ru": "Отношение выручки когорты сегодня к её же выручке год назад — с расширениями, сжатиями и оттоком, но без новых продаж.",
+              "en": "A cohort's revenue today over the same cohort's revenue a year ago — with expansion, contraction and churn, but no new sales."
+            }
+          },
+          {
+            "metricId": "trial-to-paid",
+            "def": {
+              "ru": "Доля начавших пробный период, дошедших до оплаты; надёжнее считать дожитие до второго платежа.",
+              "en": "The share of trial starters who reach payment; survival to the second payment is the more reliable count."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "HEART для B2B-инструмента отвечает на вопрос, которого нет в выручке: работают ли в продукте люди, за которых платит их работодатель.",
+      "en": "HEART for a B2B tool answers a question revenue can't: do the people whose employer pays actually work in the product."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Пользователь не борется с инструментом и не ищет обходных путей в таблицах.",
+          "en": "The user doesn't fight the tool or route around it in spreadsheets."
+        },
+        "signal": {
+          "ru": "Оценка усилия после ключевых сценариев и доля обращений в поддержку.",
+          "en": "Effort ratings after key scenarios and the support contact rate."
+        },
+        "metrics": [
+          {
+            "metricId": "ces"
+          },
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "complaint-rate"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Продукт стал местом ежедневной работы, а не отчётным ритуалом раз в месяц.",
+          "en": "The product became the place of daily work rather than a monthly reporting ritual."
+        },
+        "signal": {
+          "ru": "Доля активных дней и глубина сессии у рядовых пользователей, не только у админов.",
+          "en": "Active-day share and session depth among rank-and-file users, not just admins."
+        },
+        "metrics": [
+          {
+            "metricId": "stickiness"
+          },
+          {
+            "metricId": "session-depth"
+          },
+          {
+            "metricId": "active-days"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые возможности доходят до аккаунтов, а не остаются в релиз-ноутах и в демо для продаж.",
+          "en": "New capabilities reach accounts instead of living in release notes and sales demos."
+        },
+        "signal": {
+          "ru": "Доля аккаунтов с доступом, воспользовавшихся возможностью за 30 дней.",
+          "en": "The share of accounts with access that used the capability within 30 days."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          },
+          {
+            "metricId": "adoption-depth"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Аккаунт продлевается, потому что им пользуются, а не потому что не дошли руки отменить.",
+          "en": "The account renews because it's used, not because nobody got around to cancelling."
+        },
+        "signal": {
+          "ru": "Доля активных мест перед продлением и динамика health score.",
+          "en": "Active-seat share ahead of renewal and the health score trend."
+        },
+        "metrics": [
+          {
+            "metricId": "churn-rate"
+          },
+          {
+            "metricId": "health-score"
+          },
+          {
+            "metricId": "nrr"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Рабочий сценарий доводится до конца с первой попытки и за разумное время.",
+          "en": "A work scenario completes on the first attempt and in reasonable time."
+        },
+        "signal": {
+          "ru": "Успешность ключевых сценариев, время на них и доля ошибок.",
+          "en": "Key-scenario success, time spent on them and the error rate."
+        },
+        "metrics": [
+          {
+            "metricId": "task-success-rate"
+          },
+          {
+            "metricId": "time-on-task"
+          },
+          {
+            "metricId": "error-rate"
+          }
+        ]
+      }
+    ]
+  }
+}

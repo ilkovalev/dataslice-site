@@ -1,0 +1,309 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "Доставка еды — рынок трёх сторон: едок, ресторан и курьер. Воронка едока быстрая и эмоциональная, воронка ресторана долгая и договорная, курьерская меряется сменами, а не установками.",
+      "en": "Food delivery is a three-sided market: eater, restaurant and courier. The eater funnel is fast and emotional, the restaurant funnel long and contractual, the courier one is measured in shifts rather than installs."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Едока приводит промокод, ресторан — отдел продаж, курьера — обещанный заработок в час. Три канала с разной ценой и разной скоростью окупаемости.",
+          "en": "The eater is brought by a promo code, the restaurant by a sales team, the courier by promised hourly earnings. Three channels with different costs and payback speeds."
+        },
+        "metrics": [
+          {
+            "metricId": "cac",
+            "label": {
+              "ru": "CAC едока",
+              "en": "Eater CAC"
+            },
+            "def": {
+              "ru": "Затраты на первый заказ вместе со скидкой на него; промо-скидка — часть CAC, а не маркетинговая мелочь.",
+              "en": "The cost of the first order including its discount; the promo discount is part of CAC, not a marketing footnote."
+            }
+          },
+          {
+            "metricId": "active-listings",
+            "label": {
+              "ru": "Активные рестораны",
+              "en": "Active restaurants"
+            },
+            "def": {
+              "ru": "Число ресторанов с заказами за месяц в разрезе района: покрытие меряется зонами доставки, а не общим списком.",
+              "en": "The count of restaurants with orders in a month by district: coverage is measured in delivery zones, not a total list."
+            }
+          },
+          {
+            "metricId": "provider-availability",
+            "label": {
+              "ru": "Доступность курьеров",
+              "en": "Courier availability"
+            },
+            "def": {
+              "ru": "Доля часов, когда курьеров хватает на спрос в районе; дефицит в обед и вечером ломает всё остальное.",
+              "en": "The share of hours when couriers meet district demand; a lunch and evening shortfall breaks everything else."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активация едока — первый заказ, который приехал вовремя, тёплым и полным. Неудачный первый заказ обнуляет все затраты на привлечение.",
+          "en": "Eater activation is a first order that arrived on time, hot and complete. A failed first order zeroes out all acquisition spend."
+        },
+        "metrics": [
+          {
+            "metricId": "conversion-rate",
+            "label": {
+              "ru": "CR первого заказа",
+              "en": "First-order conversion"
+            },
+            "def": {
+              "ru": "Доля новых, оформивших заказ; отвал идёт на выборе ресторана и на итоговой сумме доставки.",
+              "en": "The share of new users placing an order; drop-off happens at restaurant choice and at the final delivery total."
+            }
+          },
+          {
+            "metricId": "on-time-delivery",
+            "label": {
+              "ru": "Первый заказ вовремя",
+              "en": "First order on time"
+            },
+            "def": {
+              "ru": "Доля первых заказов, доставленных в обещанное окно; связь с повторным заказом здесь самая сильная во всей воронке.",
+              "en": "The share of first orders delivered within the promised window; its link to a second order is the strongest in the whole funnel."
+            }
+          },
+          {
+            "metricId": "repeat-rate",
+            "label": {
+              "ru": "Конверсия во второй заказ",
+              "en": "Second-order conversion"
+            },
+            "def": {
+              "ru": "Доля новых едоков, заказавших повторно за 30 дней — единственная честная проверка того, что первый заказ был удачным.",
+              "en": "The share of new eaters ordering again within 30 days — the only honest check that the first order went well."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Едок возвращается за предсказуемостью, а не за ассортиментом: одна холодная доставка стоит нескольких месяцев привычки.",
+          "en": "The eater returns for predictability rather than choice: one cold delivery costs several months of habit."
+        },
+        "metrics": [
+          {
+            "metricId": "purchase-frequency",
+            "label": {
+              "ru": "Заказов в месяц",
+              "en": "Orders per month"
+            },
+            "def": {
+              "ru": "Заказов на активного едока; подписчики сервиса доставки заказывают заметно чаще, и их надо считать отдельно.",
+              "en": "Orders per active eater; delivery-subscription members order noticeably more often and must be counted separately."
+            }
+          },
+          {
+            "metricId": "delivery-time",
+            "def": {
+              "ru": "Время от заказа до двери, разложенное на приготовление, ожидание курьера и дорогу — чинятся эти части разными командами.",
+              "en": "Time from order to door, split into cooking, courier wait and travel — different teams fix different parts."
+            }
+          },
+          {
+            "metricId": "seller-retention",
+            "label": {
+              "ru": "Отток ресторанов",
+              "en": "Restaurant churn"
+            },
+            "def": {
+              "ru": "Доля ресторанов, переставших принимать заказы; уход популярной точки уводит её постоянных едоков вместе с ней.",
+              "en": "The share of restaurants that stopped taking orders; a popular venue leaving takes its regulars with it."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "Рекомендация в фудтехе почти всегда идёт с промокодом: канал измеримый, но каждый приведённый едок приходит со скидкой в себестоимости.",
+          "en": "A food-delivery referral almost always comes with a promo code: the channel is measurable, but every referred eater arrives with a discount baked into unit cost."
+        },
+        "metrics": [
+          {
+            "metricId": "referral-share",
+            "def": {
+              "ru": "Доля новых едоков по коду друга; retention приглашённых считается отдельно — по промокоду часто приходят разово.",
+              "en": "The share of new eaters from a friend's code; invited users' retention is tracked separately — code-driven arrivals are often one-off."
+            }
+          },
+          {
+            "metricId": "invite-conversion",
+            "def": {
+              "ru": "Доля разосланных кодов, закончившихся первым заказом, а не установкой приложения.",
+              "en": "The share of distributed codes ending in a first order rather than an app install."
+            }
+          },
+          {
+            "metricId": "nps-csat",
+            "def": {
+              "ru": "Оценка после заказа; агрегируется по ресторану и по курьеру — сервис отвечает за обоих, но чинит по-разному.",
+              "en": "The post-order rating; aggregated by restaurant and courier — the service answers for both but fixes them differently."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "На заказе зарабатывают трижды: комиссия с ресторана, плата за доставку с едока и реклама ресторанов в выдаче. Расход один — курьер, и он съедает большую часть.",
+          "en": "An order earns three ways: restaurant commission, the eater's delivery fee and restaurant ads in the listing. There's one cost — the courier — and it eats most of it."
+        },
+        "metrics": [
+          {
+            "metricId": "completed-orders",
+            "def": {
+              "ru": "Число выполненных заказов; отменённые и возвращённые не считаются, иначе метрика растёт от сбоев.",
+              "en": "The count of completed orders; cancelled and refunded ones don't count, or the metric grows from failures."
+            }
+          },
+          {
+            "metricId": "take-rate",
+            "def": {
+              "ru": "Доля стоимости заказа, остающаяся сервису: комиссия ресторана плюс плата едока за доставку.",
+              "en": "The share of the order total the service keeps: restaurant commission plus the eater's delivery fee."
+            }
+          },
+          {
+            "metricId": "contribution-margin",
+            "label": {
+              "ru": "Маржа на заказ",
+              "en": "Margin per order"
+            },
+            "def": {
+              "ru": "Что остаётся после выплаты курьеру, промо и поддержки; в фудтехе она годами бывает отрицательной при растущем обороте.",
+              "en": "What's left after paying the courier, promo and support; in food delivery it can stay negative for years while turnover grows."
+            }
+          },
+          {
+            "metricId": "aov",
+            "def": {
+              "ru": "Средний чек заказа: рычаг, который двигают порогом бесплатной доставки и наборами — оба меняют и маржу.",
+              "en": "The average order value: a lever moved by free-delivery thresholds and combos — both of which also move margin."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "Заказ доставлен — не значит, что опыт был хорошим. HEART собирает то, что происходит между нажатием кнопки и открытием пакета.",
+      "en": "An order delivered doesn't mean the experience was good. HEART gathers what happens between the button press and opening the bag."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Едок доволен и заказом, и итоговой суммой, а ресторан считает комиссию оправданной.",
+          "en": "The eater is happy with both the order and the final total, and the restaurant finds the commission justified."
+        },
+        "signal": {
+          "ru": "Оценки после заказа, доля обращений в поддержку, опросы ресторанов о комиссии.",
+          "en": "Post-order ratings, the support contact rate, restaurant surveys about commission."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "complaint-rate"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Доставка стала привычным сценарием на неделе, а не разовым решением в выходной.",
+          "en": "Delivery became a weekday habit rather than a one-off weekend decision."
+        },
+        "signal": {
+          "ru": "Заказов в месяц, доля заказов подписчиков, число сценариев заказа.",
+          "en": "Orders per month, the subscriber-order share, the number of ordering occasions."
+        },
+        "metrics": [
+          {
+            "metricId": "purchase-frequency"
+          },
+          {
+            "metricId": "app-share"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые форматы — подписка, самовывоз, продуктовые заказы — реально используются.",
+          "en": "New formats — subscription, pickup, grocery orders — actually get used."
+        },
+        "signal": {
+          "ru": "Доля заказов в новом формате и доля ресторанов, его подключивших.",
+          "en": "The share of orders in the new format and the share of restaurants that enabled it."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Остаются все три стороны: едок заказывает, ресторан принимает заказы, курьер выходит на смену.",
+          "en": "All three sides stay: the eater orders, the restaurant accepts, the courier works a shift."
+        },
+        "signal": {
+          "ru": "Повторные заказы, отток ресторанов, доля курьеров, вышедших в следующем месяце.",
+          "en": "Repeat orders, restaurant churn, the share of couriers who worked again the next month."
+        },
+        "metrics": [
+          {
+            "metricId": "repeat-rate"
+          },
+          {
+            "metricId": "seller-retention"
+          },
+          {
+            "metricId": "churn-rate"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Заказ приезжает вовремя, полным и тёплым — с первой попытки и без звонка в поддержку.",
+          "en": "The order arrives on time, complete and hot — first try and without a support call."
+        },
+        "signal": {
+          "ru": "Доля заказов вовремя, доля проблемных заказов, отмены после подтверждения.",
+          "en": "The on-time share, the problem-order share, cancellations after confirmation."
+        },
+        "metrics": [
+          {
+            "metricId": "on-time-delivery"
+          },
+          {
+            "metricId": "cancellation-rate"
+          },
+          {
+            "metricId": "delivery-time"
+          }
+        ]
+      }
+    ]
+  }
+}

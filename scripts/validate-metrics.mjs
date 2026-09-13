@@ -10,7 +10,10 @@
 //  - глубина каждого дерева = 6 уровней (0–5);
 //  - парность ru/en: каждое локализуемое поле — либо строка без кириллицы
 //    (общее для обеих локалей, например "CAC"), либо объект {ru, en} с обоими
-//    непустыми значениями. Строка с кириллицей = непереведённая — ошибка.
+//    непустыми значениями. Строка с кириллицей = непереведённая — ошибка;
+//  - разбор по фреймворкам (industries/frameworks/<id>.json): у каждой индустрии
+//    есть aarrr и heart, стадии идут в каноническом порядке и полным составом,
+//    у каждой метрики есть запись в каталоге и определение «как считается здесь».
 //
 // Канон-паттерны веток (для консистентности деревьев между индустриями):
 //  - «Привлечение»: каналы → CAC/ROAS по каналу → креативы/лендинг → CR шага;
@@ -18,9 +21,10 @@
 //  - «Монетизация»: чек/ARPU → состав корзины/подписки → ценообразование;
 //  - специфику индустрии добавляем поверх паттерна (выкуп у fashion,
 //    ликвидность у маркетплейса, буст у классифайдов), не вместо него.
-import { readFileSync, readdirSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { AARRR_STAGES, HEART_DIMS } from '../src/content/frameworks.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const errors = []
@@ -125,6 +129,71 @@ function checkTreeRoot(file, label, obj) {
   }
 }
 
+// ---------- Разбор по фреймворкам ----------
+// Стадии обязаны идти полным составом и в каноническом порядке: вид рисует их
+// как один сквозной путь, и пропуск стадии читается как «здесь её не бывает».
+function checkFrameworks(file, fw) {
+  if (!fw) { err(file, 'нет файла разбора по фреймворкам — вид «Фреймворк» покажет заглушку'); return }
+
+  const checkBlock = (kind, block, spec, rowsKey, extra) => {
+    if (!block) { err(file, `frameworks.${kind}: блок отсутствует`); return }
+    const crossStage = {}
+    checkLoc(file, `frameworks.${kind}.note`, block.note, { allowPlain: false })
+    const rows = block[rowsKey] ?? []
+    const want = spec.map((x) => x.key)
+    const got = rows.map((r) => r.key)
+    if (got.join(',') !== want.join(',')) {
+      err(file, `frameworks.${kind}.${rowsKey}: порядок или состав стадий «${got.join(', ')}», ожидается «${want.join(', ')}»`)
+    }
+    for (const r of rows) {
+      const at = `frameworks.${kind}.${r.key}`
+      extra(at, r)
+      if (!Array.isArray(r.metrics) || r.metrics.length === 0) {
+        err(file, `${at}: нет метрик — стадия без метрик оставляет в верстке пустое место`)
+        continue
+      }
+      const seen = new Set()
+      for (const m of r.metrics) {
+        // Одна метрика может стоять на двух стадиях (Retention D1 в активации и
+        // D7/D30 в удержании), но только если названия разные: иначе на странице
+        // дважды подряд появляется одинаковая карточка и это читается как баг.
+        const at2 = `frameworks.${kind}`
+        crossStage[m.metricId] ??= []
+        crossStage[m.metricId].push({ row: r.key, label: JSON.stringify(m.label ?? null), at: at2 })
+        if (!m.metricId) { err(file, `${at}: метрика без metricId`); continue }
+        if (!catalogIds.has(m.metricId)) err(file, `${at}: metricId «${m.metricId}» не существует в каталоге`)
+        if (seen.has(m.metricId)) err(file, `${at}: metricId «${m.metricId}» повторяется внутри стадии`)
+        seen.add(m.metricId)
+        if (m.label) checkLoc(file, `${at}.${m.metricId}.label`, m.label)
+        if (kind === 'aarrr') {
+          // Ради этих строк вид и существует: «конкретная метрика» — это метрика
+          // плюс определение того, что именно тут считают.
+          if (!m.def) err(file, `${at}: у метрики «${m.metricId}» нет def — без него на странице остаётся одно название`)
+          checkLoc(file, `${at}.${m.metricId}.def`, m.def, { allowPlain: false })
+        } else if (m.def) {
+          checkLoc(file, `${at}.${m.metricId}.def`, m.def, { allowPlain: false })
+        }
+      }
+    }
+    finishCross(kind, crossStage)
+  }
+
+  const finishCross = (kind, crossStage) => {
+    for (const [id, uses] of Object.entries(crossStage)) {
+      if (uses.length < 2) continue
+      if (new Set(uses.map((u) => u.label)).size === uses.length) continue
+      err(file, `frameworks.${kind}: метрика «${id}» стоит на стадиях ${uses.map((u) => u.row).join(', ')} под одним названием — задайте разные label или уберите лишнюю`)
+    }
+  }
+
+  checkBlock('aarrr', fw.aarrr, AARRR_STAGES, 'stages', (at, r) =>
+    checkLoc(file, `${at}.note`, r.note, { allowPlain: false }))
+  checkBlock('heart', fw.heart, HEART_DIMS, 'dims', (at, r) => {
+    checkLoc(file, `${at}.goal`, r.goal, { allowPlain: false })
+    checkLoc(file, `${at}.signal`, r.signal, { allowPlain: false })
+  })
+}
+
 const indDir = join(root, 'src/content/industries')
 for (const f of readdirSync(indDir).filter((f) => f.endsWith('.json')).sort()) {
   const file = `industries/${f}`
@@ -132,6 +201,9 @@ for (const f of readdirSync(indDir).filter((f) => f.endsWith('.json')).sort()) {
   checkLoc(file, 'industry', ind.industry)
   checkLoc(file, 'archetype', ind.archetype)
   checkTreeRoot(file, 'base', ind)
+  const fwPath = join(indDir, 'frameworks', f)
+  checkFrameworks(`industries/frameworks/${f}`,
+    existsSync(fwPath) ? JSON.parse(readFileSync(fwPath, 'utf8')) : null)
   for (const c of ind.companies ?? []) {
     checkLoc(file, `${c.id}.name`, c.name)
     checkLoc(file, `${c.id}.note`, c.note)
@@ -144,5 +216,5 @@ if (errors.length) {
   for (const e of errors) console.error('  ' + e)
   process.exit(1)
 } else {
-  console.log(`✓ каталог: ${catalogIds.size} метрик; деревья валидны (глубина 0–${REQUIRED_DEPTH}, ru/en парны)`)
+  console.log(`✓ каталог: ${catalogIds.size} метрик; деревья валидны (глубина 0–${REQUIRED_DEPTH}, ru/en парны); разбор по AARRR и HEART заполнен во всех индустриях`)
 }

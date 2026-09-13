@@ -448,5 +448,105 @@
     },
     "sql": "-- Orders per buyer per month + distribution\nWITH per_buyer AS (\n  SELECT date_trunc('month', created_at) AS month, user_id, COUNT(*) AS orders\n  FROM orders WHERE status = 'paid'\n  GROUP BY 1, 2\n)\nSELECT month,\n       ROUND(AVG(orders), 2) AS avg_freq,\n       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY orders) AS median_freq,\n       COUNT(*) FILTER (WHERE orders >= 4) AS weekly_plus_buyers\nFROM per_buyer\nGROUP BY 1\nORDER BY 1;",
     "related": ["aov", "repeat-rate", "gmv"]
+  },
+  {
+    "id": "arpdau",
+    "category": "monetization",
+    "title": { "ru": "ARPDAU — выручка на активного в день", "en": "ARPDAU — revenue per daily active user" },
+    "aliases": ["arpdau"],
+    "tex": { "ru": "\\mathrm{ARPDAU}=\\dfrac{\\text{выручка за день}}{\\mathrm{DAU}}=\\text{доля платящих}\\times \\mathrm{ARPPU}_{\\text{дн}}", "en": "\\mathrm{ARPDAU}=\\dfrac{\\text{daily revenue}}{\\mathrm{DAU}}=\\text{paying share}\\times \\mathrm{ARPPU}_{\\text{day}}" },
+    "desc": {
+      "ru": "Выручка за день, делённая на дневную аудиторию. Рабочая метрика F2P-игр и рекламных приложений: реагирует на изменения в экономике за сутки, тогда как LTV когорты становится известен через месяцы. Раскладывается на дневную долю платящих и средний дневной платёж — этим двум множителям соответствуют разные команды.",
+      "en": "Daily revenue divided by the daily audience. The working metric of F2P games and ad-supported apps: it reacts to economy changes within a day, while a cohort's LTV only becomes known months later. It decomposes into the daily paying share and the daily average payment — two factors owned by different teams."
+    },
+    "pitfalls": {
+      "ru": [
+        "ARPDAU растёт, когда падает DAU: уход неплатящих поднимает метрику при неизменной выручке — читайте её только вместе с абсолютным DAU.",
+        "День недели и фаза LiveOps-цикла двигают цифру на десятки процентов; сравнивайте недели, а не соседние дни.",
+        "Смешивание платформ и гео прячет всё интересное: iOS и Android, США и Индия различаются кратно."
+      ],
+      "en": [
+        "ARPDAU rises when DAU falls: losing non-payers lifts the metric at flat revenue — read it only together with absolute DAU.",
+        "Day of week and LiveOps phase move the number by tens of percent; compare weeks, not adjacent days.",
+        "Pooling platforms and geos hides everything interesting: iOS and Android, the US and India differ several-fold."
+      ]
+    },
+    "sql": "-- ARPDAU with the paying-share x daily-ARPPU decomposition\nWITH dau AS (\n  SELECT ts::date AS day, COUNT(DISTINCT user_id) AS active\n  FROM events GROUP BY 1\n),\npay AS (\n  SELECT created_at::date AS day,\n         COUNT(DISTINCT user_id) AS payers,\n         SUM(amount) AS revenue\n  FROM orders WHERE status = 'paid'\n  GROUP BY 1\n)\nSELECT d.day, d.active, COALESCE(p.payers, 0) AS payers,\n       ROUND(COALESCE(p.revenue, 0) / NULLIF(d.active, 0), 4) AS arpdau,\n       ROUND(100.0 * COALESCE(p.payers, 0) / NULLIF(d.active, 0), 3) AS paying_share_pct,\n       ROUND(COALESCE(p.revenue, 0) / NULLIF(p.payers, 0), 2) AS daily_arppu\nFROM dau d LEFT JOIN pay p USING (day)\nORDER BY d.day;",
+    "related": ["arppu", "paying-share", "dau-mau", "bookings"]
+  },
+  {
+    "id": "whale-concentration",
+    "category": "monetization",
+    "title": { "ru": "Концентрация выручки («киты»)", "en": "Revenue concentration (whales)" },
+    "aliases": ["доля китов", "киты", "концентрация выручки", "whale share"],
+    "tex": { "ru": "\\text{Концентрация}=\\dfrac{\\text{выручка топ-}1\\%\\text{ платящих}}{\\text{вся выручка}}", "en": "\\text{Concentration}=\\dfrac{\\text{revenue from top }1\\%\\text{ of payers}}{\\text{total revenue}}" },
+    "desc": {
+      "ru": "Какая доля выручки приходит от верхнего процента платящих. Распределение трат почти всегда скошено вправо, и в F2P-играх, gacha и донатных площадках перекос экстремален: десятки китов способны двигать месячную отчётность. Метрика измеряет не деньги, а риск — насколько бизнес зависит от горстки людей.",
+      "en": "What share of revenue comes from the top percent of payers. Spend distributions are almost always right-skewed, and in F2P games, gacha and tipping platforms the skew is extreme: dozens of whales can move a monthly P&L. The metric measures risk rather than money — how much the business depends on a handful of people."
+    },
+    "pitfalls": {
+      "ru": [
+        "Среднее по платящим при такой скошенности не описывает никого: считайте медиану и перцентили, а ARPPU держите как агрегат, а не как «типичного игрока».",
+        "Порог «кита» задаётся произвольно (топ-1%, топ-0,1%, траты выше N) — фиксируйте определение, иначе динамика метрики отражает смену порога.",
+        "Высокая концентрация опасна с двух сторон: уход китов бьёт по выручке, а балансировка игры под них выжигает остальных."
+      ],
+      "en": [
+        "With this much skew the mean over payers describes nobody: use the median and percentiles, and treat ARPPU as an aggregate, not a \"typical player\".",
+        "The whale threshold is arbitrary (top 1%, top 0.1%, spend above N) — fix the definition, or the metric's trend just reflects a moving threshold.",
+        "High concentration is dangerous from both sides: losing whales hits revenue, and balancing the game around them burns out everyone else."
+      ]
+    },
+    "sql": "-- Revenue concentration: top 1% and top 10% of payers, plus median spend\nWITH spend AS (\n  SELECT user_id, SUM(amount) AS total\n  FROM orders\n  WHERE status = 'paid' AND created_at >= now() - INTERVAL '30 days'\n  GROUP BY user_id\n),\nranked AS (\n  SELECT user_id, total,\n         PERCENT_RANK() OVER (ORDER BY total DESC) AS pr\n  FROM spend\n)\nSELECT COUNT(*) AS payers,\n       ROUND(SUM(total), 2) AS revenue,\n       ROUND(100.0 * SUM(total) FILTER (WHERE pr <= 0.01) / NULLIF(SUM(total), 0), 1) AS top1pct_share,\n       ROUND(100.0 * SUM(total) FILTER (WHERE pr <= 0.10) / NULLIF(SUM(total), 0), 1) AS top10pct_share,\n       ROUND(PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY total)::numeric, 2) AS median_spend,\n       ROUND(AVG(total)::numeric, 2) AS arppu\nFROM ranked;",
+    "related": ["arppu", "paying-share", "bookings", "ltv"]
+  },
+  {
+    "id": "trial-to-paid",
+    "category": "monetization",
+    "title": { "ru": "Trial → Paid — конверсия из пробного", "en": "Trial-to-paid conversion" },
+    "aliases": ["trial to paid", "конверсия из триала", "trial conversion"],
+    "tex": { "ru": "\\text{Trial}\\to\\text{Paid}=\\dfrac{\\text{оплатили после триала}}{\\text{начали триал}}", "en": "\\text{Trial}\\to\\text{paid}=\\dfrac{\\text{paid after trial}}{\\text{started trial}}" },
+    "desc": {
+      "ru": "Доля начавших пробный период, которые перешли в оплату. Узкое место подписочной воронки: до триала работает маркетинг, после — продукт, и именно здесь видно, дал ли продукт ценность за отведённые дни. Разделяется на opt-in (без карты) и opt-out (карта сразу) — это два разных бизнеса с разницей в конверсии в разы.",
+      "en": "The share of trial starters who convert to payment. The bottleneck of the subscription funnel: marketing works before the trial, the product after, and this is where you see whether the product delivered value within the allotted days. It splits into opt-in (no card) and opt-out (card upfront) — two different businesses whose conversion differs several-fold."
+    },
+    "pitfalls": {
+      "ru": [
+        "Opt-out триал даёт высокую конверсию и высокий отток первого месяца плюс возвраты — считайте не переход в оплату, а дожитие до второго платежа.",
+        "Когорту закрывает только время: пока триал не истёк у всех, конверсия свежей когорты занижена механически.",
+        "Продление длины триала обычно не помогает: люди принимают решение в первые дни, а остальное время просто забывают об отмене."
+      ],
+      "en": [
+        "An opt-out trial gives high conversion plus high first-month churn and refunds — count survival to the second payment, not the conversion itself.",
+        "Only time closes a cohort: until every trial has expired, a fresh cohort's conversion is mechanically understated.",
+        "Extending the trial usually doesn't help: people decide in the first days and simply forget to cancel during the rest."
+      ]
+    },
+    "sql": "-- Trial to paid by cohort, and survival to the second payment\nWITH trials AS (\n  SELECT user_id,\n         date_trunc('month', started_at) AS cohort,\n         started_at,\n         trial_ends_at\n  FROM subscriptions\n  WHERE trial_ends_at IS NOT NULL\n)\nSELECT t.cohort,\n       COUNT(*) AS trials,\n       COUNT(*) FILTER (WHERE EXISTS (\n         SELECT 1 FROM payments p\n         WHERE p.user_id = t.user_id AND p.status = 'paid'\n           AND p.paid_at >= t.trial_ends_at)) AS converted,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE EXISTS (\n         SELECT 1 FROM payments p\n         WHERE p.user_id = t.user_id AND p.status = 'paid'\n           AND p.paid_at >= t.trial_ends_at)) / COUNT(*), 1) AS trial_to_paid_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE (\n         SELECT COUNT(*) FROM payments p\n         WHERE p.user_id = t.user_id AND p.status = 'paid'\n           AND p.paid_at >= t.trial_ends_at) >= 2) / COUNT(*), 1) AS second_payment_pct\nFROM trials t\nWHERE t.trial_ends_at < now()\nGROUP BY t.cohort\nORDER BY t.cohort;",
+    "related": ["paying-share", "mrr", "churn-rate", "activation-rate"]
+  },
+  {
+    "id": "expansion-mrr",
+    "category": "monetization",
+    "title": { "ru": "Expansion MRR — рост выручки на текущих", "en": "Expansion MRR" },
+    "aliases": ["expansion mrr", "апсейл", "расширение выручки"],
+    "tex": { "ru": "\\text{Expansion}=\\text{апгрейды}+\\text{новые места}+\\text{доп-модули}", "en": "\\text{Expansion}=\\text{upgrades}+\\text{new seats}+\\text{add-ons}" },
+    "desc": {
+      "ru": "Прирост регулярной выручки от уже существующих клиентов: апгрейд тарифа, докупка мест, подключение модулей. Компонент NRR, который отвечает за рост без новых продаж; в зрелом B2B SaaS расширение обычно дешевле привлечения и потому определяет экономику всей воронки.",
+      "en": "The recurring-revenue increase from existing customers: plan upgrades, extra seats, add-on modules. The NRR component responsible for growth without new sales; in mature B2B SaaS expansion is usually cheaper than acquisition and therefore drives the economics of the whole funnel."
+    },
+    "pitfalls": {
+      "ru": [
+        "Expansion и contraction надо показывать рядом: чистая цифра расширения без даунгрейдов рисует картину лучше реальной.",
+        "Расширение по местам зависит от найма у клиента: в кризис оно останавливается по причинам, не связанным с продуктом.",
+        "Разовые доплаты (обучение, внедрение) не MRR — их попадание в метрику даёт красивый месяц и провал в следующем."
+      ],
+      "en": [
+        "Expansion and contraction must be shown side by side: a net expansion figure without downgrades paints a rosier picture than reality.",
+        "Seat expansion depends on the customer's hiring: in a downturn it stops for reasons unrelated to the product.",
+        "One-off charges (training, onboarding) aren't MRR — counting them gives a great month and a slump in the next."
+      ]
+    },
+    "sql": "-- Monthly MRR movement: new, expansion, contraction, churn\nWITH monthly AS (\n  SELECT user_id, date_trunc('month', period_start) AS month, SUM(mrr) AS mrr\n  FROM subscription_periods\n  GROUP BY 1, 2\n),\nmoves AS (\n  SELECT month, user_id, mrr,\n         LAG(mrr) OVER (PARTITION BY user_id ORDER BY month) AS prev_mrr\n  FROM monthly\n)\nSELECT month,\n       ROUND(SUM(mrr) FILTER (WHERE prev_mrr IS NULL), 2) AS new_mrr,\n       ROUND(SUM(mrr - prev_mrr) FILTER (WHERE prev_mrr IS NOT NULL AND mrr > prev_mrr), 2) AS expansion_mrr,\n       ROUND(SUM(prev_mrr - mrr) FILTER (WHERE prev_mrr IS NOT NULL AND mrr < prev_mrr), 2) AS contraction_mrr\nFROM moves\nGROUP BY month\nORDER BY month;",
+    "related": ["nrr", "mrr", "adoption-depth", "churn-rate"]
   }
 ]

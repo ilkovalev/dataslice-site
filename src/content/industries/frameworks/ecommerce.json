@@ -1,0 +1,288 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "У магазина со своим складом воронка классическая и полностью подконтрольная: трафик, конверсия, чек, повторные. Разница с маркетплейсом в том, что за товар, доставку и возврат отвечает он сам.",
+      "en": "A store with its own warehouse has the classic, fully controlled funnel: traffic, conversion, ticket, repeats. Unlike a marketplace, it answers for the product, the delivery and the return itself."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Трафик покупается и выращивается одновременно. Здоровье бизнеса видно по тому, растёт ли доля брендового и прямого спроса или всё держится на ставках в аукционе.",
+          "en": "Traffic is bought and grown at the same time. The business's health shows in whether brand and direct demand grow or everything rests on auction bids."
+        },
+        "metrics": [
+          {
+            "metricId": "traffic",
+            "def": {
+              "ru": "Визиты в разрезе каналов с разделением брендового и небрендового спроса — брендовый оплачен прошлым маркетингом.",
+              "en": "Visits by channel with brand and non-brand demand separated — brand demand was paid for by past marketing."
+            }
+          },
+          {
+            "metricId": "cac",
+            "def": {
+              "ru": "Затраты на нового покупателя по каналу; сравниваются с валовой маржой первого заказа, а не с его суммой.",
+              "en": "Cost per new buyer by channel; compared with the first order's gross margin, not its total."
+            }
+          },
+          {
+            "metricId": "roas",
+            "def": {
+              "ru": "Возврат на рекламные затраты по кампании; на коротком окне завышен возвратами, которые придут позже.",
+              "en": "Return on ad spend by campaign; on a short window it's overstated by returns that arrive later."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активация — первый заказ, который покупатель оставил себе. Заказ, оформленный и возвращённый, не активация, а расход на логистику.",
+          "en": "Activation is a first order the buyer kept. An order placed and returned isn't activation — it's a logistics expense."
+        },
+        "metrics": [
+          {
+            "metricId": "conversion-rate",
+            "label": {
+              "ru": "CR визита в заказ",
+              "en": "Visit-to-order conversion"
+            },
+            "def": {
+              "ru": "Доля визитов с оформленным заказом; считается по устройствам раздельно — мобильная и десктопная различаются в разы.",
+              "en": "The share of visits with a placed order; measured per device — mobile and desktop differ several-fold."
+            }
+          },
+          {
+            "metricId": "cart-abandonment",
+            "def": {
+              "ru": "Доля корзин, не дошедших до оплаты; главные причины — стоимость доставки и требование регистрации.",
+              "en": "The share of carts that never reach payment; the main causes are delivery cost and a forced signup."
+            }
+          },
+          {
+            "metricId": "buyout-rate",
+            "label": {
+              "ru": "Выкуп первого заказа",
+              "en": "First-order buyout"
+            },
+            "def": {
+              "ru": "Доля первых заказов, оставленных у себя после примерки или осмотра; в одежде и обуви решает всю экономику.",
+              "en": "The share of first orders kept after try-on or inspection; in apparel and footwear it decides the whole economics."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Второй заказ стоит дешевле первого и приносит больше маржи. Именно повторные покупки отделяют магазин от бесконечной покупки трафика.",
+          "en": "The second order is cheaper than the first and brings more margin. Repeat purchases are what separate a store from endless traffic buying."
+        },
+        "metrics": [
+          {
+            "metricId": "repeat-rate",
+            "def": {
+              "ru": "Доля покупателей со вторым заказом; окно берётся по циклу покупки категории — для мебели и косметики это разные окна.",
+              "en": "The share of buyers with a second order; the window matches the category's purchase cycle — furniture and cosmetics differ."
+            }
+          },
+          {
+            "metricId": "purchase-frequency",
+            "def": {
+              "ru": "Заказов на активного покупателя в год; вместе со средним чеком и маржой даёт LTV.",
+              "en": "Orders per active buyer per year; together with average ticket and margin it yields LTV."
+            }
+          },
+          {
+            "metricId": "win-back",
+            "def": {
+              "ru": "Доля ушедших покупателей, вернувшихся по CRM-кампании; эффект меряется только против контрольной группы.",
+              "en": "The share of lapsed buyers returned by a CRM campaign; the effect is measured only against a control group."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "В рознице рекомендация работает через товар и отзыв. Отзывы — реферальный слой, который живёт на странице и работает без бюджета.",
+          "en": "In retail, referral works through the product and the review. Reviews are a referral layer that lives on the page and works without budget."
+        },
+        "metrics": [
+          {
+            "metricId": "referral-share",
+            "def": {
+              "ru": "Доля новых покупателей по коду друга; проверяется отдельно, не пришли ли они только за скидкой.",
+              "en": "The share of new buyers from a friend's code; checked separately for whether they came only for the discount."
+            }
+          },
+          {
+            "metricId": "nps-csat",
+            "def": {
+              "ru": "Оценка после получения заказа; в рознице тесно связана со сроком доставки и состоянием упаковки.",
+              "en": "The rating after receiving the order; in retail it's tightly linked to delivery time and packaging condition."
+            }
+          },
+          {
+            "metricId": "share-rate",
+            "label": {
+              "ru": "Отзывы и расшаривание карточек",
+              "en": "Reviews and page sharing"
+            },
+            "def": {
+              "ru": "Доля заказов, закончившихся отзывом, и доля карточек, отправленных наружу — оба сигнала работают на конверсию следующих.",
+              "en": "The share of orders ending in a review and the share of pages shared outward — both signals lift the next buyers' conversion."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Выручка раскладывается на четыре множителя, и у каждого своя команда. Опасность в том, что рост чека промо-акциями съедает маржу быстрее, чем добавляет оборот.",
+          "en": "Revenue splits into four factors, each with its own team. The danger is that growing the ticket with promos eats margin faster than it adds turnover."
+        },
+        "metrics": [
+          {
+            "metricId": "revenue",
+            "def": {
+              "ru": "Выручка за период; признание фиксируется одним способом — по оплате, отгрузке или заказу, но не вперемешку.",
+              "en": "Revenue for the period; recognition is fixed one way — on payment, shipment or order, but not mixed."
+            }
+          },
+          {
+            "metricId": "aov",
+            "def": {
+              "ru": "Средний чек; растёт от состава корзины и от порога бесплатной доставки — второй рычаг всегда стоит маржи.",
+              "en": "Average order value; it grows from basket composition and the free-delivery threshold — the second lever always costs margin."
+            }
+          },
+          {
+            "metricId": "gross-margin",
+            "def": {
+              "ru": "Валовая маржа после себестоимости и промо; выручка без неё не отличает рост от распродажи склада.",
+              "en": "Gross margin after cost of goods and promo; without it, revenue can't tell growth from a warehouse clearance."
+            }
+          },
+          {
+            "metricId": "ltv",
+            "def": {
+              "ru": "Накопленная маржа покупателя за горизонт; сравнивается с CAC того канала, из которого он пришёл.",
+              "en": "A buyer's accumulated margin over the horizon; compared with the CAC of the channel they came from."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "Конверсия говорит, что человек купил. HEART говорит, нашёл ли он то, что искал, и оставил ли это себе.",
+      "en": "Conversion says the person bought. HEART says whether they found what they were looking for and kept it."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Покупатель получил то, что ожидал по фотографии и описанию.",
+          "en": "The buyer got what the photo and description promised."
+        },
+        "signal": {
+          "ru": "Оценки после получения, доля возвратов по причине «не соответствует описанию», обращения в поддержку.",
+          "en": "Post-delivery ratings, the share of \"not as described\" returns, support contacts."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "return-rate"
+          },
+          {
+            "metricId": "complaint-rate"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Магазин просматривают осмысленно: доходят до карточек и сравнивают, а не отскакивают с посадочной.",
+          "en": "The store is browsed with intent: people reach product pages and compare rather than bouncing off the landing."
+        },
+        "signal": {
+          "ru": "Глубина сессии, время на карточке, доля сессий с поиском по каталогу.",
+          "en": "Session depth, time on the product page, the share of sessions using catalogue search."
+        },
+        "metrics": [
+          {
+            "metricId": "session-depth"
+          },
+          {
+            "metricId": "bounce-rate"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые сервисы — примерка, подписка, рассрочка — доходят до покупателей.",
+          "en": "New services — try-on, subscription, instalments — reach buyers."
+        },
+        "signal": {
+          "ru": "Доля заказов, оформленных с новым сервисом, за 30 дней после запуска.",
+          "en": "The share of orders placed with the new service within 30 days of launch."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          },
+          {
+            "metricId": "app-share"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Покупатель возвращается сам, а не по очередной скидке в рассылке.",
+          "en": "The buyer returns on their own rather than for the next discount in an email."
+        },
+        "signal": {
+          "ru": "Доля повторных заказов без промокода и доля прямых заходов у постоянных.",
+          "en": "The share of repeat orders without a promo code and the direct-traffic share among regulars."
+        },
+        "metrics": [
+          {
+            "metricId": "repeat-rate"
+          },
+          {
+            "metricId": "organic-share"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Покупатель находит нужный товар в наличии и доходит до оплаты без ошибок.",
+          "en": "The buyer finds the needed item in stock and reaches payment without errors."
+        },
+        "signal": {
+          "ru": "Доля поисков без результата, доля позиций не в наличии, успешность платежа.",
+          "en": "The share of empty searches, the out-of-stock share, payment success."
+        },
+        "metrics": [
+          {
+            "metricId": "oos-rate"
+          },
+          {
+            "metricId": "payment-success"
+          },
+          {
+            "metricId": "funnel-dropoff"
+          }
+        ]
+      }
+    ]
+  }
+}

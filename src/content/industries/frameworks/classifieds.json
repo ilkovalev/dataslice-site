@@ -1,0 +1,306 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "Классифайд не берёт денег со сделки: он продаёт контакт. Из-за этого воронка обрывается там, где заканчивается площадка, — дальше стороны общаются напрямую, и результат приходится восстанавливать по косвенным признакам.",
+      "en": "A classifieds site takes no cut of the deal: it sells the contact. So the funnel breaks off where the platform ends — the parties talk directly, and the outcome has to be reconstructed from indirect signals."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Спрос почти целиком приходит из поисковой выдачи по товарным запросам, а предложение — от простоты подачи объявления. Это два разных отдела с разными рычагами.",
+          "en": "Demand comes almost entirely from search results on product queries, supply from how easy posting is. Two different departments with different levers."
+        },
+        "metrics": [
+          {
+            "metricId": "seo-visibility",
+            "def": {
+              "ru": "Видимость страниц объявлений в поиске по категориям и городам — основной и самый дешёвый канал спроса.",
+              "en": "Listing-page visibility in search by category and city — the main and cheapest demand channel."
+            }
+          },
+          {
+            "metricId": "active-listings",
+            "label": {
+              "ru": "Новые объявления в день",
+              "en": "New listings per day"
+            },
+            "def": {
+              "ru": "Приток объявлений по категориям; в классифайде это метрика привлечения, а не ассортимента.",
+              "en": "Listing inflow by category; in classifieds this is an acquisition metric, not an assortment one."
+            }
+          },
+          {
+            "metricId": "cac",
+            "label": {
+              "ru": "CAC покупателя и продавца",
+              "en": "Buyer and seller CAC"
+            },
+            "def": {
+              "ru": "Стоимость привлечения по сторонам; продавец окупается напрямую платными услугами, покупатель — только косвенно.",
+              "en": "Acquisition cost per side; the seller pays back directly through paid services, the buyer only indirectly."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активация продавца — первый отклик на его объявление, активация покупателя — первый ответивший продавец. Молчание с любой стороны убивает обе.",
+          "en": "Seller activation is the first response to their listing; buyer activation is the first seller who replies. Silence on either side kills both."
+        },
+        "metrics": [
+          {
+            "metricId": "successful-contacts",
+            "def": {
+              "ru": "Доля контактов, на которые ответили: звонок или сообщение без ответа для площадки равны нулю.",
+              "en": "The share of contacts that got a reply: an unanswered call or message counts as zero for the platform."
+            }
+          },
+          {
+            "metricId": "conversion-rate",
+            "label": {
+              "ru": "CR просмотр → контакт",
+              "en": "View-to-contact conversion"
+            },
+            "def": {
+              "ru": "Доля просмотров объявления, закончившихся обращением к продавцу; главный показатель качества карточки и цены.",
+              "en": "The share of listing views ending in a contact with the seller; the key indicator of listing quality and price."
+            }
+          },
+          {
+            "metricId": "listing-freshness",
+            "def": {
+              "ru": "Доля актуальных объявлений в выдаче: проданное, но не снятое объявление тратит контакты впустую и подрывает доверие.",
+              "en": "The share of live listings in results: a sold-but-not-removed listing wastes contacts and erodes trust."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Покупатель в классифайде исчезает, как только закрыл задачу: квартиру снимают раз в несколько лет. Возвращать надо продавцов и людей с частыми задачами.",
+          "en": "A classifieds buyer disappears the moment the task is done: an apartment is rented once every few years. Sellers and people with recurring tasks are the ones to bring back."
+        },
+        "metrics": [
+          {
+            "metricId": "seller-retention",
+            "label": {
+              "ru": "Возврат продавцов",
+              "en": "Seller return"
+            },
+            "def": {
+              "ru": "Доля продавцов, подавших второе объявление; частные продавцы возвращаются редко, профессиональные — постоянно.",
+              "en": "The share of sellers posting a second listing; private sellers return rarely, professional ones constantly."
+            }
+          },
+          {
+            "metricId": "retention-n-day",
+            "label": {
+              "ru": "Возврат по категориям",
+              "en": "Return by category"
+            },
+            "def": {
+              "ru": "Удержание в разрезе категории: авто и недвижимость дают редкие визиты, работа и вещи — регулярные.",
+              "en": "Retention by category: cars and property give rare visits, jobs and goods regular ones."
+            }
+          },
+          {
+            "metricId": "active-days",
+            "def": {
+              "ru": "Дней с поиском в месяц у активного покупателя — метрика тех сценариев, где поиск идёт неделями.",
+              "en": "Days with searching per month for an active buyer — the metric for scenarios where the search runs for weeks."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "Классифайдом делятся через конкретное объявление: ссылку на квартиру или машину отправляют в семейный чат. Это и есть основной вирусный контур.",
+          "en": "A classifieds site is shared through a specific listing: a link to a flat or a car goes into the family chat. That's the main viral loop."
+        },
+        "metrics": [
+          {
+            "metricId": "share-rate",
+            "label": {
+              "ru": "Расшаривание объявлений",
+              "en": "Listing sharing"
+            },
+            "def": {
+              "ru": "Доля просмотров, из которых ссылка ушла наружу; в дорогих категориях решение почти всегда принимают вдвоём.",
+              "en": "The share of views from which a link went outward; in expensive categories the decision is almost always made by two people."
+            }
+          },
+          {
+            "metricId": "referral-share",
+            "def": {
+              "ru": "Доля новых пользователей, пришедших по расшаренной ссылке на объявление.",
+              "en": "The share of new users arriving via a shared listing link."
+            }
+          },
+          {
+            "metricId": "nps-csat",
+            "def": {
+              "ru": "Готовность рекомендовать; у покупателей и продавцов считается раздельно — площадку они видят по-разному.",
+              "en": "Willingness to recommend; measured separately for buyers and sellers — they see the platform differently."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Платят продавцы: за подъём объявления, за пакет размещений, за доступ к отклику. Цена лида — потолок этой модели, и он задан не площадкой, а маржой продавца.",
+          "en": "Sellers pay: for bumping a listing, for a posting package, for access to responses. Lead price is this model's ceiling, and it's set by the seller's margin, not the platform."
+        },
+        "metrics": [
+          {
+            "metricId": "lead-price",
+            "def": {
+              "ru": "Цена контакта для продавца по категориям; выше маржи продавца с сделки платить он не будет.",
+              "en": "The price of a contact for the seller by category; they won't pay above their own margin on the deal."
+            }
+          },
+          {
+            "metricId": "paying-share",
+            "label": {
+              "ru": "Доля платящих продавцов",
+              "en": "Paying seller share"
+            },
+            "def": {
+              "ru": "Доля продавцов, купивших платную услугу; профессиональные и частные считаются раздельно.",
+              "en": "The share of sellers who bought a paid service; professional and private sellers counted separately."
+            }
+          },
+          {
+            "metricId": "arppu",
+            "label": {
+              "ru": "ARPPU продавца",
+              "en": "Seller ARPPU"
+            },
+            "def": {
+              "ru": "Средний платёж платящего продавца; у магазинов и автосалонов он на порядок выше частных.",
+              "en": "The average paying seller's spend; for shops and dealers it's an order of magnitude above private sellers."
+            }
+          },
+          {
+            "metricId": "ad-coverage",
+            "label": {
+              "ru": "Платное продвижение в выдаче",
+              "en": "Paid promotion in results"
+            },
+            "def": {
+              "ru": "Доля позиций выдачи, занятых поднятыми объявлениями; выше определённой доли выдача перестаёт быть релевантной.",
+              "en": "The share of result slots taken by bumped listings; above a certain share the results stop being relevant."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "Сделка происходит вне площадки, поэтому качество приходится измерять по тому, что осталось в логах: ответили ли на контакт, было ли объявление настоящим.",
+      "en": "The deal happens off-platform, so quality has to be measured from what stayed in the logs: was the contact answered, was the listing real."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Покупатель доверяет выдаче и не ждёт нарваться на фейк или посредника.",
+          "en": "The buyer trusts the results and doesn't expect to run into a fake or a middleman."
+        },
+        "signal": {
+          "ru": "Жалобы на фейки и дубли, оценки после сделки, доля заблокированных объявлений.",
+          "en": "Fake and duplicate complaints, post-deal ratings, the share of blocked listings."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "fraud-rate"
+          },
+          {
+            "metricId": "complaint-rate"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Люди ищут вдумчиво: сравнивают варианты и возвращаются к сохранённым.",
+          "en": "People search thoughtfully: they compare options and return to saved ones."
+        },
+        "signal": {
+          "ru": "Глубина сессии, число просмотренных объявлений, возвраты к избранному.",
+          "en": "Session depth, listings viewed, returns to favourites."
+        },
+        "metrics": [
+          {
+            "metricId": "session-depth"
+          },
+          {
+            "metricId": "dwell-time"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые сервисы — доставка, проверка, безопасная сделка — берут в работу обе стороны.",
+          "en": "New services — delivery, verification, escrow — get adopted by both sides."
+        },
+        "signal": {
+          "ru": "Доля объявлений с подключённым сервисом и доля сделок через него.",
+          "en": "The share of listings with the service enabled and the share of deals going through it."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Продавец возвращается со следующим объявлением, а покупатель — со следующей задачей.",
+          "en": "The seller returns with their next listing, the buyer with their next task."
+        },
+        "signal": {
+          "ru": "Доля продавцов со вторым объявлением и возвраты покупателей по категориям.",
+          "en": "The share of sellers with a second listing and buyer returns by category."
+        },
+        "metrics": [
+          {
+            "metricId": "seller-retention"
+          },
+          {
+            "metricId": "retention-n-day"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Обращение к продавцу приводит к разговору, а объявление оказывается настоящим и актуальным.",
+          "en": "Contacting the seller leads to a conversation, and the listing turns out real and current."
+        },
+        "signal": {
+          "ru": "Доля отвеченных контактов, доля снятых после продажи объявлений, доля фейков.",
+          "en": "The answered-contact share, the share of listings removed after sale, the fake share."
+        },
+        "metrics": [
+          {
+            "metricId": "successful-contacts"
+          },
+          {
+            "metricId": "listing-freshness"
+          }
+        ]
+      }
+    ]
+  }
+}

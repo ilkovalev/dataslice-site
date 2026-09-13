@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import MetricTreeGraph from '../components/MetricTreeGraph.jsx'
 import MetricPyramid from '../components/MetricPyramid.jsx'
+import MetricFramework from '../components/MetricFramework.jsx'
 import Framework from '../components/Framework.jsx'
 import SubscribeCTA from '../components/SubscribeCTA.jsx'
 import { industries, resolveIndustry } from '../content/industries/index.js'
@@ -23,7 +24,8 @@ export default function MetricsPage() {
   // открыться на дефолте, а не упасть.
   const active = localized.find((i) => i.id === sp.get('ind')) ?? localized[0]
   const company = active.companies?.find((c) => c.id === sp.get('co'))
-  const view = sp.get('view') === 'pyramid' ? 'pyramid' : 'tree'
+  const VIEWS = ['tree', 'pyramid', 'framework']
+  const view = VIEWS.includes(sp.get('view')) ? sp.get('view') : 'tree'
 
   // Обновление параметров: пустые значения из URL убираем, чтобы ссылка
   // оставалась короткой, а дефолтное состояние выглядело как чистый /metrics.
@@ -39,7 +41,9 @@ export default function MetricsPage() {
   // metric сбрасываем вместе со сменой дерева: иначе карточка из прошлой
   // индустрии всплыла бы заново, случайно совпав по id.
   const setCompanyId = (id) => patch({ co: id, metric: null })
-  const setView = (v) => patch({ view: v === 'pyramid' ? 'pyramid' : null })
+  // tree — состояние по умолчанию, его в URL не пишем: ссылка на /metrics должна
+  // оставаться короткой.
+  const setView = (v) => patch({ view: v === 'tree' ? null : v })
 
   // Резолвим, что показывать: своё дерево компании или базовое индустрии.
   const resolved = company
@@ -53,8 +57,22 @@ export default function MetricsPage() {
   const tab = (m, label) => (
     <button onClick={() => setMode(m)} className={`text-sm px-3 py-1.5 rounded-md border transition-colors ${mode === m ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-700 hover:bg-black/5'}`}>{label}</button>
   )
+  // На странице и так три ряда чипов (вкладки, индустрии, компании). Вид —
+  // единственный контрол, который меняет не «что показываем», а «как», поэтому
+  // он оформлен сегментированным контролом: утопленная дорожка и приподнятый
+  // активный сегмент. Ещё один ряд одинаковых пилюль в этом месте не читался.
   const viewBtn = (v, label) => (
-    <button onClick={() => setView(v)} className={`text-xs px-2.5 py-1 rounded-md border ${view === v ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{label}</button>
+    <button
+      onClick={() => setView(v)}
+      aria-pressed={view === v}
+      className={`flex-1 sm:flex-none text-sm px-4 py-1.5 rounded-md transition-colors ${
+        view === v
+          ? 'bg-ink text-cyanink font-medium shadow-sm border border-accent/30'
+          : 'border border-transparent text-gray-600 hover:text-gray-900'
+      }`}
+    >
+      {label}
+    </button>
   )
 
   return (
@@ -80,7 +98,7 @@ export default function MetricsPage() {
 
       {mode === 'industries' && (<>
         {/* Все индустрии видны сразу — чипами, а не спрятаны в выпадашке */}
-        <div className="flex flex-wrap gap-1.5 mb-3">
+        <div className="flex flex-wrap gap-1.5 pb-4 mb-4 border-b border-black/10">
           {localized.map((ind) => (
             <button
               key={ind.id}
@@ -94,11 +112,6 @@ export default function MetricsPage() {
             </button>
           ))}
         </div>
-        <div className="flex gap-1 mb-4">
-          {viewBtn('tree', locale === 'en' ? 'Tree' : 'Дерево')}
-          {viewBtn('pyramid', locale === 'en' ? 'Pyramid' : 'Пирамида')}
-        </div>
-
         <div className="flex flex-wrap items-end gap-x-6 gap-y-2 mb-4">
           <div>
             <div className="text-xs text-gray-500">North Star {company ? `· ${company.name}` : `· ${t.metricsBaseModel}`}</div>
@@ -114,7 +127,10 @@ export default function MetricsPage() {
           )}
         </div>
 
-        {company && (
+        {company && view === 'framework' && (
+          <div className="mb-4 rounded-lg border border-black/10 bg-black/[0.03] px-4 py-2.5 text-sm text-gray-600">{t.fwCompanyHint}</div>
+        )}
+        {company && view !== 'framework' && (
           <div className="mb-4 rounded-lg border border-sky-500/30 bg-sky-500/5 px-4 py-2.5 text-sm text-gray-700">
             <span className="text-sky-600 font-medium">{company.name}:</span> {company.note}{' '}
             <span className="text-gray-500">
@@ -125,8 +141,24 @@ export default function MetricsPage() {
           </div>
         )}
 
+        {/* Переключатель стоит вплотную к панели: он относится к ней, а не к
+            выбору индустрии, между которым и компанией он раньше вклинивался. */}
+        <div
+          role="group"
+          aria-label={t.metricsViewLabel}
+          className="inline-flex w-full sm:w-auto gap-1 p-1 mb-2 rounded-lg border border-black/10 bg-black/[0.04]"
+        >
+          {viewBtn('tree', locale === 'en' ? 'Tree' : 'Дерево')}
+          {viewBtn('pyramid', locale === 'en' ? 'Pyramid' : 'Пирамида')}
+          {viewBtn('framework', t.fwView)}
+        </div>
+
         {view === 'tree' && <MetricTreeGraph tree={resolved} />}
         {view === 'pyramid' && <MetricPyramid tree={resolved} />}
+        {/* Фреймворк описывает жизненный цикл вертикали целиком, поэтому выбор
+            компании на него не влияет — говорим об этом прямо, иначе кажется,
+            что переключатель сломался. */}
+        {view === 'framework' && <MetricFramework industry={active} />}
       </>)}
 
       <div className="mt-8 rounded-lg border border-black/10 bg-black/[0.03] px-4 py-3 text-sm text-gray-600 leading-relaxed">

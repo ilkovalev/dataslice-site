@@ -223,5 +223,55 @@
     },
     "sql": "-- Monthly resurrection: active this month after 60+ days of silence\nWITH monthly_active AS (\n  SELECT DISTINCT user_id, date_trunc('month', ts) AS month\n  FROM events\n),\nwith_prev AS (\n  SELECT user_id, month,\n         LAG(month) OVER (PARTITION BY user_id ORDER BY month) AS prev_month\n  FROM monthly_active\n)\nSELECT month,\n       COUNT(*) FILTER (WHERE prev_month < month - INTERVAL '1 month') AS resurrected,\n       COUNT(*) AS active_total\nFROM with_prev\nGROUP BY 1\nORDER BY 1;",
     "related": ["churn-rate", "retention-n-day"]
+  },
+  {
+    "id": "feature-adoption",
+    "category": "retention",
+    "title": { "ru": "Adoption фичи — освоение возможности", "en": "Feature adoption" },
+    "aliases": ["adoption", "освоение фичи", "feature adoption"],
+    "tex": { "ru": "\\text{Adoption}=\\dfrac{\\text{воспользовались фичей за окно}}{\\text{у кого фича доступна}}", "en": "\\text{Adoption}=\\dfrac{\\text{used the feature in window}}{\\text{those who have access}}" },
+    "desc": {
+      "ru": "Доля пользователей с доступом к возможности, которые ей воспользовались за период. Буква A (Adoption) в HEART: отвечает на вопрос, дошла ли работа команды до людей. Знаменатель здесь важнее числителя — доля от всей базы и доля от тех, кому фича вообще нужна, дают разные выводы о том, провалилась ли фича.",
+      "en": "The share of users with access to a capability who actually used it in a period. The A (Adoption) in HEART: it answers whether the team's work reached people at all. The denominator matters more than the numerator — the share of the whole base and the share of those who need the feature lead to different verdicts on whether it failed."
+    },
+    "pitfalls": {
+      "ru": [
+        "Первое использование и регулярное использование — разные метрики: подсказка на весь экран поднимает первое и не двигает второе.",
+        "Кривая adoption растёт месяцами: оценивать фичу на второй неделе — значит мерить эффект анонса.",
+        "Высокий adoption второстепенной фичи иногда означает, что она стоит на пути основного сценария и её нельзя обойти."
+      ],
+      "en": [
+        "First use and habitual use are different metrics: a full-screen tooltip lifts the first and doesn't move the second.",
+        "The adoption curve grows over months: judging a feature in week two measures the announcement, not the feature.",
+        "High adoption of a secondary feature sometimes means it sits in the way of the main flow and can't be avoided."
+      ]
+    },
+    "sql": "-- Feature adoption: first use, repeat use and the retained share\nWITH eligible AS (\n  SELECT user_id FROM feature_flags\n  WHERE feature = 'my_feature' AND enabled\n),\nusage AS (\n  SELECT user_id,\n         COUNT(*) AS uses,\n         COUNT(DISTINCT ts::date) AS active_days\n  FROM events\n  WHERE event_name = 'my_feature_used'\n    AND ts >= now() - INTERVAL '30 days'\n  GROUP BY user_id\n)\nSELECT COUNT(*) AS eligible_users,\n       COUNT(u.user_id) AS tried,\n       ROUND(100.0 * COUNT(u.user_id) / COUNT(*), 1) AS adoption_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE u.active_days >= 3) / COUNT(*), 1) AS habitual_pct\nFROM eligible e\nLEFT JOIN usage u USING (user_id);",
+    "related": ["adoption-depth", "activation-rate", "retention-n-day", "dau-mau"]
+  },
+  {
+    "id": "learning-outcome",
+    "category": "retention",
+    "title": { "ru": "Достигнутый результат обучения", "en": "Learning outcome achieved" },
+    "aliases": ["результат обучения", "трудоустройство", "learning outcome", "навык"],
+    "tex": { "ru": "\\text{Результат}=\\dfrac{\\text{достигли заявленной цели}}{\\text{завершили программу}}", "en": "\\text{Outcome}=\\dfrac{\\text{reached the stated goal}}{\\text{completed the program}}" },
+    "desc": {
+      "ru": "Доля выпускников, получивших то, ради чего покупали программу: работу по специальности, подтверждённый навык, сданный экзамен. Держится рядом с доходимостью и страхует её от вырождения: курс можно упростить до стопроцентного прохождения, но результат так не подделаешь.",
+      "en": "The share of graduates who got what they bought the program for: a job in the field, a verified skill, a passed exam. It sits next to completion and insures it against degeneration: a course can be dumbed down to a hundred percent completion, but the outcome can't be faked that way."
+    },
+    "pitfalls": {
+      "ru": [
+        "Знаменатель решает всё: доля от завершивших и доля от оплативших различаются в разы, и в рекламе обычно берут первую.",
+        "Трудоустройство подтверждается документом, а не опросом: доля ответивших на опрос смещена в сторону тех, у кого получилось.",
+        "Результат приходит с лагом в месяцы, поэтому по свежим когортам метрику считать нельзя — она всегда занижена."
+      ],
+      "en": [
+        "The denominator decides everything: the share of completers and the share of payers differ several-fold, and marketing usually picks the first.",
+        "Employment is confirmed by a document, not a survey: survey response is biased toward those for whom it worked out.",
+        "The outcome arrives months later, so fresh cohorts can't be measured — the number is always understated."
+      ]
+    },
+    "sql": "-- Outcome rate by cohort, from both denominators\nWITH cohorts AS (\n  SELECT user_id,\n         date_trunc('month', enrolled_at) AS cohort,\n         completed_at,\n         outcome_confirmed_at\n  FROM enrollments\n  WHERE enrolled_at < now() - INTERVAL '9 months'\n)\nSELECT cohort,\n       COUNT(*) AS paid,\n       COUNT(*) FILTER (WHERE completed_at IS NOT NULL) AS completed,\n       COUNT(*) FILTER (WHERE outcome_confirmed_at IS NOT NULL) AS with_outcome,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE outcome_confirmed_at IS NOT NULL)\n         / NULLIF(COUNT(*) FILTER (WHERE completed_at IS NOT NULL), 0), 1) AS outcome_of_completed_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE outcome_confirmed_at IS NOT NULL)\n         / COUNT(*), 1) AS outcome_of_paid_pct\nFROM cohorts\nGROUP BY cohort\nORDER BY cohort;",
+    "related": ["course-completion", "nps-csat", "repeat-rate", "ltv"]
   }
 ]

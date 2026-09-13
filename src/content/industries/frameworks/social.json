@@ -1,0 +1,288 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "Соцсеть — двусторонний рынок внимания: с одной стороны зрители, с другой авторы. Воронка зрителя короткая, воронка автора длинная, и путать их метрики нельзя.",
+      "en": "A social network is a two-sided attention market: viewers on one side, creators on the other. The viewer funnel is short, the creator funnel is long, and their metrics can't be mixed."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Платный трафик приводит зрителя, но удерживает его контент. Долю органики здесь читают как меру того, стал ли продукт заметен сам по себе.",
+          "en": "Paid traffic brings the viewer, but content is what keeps them. The organic share is read as a measure of whether the product became visible on its own."
+        },
+        "metrics": [
+          {
+            "metricId": "installs",
+            "def": {
+              "ru": "Установки за период по платформам; для веб-первых продуктов вместо них считают новых зарегистрированных.",
+              "en": "Installs per period by platform; web-first products count new registrations instead."
+            }
+          },
+          {
+            "metricId": "organic-share",
+            "def": {
+              "ru": "Доля новых, пришедших без оплаченного клика: расшаренные ссылки, поиск по бренду, витрина стора.",
+              "en": "The share of new users arriving without a paid click: shared links, brand search, store discovery."
+            }
+          },
+          {
+            "metricId": "cac",
+            "def": {
+              "ru": "Затраты на нового активного зрителя; окупаемость считается через рекламную выручку с его внимания, а не через покупки.",
+              "en": "Spend per new active viewer; payback is computed through ad revenue on their attention, not through purchases."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активирован зритель, у которого лента заработала: он подписался на первых авторов и досмотрел несколько роликов подряд.",
+          "en": "An activated viewer is one whose feed started working: they followed their first creators and watched several items through."
+        },
+        "metrics": [
+          {
+            "metricId": "activation-rate",
+            "label": {
+              "ru": "Активация (порог подписок)",
+              "en": "Activation (follow threshold)"
+            },
+            "def": {
+              "ru": "Доля новых, набравших порог подписок за первую неделю — ниже этого порога рекомендации не на чем строить.",
+              "en": "The share of new users hitting the follow threshold in week one — below it there's nothing for recommendations to work with."
+            }
+          },
+          {
+            "metricId": "follow-graph",
+            "def": {
+              "ru": "Число и качество первых подписок: одна подписка на популярного автора работает хуже пяти на близких по интересам.",
+              "en": "The count and quality of first follows: one follow of a mega-creator works worse than five on interest-matched ones."
+            }
+          },
+          {
+            "metricId": "retention-n-day",
+            "label": {
+              "ru": "Retention D1",
+              "en": "D1 retention"
+            },
+            "def": {
+              "ru": "Возврат на следующий день после регистрации — самый быстрый сигнал, что лента попала в интересы.",
+              "en": "Return the day after signup — the fastest signal that the feed hit the user's interests."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Привычка в соцсети измеряется не возвратом, а частотой: продукт живёт от того, сколько раз в день человек открывает приложение без повода.",
+          "en": "Habit in a social network is measured by frequency rather than return: the product lives on how many times a day a person opens the app for no reason."
+        },
+        "metrics": [
+          {
+            "metricId": "stickiness",
+            "def": {
+              "ru": "DAU / MAU — доля месячной аудитории, заходящая в конкретный день; у зрелых лент это десятки процентов.",
+              "en": "DAU / MAU — the share of the monthly audience present on a given day; in mature feeds it runs in the tens of percent."
+            }
+          },
+          {
+            "metricId": "active-days",
+            "def": {
+              "ru": "Сколько дней из 30 пользователь открывал приложение: метрика привычки, отделяющая ядро от заглянувших по ссылке.",
+              "en": "How many of 30 days the user opened the app: the habit metric separating the core from link visitors."
+            }
+          },
+          {
+            "metricId": "retention-n-day",
+            "label": {
+              "ru": "Retention D7 / D30",
+              "en": "D7 / D30 retention"
+            },
+            "def": {
+              "ru": "Доля когорты, активной на 7-й и 30-й день; отдельно по зрителям и по авторам — их кривые расходятся.",
+              "en": "The share of the cohort active on day 7 and day 30; split by viewers and creators — their curves diverge."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "Главный реферальный канал соцсети — сам контент: ролик, ушедший наружу, приводит зрителей дешевле любой кампании.",
+          "en": "A social network's main referral channel is the content itself: a clip that travels outward brings viewers cheaper than any campaign."
+        },
+        "metrics": [
+          {
+            "metricId": "share-rate",
+            "def": {
+              "ru": "Доля просмотров, закончившихся отправкой наружу; считается по контенту, а не по пользователю — распределение крайне скошено.",
+              "en": "The share of views ending in an outward share; measured per content item, not per user — the distribution is heavily skewed."
+            }
+          },
+          {
+            "metricId": "viral-coefficient",
+            "def": {
+              "ru": "Сколько новых пользователей приводит один существующий через расшаренный контент и приглашения.",
+              "en": "How many new users one existing user brings through shared content and invites."
+            }
+          },
+          {
+            "metricId": "referral-share",
+            "def": {
+              "ru": "Доля регистраций с расшаренной ссылки среди всех новых за период.",
+              "en": "The share of signups from a shared link among all new users in the period."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Деньги приходят с проданного внимания. Плотность рекламы — рычаг с обратной связью: она повышает выручку сегодня и снижает время просмотра завтра.",
+          "en": "Money comes from attention sold. Ad density is a lever with feedback: it raises revenue today and lowers watch time tomorrow."
+        },
+        "metrics": [
+          {
+            "metricId": "ad-coverage",
+            "def": {
+              "ru": "Доля просмотров с рекламой и число рекламных вставок на сессию — прямой рычаг выручки и прямой риск для удержания.",
+              "en": "The share of views carrying ads and the number of ad slots per session — a direct revenue lever and a direct retention risk."
+            }
+          },
+          {
+            "metricId": "cpc",
+            "label": {
+              "ru": "CPM / CPC инвентаря",
+              "en": "Inventory CPM / CPC"
+            },
+            "def": {
+              "ru": "Цена тысячи показов или клика: зависит от таргетинга и от того, насколько рекламодатель верит в атрибуцию.",
+              "en": "The price of a thousand impressions or a click: it depends on targeting and on how much the advertiser trusts attribution."
+            }
+          },
+          {
+            "metricId": "arpu",
+            "def": {
+              "ru": "Выручка на активного пользователя за период; сравнивается только внутри одного гео — разброс между рынками кратный.",
+              "en": "Revenue per active user per period; comparable only within one geo — the spread between markets is several-fold."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "Время просмотра растёт и от хорошей ленты, и от залипания против воли. HEART нужен ровно для того, чтобы отличить одно от другого.",
+      "en": "Watch time grows both from a good feed and from unwilling doomscrolling. HEART exists precisely to tell one from the other."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Человек доволен тем, что показала лента, а не жалеет о потраченном вечере.",
+          "en": "The person is happy with what the feed showed rather than regretting the evening."
+        },
+        "signal": {
+          "ru": "Доля скрытий и «не интересно», жалобы на контент, опросы удовлетворённости лентой.",
+          "en": "The share of hides and \"not interested\", content reports, feed satisfaction surveys."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "complaint-rate"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Просмотры глубокие: контент досматривают, а не пролистывают за секунду.",
+          "en": "Views run deep: content is watched through rather than flicked past in a second."
+        },
+        "signal": {
+          "ru": "Доля досмотров, глубина сессии, время на сессию.",
+          "en": "Completion share, session depth, time per session."
+        },
+        "metrics": [
+          {
+            "metricId": "video-completion"
+          },
+          {
+            "metricId": "session-depth"
+          },
+          {
+            "metricId": "time-spent"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые форматы и инструменты авторов доходят до людей, а не остаются в анонсе.",
+          "en": "New formats and creator tools reach people instead of staying in the announcement."
+        },
+        "signal": {
+          "ru": "Доля активных, воспользовавшихся форматом за 30 дней после запуска.",
+          "en": "The share of active users who used the format within 30 days of launch."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          },
+          {
+            "metricId": "content-supply"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Аудитория возвращается по привычке, а не по пушу.",
+          "en": "The audience returns out of habit rather than because of a push."
+        },
+        "signal": {
+          "ru": "Плато кривой удержания и доля возвращённых из ушедших.",
+          "en": "The retention curve's plateau and the resurrected share of lapsed users."
+        },
+        "metrics": [
+          {
+            "metricId": "retention-n-day"
+          },
+          {
+            "metricId": "win-back"
+          },
+          {
+            "metricId": "stickiness"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Человек находит, что посмотреть, за разумное число свайпов.",
+          "en": "The person finds something to watch within a reasonable number of swipes."
+        },
+        "signal": {
+          "ru": "Доля сессий без единого досмотра и скорость выдачи ленты.",
+          "en": "The share of sessions without a single completed view and feed load speed."
+        },
+        "metrics": [
+          {
+            "metricId": "search-success"
+          },
+          {
+            "metricId": "bounce-rate"
+          },
+          {
+            "metricId": "latency-p95"
+          }
+        ]
+      }
+    ]
+  }
+}

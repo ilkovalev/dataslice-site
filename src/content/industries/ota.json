@@ -919,7 +919,7 @@
                         ]
                       }
                     ],
-                    "metricId": "seller-retention"
+                    "metricId": "nps-csat"
                   }
                 ]
               }

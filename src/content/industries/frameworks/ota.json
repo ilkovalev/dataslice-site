@@ -1,0 +1,317 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "Путешествия — рынок с редкими и дорогими покупками: между поездками проходят месяцы, поэтому привычка не складывается, а привлечение приходится оплачивать заново почти каждый раз.",
+      "en": "Travel is a market of rare, expensive purchases: months pass between trips, so no habit forms and acquisition has to be paid for almost every time."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Спрос приходит из поиска, и цена клика по коммерческим запросам о путешествиях — одна из самых высоких на рынке. Отсюда постоянная борьба за долю прямого трафика.",
+          "en": "Demand comes from search, and the click price on commercial travel queries is among the market's highest. Hence the constant fight for a direct-traffic share."
+        },
+        "metrics": [
+          {
+            "metricId": "cac",
+            "def": {
+              "ru": "Затраты на бронирование в разрезе канала; при редких покупках окупаемость считается на горизонте нескольких поездок, а не одной.",
+              "en": "Cost per booking by channel; with rare purchases payback is computed over several trips, not one."
+            }
+          },
+          {
+            "metricId": "organic-share",
+            "label": {
+              "ru": "Доля прямых заходов",
+              "en": "Direct-traffic share"
+            },
+            "def": {
+              "ru": "Доля бронирований от людей, пришедших без оплаченного клика; главная защита от роста ставок в поисковом аукционе.",
+              "en": "The share of bookings from people arriving without a paid click; the main defence against rising search-auction bids."
+            }
+          },
+          {
+            "metricId": "active-listings",
+            "label": {
+              "ru": "Активные объекты",
+              "en": "Active properties"
+            },
+            "def": {
+              "ru": "Число объектов со свободными датами в направлении: без глубины предложения поисковый спрос уходит к конкуренту.",
+              "en": "The count of properties with open dates in a destination: without supply depth, search demand goes to a competitor."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активация — первое состоявшееся заселение, а не оплата. Между бронированием и поездкой проходят недели, и отмена в этом окне обнуляет всё.",
+          "en": "Activation is the first completed stay, not the payment. Weeks pass between booking and the trip, and a cancellation in that window zeroes everything."
+        },
+        "metrics": [
+          {
+            "metricId": "conversion-rate",
+            "label": {
+              "ru": "Look-to-Book",
+              "en": "Look-to-book"
+            },
+            "def": {
+              "ru": "Доля поисковых сессий, закончившихся бронированием; в путешествиях она измеряется долями процента и сильно зависит от направления.",
+              "en": "The share of search sessions ending in a booking; in travel it runs in fractions of a percent and depends heavily on the destination."
+            }
+          },
+          {
+            "metricId": "cancellation-rate",
+            "def": {
+              "ru": "Доля бронирований, отменённых до заезда; бесплатная отмена поднимает конверсию и переносит проблему на этот шаг.",
+              "en": "The share of bookings cancelled before check-in; free cancellation lifts conversion and moves the problem to this step."
+            }
+          },
+          {
+            "metricId": "completed-orders",
+            "label": {
+              "ru": "Состоявшиеся заезды",
+              "en": "Completed stays"
+            },
+            "def": {
+              "ru": "Число заездов после вычета отмен и неявок — единственная цифра, за которую платформе действительно платят.",
+              "en": "The count of stays net of cancellations and no-shows — the only figure the platform actually gets paid for."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Удержание в путешествиях измеряется годами, а не днями: важна доля тех, кто в следующую поездку пришёл прямо, а не через поиск.",
+          "en": "Travel retention is measured in years, not days: what matters is the share who came directly for their next trip rather than through search."
+        },
+        "metrics": [
+          {
+            "metricId": "repeat-rate",
+            "label": {
+              "ru": "Повторные бронирования",
+              "en": "Repeat bookings"
+            },
+            "def": {
+              "ru": "Доля гостей, забронировавших второй раз за 12 месяцев; окно короче года в этой категории ничего не показывает.",
+              "en": "The share of guests booking a second time within 12 months; a window shorter than a year shows nothing in this category."
+            }
+          },
+          {
+            "metricId": "app-share",
+            "label": {
+              "ru": "Брони из приложения",
+              "en": "App bookings"
+            },
+            "def": {
+              "ru": "Доля бронирований через приложение: установленное приложение — способ вернуть гостя без повторной оплаты клика.",
+              "en": "The share of bookings through the app: an installed app is how you get a guest back without paying for the click again."
+            }
+          },
+          {
+            "metricId": "seller-retention",
+            "label": {
+              "ru": "Удержание объектов",
+              "en": "Property retention"
+            },
+            "def": {
+              "ru": "Доля объектов, остающихся на площадке следующий сезон; уход отеля забирает и его прямой спрос.",
+              "en": "The share of properties staying for the next season; a hotel leaving takes its direct demand along."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "О поездке рассказывают охотно, но советуют место, а не площадку. Реферальный слой держится на реферальных бонусах и на программе лояльности.",
+          "en": "People talk about a trip willingly, but recommend the place rather than the platform. The referral layer rests on referral bonuses and a loyalty program."
+        },
+        "metrics": [
+          {
+            "metricId": "referral-share",
+            "def": {
+              "ru": "Доля бронирований по реферальной ссылке или коду среди всех новых гостей.",
+              "en": "The share of bookings from a referral link or code among all new guests."
+            }
+          },
+          {
+            "metricId": "share-rate",
+            "label": {
+              "ru": "Расшаривание объектов",
+              "en": "Property sharing"
+            },
+            "def": {
+              "ru": "Доля просмотров объекта, из которых ссылка ушла в чат — в путешествиях решение почти всегда групповое.",
+              "en": "The share of property views from which a link went to a chat — in travel the decision is almost always a group one."
+            }
+          },
+          {
+            "metricId": "nps-csat",
+            "def": {
+              "ru": "Оценка после заезда; считается по объекту и по направлению, иначе средняя по площадке ничего не объясняет.",
+              "en": "The post-stay rating; measured by property and destination, or the platform average explains nothing."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Платформа берёт комиссию с состоявшегося заезда. Между бронированием и деньгами лежат недели и отмены, поэтому оборот бронирований и выручка расходятся.",
+          "en": "The platform takes commission on a completed stay. Weeks and cancellations sit between booking and money, so booking volume and revenue diverge."
+        },
+        "metrics": [
+          {
+            "metricId": "gmv",
+            "label": {
+              "ru": "Booked Nights / GMV",
+              "en": "Booked nights / GMV"
+            },
+            "def": {
+              "ru": "Оборот бронирований за вычетом отмен; валовая цифра до вычета завышает результат на десятки процентов.",
+              "en": "Booking volume net of cancellations; the gross figure overstates the result by tens of percent."
+            }
+          },
+          {
+            "metricId": "take-rate",
+            "def": {
+              "ru": "Доля стоимости заезда, остающаяся площадке; у отелей и частных объектов она разная и по-разному растёт.",
+              "en": "The share of the stay's price the platform keeps; it differs between hotels and private listings and grows differently."
+            }
+          },
+          {
+            "metricId": "aov",
+            "label": {
+              "ru": "Средний чек брони",
+              "en": "Average booking value"
+            },
+            "def": {
+              "ru": "Стоимость бронирования: складывается из длины поездки и класса объекта — рычаги независимые.",
+              "en": "The booking's value: it comes from trip length and property class — independent levers."
+            }
+          },
+          {
+            "metricId": "ad-coverage",
+            "label": {
+              "ru": "Платное продвижение объектов",
+              "en": "Paid property promotion"
+            },
+            "def": {
+              "ru": "Доля выдачи, проданной объектам за продвижение; растит выручку и портит релевантность поиска по направлению.",
+              "en": "The share of results sold to properties for promotion; it grows revenue and degrades destination-search relevance."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "Бронирование — обещание, которое исполнится через месяц. HEART смотрит на то, совпало ли обещанное с тем, что человек увидел, приехав.",
+      "en": "A booking is a promise that comes due in a month. HEART looks at whether the promise matched what the person saw on arrival."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Объект оказался таким, каким выглядел на площадке, а цена — без сюрпризов на последнем шаге.",
+          "en": "The property turned out as it looked on the platform, and the price held no surprises at the last step."
+        },
+        "signal": {
+          "ru": "Оценки после заезда, жалобы на несоответствие, доля отмен из-за цены.",
+          "en": "Post-stay ratings, mismatch complaints, the share of price-driven cancellations."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "complaint-rate"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Площадкой пользуются на этапе выбора, а не только для сверки цены перед бронью на сайте отеля.",
+          "en": "The platform is used while choosing, not only to price-check before booking on the hotel's own site."
+        },
+        "signal": {
+          "ru": "Глубина сессии, число просмотренных объектов, возвраты к сохранённым.",
+          "en": "Session depth, properties viewed, returns to saved items."
+        },
+        "metrics": [
+          {
+            "metricId": "session-depth"
+          },
+          {
+            "metricId": "dwell-time"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые направления и форматы размещения находят спрос, а не висят в каталоге.",
+          "en": "New destinations and stay formats find demand instead of sitting in the catalogue."
+        },
+        "signal": {
+          "ru": "Доля бронирований в новом формате и доля объектов, его подключивших.",
+          "en": "The share of bookings in the new format and the share of properties offering it."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          },
+          {
+            "metricId": "assortment-width"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Следующую поездку человек начинает с площадки, а не с поисковика.",
+          "en": "The person starts their next trip on the platform rather than in a search engine."
+        },
+        "signal": {
+          "ru": "Доля прямых заходов у повторных гостей и доля броней из приложения.",
+          "en": "The direct-traffic share among repeat guests and the app-booking share."
+        },
+        "metrics": [
+          {
+            "metricId": "repeat-rate"
+          },
+          {
+            "metricId": "app-share"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Человек находит объект на нужные даты и бронирует без обрыва на оплате.",
+          "en": "The person finds a property for the needed dates and books without a payment failure."
+        },
+        "signal": {
+          "ru": "Доля поисков без доступных вариантов, отвал на оплате, ошибки бронирования.",
+          "en": "The share of searches with no available options, payment drop-off, booking errors."
+        },
+        "metrics": [
+          {
+            "metricId": "oos-rate"
+          },
+          {
+            "metricId": "payment-success"
+          },
+          {
+            "metricId": "error-rate"
+          }
+        ]
+      }
+    ]
+  }
+}

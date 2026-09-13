@@ -503,7 +503,7 @@
                               "ru": "Доля выручки от топ-клиентов: пара крупных приложений может давать треть токенов.",
                               "en": "Revenue share from top customers: a couple of big apps can drive a third of tokens."
                             },
-                            "metricId": "token-volume"
+                            "metricId": "whale-concentration"
                           }
                         ]
                       }

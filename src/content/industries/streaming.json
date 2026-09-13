@@ -44,7 +44,7 @@
           {
             "id": "trial",
             "level": 2,
-            "metricId": "conversion-rate",
+            "metricId": "trial-to-paid",
             "title": "Trial → Paid",
             "note": {
               "ru": "Доходят ли с пробного периода до первой оплаты.",
@@ -249,7 +249,7 @@
                   "ru": "Апгрейды минус даунгрейды — денежное выражение микса.",
                   "en": "Upgrades minus downgrades — the mix in money terms."
                 },
-                "metricId": "mrr"
+                "metricId": "expansion-mrr"
               }
             ]
           },
@@ -264,7 +264,7 @@
               "ru": "Апсейлы поверх подписки.",
               "en": "Upsells on top of the subscription."
             },
-            "metricId": "mrr"
+            "metricId": "expansion-mrr"
           }
         ]
       }
@@ -845,7 +845,7 @@
                       "ru": "Попадание рекомендаций в вкус — сохранил значит зашло.",
                       "en": "Recommendation accuracy — a save means a hit."
                     },
-                    "metricId": "model-quality"
+                    "metricId": "acceptance-rate"
                   }
                 ]
               }

@@ -148,5 +148,155 @@
     },
     "sql": "-- Fraud rate by transaction cohort month (chargeback lag aware)\nSELECT date_trunc('month', created_at) AS txn_month,\n       COUNT(*) AS transactions,\n       COUNT(*) FILTER (WHERE props->>'fraud_flag' = 'true') AS fraud_txns,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE props->>'fraud_flag' = 'true') / COUNT(*), 3) AS fraud_rate_pct,\n       ROUND(100.0 * SUM(amount) FILTER (WHERE props->>'fraud_flag' = 'true')\n             / NULLIF(SUM(amount), 0), 3) AS fraud_money_pct\nFROM orders\nGROUP BY 1\nORDER BY 1;",
     "related": ["cancellation-rate", "complaint-rate"]
+  },
+  {
+    "id": "task-success-rate",
+    "category": "quality",
+    "title": { "ru": "Task Success Rate — успешность сценария", "en": "Task success rate" },
+    "aliases": ["успешность задач", "task success", "успешные сценарии"],
+    "tex": { "ru": "\\text{TSR}=\\dfrac{\\text{сценарии, доведённые до цели}}{\\text{начатые сценарии}}", "en": "\\text{TSR}=\\dfrac{\\text{tasks completed successfully}}{\\text{tasks started}}" },
+    "desc": {
+      "ru": "Доля попыток решить конкретную задачу в продукте, которые закончились результатом: перевод ушёл, размер подобрался, документ нашёлся. Буква T в HEART и самая честная метрика интерфейса: пользователь пришёл с намерением, и либо получил своё, либо нет. В отличие от конверсии измеряет не желание компании, а задачу пользователя.",
+      "en": "The share of attempts at a specific in-product task that ended in a result: the transfer went through, the size was found, the document was located. The T in HEART and the most honest interface metric: the user arrived with an intent and either got what they came for or didn't. Unlike conversion, it measures the user's task rather than the company's wish."
+    },
+    "pitfalls": {
+      "ru": [
+        "Сценарий надо задать до замера: «нашёл товар» и «нашёл товар и не вернулся в поиск за 5 минут» дают разные числа.",
+        "Отказ от задачи посреди пути не всегда провал: пользователь мог передумать — отделяйте отказ от ошибки системы.",
+        "Средняя по всем сценариям бесполезна: считайте по каждому ключевому сценарию отдельно, иначе редкий и болезненный тонет в частом и лёгком."
+      ],
+      "en": [
+        "Define the task before measuring: \"found the product\" and \"found it without returning to search within 5 minutes\" give different numbers.",
+        "Abandoning mid-way isn't always failure: the user may have changed their mind — separate abandonment from system error.",
+        "An average across all tasks is useless: measure each key task separately, or the rare painful one drowns in the frequent easy one."
+      ]
+    },
+    "sql": "-- Task success per scenario: started vs reached the success event\nWITH attempts AS (\n  SELECT session_id,\n         props->>'task' AS task,\n         MIN(ts) FILTER (WHERE event_name = 'task_start')   AS started_at,\n         MIN(ts) FILTER (WHERE event_name = 'task_success') AS succeeded_at,\n         MIN(ts) FILTER (WHERE event_name = 'task_error')   AS errored_at\n  FROM events\n  WHERE event_name IN ('task_start', 'task_success', 'task_error')\n  GROUP BY 1, 2\n)\nSELECT task,\n       COUNT(*) FILTER (WHERE started_at IS NOT NULL) AS attempts,\n       COUNT(*) FILTER (WHERE succeeded_at IS NOT NULL) AS succeeded,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE succeeded_at IS NOT NULL)\n         / NULLIF(COUNT(*) FILTER (WHERE started_at IS NOT NULL), 0), 1) AS success_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE errored_at IS NOT NULL)\n         / NULLIF(COUNT(*) FILTER (WHERE started_at IS NOT NULL), 0), 1) AS error_pct\nFROM attempts\nGROUP BY task\nORDER BY attempts DESC;",
+    "related": ["time-on-task", "error-rate", "ces", "funnel-dropoff"]
+  },
+  {
+    "id": "time-on-task",
+    "category": "quality",
+    "title": { "ru": "Time-on-Task — время на сценарий", "en": "Time on task" },
+    "aliases": ["время на задачу", "time on task"],
+    "tex": { "ru": "\\text{Time-on-Task}=\\text{медиана}(t_{\\text{успех}}-t_{\\text{старт}})", "en": "\\text{Time on task}=\\text{median}(t_{\\text{success}}-t_{\\text{start}})" },
+    "desc": {
+      "ru": "Сколько времени уходит на успешное прохождение сценария — от старта до результата. Второй сигнал буквы T в HEART: задачу можно решить и за десять минут мучений, и это будет засчитано как успех. Медиана и 90-й перцентиль вместе показывают и типичный опыт, и опыт тех, кому тяжелее всех.",
+      "en": "How long a successful pass through a scenario takes — from start to result. The second signal for HEART's T: a task can be completed after ten minutes of struggle and still count as a success. The median and the 90th percentile together show both the typical experience and the experience of those who struggle most."
+    },
+    "pitfalls": {
+      "ru": [
+        "Считайте только по успешным попыткам: брошенные на полпути дают случайные обрывки времени и портят распределение.",
+        "Короче не всегда лучше: время на выбор дорогой покупки — это обдумывание, а не трение.",
+        "Среднее по времени бесполезно почти всегда: распределение с длинным правым хвостом, берите медиану и p90."
+      ],
+      "en": [
+        "Count successful attempts only: those abandoned midway contribute random time fragments and skew the distribution.",
+        "Shorter isn't always better: time spent choosing an expensive purchase is deliberation, not friction.",
+        "The mean is almost always useless here: the distribution has a long right tail — use the median and p90."
+      ]
+    },
+    "sql": "-- Median and p90 time on task, successful attempts only\nWITH spans AS (\n  SELECT session_id,\n         props->>'task' AS task,\n         MIN(ts) FILTER (WHERE event_name = 'task_start')   AS started_at,\n         MIN(ts) FILTER (WHERE event_name = 'task_success') AS succeeded_at\n  FROM events\n  WHERE event_name IN ('task_start', 'task_success')\n  GROUP BY 1, 2\n)\nSELECT task,\n       COUNT(*) AS successful_attempts,\n       ROUND(PERCENTILE_CONT(0.5) WITHIN GROUP (\n         ORDER BY EXTRACT(epoch FROM succeeded_at - started_at))::numeric, 1) AS median_sec,\n       ROUND(PERCENTILE_CONT(0.9) WITHIN GROUP (\n         ORDER BY EXTRACT(epoch FROM succeeded_at - started_at))::numeric, 1) AS p90_sec\nFROM spans\nWHERE succeeded_at IS NOT NULL\nGROUP BY task\nORDER BY median_sec DESC;",
+    "related": ["task-success-rate", "ces", "latency-p95", "error-rate"]
+  },
+  {
+    "id": "ces",
+    "category": "quality",
+    "title": { "ru": "CES — оценка усилия", "en": "CES — customer effort score" },
+    "aliases": ["ces", "customer effort score", "оценка усилия"],
+    "tex": { "ru": "\\mathrm{CES}=\\text{среднее}(\\text{оценка «насколько легко было»},\\ 1..7)", "en": "\\mathrm{CES}=\\text{mean}(\\text{\"how easy was it\" rating},\\ 1..7)" },
+    "desc": {
+      "ru": "Оценка того, сколько усилий стоило пользователю решить задачу: вопрос задают сразу после сценария, шкала обычно 1–7. Сигнал для буквы H в HEART там, где NPS слишком общий: NPS спрашивает про отношение к компании, CES — про конкретный только что пройденный путь. Хорошо предсказывает повторные обращения в поддержку.",
+      "en": "A rating of how much effort a task cost the user: the question is asked right after the scenario, usually on a 1–7 scale. The signal for HEART's H where NPS is too broad: NPS asks about the company, CES about the specific path just travelled. It predicts repeat support contacts well."
+    },
+    "pitfalls": {
+      "ru": [
+        "Отвечают не все и не случайно: раздражённые молчат чаще довольных, поэтому CES систематически завышен.",
+        "Момент опроса решает: вопрос через сутки после сценария измеряет память, а не усилие.",
+        "Сравнивать CES между сценариями разной сложности бессмысленно — следите за динамикой одного сценария."
+      ],
+      "en": [
+        "Not everyone responds, and not at random: the annoyed stay silent more often than the satisfied, so CES is systematically overstated.",
+        "The survey moment decides: asking a day later measures memory, not effort.",
+        "Comparing CES across tasks of different complexity is meaningless — track one task over time."
+      ]
+    },
+    "sql": "-- CES by scenario, with response rate\nWITH asked AS (\n  SELECT props->>'task' AS task, COUNT(*) AS shown\n  FROM events WHERE event_name = 'ces_survey_shown'\n  GROUP BY 1\n),\nanswered AS (\n  SELECT props->>'task' AS task,\n         COUNT(*) AS responses,\n         ROUND(AVG((props->>'score')::numeric), 2) AS ces\n  FROM events WHERE event_name = 'ces_survey_answered'\n  GROUP BY 1\n)\nSELECT a.task, a.shown, COALESCE(r.responses, 0) AS responses,\n       ROUND(100.0 * COALESCE(r.responses, 0) / NULLIF(a.shown, 0), 1) AS response_rate_pct,\n       r.ces\nFROM asked a LEFT JOIN answered r USING (task)\nORDER BY r.ces NULLS LAST;",
+    "related": ["nps-csat", "task-success-rate", "time-on-task", "complaint-rate"]
+  },
+  {
+    "id": "error-rate",
+    "category": "quality",
+    "title": { "ru": "Error Rate — доля ошибок в сценарии", "en": "Error rate" },
+    "aliases": ["доля ошибок", "error rate"],
+    "tex": { "ru": "\\text{Error Rate}=\\dfrac{\\text{попытки с ошибкой}}{\\text{все попытки}}", "en": "\\text{Error rate}=\\dfrac{\\text{attempts with an error}}{\\text{all attempts}}" },
+    "desc": {
+      "ru": "Доля прохождений сценария, в которых пользователь упёрся в ошибку: отказ платежа, невалидная форма, пятисотка, «попробуйте позже». Отделяет проблемы реализации от проблем замысла: низкая конверсия при высоком error rate чинится инженерами, при низком — продуктом.",
+      "en": "The share of scenario passes where the user hit an error: a declined payment, an invalid form, a 500, a \"try again later\". It separates implementation problems from design problems: low conversion with a high error rate is fixed by engineers, with a low error rate by product."
+    },
+    "pitfalls": {
+      "ru": [
+        "Ошибки валидации и отказы системы смешивать нельзя: первые говорят о форме, вторые о бэкенде.",
+        "Считайте по попыткам, а не по событиям: один пользователь, десять раз нажавший «оплатить», даст десять ошибок и одну испорченную попытку.",
+        "Тихие ошибки страшнее громких: сценарий, который просто ничего не делает по нажатию, в логи ошибок не попадёт."
+      ],
+      "en": [
+        "Validation errors and system failures can't be pooled: the first speak about the form, the second about the backend.",
+        "Count attempts, not events: one user pressing \"pay\" ten times gives ten errors and one spoiled attempt.",
+        "Silent failures are worse than loud ones: a flow that simply does nothing on click never reaches the error log."
+      ]
+    },
+    "sql": "-- Error rate per scenario, split into validation and system errors\nWITH attempts AS (\n  SELECT session_id, props->>'task' AS task,\n         COUNT(*) FILTER (WHERE event_name = 'task_error'\n                            AND props->>'error_kind' = 'validation') AS validation_errors,\n         COUNT(*) FILTER (WHERE event_name = 'task_error'\n                            AND props->>'error_kind' = 'system')     AS system_errors\n  FROM events\n  WHERE event_name IN ('task_start', 'task_error')\n  GROUP BY 1, 2\n)\nSELECT task,\n       COUNT(*) AS attempts,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE validation_errors > 0) / COUNT(*), 1) AS validation_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE system_errors > 0) / COUNT(*), 1) AS system_pct\nFROM attempts\nGROUP BY task\nORDER BY system_pct DESC;",
+    "related": ["task-success-rate", "payment-success", "crash-rate", "complaint-rate"]
+  },
+  {
+    "id": "app-rating",
+    "category": "quality",
+    "title": { "ru": "Оценка в сторах", "en": "App store rating" },
+    "aliases": ["рейтинг приложения", "app rating", "оценка в сторе"],
+    "tex": { "ru": "\\text{Rating}=\\text{средняя оценка за окно};\\ \\ \\text{доля }1\\text{-звёзд}", "en": "\\text{Rating}=\\text{mean rating in window};\\ \\ \\text{share of }1\\text{-star}" },
+    "desc": {
+      "ru": "Средняя оценка приложения в App Store и Google Play и структура распределения оценок. Единственная публичная метрика удовлетворённости: её видят и пользователи перед установкой, и алгоритмы стора при ранжировании, поэтому падение рейтинга бьёт по конверсии установки и по органике одновременно.",
+      "en": "The mean app rating in the App Store and Google Play plus the shape of the rating distribution. The only public satisfaction metric: both users deciding to install and the store's ranking algorithms see it, so a rating drop hits install conversion and organic reach at once."
+    },
+    "pitfalls": {
+      "ru": [
+        "Накопленный рейтинг инертен: свежий релиз может ронять оценки неделями, пока средняя за всё время почти не двигается — смотрите рейтинг за последние 30 дней.",
+        "Промпт оценки, показанный после удачного действия, поднимает цифру, не меняя продукт: это управление выборкой, а не качеством.",
+        "Распределение важнее средней: 4,5 из смеси пятёрок и единиц и 4,5 из сплошных четвёрок — два разных продукта."
+      ],
+      "en": [
+        "The lifetime rating is inert: a fresh release can drag reviews down for weeks while the all-time mean barely moves — watch the trailing 30-day rating.",
+        "A rating prompt shown right after a successful action lifts the number without changing the product: that's sampling management, not quality.",
+        "The distribution matters more than the mean: a 4.5 made of fives and ones and a 4.5 made of solid fours are two different products."
+      ]
+    },
+    "sql": "-- Trailing 30-day store rating vs lifetime, plus the 1-star share\nSELECT platform,\n       ROUND(AVG(stars) FILTER (WHERE created_at >= now() - INTERVAL '30 days'), 2) AS rating_30d,\n       ROUND(AVG(stars), 2) AS rating_lifetime,\n       COUNT(*) FILTER (WHERE created_at >= now() - INTERVAL '30 days') AS reviews_30d,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE stars = 1\n              AND created_at >= now() - INTERVAL '30 days')\n         / NULLIF(COUNT(*) FILTER (WHERE created_at >= now() - INTERVAL '30 days'), 0), 1) AS one_star_pct\nFROM store_reviews\nGROUP BY platform;",
+    "related": ["nps-csat", "crash-rate", "complaint-rate", "installs"]
+  },
+  {
+    "id": "resolution-time",
+    "category": "quality",
+    "title": { "ru": "Время решения обращения", "en": "Resolution time" },
+    "aliases": ["время решения", "sla поддержки", "resolution time"],
+    "tex": { "ru": "\\text{TTR}=\\text{медиана}(t_{\\text{решено}}-t_{\\text{обращение}})", "en": "\\text{TTR}=\\text{median}(t_{\\text{resolved}}-t_{\\text{opened}})" },
+    "desc": {
+      "ru": "Сколько проходит от обращения в поддержку до решения проблемы. Работает в паре с долей обращений: сама по себе быстрая поддержка — признак того, что тикеты закрывают, а не то, что продукт хорош. Смотреть надо медиану и хвост: репутацию делают долгие случаи, а не типичные.",
+      "en": "How long it takes from a support contact to the problem being solved. It works in a pair with contact rate: fast support on its own signals that tickets get closed, not that the product is good. Watch the median and the tail: reputation is made by the long cases, not the typical ones."
+    },
+    "pitfalls": {
+      "ru": [
+        "«Решено» ставит агент, а не пользователь: доля переоткрытых тикетов показывает, насколько этой отметке можно верить.",
+        "Первый ответ и решение — разные метрики; быстрый автоответ улучшает первую и не трогает вторую.",
+        "Медиана растёт медленно, а больно делает хвост — держите рядом p90 и долю тикетов старше суток."
+      ],
+      "en": [
+        "\"Resolved\" is set by an agent, not the user: the reopen rate shows how much that flag is worth.",
+        "First response and resolution are different metrics; a fast auto-reply improves the first and leaves the second untouched.",
+        "The median moves slowly while the tail does the damage — keep p90 and the share of tickets older than a day next to it."
+      ]
+    },
+    "sql": "-- Resolution time and reopen rate by ticket category\nSELECT category,\n       COUNT(*) AS tickets,\n       ROUND(PERCENTILE_CONT(0.5) WITHIN GROUP (\n         ORDER BY EXTRACT(epoch FROM resolved_at - created_at) / 3600)::numeric, 1) AS median_hours,\n       ROUND(PERCENTILE_CONT(0.9) WITHIN GROUP (\n         ORDER BY EXTRACT(epoch FROM resolved_at - created_at) / 3600)::numeric, 1) AS p90_hours,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE reopened_count > 0) / COUNT(*), 1) AS reopened_pct\nFROM support_tickets\nWHERE resolved_at IS NOT NULL\n  AND created_at >= now() - INTERVAL '90 days'\nGROUP BY category\nORDER BY median_hours DESC;",
+    "related": ["complaint-rate", "nps-csat", "ces", "churn-rate"]
   }
 ]

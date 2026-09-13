@@ -1,0 +1,291 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "У поиска воронка нетипичная: привлечение почти целиком сводится к дистрибуции, а удержание — к тому, ушёл ли человек к конкуренту после одной плохой выдачи.",
+      "en": "Search has an unusual funnel: acquisition is almost entirely distribution, and retention is about whether the user left for a competitor after one bad result page."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Пользователь приходит не по рекламе, а через настройки по умолчанию: браузер, устройство, стартовая страница. Это покупается контрактами, а не кликами.",
+          "en": "The user arrives not through ads but through defaults: the browser, the device, the start page. That's bought with contracts, not clicks."
+        },
+        "metrics": [
+          {
+            "metricId": "traffic",
+            "label": {
+              "ru": "Запросы по точкам входа",
+              "en": "Queries by entry point"
+            },
+            "def": {
+              "ru": "Число запросов в разбивке по входу: приложение, браузер по умолчанию, виджет, веб — доли по ним меняются медленно и стоят дорого.",
+              "en": "Query volume split by entry point: app, default browser, widget, web — these shares move slowly and cost a lot."
+            }
+          },
+          {
+            "metricId": "cac",
+            "label": {
+              "ru": "TAC — плата за дистрибуцию",
+              "en": "TAC — traffic acquisition cost"
+            },
+            "def": {
+              "ru": "Выплаты за статус поиска по умолчанию, отнесённые к привлечённым запросам; крупнейшая статья расходов такого бизнеса.",
+              "en": "Payments for default-search status divided by the queries they bring; the largest cost line of this business."
+            }
+          },
+          {
+            "metricId": "organic-share",
+            "def": {
+              "ru": "Доля запросов от пользователей, пришедших без дистрибуционного контракта, — мера самостоятельности бренда.",
+              "en": "The share of queries from users who arrived without a distribution deal — a measure of brand self-sufficiency."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активация здесь мгновенная: первая же сессия либо дала ответ, либо отправила человека обратно в другую вкладку.",
+          "en": "Activation here is instant: the very first session either gave an answer or sent the person back to another tab."
+        },
+        "metrics": [
+          {
+            "metricId": "activation-rate",
+            "label": {
+              "ru": "Первая успешная сессия",
+              "en": "First successful session"
+            },
+            "def": {
+              "ru": "Доля новых, чья первая сессия закончилась долгим кликом, а не возвратом к выдаче и переформулировке.",
+              "en": "The share of new users whose first session ended in a long click rather than a return to the results and a rephrase."
+            }
+          },
+          {
+            "metricId": "search-success",
+            "def": {
+              "ru": "Доля сессий с найденным ответом: клик с долгим пребыванием на странице либо ответ прямо в выдаче.",
+              "en": "The share of sessions with an answer found: a click with a long dwell time, or an answer right in the results."
+            }
+          },
+          {
+            "metricId": "retention-n-day",
+            "label": {
+              "ru": "Возврат на следующий день",
+              "en": "Next-day return"
+            },
+            "def": {
+              "ru": "Доля новых, задавших запрос на следующий день; для поиска это важнее любых показателей первой сессии.",
+              "en": "The share of new users issuing a query the next day; for search this beats any first-session figure."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Удержание меряется частотой запросов: поиск теряют не разом, а по одной задаче — сначала перестают спрашивать сложное, потом простое.",
+          "en": "Retention is measured by query frequency: search isn't lost at once but one task at a time — first the hard questions stop, then the easy ones."
+        },
+        "metrics": [
+          {
+            "metricId": "sessions-per-user",
+            "label": {
+              "ru": "Запросов на пользователя",
+              "en": "Queries per user"
+            },
+            "def": {
+              "ru": "Число запросов активного за день; падение при неизменном DAU означает, что часть задач ушла к другому инструменту.",
+              "en": "Queries per active user per day; a drop at flat DAU means some tasks moved to another tool."
+            }
+          },
+          {
+            "metricId": "active-days",
+            "def": {
+              "ru": "Сколько дней в месяц человек искал: метрика привычки, устойчивая к разовым всплескам новостей.",
+              "en": "How many days a month the person searched: a habit metric resistant to one-off news spikes."
+            }
+          },
+          {
+            "metricId": "retention-n-day",
+            "label": {
+              "ru": "Retention D30",
+              "en": "D30 retention"
+            },
+            "def": {
+              "ru": "Доля когорты, задающей запросы через месяц; отдельно по мобильным и десктопным — привычки разные.",
+              "en": "The share of the cohort still querying a month later; split by mobile and desktop — the habits differ."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "Поиском не делятся, делятся результатом. Реферальный слой здесь тонкий, и его считают через расшаренные ссылки на выдачу и ответы.",
+          "en": "Nobody shares a search engine; people share a result. The referral layer here is thin and is counted through shared result and answer links."
+        },
+        "metrics": [
+          {
+            "metricId": "share-rate",
+            "def": {
+              "ru": "Доля сессий, из которых ссылка на выдачу или ответ ушла наружу — в мессенджер, документ, письмо.",
+              "en": "The share of sessions from which a result or answer link went outward — to a messenger, a document, an email."
+            }
+          },
+          {
+            "metricId": "referral-share",
+            "def": {
+              "ru": "Доля новых пользователей, пришедших по расшаренной ссылке, среди всех новых за период.",
+              "en": "The share of new users arriving via a shared link among all new users in the period."
+            }
+          },
+          {
+            "metricId": "nps-csat",
+            "label": {
+              "ru": "Готовность рекомендовать",
+              "en": "Willingness to recommend"
+            },
+            "def": {
+              "ru": "Опрос про готовность советовать поиск; в категории с дефолтами это единственный сигнал добровольного выбора.",
+              "en": "A survey on willingness to recommend the engine; in a defaults-driven category it's the only signal of voluntary choice."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Выручка поиска — произведение числа запросов, доли коммерческих среди них и цены клика. Первый множитель растить дорого, второй опасно, третий приятно.",
+          "en": "Search revenue is queries times the commercial share among them times the price of a click. The first factor is expensive to grow, the second dangerous, the third pleasant."
+        },
+        "metrics": [
+          {
+            "metricId": "ad-coverage",
+            "def": {
+              "ru": "Доля запросов с рекламой и число объявлений над органикой — рычаг выручки, который напрямую портит успешность сессий.",
+              "en": "The share of queries with ads and the number of ads above organic — a revenue lever that directly damages session success."
+            }
+          },
+          {
+            "metricId": "cpc",
+            "def": {
+              "ru": "Средняя цена клика по аукциону; растёт от конкуренции рекламодателей, а не от улучшений продукта.",
+              "en": "The average auction click price; it rises from advertiser competition rather than product improvements."
+            }
+          },
+          {
+            "metricId": "quality-score",
+            "def": {
+              "ru": "Оценка релевантности объявления: удерживает аукцион от того, чтобы продавать верх выдачи худшему по качеству и лучшему по ставке.",
+              "en": "The ad relevance score: it stops the auction from selling the top slot to the worst by quality and best by bid."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "Успешность сессии — главная метрика поиска, и в HEART она стоит на своём законном месте: буква T. Остальные буквы объясняют, что происходит вокруг неё.",
+      "en": "Session success is search's key metric, and in HEART it sits where it belongs: the letter T. The other letters explain what happens around it."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Человек доверяет выдаче и не проверяет её в другом поиске.",
+          "en": "The person trusts the results and doesn't double-check them in another engine."
+        },
+        "signal": {
+          "ru": "Опросы доверия, жалобы на рекламу над органикой, оценка усилия после сложных запросов.",
+          "en": "Trust surveys, complaints about ads above organic, effort ratings after hard queries."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "ces"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Поиском пользуются для сложных задач, а не только для навигации по знакомым сайтам.",
+          "en": "Search is used for hard tasks, not only to navigate to familiar sites."
+        },
+        "signal": {
+          "ru": "Число запросов на пользователя, доля длинных и небрендовых запросов.",
+          "en": "Queries per user, the share of long and non-brand queries."
+        },
+        "metrics": [
+          {
+            "metricId": "sessions-per-user"
+          },
+          {
+            "metricId": "active-days"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые форматы выдачи — карточки, ответы, картинки — реально используются.",
+          "en": "New result formats — cards, answers, images — actually get used."
+        },
+        "signal": {
+          "ru": "Доля сессий, где взаимодействовали с новым блоком, а не проскроллили его.",
+          "en": "The share of sessions where the new block was interacted with rather than scrolled past."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Поиск остаётся выбором по умолчанию даже там, где его можно сменить в два клика.",
+          "en": "Search stays the default choice even where it can be switched in two clicks."
+        },
+        "signal": {
+          "ru": "Доля пользователей, вернувшихся через месяц, и доля сменивших поиск по умолчанию.",
+          "en": "The share of users returning a month later and the share who switched their default engine."
+        },
+        "metrics": [
+          {
+            "metricId": "retention-n-day"
+          },
+          {
+            "metricId": "stickiness"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Ответ найден с первой выдачи и без переформулировок.",
+          "en": "The answer is found on the first result page, with no rephrasing."
+        },
+        "signal": {
+          "ru": "Доля переформулировок, доля пустых сессий, скорость выдачи.",
+          "en": "The rephrase share, the empty-session share, result latency."
+        },
+        "metrics": [
+          {
+            "metricId": "search-success"
+          },
+          {
+            "metricId": "time-on-task"
+          },
+          {
+            "metricId": "latency-p95"
+          }
+        ]
+      }
+    ]
+  }
+}

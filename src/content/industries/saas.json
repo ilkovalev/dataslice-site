@@ -91,7 +91,7 @@
                     "metricId": "win-rate"
                   }
                 ],
-                "metricId": "win-rate"
+                "metricId": "funnel-dropoff"
               }
             ],
             "kind": "group"
@@ -321,7 +321,7 @@
                           "ru": "Доля «спасённых» из собравшихся уходить — эффективность работы с риском.",
                           "en": "Share of would-be churners saved — the effectiveness of risk work."
                         },
-                        "metricId": "health-score"
+                        "metricId": "churn-rate"
                       }
                     ]
                   }
@@ -603,7 +603,7 @@
                   "ru": "Безопасность, комплаенс, SSO — покупка уровня всей организации.",
                   "en": "Security, compliance, SSO — an organization-level purchase."
                 },
-                "metricId": "mrr"
+                "metricId": "expansion-mrr"
               }
             ],
             "kind": "group"
@@ -922,7 +922,7 @@
                   "ru": "Доп-выручка поверх плана; следить за маржой инференса.",
                   "en": "Extra revenue on top of the plan; watch inference margin."
                 },
-                "metricId": "mrr"
+                "metricId": "expansion-mrr"
               },
               {
                 "id": "no-tier",
@@ -935,7 +935,7 @@
                   "ru": "Business / Enterprise: безопасность и админ-контроль.",
                   "en": "Business / Enterprise: security and admin controls."
                 },
-                "metricId": "mrr"
+                "metricId": "expansion-mrr"
               }
             ],
             "kind": "group"

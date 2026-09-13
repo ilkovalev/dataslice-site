@@ -1,0 +1,297 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "В on-demand воронка привязана к месту и часу: пассажир, водитель и заказ должны совпасть в одной точке за минуты. Метрики без разреза по городу и времени суток бессмысленны.",
+      "en": "In on-demand the funnel is tied to a place and an hour: rider, driver and order must meet at one point within minutes. Metrics without a city and time-of-day cut are meaningless."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Привлекать надо обе стороны сразу и в одном районе. Пассажир, открывший приложение там, где нет машин, не возвращается — и деньги на его привлечение сгорают.",
+          "en": "Both sides must be acquired at once and in the same district. A rider who opens the app where there are no cars doesn't come back — and the money spent on them burns."
+        },
+        "metrics": [
+          {
+            "metricId": "cac",
+            "label": {
+              "ru": "CAC пассажира и водителя",
+              "en": "Rider and driver CAC"
+            },
+            "def": {
+              "ru": "Стоимость привлечения по сторонам и по городам: экономика запуска в новом городе не переносится из старого.",
+              "en": "Acquisition cost by side and by city: the launch economics of a new city don't transfer from an old one."
+            }
+          },
+          {
+            "metricId": "installs",
+            "def": {
+              "ru": "Установки в разрезе города; в on-demand национальная цифра прячет то, что половина городов не вышла на ликвидность.",
+              "en": "Installs by city; in on-demand a national figure hides that half the cities never reached liquidity."
+            }
+          },
+          {
+            "metricId": "driver-density",
+            "def": {
+              "ru": "Число доступных водителей на квадратный километр в час пик — привлечение предложения меряется плотностью, а не головами.",
+              "en": "Available drivers per square kilometre at peak — supply acquisition is measured in density, not headcount."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Активация пассажира — первая поездка, которая состоялась. Активация водителя — первая смена, после которой он вышел на вторую.",
+          "en": "Rider activation is a first ride that actually happened. Driver activation is a first shift after which they came back for a second."
+        },
+        "metrics": [
+          {
+            "metricId": "activation-rate",
+            "label": {
+              "ru": "Установка → первая поездка",
+              "en": "Install → first ride"
+            },
+            "def": {
+              "ru": "Доля установивших, совершивших поездку за первую неделю; главный отвал происходит на подаче — машины нет или ждать долго.",
+              "en": "The share of installers who took a ride in week one; the main drop happens at dispatch — no car or too long a wait."
+            }
+          },
+          {
+            "metricId": "time-to-match",
+            "label": {
+              "ru": "Время подачи (ETA)",
+              "en": "Pickup ETA"
+            },
+            "def": {
+              "ru": "Медианное время от заказа до подачи в этом районе и в этот час; выше пяти-семи минут спрос начинает осыпаться.",
+              "en": "Median time from order to pickup in this district and hour; above five to seven minutes demand starts crumbling."
+            }
+          },
+          {
+            "metricId": "cancellation-rate",
+            "def": {
+              "ru": "Доля отмен до начала поездки, раздельно по пассажирам и водителям — отмена водителем бьёт по доверию сильнее долгого ожидания.",
+              "en": "The share of cancellations before the ride starts, split by rider and driver — a driver cancel damages trust more than a long wait."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Пассажир возвращается, если сервис предсказуем: важна не средняя подача, а доля поездок, где ждать пришлось дольше обещанного.",
+          "en": "The rider returns if the service is predictable: what matters isn't the average ETA but the share of rides where the wait exceeded the promise."
+        },
+        "metrics": [
+          {
+            "metricId": "purchase-frequency",
+            "label": {
+              "ru": "Поездок в месяц",
+              "en": "Rides per month"
+            },
+            "def": {
+              "ru": "Поездок на активного пассажира; в разрезе сценария — работа, аэропорт, вечер — цифры и их устойчивость разные.",
+              "en": "Rides per active rider; split by use case — commute, airport, night out — the numbers and their stability differ."
+            }
+          },
+          {
+            "metricId": "retention-n-day",
+            "label": {
+              "ru": "Retention по месяцам",
+              "en": "Monthly retention"
+            },
+            "def": {
+              "ru": "Доля когорты, заказывающей на 3-й и 6-й месяц; считается по городу — национальное среднее прячет провальные рынки.",
+              "en": "The share of the cohort ordering at month 3 and 6; measured per city — the national average hides failing markets."
+            }
+          },
+          {
+            "metricId": "churn-rate",
+            "label": {
+              "ru": "Отток водителей",
+              "en": "Driver churn"
+            },
+            "def": {
+              "ru": "Доля водителей, не вышедших на смену в следующем месяце; удержание предложения дороже удержания спроса.",
+              "en": "The share of drivers who didn't work a shift the next month; supply retention costs more than demand retention."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "Реферальные программы в такси исторически самый заметный канал — и самый уязвимый к охотникам за промокодами.",
+          "en": "Referral programs in ride-hailing are historically the most visible channel — and the most vulnerable to promo-code hunters."
+        },
+        "metrics": [
+          {
+            "metricId": "referral-share",
+            "def": {
+              "ru": "Доля новых пассажиров и водителей по реферальному коду; retention приглашённых считается отдельно.",
+              "en": "The share of new riders and drivers from a referral code; invited users' retention is tracked separately."
+            }
+          },
+          {
+            "metricId": "invite-conversion",
+            "def": {
+              "ru": "Доля разосланных кодов, закончившихся первой поездкой, а не просто установкой.",
+              "en": "The share of distributed codes ending in a first ride rather than just an install."
+            }
+          },
+          {
+            "metricId": "nps-csat",
+            "def": {
+              "ru": "Оценка после поездки; агрегируется по водителю и по району, а не только по сервису целиком.",
+              "en": "The post-ride rating; aggregated by driver and district, not only for the service as a whole."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Деньги считаются на поездку, а не на пользователя: комиссия минус промо, поддержка и страховка. Половина рынков может быть убыточной при растущем обороте.",
+          "en": "Money is counted per ride, not per user: commission minus promo, support and insurance. Half the markets can be loss-making while turnover grows."
+        },
+        "metrics": [
+          {
+            "metricId": "completed-orders",
+            "def": {
+              "ru": "Число состоявшихся поездок; отменённые не считаются — иначе метрика растёт от плохого матчинга.",
+              "en": "The count of completed rides; cancellations don't count — otherwise the metric grows from bad matching."
+            }
+          },
+          {
+            "metricId": "take-rate",
+            "def": {
+              "ru": "Доля стоимости поездки, остающаяся платформе после выплаты водителю.",
+              "en": "The share of the ride price the platform keeps after paying the driver."
+            }
+          },
+          {
+            "metricId": "contribution-margin",
+            "def": {
+              "ru": "Что остаётся с поездки после промо, поддержки и страховки — считается по городу, потому что различия между рынками кратные.",
+              "en": "What's left from a ride after promo, support and insurance — computed per city, because differences between markets are several-fold."
+            }
+          },
+          {
+            "metricId": "surge-share",
+            "def": {
+              "ru": "Доля поездок с повышенным коэффициентом: балансирует спрос в пик и одновременно портит доверие к цене.",
+              "en": "The share of rides at a surge multiplier: it balances peak demand and damages price trust at the same time."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "Поездка состоялась — этого мало. HEART спрашивает, сколько человек ждал, сколько заплатил сверх ожидаемого и вернётся ли водитель на смену.",
+      "en": "The ride happened — that's not enough. HEART asks how long the person waited, how much above expectation they paid and whether the driver returns for a shift."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Пассажир считает цену честной, а водитель — заработок предсказуемым.",
+          "en": "The rider finds the price fair and the driver finds earnings predictable."
+        },
+        "signal": {
+          "ru": "Оценки после поездки, жалобы на surge, опросы водителей о заработке.",
+          "en": "Post-ride ratings, surge complaints, driver earnings surveys."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "complaint-rate"
+          },
+          {
+            "metricId": "hourly-earnings"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Сервис стал регулярным способом передвижения, а не запасным вариантом на случай дождя.",
+          "en": "The service became a regular way to travel rather than a rainy-day fallback."
+        },
+        "signal": {
+          "ru": "Поездок в месяц и число сценариев, в которых сервисом пользуются.",
+          "en": "Rides per month and the number of use cases the service covers."
+        },
+        "metrics": [
+          {
+            "metricId": "purchase-frequency"
+          },
+          {
+            "metricId": "active-days"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые тарифы и режимы находят свою аудиторию, а не размывают выбор.",
+          "en": "New tariffs and modes find their audience instead of diluting the choice."
+        },
+        "signal": {
+          "ru": "Доля поездок в новом тарифе и доля водителей, подключивших режим.",
+          "en": "The share of rides on the new tariff and the share of drivers who enabled the mode."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Остаются обе стороны: пассажир заказывает через месяц, водитель выходит на смену.",
+          "en": "Both sides stay: the rider orders a month later, the driver shows up for a shift."
+        },
+        "signal": {
+          "ru": "Дожитие когорт пассажиров и отток водителей по городам.",
+          "en": "Rider cohort survival and driver churn by city."
+        },
+        "metrics": [
+          {
+            "metricId": "retention-n-day"
+          },
+          {
+            "metricId": "churn-rate"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Заказ находит машину за обещанное время и доезжает без отмены.",
+          "en": "The order finds a car within the promised time and completes without a cancellation."
+        },
+        "signal": {
+          "ru": "Доля заказов без машины, отклонение факта от ETA, отмены после подтверждения.",
+          "en": "The share of orders with no car, actual-versus-ETA deviation, cancellations after confirmation."
+        },
+        "metrics": [
+          {
+            "metricId": "time-to-match"
+          },
+          {
+            "metricId": "cancellation-rate"
+          },
+          {
+            "metricId": "supply-demand-balance"
+          }
+        ]
+      }
+    ]
+  }
+}

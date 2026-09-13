@@ -298,5 +298,80 @@
     },
     "sql": "-- Session-level funnel: view -> cart -> checkout -> payment\nWITH steps AS (\n  SELECT s.session_id,\n         MAX((e.event_name = 'product_view')::int) AS s1,\n         MAX((e.event_name = 'add_to_cart')::int) AS s2,\n         MAX((e.event_name = 'checkout_start')::int) AS s3,\n         MAX((e.event_name = 'payment_success')::int) AS s4\n  FROM sessions s\n  JOIN events e ON e.user_id = s.user_id\n   AND e.ts BETWEEN s.started_at AND s.started_at + INTERVAL '1 hour'\n  GROUP BY s.session_id\n)\nSELECT SUM(s1) AS product_view,\n       SUM(s1 * s2) AS add_to_cart,\n       SUM(s1 * s2 * s3) AS checkout,\n       SUM(s1 * s2 * s3 * s4) AS paid,\n       ROUND(100.0 * SUM(s1 * s2) / NULLIF(SUM(s1), 0), 1) AS view_to_cart_pct,\n       ROUND(100.0 * SUM(s1 * s2 * s3 * s4) / NULLIF(SUM(s1 * s2 * s3), 0), 1) AS checkout_to_paid_pct\nFROM steps;",
     "related": ["conversion-rate", "activation-rate", "oos-rate"]
+  },
+  {
+    "id": "organic-share",
+    "category": "acquisition",
+    "title": { "ru": "Доля органики в привлечении", "en": "Organic share of acquisition" },
+    "aliases": ["доля органики", "organic share", "органический трафик"],
+    "tex": { "ru": "\\text{Доля органики}=\\dfrac{\\text{новые без платного источника}}{\\text{все новые}}", "en": "\\text{Organic share}=\\dfrac{\\text{new users with no paid source}}{\\text{all new users}}" },
+    "desc": {
+      "ru": "Какая часть новых пользователей пришла без оплаченного клика: прямые заходы, поиск по бренду, рекомендации, сторы. Показывает, накопил ли продукт собственную гравитацию: бизнес с высокой долей органики переживает отключение рекламного бюджета, бизнес с низкой — останавливается вместе с ним.",
+      "en": "What part of new users arrived without a paid click: direct visits, brand search, word of mouth, store discovery. It shows whether the product has built its own gravity: a business with a high organic share survives an ad-budget shutdown, one with a low share stops along with it."
+    },
+    "pitfalls": {
+      "ru": [
+        "Атрибуция завышает органику: часть «прямых» заходов — это люди, увидевшие рекламу и набравшие адрес руками.",
+        "Брендовый поиск наполовину оплачен прошлыми кампаниями — отделяйте его от небрендового, иначе органика выглядит самостоятельнее, чем есть.",
+        "Доля растёт и при сокращении платных каналов: смотрите абсолютное число органических новых, а не только долю."
+      ],
+      "en": [
+        "Attribution overstates organic: some \"direct\" visits are people who saw an ad and typed the address by hand.",
+        "Brand search is half-paid by past campaigns — separate it from non-brand, or organic looks more self-sufficient than it is.",
+        "The share also grows when paid channels are cut: watch the absolute count of organic new users, not just the share."
+      ]
+    },
+    "sql": "-- Organic share of new users, with brand vs non-brand search split\nSELECT date_trunc('month', created_at) AS month,\n       COUNT(*) AS new_users,\n       COUNT(*) FILTER (WHERE utm_source IS NULL OR utm_medium IN ('organic', 'referral', 'none')) AS organic,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE utm_source IS NULL\n              OR utm_medium IN ('organic', 'referral', 'none')) / COUNT(*), 1) AS organic_pct,\n       COUNT(*) FILTER (WHERE utm_medium = 'organic' AND is_brand_query) AS brand_search,\n       COUNT(*) FILTER (WHERE utm_medium = 'organic' AND NOT is_brand_query) AS nonbrand_search\nFROM users\nGROUP BY 1\nORDER BY 1;",
+    "related": ["cac", "traffic", "seo-visibility", "referral-share"]
+  },
+  {
+    "id": "referral-share",
+    "category": "acquisition",
+    "title": { "ru": "Доля новых по рекомендации", "en": "Referral share of new users" },
+    "aliases": ["доля по рекомендации", "referral share", "сарафан"],
+    "tex": { "ru": "\\text{Доля рефералов}=\\dfrac{\\text{новые по приглашению или коду}}{\\text{все новые}}", "en": "\\text{Referral share}=\\dfrac{\\text{new users from an invite or code}}{\\text{all new users}}" },
+    "desc": {
+      "ru": "Какая часть новых пользователей пришла по приглашению существующих — по ссылке, промокоду или расшаренному объекту. Буква R (Referral) в AARRR в измеримом виде: в отличие от вирального коэффициента считается по факту атрибуции, а не моделируется, поэтому её можно класть в отчёт без оговорок про допущения.",
+      "en": "What part of new users arrived through an invite from an existing user — a link, a promo code or a shared object. The R (Referral) of AARRR in measurable form: unlike the viral coefficient it is counted from actual attribution rather than modelled, so it goes into a report without caveats about assumptions."
+    },
+    "pitfalls": {
+      "ru": [
+        "Реферальные программы притягивают охотников за бонусами: смотрите retention приглашённых отдельно, иначе канал выглядит дешёвым и пустым.",
+        "Часть приглашённых пришла бы сама — вознаграждение платится и за них; честная оценка требует эксперимента, а не сравнения каналов.",
+        "Шеринг контента и приглашение в продукт — разные вещи: расшаренная ссылка на страницу не создаёт пользователя."
+      ],
+      "en": [
+        "Referral programs attract bonus hunters: track invited users' retention separately, or the channel looks cheap and empty.",
+        "Some invitees would have come anyway — the reward is paid for them too; an honest estimate needs an experiment, not a channel comparison.",
+        "Sharing content and inviting into the product are different things: a shared page link doesn't create a user."
+      ]
+    },
+    "sql": "-- Referral share of new users and the retention of those invited\nWITH new_users AS (\n  SELECT user_id, created_at, referrer_user_id,\n         date_trunc('month', created_at) AS cohort\n  FROM users\n)\nSELECT cohort,\n       COUNT(*) AS new_users,\n       COUNT(*) FILTER (WHERE referrer_user_id IS NOT NULL) AS referred,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE referrer_user_id IS NOT NULL) / COUNT(*), 1) AS referral_pct,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE referrer_user_id IS NOT NULL AND EXISTS (\n         SELECT 1 FROM events e WHERE e.user_id = n.user_id\n           AND e.ts >= n.created_at + INTERVAL '30 days'))\n         / NULLIF(COUNT(*) FILTER (WHERE referrer_user_id IS NOT NULL), 0), 1) AS referred_d30_pct\nFROM new_users n\nGROUP BY cohort\nORDER BY cohort;",
+    "related": ["viral-coefficient", "invite-conversion", "organic-share", "cac"]
+  },
+  {
+    "id": "onboarding-completion",
+    "category": "acquisition",
+    "title": { "ru": "Прохождение онбординга", "en": "Onboarding completion" },
+    "aliases": ["онбординг", "ftue", "onboarding completion", "первый сценарий"],
+    "tex": { "ru": "\\text{Онбординг}=\\dfrac{\\text{дошли до последнего шага}}{\\text{начали первый шаг}}", "en": "\\text{Onboarding}=\\dfrac{\\text{reached the last step}}{\\text{started the first step}}" },
+    "desc": {
+      "ru": "Доля новых пользователей, прошедших вводный сценарий целиком, и распределение отвалов по шагам. Мост между привлечением и активацией: до конца онбординга пользователь ещё не знает, что продукт умеет, поэтому каждый лишний шаг оплачивается людьми, купленными в рекламе.",
+      "en": "The share of new users who complete the introductory flow, plus the drop-off distribution across steps. The bridge between acquisition and activation: until onboarding ends the user still doesn't know what the product does, so every extra step is paid for with people bought in ads."
+    },
+    "pitfalls": {
+      "ru": [
+        "Пройденный онбординг не равен активации: человек мог прокликать экраны и не сделать ни одного полезного действия.",
+        "Отвал на шаге считают по-разному: доля от начавших шаг и доля от начавших онбординг — две разные истории про одно место.",
+        "Убирать шаги ради метрики опасно: запрос разрешений и настройка иногда и есть та работа, после которой продукт начинает работать."
+      ],
+      "en": [
+        "Completing onboarding isn't activation: a person may have clicked through screens without a single useful action.",
+        "Step drop-off is counted in different ways: the share of those who started the step and the share of those who started onboarding tell two different stories about one place.",
+        "Removing steps for the metric's sake is risky: permission prompts and setup are sometimes exactly the work that makes the product work."
+      ]
+    },
+    "sql": "-- Onboarding funnel: completion and the drop-off per step\nWITH steps AS (\n  SELECT user_id,\n         (props->>'step_no')::int AS step_no,\n         MIN(ts) AS reached_at\n  FROM events\n  WHERE event_name = 'onboarding_step'\n  GROUP BY 1, 2\n),\nper_step AS (\n  SELECT step_no, COUNT(DISTINCT user_id) AS users\n  FROM steps GROUP BY 1\n)\nSELECT step_no, users,\n       ROUND(100.0 * users / NULLIF(MAX(users) OVER (), 0), 1) AS pct_of_starters,\n       ROUND(100.0 * (LAG(users) OVER (ORDER BY step_no) - users)\n         / NULLIF(LAG(users) OVER (ORDER BY step_no), 0), 1) AS dropoff_from_prev_pct\nFROM per_step\nORDER BY step_no;",
+    "related": ["activation-rate", "ttv", "funnel-dropoff", "retention-n-day"]
   }
 ]

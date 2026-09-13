@@ -1,0 +1,307 @@
+{
+  "aarrr": {
+    "note": {
+      "ru": "У маркетплейса две воронки: покупательская и продавцовая. Считать их одним AARRR нельзя — рост только одной стороны ломает ликвидность вместо того, чтобы её создавать.",
+      "en": "A marketplace has two funnels: the buyer's and the seller's. They can't share one AARRR — growing only one side breaks liquidity instead of building it."
+    },
+    "stages": [
+      {
+        "key": "acquisition",
+        "note": {
+          "ru": "Спрос приходит из поиска и рекламы, предложение — из работы с селлерами. Дешевле обычно та сторона, которой на площадке не хватает, и это меняется от категории к категории.",
+          "en": "Demand comes from search and ads, supply from seller operations. The cheaper side is usually whichever is scarce, and that shifts from category to category."
+        },
+        "metrics": [
+          {
+            "metricId": "cac",
+            "label": {
+              "ru": "CAC покупателя и селлера",
+              "en": "Buyer and seller CAC"
+            },
+            "def": {
+              "ru": "Стоимость привлечения по каждой стороне отдельно; сравнивать их между собой бессмысленно — окупаются они по разным механизмам.",
+              "en": "Acquisition cost per side, counted separately; comparing them to each other is meaningless — they pay back through different mechanisms."
+            }
+          },
+          {
+            "metricId": "seo-visibility",
+            "def": {
+              "ru": "Видимость карточек в поисковой выдаче: у маркетплейсов это основной канал спроса, растущий вместе с ассортиментом.",
+              "en": "Product-page visibility in search results: for marketplaces this is the main demand channel, growing with assortment."
+            }
+          },
+          {
+            "metricId": "active-listings",
+            "label": {
+              "ru": "Активные селлеры и карточки",
+              "en": "Active sellers and listings"
+            },
+            "def": {
+              "ru": "Число селлеров с хотя бы одним заказом за месяц и карточек в наличии — привлечение на стороне предложения.",
+              "en": "The count of sellers with at least one order in a month and in-stock listings — acquisition on the supply side."
+            }
+          }
+        ]
+      },
+      {
+        "key": "activation",
+        "note": {
+          "ru": "Покупатель активирован после первого заказа, который дошёл и не вернулся. Селлер — после первых продаж: до них он не поверит, что площадка работает.",
+          "en": "The buyer is activated after a first order that arrived and wasn't returned. The seller after their first sales: until then they won't believe the platform works."
+        },
+        "metrics": [
+          {
+            "metricId": "conversion-rate",
+            "label": {
+              "ru": "CR первого заказа",
+              "en": "First-order conversion"
+            },
+            "def": {
+              "ru": "Доля новых, оформивших заказ в первую сессию; считается от визитов, а не от регистраций.",
+              "en": "The share of new users placing an order in the first session; measured against visits, not signups."
+            }
+          },
+          {
+            "metricId": "search-to-cart",
+            "def": {
+              "ru": "Доля поисков, закончившихся добавлением в корзину: ловит разрыв между тем, что ищут, и тем, что есть в наличии.",
+              "en": "The share of searches ending in an add-to-cart: it catches the gap between what's searched for and what's in stock."
+            }
+          },
+          {
+            "metricId": "seller-retention",
+            "label": {
+              "ru": "Первые продажи селлера",
+              "en": "Seller's first sales"
+            },
+            "def": {
+              "ru": "Доля новых селлеров, получивших заказ в первые 30 дней; без первого заказа селлер уходит и уносит ассортимент.",
+              "en": "The share of new sellers receiving an order within 30 days; without a first order the seller leaves and takes their assortment."
+            }
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "note": {
+          "ru": "Удержание покупателя на маркетплейсе решается логистикой: доставка вовремя и без брака возвращает лучше любой скидки.",
+          "en": "Buyer retention on a marketplace is decided by logistics: on-time, defect-free delivery brings people back better than any discount."
+        },
+        "metrics": [
+          {
+            "metricId": "repeat-rate",
+            "def": {
+              "ru": "Доля покупателей, вернувшихся за вторым заказом; окно берётся по циклу покупки категории, а не «за всё время».",
+              "en": "The share of buyers returning for a second order; the window matches the category's purchase cycle rather than \"all time\"."
+            }
+          },
+          {
+            "metricId": "purchase-frequency",
+            "def": {
+              "ru": "Заказов на активного покупателя в месяц — метрика, которая отличает площадку-привычку от площадки-разового повода.",
+              "en": "Orders per active buyer per month — the metric that separates a habit platform from a one-off-occasion platform."
+            }
+          },
+          {
+            "metricId": "on-time-delivery",
+            "def": {
+              "ru": "Доля заказов, доставленных в обещанный срок; вместе с браком объясняет почти весь отток покупателей.",
+              "en": "The share of orders delivered within the promised window; together with defects it explains nearly all buyer churn."
+            }
+          }
+        ]
+      },
+      {
+        "key": "referral",
+        "note": {
+          "ru": "Товарные площадки рекомендуют не как сервис, а как способ купить конкретное дешевле. Реферальный слой тонкий, зато карточка товара расшаривается сама.",
+          "en": "Product platforms are recommended not as a service but as a cheaper way to buy a specific thing. The referral layer is thin, but the product page shares itself."
+        },
+        "metrics": [
+          {
+            "metricId": "referral-share",
+            "def": {
+              "ru": "Доля новых покупателей по реферальной ссылке или промокоду друга среди всех новых.",
+              "en": "The share of new buyers from a referral link or a friend's promo code among all new buyers."
+            }
+          },
+          {
+            "metricId": "share-rate",
+            "label": {
+              "ru": "Расшаривание карточек",
+              "en": "Product page sharing"
+            },
+            "def": {
+              "ru": "Доля просмотров карточки, из которых ссылка ушла наружу — в мессенджер или в семейный чат.",
+              "en": "The share of product-page views from which a link went outward — to a messenger or a family chat."
+            }
+          },
+          {
+            "metricId": "nps-csat",
+            "def": {
+              "ru": "Готовность рекомендовать; считается раздельно по покупателям и селлерам — у них разный опыт одной площадки.",
+              "en": "Willingness to recommend; measured separately for buyers and sellers — they experience the same platform differently."
+            }
+          }
+        ]
+      },
+      {
+        "key": "revenue",
+        "note": {
+          "ru": "Маркетплейс зарабатывает долей от чужого оборота. Поднимать take rate легко и опасно: селлеры уходят не сразу, а вместе с ассортиментом.",
+          "en": "A marketplace earns a share of someone else's turnover. Raising take rate is easy and dangerous: sellers don't leave at once — they leave with their assortment."
+        },
+        "metrics": [
+          {
+            "metricId": "gmv",
+            "def": {
+              "ru": "Валовой оборот площадки; отменённые и возвращённые заказы вычитаются, иначе метрика меряет намерения.",
+              "en": "The platform's gross merchandise value; cancelled and returned orders are subtracted, or the metric measures intentions."
+            }
+          },
+          {
+            "metricId": "take-rate",
+            "def": {
+              "ru": "Доля GMV, остающаяся площадке: комиссия плюс логистика, реклама и услуги селлерам.",
+              "en": "The share of GMV the platform keeps: commission plus logistics, ads and seller services."
+            }
+          },
+          {
+            "metricId": "ad-coverage",
+            "label": {
+              "ru": "Реклама селлеров в выдаче",
+              "en": "Seller ads in results"
+            },
+            "def": {
+              "ru": "Доля позиций выдачи, проданных селлерам; растит выручку и одновременно ухудшает релевантность поиска.",
+              "en": "The share of result slots sold to sellers; it grows revenue and degrades search relevance at the same time."
+            }
+          },
+          {
+            "metricId": "contribution-margin",
+            "label": {
+              "ru": "Маржа на заказ",
+              "en": "Margin per order"
+            },
+            "def": {
+              "ru": "Что остаётся с заказа после логистики, возвратов и промо — цифра, ради которой существует весь оборот.",
+              "en": "What's left from an order after logistics, returns and promo — the number the whole turnover exists for."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "heart": {
+    "note": {
+      "ru": "GMV растёт и от скидок в убыток. HEART смотрит на то, что оборот скрывает: нашёл ли покупатель товар, дошёл ли заказ, вернулся ли селлер.",
+      "en": "GMV also grows from loss-making discounts. HEART looks at what turnover hides: did the buyer find the product, did the order arrive, did the seller come back."
+    },
+    "dims": [
+      {
+        "key": "happiness",
+        "goal": {
+          "ru": "Покупатель доверяет площадке настолько, что не проверяет цену и отзывы на стороне.",
+          "en": "The buyer trusts the platform enough not to check price and reviews elsewhere."
+        },
+        "signal": {
+          "ru": "Доля жалоб на брак и подделки, оценки после доставки, опросы селлеров.",
+          "en": "The share of defect and counterfeit complaints, post-delivery ratings, seller surveys."
+        },
+        "metrics": [
+          {
+            "metricId": "nps-csat"
+          },
+          {
+            "metricId": "complaint-rate"
+          },
+          {
+            "metricId": "return-rate"
+          }
+        ]
+      },
+      {
+        "key": "engagement",
+        "goal": {
+          "ru": "Площадкой пользуются регулярно, а не заходят на неё по ссылке из поиска раз в квартал.",
+          "en": "The platform is used regularly rather than visited from a search link once a quarter."
+        },
+        "signal": {
+          "ru": "Заказов в месяц, глубина сессии, доля заходов из приложения.",
+          "en": "Orders per month, session depth, the share of app sessions."
+        },
+        "metrics": [
+          {
+            "metricId": "purchase-frequency"
+          },
+          {
+            "metricId": "session-depth"
+          },
+          {
+            "metricId": "app-share"
+          }
+        ]
+      },
+      {
+        "key": "adoption",
+        "goal": {
+          "ru": "Новые сервисы для селлеров и покупателей действительно берут в работу.",
+          "en": "New seller and buyer services actually get put to work."
+        },
+        "signal": {
+          "ru": "Доля селлеров, подключивших сервис, и доля заказов, прошедших через него.",
+          "en": "The share of sellers who enabled the service and the share of orders that went through it."
+        },
+        "metrics": [
+          {
+            "metricId": "feature-adoption"
+          },
+          {
+            "metricId": "adoption-depth"
+          }
+        ]
+      },
+      {
+        "key": "retention",
+        "goal": {
+          "ru": "Обе стороны остаются: покупатель возвращается за вторым заказом, селлер не уносит ассортимент к конкуренту.",
+          "en": "Both sides stay: the buyer returns for a second order, the seller doesn't move their assortment to a competitor."
+        },
+        "signal": {
+          "ru": "Повторные покупки и доля селлеров, продающих второй месяц подряд.",
+          "en": "Repeat purchases and the share of sellers selling a second month in a row."
+        },
+        "metrics": [
+          {
+            "metricId": "repeat-rate"
+          },
+          {
+            "metricId": "seller-retention"
+          }
+        ]
+      },
+      {
+        "key": "task-success",
+        "goal": {
+          "ru": "Покупатель находит нужный товар в наличии и получает его вовремя.",
+          "en": "The buyer finds the needed item in stock and receives it on time."
+        },
+        "signal": {
+          "ru": "Доля поисков без результата, доля позиций не в наличии, доставка в срок.",
+          "en": "The share of empty searches, the out-of-stock share, on-time delivery."
+        },
+        "metrics": [
+          {
+            "metricId": "search-to-cart"
+          },
+          {
+            "metricId": "oos-rate"
+          },
+          {
+            "metricId": "on-time-delivery"
+          }
+        ]
+      }
+    ]
+  }
+}

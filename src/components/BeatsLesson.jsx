@@ -118,7 +118,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
                 className="py-[19px] -my-[19px] bg-transparent flex items-center"
               >
                 <span
-                  className={`block h-1.5 rounded-full transition-all ${k === i ? 'w-6 bg-accent' : 'w-3 bg-black/12 hover:bg-black/20'}`}
+                  className={`block h-1.5 rounded-full transition-all ${k === i ? 'w-6 bg-accent' : 'w-3 bg-black/[0.12] hover:bg-black/20'}`}
                 />
               </button>
             ))}

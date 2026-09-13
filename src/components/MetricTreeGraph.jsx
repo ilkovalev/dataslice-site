@@ -323,8 +323,8 @@ export default function MetricTreeGraph({ tree, defaultDepth, plain = false, cla
                 } ${levelBox[n.level] ?? 'border-black/15'} ${selected?.id === n.id ? 'ring-2 ring-accent/60' : ''}`}
                 style={{ left: n.cx - BOX_W / 2, top: n.y, width: BOX_W, minHeight: BOX_MIN_H }}
               >
-                <div className={`text-[13px] font-medium leading-tight ${levelText[n.level] ?? 'text-gray-900'}`}>{n.title}</div>
-                {n.formula && <div className="text-[10px] font-mono text-cyanink/90 mt-0.5 leading-tight">{n.formula}</div>}
+                <span className={`block text-[13px] font-medium leading-tight ${levelText[n.level] ?? 'text-gray-900'}`}>{n.title}</span>
+                {n.formula && <span className="block text-[10px] font-mono text-cyanink/90 mt-0.5 leading-tight">{n.formula}</span>}
               </button>
             )
           })}
@@ -334,7 +334,7 @@ export default function MetricTreeGraph({ tree, defaultDepth, plain = false, cla
               key={`t-${n.id}`}
               onClick={(e) => { e.stopPropagation(); toggle(n.id) }}
               aria-label={n.collapsed ? t.treeExpandAll : t.treeCollapseAll}
-              className={`absolute z-10 rounded-full border text-[10px] font-mono leading-none px-1.5 min-w-[26px] h-[20px] ${
+              className={`absolute z-10 rounded-full border text-[10px] font-mono leading-none px-1.5 min-w-[30px] h-[24px] sm:min-w-[26px] sm:h-[20px] after:absolute after:content-[''] after:-inset-1.5 ${
                 n.collapsed
                   ? 'border-accent/50 bg-white text-cyanink hover:bg-accent/10'
                   : 'border-black/15 bg-white text-gray-400 hover:text-gray-700'

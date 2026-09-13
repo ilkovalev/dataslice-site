@@ -42,7 +42,7 @@ export default function Framework({ industries, onPick }) {
         <aside className="mt-6 lg:mt-0 rounded-xl border border-black/10 bg-panel p-5">
           <div className="text-xs uppercase tracking-wider text-gray-500 mb-3">{t.anatomyHeading}</div>
           <div className="space-y-2">
-            <div className="rounded-lg border border-accent/40 bg-accent/12 px-3.5 py-2.5">
+            <div className="rounded-lg border border-accent/40 bg-accent/[0.12] px-3.5 py-2.5">
               <div className="text-sm font-semibold text-cyanink">{t.anatomyNsm.t}</div>
               <div className="text-xs text-gray-600 mt-0.5">{t.anatomyNsm.d}</div>
             </div>
@@ -82,7 +82,7 @@ export default function Framework({ industries, onPick }) {
             </div>
             <div className="rounded-xl border border-black/10 bg-panel p-5 flex-1 flex flex-col items-center justify-center gap-2">
               {PYRAMID_BANDS.map((b, i) => (
-                <div key={i} className="rounded-lg border border-black/10 bg-accent/12 px-3 py-2 text-center" style={{ width: b.w }}>
+                <div key={i} className="rounded-lg border border-black/10 bg-accent/[0.12] px-3 py-2 text-center" style={{ width: b.w }}>
                   <div className="text-[11px] uppercase tracking-wider text-gray-700">{loc(b.label, locale)}</div>
                   <div className="text-xs text-gray-900">{loc(b.items, locale)}</div>
                 </div>

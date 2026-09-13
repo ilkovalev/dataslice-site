@@ -57,7 +57,7 @@ export default function NorthStar({ industries, onPick }) {
               <div className="text-xs text-gray-600 mt-0.5">{t.ioInput.d}</div>
             </div>
             <div className="flex justify-center text-gray-300 text-xs leading-none">↓</div>
-            <div className="rounded-lg border border-accent/40 bg-accent/12 px-3.5 py-2.5">
+            <div className="rounded-lg border border-accent/40 bg-accent/[0.12] px-3.5 py-2.5">
               <div className="text-sm font-semibold text-cyanink">{t.ioNsm.t}</div>
               <div className="text-xs text-gray-600 mt-0.5">{t.ioNsm.d}</div>
             </div>

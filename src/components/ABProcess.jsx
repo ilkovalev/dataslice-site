@@ -77,7 +77,7 @@ export default function ABProcess({ locale = 'ru' }) {
               sel === i ? 'border-accent/60 bg-accent/15 text-cyanink' : 'border-black/10 text-gray-700 hover:bg-black/5'
             }`}
           >
-            <div className="text-[10px] text-gray-500">{en ? 'phase' : 'этап'} {ph.n}</div>
+            <span className="block text-[10px] text-gray-500">{en ? 'phase' : 'этап'} {ph.n}</span>
             {en ? ph.titleEn : ph.title}
           </button>
         ))}

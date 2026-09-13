@@ -324,13 +324,13 @@ export default function StatsPage() {
           <nav className="order-4 md:order-none mt-12 pt-5 border-t border-black/10 flex justify-between gap-3">
             {prevLoc ? (
               <button onClick={() => goLesson(prev)} className="text-left text-sm text-gray-700 hover:text-cyanink max-w-[45%]">
-                <div className="text-gray-500 text-xs">{t.prevArrow}</div>
+                <span className="block text-gray-500 text-xs">{t.prevArrow}</span>
                 {prevLoc.title}
               </button>
             ) : <span />}
             {nextLoc ? (
               <button onClick={() => goLesson(next)} className="text-right text-sm text-gray-700 hover:text-cyanink max-w-[45%]">
-                <div className="text-gray-500 text-xs">{t.nextArrow}</div>
+                <span className="block text-gray-500 text-xs">{t.nextArrow}</span>
                 {nextLoc.title}
               </button>
             ) : <span />}

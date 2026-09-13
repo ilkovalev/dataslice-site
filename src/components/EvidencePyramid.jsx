@@ -22,7 +22,7 @@ export default function EvidencePyramid({ locale = 'ru' }) {
             onClick={() => setSel(i)}
             style={{ width: l.w }}
             className={`rounded-md border px-3 py-2 text-center text-sm transition-colors ${
-              sel === i ? 'border-accent/60 bg-accent/15 text-cyanink' : l.ab ? 'border-accent/40 bg-accent/8 text-gray-800' : 'border-black/10 bg-ink text-gray-700 hover:bg-black/5'
+              sel === i ? 'border-accent/60 bg-accent/15 text-cyanink' : l.ab ? 'border-accent/40 bg-accent/[0.08] text-gray-800' : 'border-black/10 bg-ink text-gray-700 hover:bg-black/5'
             }`}
           >
             {en ? l.nameEn : l.name}{l.ab && <span className="text-[10px] text-cyanink ml-1">★</span>}

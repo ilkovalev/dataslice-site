@@ -50,8 +50,8 @@ const first = 'center-measures'
 const routes = [
   { url: '/stats', file: 'stats.html', canonical: `${SITE}/stats/${first}` },
   { url: '/metrics', file: 'metrics.html', canonical: `${SITE}/metrics`, title: `Иерархии метрик по ${N_INDUSTRIES} индустриям — «Кусочек пиццы»`, desc: `Деревья метрик North Star → драйверы → операционные → контр-метрики по ${N_INDUSTRIES} индустриям, с разборами реальных компаний. Бесплатно и интерактивно.`, alternates: alt('/metrics', '/en/metrics') },
-  { url: '/roadmaps', file: 'roadmaps.html', canonical: `${SITE}/roadmaps`, title: 'Роудмапы профессий в данных — «Кусочек пиццы»', desc: 'Аналитика, инженерия данных и Data Science: чем занимается каждый трек, что учить в каком порядке и как понять, что этап закрыт.', alternates: alt('/roadmaps', '/en/roadmaps') },
-  { url: '/glossary', file: 'glossary.html', canonical: `${SITE}/glossary`, title: 'Глоссарий статистики и бизнес-метрик — «Кусочек пиццы»', desc: 'Термины статистики и бизнес-метрики простыми словами, с поиском по-русски и по-английски и ссылками на интерактивные уроки.', alternates: alt('/glossary', '/en/glossary') },
+  { url: '/roadmaps', file: 'roadmaps.html', canonical: `${SITE}/roadmaps`, title: 'Роудмапы профессий в данных — «Кусочек пиццы»', desc: 'Три трека: аналитика, инженерия данных и DS/ML. 13 ролей, путь по этапам и карьерная лестница до CDO. Бесплатно и без регистрации.', alternates: alt('/roadmaps', '/en/roadmaps') },
+  { url: '/glossary', file: 'glossary.html', canonical: `${SITE}/glossary`, title: 'Глоссарий статистики и бизнес-метрик — «Кусочек пиццы»', desc: '112 терминов статистики и бизнес-метрик простыми словами, с поиском по-русски и по-английски и ссылками на интерактивные уроки.', alternates: alt('/glossary', '/en/glossary') },
   ...lessons.map((l) => ({
     url: `/stats/${l.id}`,
     file: `stats/${l.id}.html`,
@@ -65,8 +65,8 @@ const routes = [
   { url: '/en', file: 'en.html', canonical: `${SITE}/en`, lang: 'en', alternates: alt('/', '/en'), title: 'Analytics you can touch — DataSlice', desc: `An interactive reference for analysts: ${N_LESSONS} statistics lessons, metric trees for ${N_INDUSTRIES} industries and a glossary. No sign-up.` },
   { url: '/en/stats', file: 'en/stats.html', canonical: `${SITE}/en/stats/${first}`, lang: 'en', title: 'Statistics you can touch — DataSlice', desc: `Free interactive statistics course: ${N_LESSONS} lessons from the mean to A/B tests and Bayes, plus metric trees for ${N_INDUSTRIES} industries. No sign-up.` },
   { url: '/en/metrics', file: 'en/metrics.html', canonical: `${SITE}/en/metrics`, lang: 'en', title: `Metric trees for ${N_INDUSTRIES} industries — DataSlice`, desc: `North Star → drivers → operational → guardrail metric trees for ${N_INDUSTRIES} industries, with real-company breakdowns. Free and interactive.`, alternates: alt('/metrics', '/en/metrics') },
-  { url: '/en/roadmaps', file: 'en/roadmaps.html', canonical: `${SITE}/en/roadmaps`, lang: 'en', title: 'Data career roadmaps — DataSlice', desc: 'Analytics, data engineering and data science: what each track actually does, what to learn in which order and how to tell a stage is closed.', alternates: alt('/roadmaps', '/en/roadmaps') },
-  { url: '/en/glossary', file: 'en/glossary.html', canonical: `${SITE}/en/glossary`, lang: 'en', title: 'Statistics and business-metrics glossary — DataSlice', desc: 'Statistics and business-metric terms in plain words, with search and links to interactive lessons.', alternates: alt('/glossary', '/en/glossary') },
+  { url: '/en/roadmaps', file: 'en/roadmaps.html', canonical: `${SITE}/en/roadmaps`, lang: 'en', title: 'Data career roadmaps — DataSlice', desc: 'Three tracks: analytics, data engineering and DS/ML. 13 roles, a path broken into stages and a career ladder up to CDO. Free, no sign-up.', alternates: alt('/roadmaps', '/en/roadmaps') },
+  { url: '/en/glossary', file: 'en/glossary.html', canonical: `${SITE}/en/glossary`, lang: 'en', title: 'Statistics and business-metrics glossary — DataSlice', desc: '112 statistics and business-metric terms in plain words, with search and links to interactive lessons.', alternates: alt('/glossary', '/en/glossary') },
   ...lessonsEn.map((l) => ({
     url: `/en/stats/${l.id}`,
     file: `en/stats/${l.id}.html`,

@@ -39,20 +39,20 @@ export default function Framework({ industries, onPick }) {
           </div>
         </div>
         {/* Схема-шпаргалка справа: заполняет ширину и визуализирует три уровня иерархии */}
-        <aside className="mt-6 lg:mt-0 rounded-xl border border-black/10 bg-panel p-5">
+        <aside className="mt-6 lg:mt-0 glass rounded-3xl p-5">
           <div className="text-xs uppercase tracking-wider text-gray-500 mb-3">{t.anatomyHeading}</div>
           <div className="space-y-2">
-            <div className="rounded-lg border border-accent/40 bg-accent/[0.12] px-3.5 py-2.5">
+            <div className="rounded-2xl border border-accent/40 bg-accent/[0.12] px-3.5 py-2.5">
               <div className="text-sm font-semibold text-cyanink">{t.anatomyNsm.t}</div>
               <div className="text-xs text-gray-600 mt-0.5">{t.anatomyNsm.d}</div>
             </div>
             <div className="flex justify-center text-gray-300 text-xs leading-none">↑</div>
-            <div className="rounded-lg border border-sky-500/30 bg-sky-500/[0.07] px-3.5 py-2.5">
+            <div className="rounded-2xl border border-sky-500/30 bg-sky-500/[0.07] px-3.5 py-2.5">
               <div className="text-sm font-semibold text-sky-700">{t.anatomyDrivers.t}</div>
               <div className="text-xs text-gray-600 mt-0.5">{t.anatomyDrivers.d}</div>
             </div>
             <div className="flex justify-center text-gray-300 text-xs leading-none">↑</div>
-            <div className="rounded-lg border border-amber-400/45 bg-amber-400/[0.1] px-3.5 py-2.5">
+            <div className="rounded-2xl border border-amber-400/45 bg-amber-400/[0.1] px-3.5 py-2.5">
               <div className="text-sm font-semibold text-amber-700">{t.anatomyCounters.t}</div>
               <div className="text-xs text-gray-600 mt-0.5">{t.anatomyCounters.d}</div>
             </div>
@@ -80,7 +80,7 @@ export default function Framework({ industries, onPick }) {
             <div className="text-sm text-gray-700 mb-2">
               <span className="text-cyanink">{t.vsPyramidName}</span> {t.vsPyramid}
             </div>
-            <div className="rounded-xl border border-black/10 bg-panel p-5 flex-1 flex flex-col items-center justify-center gap-2">
+            <div className="glass rounded-3xl p-5 flex-1 flex flex-col items-center justify-center gap-2">
               {PYRAMID_BANDS.map((b, i) => (
                 <div key={i} className="rounded-lg border border-black/10 bg-accent/[0.12] px-3 py-2 text-center" style={{ width: b.w }}>
                   <div className="text-[11px] uppercase tracking-wider text-gray-700">{loc(b.label, locale)}</div>
@@ -101,7 +101,7 @@ export default function Framework({ industries, onPick }) {
             <h2 className="text-lg font-medium mb-3">{t.fwHeading}</h2>
             <div className="space-y-3">
               {FRAMEWORKS.map((f) => (
-                <div key={f.name} className="rounded-lg border border-black/10 bg-panel px-4 py-3">
+                <div key={f.name} className="rounded-2xl bg-white/55 ring-1 ring-white/70 px-4 py-3">
                   <div className="text-cyanink font-medium">{f.name}</div>
                   <div className="text-sm text-gray-900 mt-0.5">{loc(f.items, locale)}</div>
                   <div className="text-sm text-gray-600 mt-1">{loc(f.use, locale)}</div>
@@ -118,8 +118,8 @@ export default function Framework({ industries, onPick }) {
                 <button
                   key={s.archetype.ru}
                   onClick={() => setSel(s.archetype.ru)}
-                  className={`text-sm px-3 py-1.5 rounded-md border transition-colors ${
-                    s.archetype.ru === sel ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-700 hover:bg-black/5'
+                  className={`text-sm px-3 py-1.5 rounded-full transition-colors ${
+                    s.archetype.ru === sel ? 'glass-pill text-cyanink font-medium' : 'border border-white/80 bg-white/55 shadow-[0_1px_3px_rgba(20,40,60,0.07)] text-gray-700 hover:bg-white/75'
                   }`}
                 >
                   {loc(s.q, locale)}
@@ -127,7 +127,7 @@ export default function Framework({ industries, onPick }) {
               ))}
             </div>
             {shape && (
-              <div className="rounded-xl border border-black/10 bg-panel p-5">
+              <div className="glass rounded-3xl p-5">
                 <div className="text-xs uppercase tracking-wider text-gray-500">{t.shapesArchetype}</div>
                 <div className="text-lg text-cyanink font-medium mb-3">{loc(shape.archetype, locale)}</div>
                 <div className="text-sm text-gray-600">North Star</div>
@@ -141,7 +141,7 @@ export default function Framework({ industries, onPick }) {
                 {matches.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {matches.map((m) => (
-                      <button key={m.id} onClick={() => onPick(m.id)} className="text-sm px-3 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10">
+                      <button key={m.id} onClick={() => onPick(m.id)} className="text-sm px-3 py-1 glass-pill rounded-full text-cyanink">
                         {m.industry} →
                       </button>
                     ))}
@@ -157,7 +157,7 @@ export default function Framework({ industries, onPick }) {
           <p className="text-gray-600 text-sm mb-3">{t.glossaryIntro}</p>
           <div className="space-y-3">
             {GLOSSARY.map((g) => (
-              <div key={g.group.ru} className="rounded-lg border border-black/10 bg-panel px-4 py-3">
+              <div key={g.group.ru} className="rounded-2xl bg-white/55 ring-1 ring-white/70 px-4 py-3">
                 <div className="text-cyanink font-medium mb-1.5">{loc(g.group, locale)}</div>
                 <dl className="space-y-1.5">
                   {g.items.map((it) => (

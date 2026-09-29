@@ -9,8 +9,8 @@ export default function SubscribeCTA({ locale = 'ru', heading, text }) {
   heading = heading ?? t.ctaHeading
   text = text ?? t.ctaText
   return (
-    <div className="rounded-[1.4rem] bg-black/[0.04] ring-1 ring-black/5 p-1.5 shadow-[0_12px_40px_rgba(32,36,46,0.08)]">
-      <div className="relative overflow-hidden rounded-[calc(1.4rem-0.375rem)] border border-accent/30 bg-accent/10 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]">
+    <div className="glass rounded-[1.8rem] p-1.5">
+      <div className="relative overflow-hidden rounded-[calc(1.8rem-0.375rem)] border border-white/70 bg-gradient-to-br from-accent/20 via-accent/10 to-white/30 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]">
         <div
           aria-hidden
           className="pointer-events-none select-none absolute -inset-4 opacity-[0.07] text-2xl leading-[1.7] tracking-[0.35em] -rotate-12 break-words"

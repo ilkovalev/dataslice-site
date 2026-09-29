@@ -73,7 +73,7 @@ function ShareButton({ lesson, locale, t }) {
       <button
         onClick={share}
         title={t.shareTitle}
-        className="w-full text-xs px-2.5 py-[13px] -my-[7px] sm:py-1.5 sm:my-0 rounded-md border border-black/10 text-gray-600 hover:bg-black/5 transition-colors"
+        className="glass-pill w-full text-xs px-3 py-[13px] -my-[7px] sm:py-1.5 sm:my-0 rounded-full text-gray-600 hover:text-cyanink transition-colors"
       >
         {copied ? t.shareCopied : t.share}
       </button>
@@ -98,12 +98,12 @@ function ShareButton({ lesson, locale, t }) {
 function ProgressCard({ completed, total, t }) {
   const pct = Math.round((completed.size / total) * 100)
   return (
-    <div className="rounded-xl border border-black/10 bg-panel/70 p-4">
+    <div className="glass rounded-3xl p-4">
       <div className="flex items-baseline justify-between text-sm mb-1.5">
         <span className="font-medium text-gray-900">{t.progress}</span>
         <span className="text-gray-500">{t.done(completed.size, total)}</span>
       </div>
-      <div className="h-2 rounded-full bg-black/10 overflow-hidden">
+      <div className="h-2 rounded-full bg-black/[0.07] shadow-[inset_0_1px_2px_rgba(20,40,60,0.08)] overflow-hidden">
         <div className="h-full rounded-full bg-gradient-to-r from-accent to-brand transition-all" style={{ width: `${pct}%` }} />
       </div>
     </div>
@@ -132,13 +132,13 @@ function Sidebar({ activeModule, lessonId, globalIdx, completed, onModule, onLes
       <button
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="md:hidden mt-3 w-full flex items-center justify-between gap-2 rounded-lg border border-black/10 bg-panel/70 px-3 py-[11px] text-sm text-gray-700"
+        className="glass-pill md:hidden mt-3 w-full flex items-center justify-between gap-2 rounded-2xl px-4 py-[11px] text-sm text-gray-700"
       >
         <span className="truncate text-left"><span className="text-gray-400 mr-1.5">{open ? t.collapse : t.toc} ·</span>{currentTitle}</span>
         <span className={`shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} aria-hidden>▾</span>
       </button>
 
-      <nav className={`${open ? 'block' : 'hidden'} md:block mt-3 md:mt-4 max-h-[60vh] md:max-h-none overflow-auto pr-1`}>
+      <nav className={`${open ? 'block' : 'hidden'} md:block glass rounded-3xl p-2 mt-3 md:mt-4 max-h-[60vh] md:max-h-none overflow-auto`}>
         <ol className="space-y-1">
           {moduleIds.map((mId) => {
             const list = lessonsByModule[mId] ?? []
@@ -149,8 +149,8 @@ function Sidebar({ activeModule, lessonId, globalIdx, completed, onModule, onLes
                 <button
                   onClick={() => ready && onModule(mId)}
                   disabled={!ready}
-                  className={`w-full text-left text-sm px-2.5 py-1.5 rounded-md transition-colors ${
-                    isActive ? 'bg-accent/15 text-cyanink font-medium' : ready ? 'text-gray-700 hover:bg-black/5' : 'text-gray-400 cursor-default'
+                  className={`w-full text-left text-sm px-2.5 py-1.5 rounded-xl transition-colors ${
+                    isActive ? 'glass-pill text-cyanink font-medium' : ready ? 'text-gray-700 hover:bg-white/50 border border-transparent' : 'text-gray-400 cursor-default border border-transparent'
                   }`}
                 >
                   <span className="tabular-nums text-gray-400 mr-1.5">{mId}.</span>
@@ -167,8 +167,8 @@ function Sidebar({ activeModule, lessonId, globalIdx, completed, onModule, onLes
                         <li key={l.id}>
                           <button
                             onClick={() => selectLesson(l)}
-                            className={`w-full text-left flex items-start gap-1.5 text-[13px] px-2 py-1 rounded transition-colors ${
-                              current ? 'bg-black/[0.06] text-gray-900 font-medium' : 'text-gray-600 hover:bg-black/5'
+                            className={`w-full text-left flex items-start gap-1.5 text-[13px] px-2 py-1 rounded-lg transition-colors ${
+                              current ? 'bg-white/60 text-gray-900 font-medium' : 'text-gray-600 hover:bg-white/40'
                             }`}
                           >
                             <span className={`mt-0.5 shrink-0 ${done ? 'text-accent' : current ? 'text-cyanink' : 'text-gray-300'}`} aria-hidden>
@@ -298,7 +298,7 @@ export default function StatsPage() {
           </div>
 
           {full?._untranslated && (
-            <div className="order-1 md:order-none mb-4 rounded-lg border border-amber-400/40 bg-amber-400/[0.08] px-4 py-2.5 text-sm text-gray-700">
+            <div className="order-1 md:order-none mb-4 rounded-2xl border border-amber-400/40 bg-amber-100/50 backdrop-blur px-4 py-2.5 text-sm text-gray-700">
               {t.untranslated}
             </div>
           )}

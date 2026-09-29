@@ -55,7 +55,7 @@ export default function MetricsPage() {
   }
 
   const tab = (m, label) => (
-    <button onClick={() => setMode(m)} className={`text-sm px-3 py-1.5 rounded-md border transition-colors ${mode === m ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-700 hover:bg-black/5'}`}>{label}</button>
+    <button onClick={() => setMode(m)} className={`text-sm px-4 py-1.5 rounded-full transition-colors ${mode === m ? 'glass-pill text-cyanink font-medium' : 'border border-transparent text-gray-600 hover:text-gray-900'}`}>{label}</button>
   )
   // На странице и так три ряда чипов (вкладки, индустрии, компании). Вид —
   // единственный контрол, который меняет не «что показываем», а «как», поэтому
@@ -65,9 +65,9 @@ export default function MetricsPage() {
     <button
       onClick={() => setView(v)}
       aria-pressed={view === v}
-      className={`flex-1 sm:flex-none text-sm px-4 py-1.5 rounded-md transition-colors ${
+      className={`flex-1 sm:flex-none text-sm px-4 py-1.5 rounded-full transition-colors ${
         view === v
-          ? 'bg-ink text-cyanink font-medium shadow-sm border border-accent/30'
+          ? 'glass-pill text-cyanink font-medium'
           : 'border border-transparent text-gray-600 hover:text-gray-900'
       }`}
     >
@@ -86,10 +86,10 @@ export default function MetricsPage() {
         <p className="text-gray-600 mb-4 max-w-3xl">Начните с вкладки <span className="text-cyanink">«Основы»</span> — что такое метрики, какие они бывают и как выстраивать иерархии. Затем переходите в <span className="text-cyanink">«Индустрии»</span> — готовые деревья по {industries.length} направлениям с разбором по компаниям.</p>
       )}
       {t.metricsNotice && (
-        <div className="mb-4 rounded-lg border border-amber-400/40 bg-amber-400/[0.08] px-4 py-2.5 text-sm text-gray-700 max-w-3xl">{t.metricsNotice}</div>
+        <div className="mb-4 rounded-2xl border border-amber-400/40 bg-amber-50/60 backdrop-blur px-4 py-2.5 text-sm text-gray-700 max-w-3xl">{t.metricsNotice}</div>
       )}
 
-      <div className="flex gap-2 mb-6">
+      <div className="glass-segment inline-flex gap-1 p-1 mb-6 rounded-full">
         {tab('basics', locale === 'en' ? 'Basics' : 'Основы')}
         {tab('industries', locale === 'en' ? 'Industries' : 'Индустрии')}
       </div>
@@ -98,14 +98,14 @@ export default function MetricsPage() {
 
       {mode === 'industries' && (<>
         {/* Все индустрии видны сразу — чипами, а не спрятаны в выпадашке */}
-        <div className="flex flex-wrap gap-1.5 pb-4 mb-4 border-b border-black/10">
+        <div className="flex flex-wrap gap-1.5 pb-5 mb-5 border-b border-black/[0.06]">
           {localized.map((ind) => (
             <button
               key={ind.id}
               onClick={() => goIndustry(ind.id)}
               title={ind.archetype}
-              className={`text-sm px-3 py-1 rounded-md border transition-colors ${
-                ind.id === active.id ? 'border-accent/50 text-cyanink bg-accent/15 font-medium' : 'border-black/10 text-gray-600 hover:bg-black/5'
+              className={`text-sm px-3.5 py-1 rounded-full transition-colors ${
+                ind.id === active.id ? 'glass-pill text-cyanink font-medium' : 'border border-white/80 bg-white/55 shadow-[0_1px_3px_rgba(20,40,60,0.07)] text-gray-600 hover:bg-white/75'
               }`}
             >
               {ind.industry}
@@ -119,19 +119,19 @@ export default function MetricsPage() {
           </div>
           {active.companies && (
             <div className="flex flex-wrap gap-2">
-              <button onClick={() => setCompanyId(null)} className={`text-sm px-3 py-1 rounded-md border ${!company ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{t.metricsBase}</button>
+              <button onClick={() => setCompanyId(null)} className={`text-sm px-3.5 py-1 rounded-full transition-colors ${!company ? 'glass-pill text-cyanink font-medium' : 'border border-white/80 bg-white/55 shadow-[0_1px_3px_rgba(20,40,60,0.07)] text-gray-600 hover:bg-white/75'}`}>{t.metricsBase}</button>
               {active.companies.map((c) => (
-                <button key={c.id} onClick={() => setCompanyId(c.id)} className={`text-sm px-3 py-1 rounded-md border ${c.id === company?.id ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'}`}>{c.name}</button>
+                <button key={c.id} onClick={() => setCompanyId(c.id)} className={`text-sm px-3.5 py-1 rounded-full transition-colors ${c.id === company?.id ? 'glass-pill text-cyanink font-medium' : 'border border-white/80 bg-white/55 shadow-[0_1px_3px_rgba(20,40,60,0.07)] text-gray-600 hover:bg-white/75'}`}>{c.name}</button>
               ))}
             </div>
           )}
         </div>
 
         {company && view === 'framework' && (
-          <div className="mb-4 rounded-lg border border-black/10 bg-black/[0.03] px-4 py-2.5 text-sm text-gray-600">{t.fwCompanyHint}</div>
+          <div className="glass mb-4 rounded-2xl px-4 py-2.5 text-sm text-gray-600">{t.fwCompanyHint}</div>
         )}
         {company && view !== 'framework' && (
-          <div className="mb-4 rounded-lg border border-sky-500/30 bg-sky-500/5 px-4 py-2.5 text-sm text-gray-700">
+          <div className="mb-4 rounded-2xl border border-sky-500/30 bg-sky-50/60 backdrop-blur px-4 py-2.5 text-sm text-gray-700">
             <span className="text-sky-600 font-medium">{company.name}:</span> {company.note}{' '}
             <span className="text-gray-500">
               {locale === 'en'
@@ -146,7 +146,7 @@ export default function MetricsPage() {
         <div
           role="group"
           aria-label={t.metricsViewLabel}
-          className="inline-flex w-full sm:w-auto gap-1 p-1 mb-2 rounded-lg border border-black/10 bg-black/[0.04]"
+          className="glass-segment inline-flex w-full sm:w-auto gap-1 p-1 mb-3 rounded-full"
         >
           {viewBtn('tree', locale === 'en' ? 'Tree' : 'Дерево')}
           {viewBtn('pyramid', locale === 'en' ? 'Pyramid' : 'Пирамида')}
@@ -161,7 +161,7 @@ export default function MetricsPage() {
         {view === 'framework' && <MetricFramework industry={active} />}
       </>)}
 
-      <div className="mt-8 rounded-lg border border-black/10 bg-black/[0.03] px-4 py-3 text-sm text-gray-600 leading-relaxed">
+      <div className="glass mt-8 rounded-3xl px-5 py-4 text-sm text-gray-600 leading-relaxed">
         {locale === 'en' ? (
           <>
             <span className="text-gray-900">Where statistics comes in:</span> a metric went up — check it wasn’t by chance (<Link to="/en/stats" className="text-cyanink hover:underline">A/B and the t-test</Link>); revenue means lie because of long tails — use the median (<Link to="/en/stats" className="text-cyanink hover:underline">distributions and skew</Link>); optimizing a single number — keep counter-metrics (<Link to="/en/stats" className="text-cyanink hover:underline">Goodhart’s law</Link>).

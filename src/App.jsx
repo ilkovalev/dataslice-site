@@ -19,7 +19,7 @@ const RoadmapsPage = lazy(() => import('./pages/RoadmapsPage.jsx'))
 // min-h-[44px] на мобильном — комфортная тап-зона (WCAG); на sm+ шапка снова компактная.
 const linkBase = 'px-3 py-1.5 rounded-full text-sm transition-colors inline-flex items-center min-h-[44px] sm:min-h-0'
 const linkClass = ({ isActive }) =>
-  `${linkBase} ${isActive ? 'bg-accent/20 text-cyanink' : 'text-gray-700 hover:bg-black/5'}`
+  `${linkBase} ${isActive ? 'glass-pill text-cyanink' : 'text-gray-700 hover:bg-white/50'}`
 
 export default function App() {
   const locale = useLocale()
@@ -54,7 +54,7 @@ export default function App() {
       <div className="h-1 bg-gradient-to-r from-accent to-brand" />
       {/* Бар во всю ширину экрана; контент внутри — в общей сетке max-w-[1600px]. */}
       <header className="sticky top-0 z-10">
-        <div className="border-b border-accent/20 bg-accent/10 backdrop-blur">
+        <div className="glass-bar">
         <div className="max-w-[1600px] mx-auto px-4 py-2 sm:py-0 sm:h-14 lg:h-14 flex flex-wrap items-center gap-x-3 gap-y-2">
           {/* Логотип ведёт на главную — привычный способ вернуться на лендинг.
               Дублируется явным пунктом «Главная» в навигации: на клик по

@@ -77,7 +77,7 @@ function RoleCard({ n, locale, en, onRole }) {
   // человек понимает, о чём вакансия, быстрее, чем по абзацу текста.
   const chips = (n.stack?.[0]?.items || []).slice(0, 3)
   return (
-    <div className="rounded-[1.15rem] border border-black/10 bg-panel/50 p-5">
+    <div className="glass rounded-3xl p-5">
       {/* Кликабельна вся верхняя часть карточки, а не строка заголовка:
           раньше цель была высотой 24px, а знак «+» — 8×14px, и промах мимо
           него ничего не делал. Знак остался как подсказка, но попадать в него
@@ -113,7 +113,7 @@ function RoleCard({ n, locale, en, onRole }) {
       {!open && chips.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mt-3">
           {chips.map((it) => (
-            <span key={it} className="text-xs px-2 py-1 rounded-md border border-black/10 text-gray-600">{it}</span>
+            <span key={it} className="text-xs px-2 py-1 rounded-full bg-white/50 ring-1 ring-white/70 text-gray-600">{it}</span>
           ))}
         </div>
       )}
@@ -155,7 +155,7 @@ function RoleCard({ n, locale, en, onRole }) {
                   <div className="text-[11px] uppercase tracking-wider text-gray-400 mb-1">{loc(g.g, locale)}</div>
                   <div className="flex flex-wrap gap-1.5">
                     {g.items.map((it) => (
-                      <span key={it} className="text-xs px-2 py-1 rounded-md border border-black/10 text-gray-600">{it}</span>
+                      <span key={it} className="text-xs px-2 py-1 rounded-full bg-white/50 ring-1 ring-white/70 text-gray-600">{it}</span>
                     ))}
                   </div>
                 </div>
@@ -233,7 +233,7 @@ function Stage({ stage, index, total, locale, defaultOpen, areasOpen, areasKey }
           {/* Общий фундамент не дублируется в данных: этап помечает флагом,
               что берёт его целиком, и добавляет своё сверху. */}
           {stage.sharedFoundation && (
-            <div className="rounded-xl border border-accent/25 bg-accent/[0.06] p-4 mb-5">
+            <div className="rounded-3xl border border-accent/25 bg-accent/[0.06] backdrop-blur p-4 mb-5">
               <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-1">{loc(foundation.title, locale)}</div>
               <p className="text-sm text-gray-700 leading-relaxed mb-4">{loc(foundation.lead, locale)}</p>
               <div>
@@ -262,7 +262,7 @@ function Stage({ stage, index, total, locale, defaultOpen, areasOpen, areasKey }
               проводят его по-разному, а выбирают люди не роль вообще, а первый
               год работы. */}
           {stage.dayMix && (
-            <div className="rounded-lg border border-black/10 bg-black/[0.03] px-4 py-3 mb-5">
+            <div className="rounded-2xl bg-white/45 ring-1 ring-white/70 px-4 py-3 mb-5">
               <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-1.5">{en ? 'A day at this grade' : 'День на этом грейде'}</div>
               <ul className="space-y-1">
                 {loc(stage.dayMix, locale).map((x, i) => (
@@ -284,13 +284,13 @@ function Stage({ stage, index, total, locale, defaultOpen, areasOpen, areasKey }
               Список навыков без критерия закрытия длится бесконечно. */}
           <div className="grid gap-3 sm:grid-cols-2 mt-2">
             {stage.check && (
-              <div className="rounded-lg border border-black/10 bg-black/[0.03] px-4 py-3">
+              <div className="rounded-2xl bg-white/45 ring-1 ring-white/70 px-4 py-3">
                 <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-1">{en ? 'Stage closed when' : 'Этап закрыт, когда'}</div>
                 <p className="text-sm text-gray-700 leading-relaxed">{loc(stage.check, locale)}</p>
               </div>
             )}
             {stage.trap && (
-              <div className="rounded-lg border border-amber-400/40 bg-amber-400/[0.08] px-4 py-3">
+              <div className="rounded-2xl border border-amber-400/40 bg-amber-400/[0.08] px-4 py-3">
                 <div className="text-xs uppercase tracking-wider text-amber-700/90 mb-1">{en ? 'Where people get stuck' : 'Где застревают'}</div>
                 <p className="text-sm text-gray-700 leading-relaxed">{loc(stage.trap, locale)}</p>
               </div>
@@ -376,7 +376,7 @@ export default function RoadmapsPage() {
       {/* Выбор трека липкий: страница длинная, а переключатель был один и
           стоял наверху. Чтобы сравнить треки, приходилось уезжать к началу и
           возвращаться обратно. top совпадает с высотой шапки сайта. */}
-      <div className="sticky z-30 -mx-4 px-4 py-2 bg-[#FFF8EF]/95 backdrop-blur border-b border-black/[0.06] mb-6" style={{ top: headerH }}>
+      <div className="glass-bar sticky z-30 -mx-4 px-4 py-2 mb-6" style={{ top: headerH }}>
         {/* На узком экране чипы едут в одну строку с горизонтальной
             прокруткой: перенос на вторую строку вместе со 153-пиксельной
             шапкой съедал почти треть экрана. */}
@@ -386,8 +386,8 @@ export default function RoadmapsPage() {
             <button
               key={r.id}
               onClick={() => setRole(r.id)}
-              className={`text-sm px-3 py-1.5 rounded-md border transition-colors shrink-0 ${
-                r.id === role.id ? 'border-accent/50 text-cyanink bg-accent/15 font-medium' : 'border-black/10 text-gray-600 hover:bg-black/5'
+              className={`text-sm px-3 py-1.5 rounded-full transition-colors shrink-0 ${
+                r.id === role.id ? 'glass-pill text-cyanink font-medium' : 'border border-white/80 bg-white/55 shadow-[0_1px_3px_rgba(20,40,60,0.07)] text-gray-600 hover:bg-white/75'
               }`}
             >
               {loc(r.title, locale)}
@@ -399,7 +399,7 @@ export default function RoadmapsPage() {
       {/* Карточка трека: «кто это» до списка навыков. Роудмап, который
           начинается со стека, отвечает на вопрос «что учить» раньше, чем на
           вопрос «зачем». */}
-      <section className="rounded-[1.15rem] border border-black/10 bg-panel/60 p-5 md:p-6 mb-6">
+      <section className="glass rounded-3xl p-5 md:p-6 mb-6">
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
           <h2 className="text-xl font-semibold text-gray-900">{loc(role.title, locale)}</h2>
           <span className="text-xs px-2 py-0.5 rounded-full bg-accent/15 text-cyanink">{loc(role.entry, locale)}</span>
@@ -427,7 +427,7 @@ export default function RoadmapsPage() {
                   <div className="text-[11px] uppercase tracking-wider text-gray-400 mb-1">{loc(g.stage, locale)}</div>
                   <div className="flex flex-wrap gap-1.5">
                     {g.items.map((tool) => (
-                      <span key={tool} className="text-xs px-2 py-1 rounded-md border border-black/10 text-gray-600">{tool}</span>
+                      <span key={tool} className="text-xs px-2 py-1 rounded-full bg-white/50 ring-1 ring-white/70 text-gray-600">{tool}</span>
                     ))}
                   </div>
                 </div>
@@ -473,8 +473,8 @@ export default function RoadmapsPage() {
               key={v}
               onClick={() => setPathView(v)}
               aria-pressed={pathView === v}
-              className={`text-sm px-3 py-1.5 rounded-md border transition-colors ${
-                pathView === v ? 'border-accent/50 text-cyanink bg-accent/15 font-medium' : 'border-black/10 text-gray-600 hover:bg-black/5'
+              className={`text-sm px-3 py-1.5 rounded-full transition-colors ${
+                pathView === v ? 'glass-pill text-cyanink font-medium' : 'border border-white/80 bg-white/55 shadow-[0_1px_3px_rgba(20,40,60,0.07)] text-gray-600 hover:bg-white/75'
               }`}
             >
               {label}
@@ -582,7 +582,7 @@ export default function RoadmapsPage() {
           </p>
           <dl className="flex flex-col gap-3">
             {trackPitfalls.map((x, i) => (
-              <div key={i} className="rounded-[1.15rem] border border-black/10 bg-panel/50 p-5">
+              <div key={i} className="glass rounded-3xl p-5">
                 <dt className="text-sm font-medium text-gray-900 mb-1">{loc(x.t, locale)}</dt>
                 <dd className="text-sm text-gray-700 leading-relaxed">{loc(x.d, locale)}</dd>
               </div>
@@ -591,7 +591,7 @@ export default function RoadmapsPage() {
         </section>
       )}
 
-      <div className="rounded-lg border border-black/10 bg-black/[0.03] px-4 py-3 text-sm text-gray-600 leading-relaxed mb-6">
+      <div className="rounded-2xl bg-white/45 ring-1 ring-white/70 px-4 py-3 text-sm text-gray-600 leading-relaxed mb-6">
         <span className="text-gray-900">{en ? 'Where to start right now: ' : 'С чего начать прямо сейчас: '}</span>
         {en ? (
           <>

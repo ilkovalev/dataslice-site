@@ -138,7 +138,9 @@ function collectWidgets(dir) {
 const fields = [
   ...collectJson(path.join(root, 'src/content/lessons')),
   ...collectJs(path.join(root, 'src/content/tooltipTerms.js'), /def:\s*'((?:[^'\\]|\\.)*)'/g),
-  ...collectJs(path.join(root, 'src/content/glossary.js'), /def:\s*'((?:[^'\\]|\\.)*)'/g),
+  ...collectJs(path.join(root, 'src/content/glossary.js'), /(?:def|case):\s*'((?:[^'\\]|\\.)*)'/g),
+  // подводные камни терминов без карточки в каталоге — русские строки целиком
+  ...collectJs(path.join(root, 'src/content/glossaryPitfalls.js'), /'((?:[^'\\]|\\.)*[а-яё](?:[^'\\]|\\.)*)'/g),
   ...collectWidgets(path.join(root, 'src/components')),
 ]
 

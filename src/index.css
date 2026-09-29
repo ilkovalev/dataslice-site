@@ -36,6 +36,10 @@ body {
 :focus-visible {
   outline: 2px solid #0a6c97;
   outline-offset: 2px;
+}
+/* Скругление кольца — только у элементов без своего скругления: иначе
+   круглые кнопки-«пилюли» при фокусе становились квадратными. */
+:focus-visible:not([class*='rounded']) {
   border-radius: 4px;
 }
 
@@ -92,5 +96,62 @@ input[type='range']::-moz-range-thumb {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Liquid glass. Стекло видно только на неоднородном фоне, поэтому под всем
+   сайтом лежит закреплённый слой из мягких цветных пятен: бренд-голубой и
+   тёплый персиковый поверх кремового. Поверхности — полупрозрачный белый
+   с размытием и насыщением фона, светлый блик по верхней кромке и мягкая
+   тень. Классы общие для всех страниц: .glass — карточки и панели,
+   .glass-bar — закреплённые полосы (шапка), .glass-pill — кнопки и поля,
+   .glass-segment — переключатели вкладок.
+   --------------------------------------------------------------------------- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(38rem 30rem at 8% 12%, rgba(42, 184, 235, 0.20), transparent 70%),
+    radial-gradient(34rem 28rem at 92% 22%, rgba(255, 170, 120, 0.22), transparent 70%),
+    radial-gradient(40rem 32rem at 70% 95%, rgba(120, 205, 245, 0.18), transparent 70%),
+    radial-gradient(30rem 26rem at 18% 88%, rgba(255, 205, 150, 0.20), transparent 70%);
+}
+
+@layer components {
+  .glass {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.5));
+    -webkit-backdrop-filter: blur(22px) saturate(170%);
+    backdrop-filter: blur(22px) saturate(170%);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.25),
+      0 1px 2px rgba(20, 40, 60, 0.04),
+      0 12px 36px -8px rgba(20, 50, 80, 0.12);
+  }
+  .glass-bar {
+    background: rgba(255, 252, 247, 0.62);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 1px 0 rgba(20, 40, 60, 0.06), 0 8px 24px -12px rgba(20, 50, 80, 0.12);
+  }
+  .glass-pill {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.55));
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 1px 2px rgba(20, 40, 60, 0.06), 0 4px 14px -6px rgba(20, 50, 80, 0.14);
+  }
+  .glass-segment {
+    background: rgba(255, 255, 255, 0.35);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: inset 0 1px 2px rgba(20, 40, 60, 0.06);
   }
 }

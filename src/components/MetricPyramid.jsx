@@ -12,7 +12,7 @@ export default function MetricPyramid({ tree }) {
   const locale = useLocale()
   const bands = tree.pyramid?.bands ?? []
   return (
-    <div className="rounded-xl border border-black/10 bg-panel p-5">
+    <div className="glass rounded-3xl p-5">
       {tree.pyramid?.note && <p className="text-sm text-gray-600 mb-4">{gloss(tree.pyramid.note)}</p>}
       <div className="flex flex-col items-center gap-2">
         {bands.map((b, i) => (

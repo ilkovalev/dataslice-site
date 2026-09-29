@@ -237,12 +237,24 @@ export default function MetricTreeGraph({ tree, defaultDepth, plain = false, cla
   useEffect(() => {
     if (!wanted) return
     if (selected?.metricId === wanted) return
-    const n = nodes.find((x) => x.metricId === wanted)
+    // Ищем по всему дереву, а не только по видимым узлам: метрика бывает
+    // в свёрнутой ветке (CTR в e-commerce лежит на глубине 3–5), и тогда
+    // ссылка из поиска открывала дерево без карточки.
+    const findDeep = (x) => {
+      if (!x) return null
+      if (x.metricId === wanted) return x
+      for (const c of x.children || []) {
+        const hit = findDeep(c)
+        if (hit) return hit
+      }
+      return null
+    }
+    const n = nodes.find((x) => x.metricId === wanted) ?? findDeep(tree.root)
     if (n) {
       setSelected(n)
       if (!catalogCache) loadCatalog().then(setCatalog)
     }
-  }, [wanted, nodes, selected])
+  }, [wanted, nodes, selected, tree])
 
   const toggle = (id) => {
     setCollapsed((prev) => {
@@ -259,14 +271,14 @@ export default function MetricTreeGraph({ tree, defaultDepth, plain = false, cla
   const scrollable = width * scale > (boxRef.current?.clientWidth ?? Infinity)
 
   return (
-    <div className={`rounded-xl border border-black/10 bg-panel p-5 ${className}`}>
+    <div className={`glass rounded-3xl p-5 ${className}`}>
       {!plain && (
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mb-3">
           <div className="text-xs text-gray-500">{t.treeHintClick}</div>
           {anyCollapsible && (
             <button
               onClick={allExpanded ? collapseAll : expandAll}
-              className="text-xs px-2.5 py-1 rounded-md border border-black/10 text-gray-600 hover:bg-black/5 hover:text-cyanink ml-auto"
+              className="text-xs px-2.5 py-1 glass-pill rounded-full text-gray-600 hover:text-cyanink ml-auto"
             >
               {allExpanded ? t.treeCollapseAll : t.treeExpandAll}
             </button>

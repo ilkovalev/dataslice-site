@@ -39,7 +39,7 @@ function MetricItem({ m, catalog, locale, onOpen }) {
     return (
       <button
         onClick={() => onOpen(m, title)}
-        className="text-left rounded-md border border-black/10 bg-ink px-2.5 py-1 text-[13px] text-gray-900 hover:border-accent/40 hover:text-cyanink transition-colors"
+        className="text-left rounded-xl bg-white/60 ring-1 ring-white/70 px-2.5 py-1 text-[13px] text-gray-900 hover:ring-accent/40 hover:text-cyanink transition-colors"
       >
         {title}
       </button>
@@ -48,7 +48,7 @@ function MetricItem({ m, catalog, locale, onOpen }) {
   return (
     <button
       onClick={() => onOpen(m, title)}
-      className="text-left rounded-lg border border-black/10 bg-ink px-3 py-2 hover:border-accent/40 hover:shadow-sm transition-colors w-full"
+      className="text-left rounded-xl bg-white/60 ring-1 ring-white/70 px-3 py-2 hover:ring-accent/40 hover:shadow-sm transition-colors w-full"
     >
       <span className="block text-[13px] font-medium text-gray-900 leading-snug">{title}</span>
       <span className="block text-xs text-gray-600 leading-snug mt-1">{gloss(def)}</span>
@@ -106,7 +106,7 @@ export default function MetricFramework({ industry }) {
 
   if (!fw) {
     return (
-      <div className="rounded-xl border border-black/10 bg-panel p-5 text-sm text-gray-600 min-h-[6rem]">
+      <div className="glass rounded-3xl p-5 text-sm text-gray-600 min-h-[6rem]">
         {frameworks ? t.fwNoData : ''}
       </div>
     )
@@ -119,8 +119,8 @@ export default function MetricFramework({ industry }) {
   const kindBtn = (k, label) => (
     <button
       onClick={() => setKind(k)}
-      className={`text-xs px-2.5 py-1 rounded-md border ${
-        kind === k ? 'border-accent/40 text-cyanink bg-accent/10' : 'border-black/10 text-gray-600 hover:bg-black/5'
+      className={`text-xs px-2.5 py-1 rounded-full ${
+        kind === k ? 'glass-pill text-cyanink font-medium' : 'border border-white/80 bg-white/55 shadow-[0_1px_3px_rgba(20,40,60,0.07)] text-gray-600 hover:bg-white/75'
       }`}
     >
       {label}
@@ -128,7 +128,7 @@ export default function MetricFramework({ industry }) {
   )
 
   return (
-    <div className="rounded-xl border border-black/10 bg-panel p-5">
+    <div className="glass rounded-3xl p-5">
       <div className="flex flex-wrap items-center gap-2 mb-3">
         {kindBtn('aarrr', 'AARRR')}
         {kindBtn('heart', 'HEART')}
@@ -142,7 +142,7 @@ export default function MetricFramework({ industry }) {
           const m = meta(r)
           if (!m) return null
           return (
-            <div key={r.key} className="rounded-lg border border-black/10 bg-ink/60 p-3 sm:p-4">
+            <div key={r.key} className="rounded-2xl bg-white/45 ring-1 ring-white/70 p-3 sm:p-4">
               <div className="sm:grid sm:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] sm:gap-5">
                 <div className="mb-3 sm:mb-0">
                   <div className="flex items-baseline gap-2">

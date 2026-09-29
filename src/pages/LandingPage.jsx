@@ -98,11 +98,11 @@ function Door({ preview, title, count, what, who, to, open, accent }) {
   return (
     <Link
       to={to}
-      className={`group flex flex-col rounded-[1.15rem] border bg-panel/60 p-5 transition-shadow hover:shadow-[0_10px_36px_rgba(32,36,46,0.09)] ${
-        accent ? 'border-accent/40' : 'border-black/10'
+      className={`glass group flex flex-col rounded-3xl p-5 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-1 ${
+        accent ? 'ring-1 ring-accent/40' : ''
       }`}
     >
-      <div className="rounded-lg bg-ink/50 mb-4 px-2 py-1">{preview}</div>
+      <div className="rounded-2xl bg-white/45 ring-1 ring-white/70 mb-4 px-2 py-1">{preview}</div>
       <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
       <div className={`text-sm font-medium mt-0.5 ${accent ? 'text-cyanink' : 'text-gray-500'}`}>{count}</div>
       <p className="text-sm text-gray-700 leading-relaxed mt-2 flex-1">{what}</p>
@@ -114,7 +114,7 @@ function Door({ preview, title, count, what, who, to, open, accent }) {
 
 function Scenario({ text, linkText, to }) {
   return (
-    <li className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3 py-2.5 border-b border-black/[0.07] last:border-0">
+    <li className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3 py-2.5 border-b border-black/[0.06] last:border-0">
       <span className="text-gray-900 sm:flex-1">{text}</span>
       <Link to={to} className="text-sm text-cyanink hover:underline">{linkText}</Link>
     </li>
@@ -145,7 +145,7 @@ export default function LandingPage() {
           </Link>
           <Link
             to={`${p}/metrics`}
-            className="inline-flex items-center justify-center px-6 py-3 rounded-full border border-black/15 text-gray-800 font-medium hover:bg-black/5 transition-colors"
+            className="glass-pill inline-flex items-center justify-center px-6 py-3 rounded-full text-gray-800 font-medium hover:text-cyanink transition-colors"
           >
             {l.ctaSecondary}
           </Link>
@@ -200,8 +200,8 @@ export default function LandingPage() {
       {/* Сценарии: превращают описание разделов в навигацию и закрывают
           проблему «57 уроков без точки входа». */}
       <section className="mt-14">
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">{l.scenariosTitle}</h2>
-        <ul className="text-sm">
+        <h2 className="text-xl font-semibold text-gray-900 mb-3">{l.scenariosTitle}</h2>
+        <ul className="glass rounded-3xl px-5 sm:px-6 py-1.5 text-sm">
           <Scenario text={l.scenario1} linkText={l.scenario1Links} to={`${p}/stats/hypothesis-test`} />
           <Scenario text={l.scenario2} linkText={l.scenario2Links} to={`${p}/metrics`} />
           <Scenario text={l.scenario3} linkText={l.scenario3Links} to={`${p}/glossary`} />
@@ -211,7 +211,7 @@ export default function LandingPage() {
 
       {/* Честность про статус — актив, а не слабость: для аудитории джунов
           она снимает завышенные ожидания и вызывает доверие. */}
-      <section className="mt-14 rounded-[1.15rem] border border-black/10 bg-panel/50 p-6">
+      <section className="glass mt-14 rounded-3xl p-6 sm:p-7">
         <h2 className="text-xl font-semibold text-gray-900 mb-3">{l.aboutTitle}</h2>
         <p className="text-gray-700 leading-relaxed">{l.aboutP1}</p>
         <p className="text-gray-700 leading-relaxed mt-3">{l.aboutP2}</p>

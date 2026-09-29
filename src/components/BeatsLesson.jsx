@@ -83,7 +83,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
                 <button
                   onClick={() => setResetKey((k) => k + 1)}
                   title={t.resetChartTitle}
-                  className="text-xs px-2.5 py-[13px] -my-[7px] sm:py-1.5 sm:my-0 rounded-md border border-black/10 text-gray-500 hover:bg-black/5"
+                  className="glass-pill text-xs px-3 py-[13px] -my-[7px] sm:py-1.5 sm:my-0 rounded-full text-gray-500 hover:text-cyanink"
                 >
                   {t.resetChart}
                 </button>
@@ -94,7 +94,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
             <div
               role="group"
               aria-label={lesson.title}
-              className="rounded-[1.15rem] bg-black/[0.04] ring-1 ring-black/5 p-1.5 shadow-[0_10px_36px_rgba(32,36,46,0.07)]"
+              className="glass rounded-[1.6rem] p-1.5"
             >
               {/* Виджеты грузятся лениво (см. widgets.js). Заглушка держит
                   высоту, чтобы страница не прыгала в момент подгрузки чанка. */}
@@ -129,13 +129,13 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
             <p className="text-gray-900 leading-[1.8] mb-4">{gloss(beat.text)}</p>
 
             {beat.predict && (
-              <div className="rounded-lg border border-black/10 bg-ink/60 p-3 mb-4">
+              <div className="rounded-2xl bg-white/50 ring-1 ring-white/70 shadow-[0_4px_16px_-8px_rgba(20,50,80,0.15)] backdrop-blur p-3.5 mb-4">
                 <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-1">{t.predict}</div>
                 <p className="text-sm text-gray-700">{beat.predict}</p>
                 {!revealed && (
                   <button
                     onClick={() => setRevealed(true)}
-                    className="mt-2 text-xs px-2.5 py-2 sm:py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10"
+                    className="glass-pill mt-2 text-xs px-3 py-2 sm:py-1 rounded-full text-cyanink"
                   >
                     {t.revealAnswer}
                   </button>
@@ -180,7 +180,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
             {!last && (
               <button
                 onClick={() => setI(i + 1)}
-                className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-3 sm:py-2 rounded-lg bg-cyanink text-white hover:opacity-90 transition-opacity"
+                className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-3 sm:py-2 rounded-full bg-cyanink text-white shadow-[0_6px_18px_-6px_rgba(10,108,151,0.55)] hover:opacity-90 transition-opacity"
               >
                 {t.next} <span aria-hidden>→</span>
               </button>
@@ -188,7 +188,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
             {last && (
               <button
                 onClick={() => summaryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-3 sm:py-2 rounded-lg bg-cyanink text-white hover:opacity-90 transition-opacity"
+                className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-3 sm:py-2 rounded-full bg-cyanink text-white shadow-[0_6px_18px_-6px_rgba(10,108,151,0.55)] hover:opacity-90 transition-opacity"
               >
                 {t.lessonSummary} <span aria-hidden>↓</span>
               </button>
@@ -214,7 +214,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
             <div>
               <h2 className="text-xs uppercase tracking-wider text-cyanink/80 mb-2">{lesson.practiceTitle || t.whatItMeans}</h2>
               {lesson.decision && (
-                <div className="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/5 px-4 py-3">
+                <div className="mb-4 rounded-2xl border border-emerald-500/30 bg-emerald-50/60 backdrop-blur px-4 py-3">
                   <h2 className="text-xs uppercase tracking-wider text-emerald-700 mb-1.5">{t.decisionLabel}</h2>
                   <p className="text-sm text-gray-700 leading-[1.8]">{lesson.decision}</p>
                 </div>
@@ -222,7 +222,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
               <Paragraphs text={lesson.practice} className="text-gray-700 leading-[1.8]" />
             </div>
             {lesson.realLife && (
-              <div className="rounded-lg border border-sky-500/30 bg-sky-500/5 px-4 py-3">
+              <div className="rounded-2xl border border-sky-500/30 bg-sky-50/60 backdrop-blur px-4 py-3">
                 <h2 className="text-xs uppercase tracking-wider text-sky-600/90 mb-2">{lesson.realLifeTitle || t.whereItAppears}</h2>
                 <Paragraphs text={lesson.realLife} className="text-sm text-gray-700 leading-[1.8]" />
               </div>
@@ -252,13 +252,13 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
               </details>
             )}
             {lesson.assumptions && (
-              <div className="rounded-lg border border-amber-400/40 bg-amber-400/[0.07] px-4 py-3">
+              <div className="rounded-2xl border border-amber-400/40 bg-amber-50/60 backdrop-blur px-4 py-3">
                 <h2 className="text-xs uppercase tracking-wider text-amber-600 mb-2">{t.whenItLies}</h2>
                 <Paragraphs text={lesson.assumptions} className="text-sm text-gray-700 leading-[1.8]" />
               </div>
             )}
             {lesson.deepDive && (
-              <details className="rounded-lg border border-black/10 bg-black/[0.02] px-4 py-3">
+              <details className="glass rounded-2xl px-4 py-3">
                 <summary className="cursor-pointer text-sm text-cyanink select-none">{t.deepDive}</summary>
                 <div className="mt-2">
                   <Paragraphs text={lesson.deepDive} className="text-sm text-gray-700 leading-[1.8]" />
@@ -278,7 +278,7 @@ export default function BeatsLesson({ lesson, locale = 'ru', onComplete, onNext 
                   <Link
                     key={r.id}
                     to={`${prefix(locale)}/stats/${r.id}`}
-                    className="text-xs px-2.5 py-2 sm:py-1 rounded-full border border-accent/30 text-cyanink hover:bg-accent/10 transition-colors"
+                    className="glass-pill text-xs px-3 py-2 sm:py-1 rounded-full text-cyanink transition-colors"
                   >
                     {r.label}
                   </Link>

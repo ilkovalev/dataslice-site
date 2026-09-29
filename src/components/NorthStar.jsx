@@ -49,20 +49,20 @@ export default function NorthStar({ industries, onPick }) {
         </div>
 
         {/* Input → NSM → выручка: схема-шпаргалка, как «Анатомия иерархии» */}
-        <aside className="mt-6 lg:mt-0 rounded-xl border border-black/10 bg-panel p-5">
+        <aside className="mt-6 lg:mt-0 glass rounded-3xl p-5">
           <div className="text-xs uppercase tracking-wider text-gray-500 mb-3">{t.ioHeading}</div>
           <div className="space-y-2">
-            <div className="rounded-lg border border-sky-500/30 bg-sky-500/[0.07] px-3.5 py-2.5">
+            <div className="rounded-2xl border border-sky-500/30 bg-sky-500/[0.07] px-3.5 py-2.5">
               <div className="text-sm font-semibold text-sky-700">{t.ioInput.t}</div>
               <div className="text-xs text-gray-600 mt-0.5">{t.ioInput.d}</div>
             </div>
             <div className="flex justify-center text-gray-300 text-xs leading-none">↓</div>
-            <div className="rounded-lg border border-accent/40 bg-accent/[0.12] px-3.5 py-2.5">
+            <div className="rounded-2xl border border-accent/40 bg-accent/[0.12] px-3.5 py-2.5">
               <div className="text-sm font-semibold text-cyanink">{t.ioNsm.t}</div>
               <div className="text-xs text-gray-600 mt-0.5">{t.ioNsm.d}</div>
             </div>
             <div className="flex justify-center text-gray-300 text-xs leading-none">↓</div>
-            <div className="rounded-lg border border-black/10 bg-black/[0.03] px-3.5 py-2.5">
+            <div className="rounded-2xl bg-white/45 ring-1 ring-white/70 px-3.5 py-2.5">
               <div className="text-sm font-semibold text-gray-700">{t.ioRevenue.t}</div>
               <div className="text-xs text-gray-600 mt-0.5">{t.ioRevenue.d}</div>
             </div>
@@ -78,8 +78,8 @@ export default function NorthStar({ industries, onPick }) {
             <button
               key={ty.id}
               onClick={() => setOpenType(ty.id)}
-              className={`text-sm px-3 py-1.5 rounded-md border transition-colors ${
-                ty.id === openType ? 'border-accent/50 text-cyanink bg-accent/15' : 'border-black/10 text-gray-700 hover:bg-black/5'
+              className={`text-sm px-3 py-1.5 rounded-full transition-colors ${
+                ty.id === openType ? 'glass-pill text-cyanink font-medium' : 'border border-white/80 bg-white/55 shadow-[0_1px_3px_rgba(20,40,60,0.07)] text-gray-700 hover:bg-white/75'
               }`}
             >
               {loc(ty.title, locale)}
@@ -87,7 +87,7 @@ export default function NorthStar({ industries, onPick }) {
           ))}
         </div>
         {NSM_TYPES.filter((ty) => ty.id === openType).map((ty) => (
-          <div key={ty.id} className="rounded-xl border border-black/10 bg-panel p-5">
+          <div key={ty.id} className="glass rounded-3xl p-5">
             <div className="text-lg text-cyanink font-medium">{loc(ty.title, locale)}</div>
             <div className="text-sm text-gray-600 mt-2">{t.typeMetric}</div>
             <div className="font-mono text-sm text-cyanink/90 bg-accent/10 inline-block px-2 py-0.5 rounded mb-3">{loc(ty.metric, locale)}</div>
@@ -104,7 +104,7 @@ export default function NorthStar({ industries, onPick }) {
                 <button
                   key={id}
                   onClick={() => onPick(id)}
-                  className="text-sm px-3 py-1 rounded-md border border-accent/40 text-cyanink hover:bg-accent/10"
+                  className="text-sm px-3 py-1 glass-pill rounded-full text-cyanink"
                 >
                   {byId[id].industry} →
                 </button>
@@ -118,7 +118,7 @@ export default function NorthStar({ industries, onPick }) {
         <h3 className="text-base font-medium mb-3">{t.criteriaHeading}</h3>
         <div className="grid md:grid-cols-2 gap-3">
           {t.criteria.map((c) => (
-            <div key={c.t} className="rounded-lg border border-black/10 bg-panel px-4 py-3">
+            <div key={c.t} className="rounded-2xl bg-white/55 ring-1 ring-white/70 px-4 py-3">
               <div className="text-cyanink font-medium text-sm">{c.t}</div>
               <div className="text-sm text-gray-600 mt-1 leading-relaxed">{gloss(c.d)}</div>
             </div>
@@ -168,7 +168,7 @@ export default function NorthStar({ industries, onPick }) {
                 <button
                   key={id}
                   onClick={() => onPick(id)}
-                  className="text-sm px-2.5 py-1 rounded-md border border-black/10 text-gray-700 hover:bg-black/5 hover:text-cyanink"
+                  className="text-sm px-2.5 py-1 glass-pill rounded-full text-gray-700 hover:text-cyanink"
                 >
                   {byId[id].industry}
                 </button>

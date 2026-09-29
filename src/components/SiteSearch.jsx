@@ -127,7 +127,7 @@ export default function SiteSearch({ open, onClose }) {
       className="fixed inset-0 z-50 bg-black/30 backdrop-blur-[2px] flex items-start justify-center p-4 pt-[10vh]"
       onMouseDown={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div role="dialog" aria-modal="true" aria-label={t.searchButton} className="w-full max-w-2xl rounded-xl border border-black/10 bg-ink shadow-2xl overflow-hidden">
+      <div role="dialog" aria-modal="true" aria-label={t.searchButton} className="w-full max-w-2xl glass bg-white/80 rounded-3xl shadow-2xl overflow-hidden">
         <input
           ref={inputRef}
           type="text"

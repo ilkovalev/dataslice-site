@@ -45,7 +45,7 @@ function Forks({ forks, onRole, locale, en }) {
       <div className="flex flex-wrap gap-1.5">
         {forks.map((f, i) => {
           const title = loc(f.t, locale)
-          const cls = 'text-[11px] px-2 py-1 rounded-md border border-accent/30 bg-accent/[0.07] text-cyanink'
+          const cls = 'text-[11px] px-2.5 py-1 rounded-full border border-accent/30 bg-accent/[0.07] text-cyanink'
           return f.role ? (
             <button key={i} onClick={() => onRole(f.role)} className={`${cls} hover:bg-accent/15 transition-colors`}>{title}</button>
           ) : (
@@ -59,7 +59,7 @@ function Forks({ forks, onRole, locale, en }) {
 
 function Branch({ b, from, accent, locale }) {
   return (
-    <div className={`rounded-[1.15rem] border p-5 h-full ${accent ? 'border-accent/40 bg-accent/[0.05]' : 'border-black/10 bg-panel/60'}`}>
+    <div className={`glass rounded-3xl p-5 h-full ${accent ? 'ring-1 ring-accent/40' : ''}`}>
       <h4 className="font-semibold text-gray-900 mb-1">{loc(b.t, locale)}</h4>
       <p className="text-sm text-gray-600 leading-relaxed mb-4">{loc(b.d, locale)}</p>
       <div>
@@ -86,7 +86,7 @@ export default function CareerLadder({ data, onRole, locale, en }) {
     <div>
       {/* Откуда приходят в трек. Отдельной схемы этот список не заслуживает:
           для человека, который уже выбрал трек, это одна строка контекста. */}
-      <div className="rounded-lg border border-black/10 bg-black/[0.03] px-4 py-3 mb-6">
+      <div className="rounded-2xl bg-white/45 ring-1 ring-white/70 px-4 py-3 mb-6">
         <div className="text-xs uppercase tracking-wider text-cyanink/80 mb-2">
           {en ? 'People arrive here from' : 'Приходят сюда из'}
         </div>

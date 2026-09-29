@@ -81,6 +81,37 @@ for (const f of jsonFiles('src/content/industries')) {
   for (const id of seen) if (!metricIndustry[id]) metricIndustry[id] = d.id
 }
 
+// --- Глоссарий ↔ карточка метрики -----------------------------------------
+// Глоссарий и карточка метрики описывают одни и те же метрики и не должны
+// расходиться по полноте: раньше в карточке были подводные камни и связанные
+// метрики, а в глоссарии — нет. Теперь из каталога в глоссарий идут камни и
+// связанные метрики, а из глоссария в карточку — кейс с числами. Источник
+// у каждого куска один, поэтому текст не разъезжается.
+const glossEntries = (file) =>
+  [...fs.readFileSync(file, 'utf8').matchAll(/\{\s*term:\s*'(?:[^'\\]|\\.)*'[\s\S]*?\}/g)].map((m) => {
+    const f = (n) => (m[0].match(new RegExp('[{,]\\s*' + n + ":\\s*'((?:[^'\\\\]|\\\\.)*)'"))?.[1] || '').replace(/\\'/g, "'")
+    return { id: f('id'), metric: f('metric'), case: f('case') }
+  })
+const catalog = {}
+for (const f of jsonFiles('src/content/metrics')) for (const m of read(path.join('src/content/metrics', f))) catalog[m.id] = m
+const glossRu = glossEntries('src/content/glossary.js')
+const glossEn = glossEntries('src/content/glossary-en.js')
+const termByMetric = {}
+for (const g of glossRu) if (g.metric && g.id && !termByMetric[g.metric]) termByMetric[g.metric] = g.id
+const GLOSSARY_METRICS = {}
+const METRIC_CASES = {}
+glossRu.forEach((g, i) => {
+  const m = g.metric && catalog[g.metric]
+  if (!m) return
+  GLOSSARY_METRICS[g.metric] = {
+    pitfalls: m.pitfalls,
+    // связанные — только те, что есть в глоссарии: ссылка ведёт на термин рядом
+    related: (m.related || []).map((r) => termByMetric[r]).filter((id) => id && id !== g.id),
+  }
+  const en = glossEn.find((e) => e.id === g.id)
+  if (g.case && !METRIC_CASES[g.metric]) METRIC_CASES[g.metric] = { ru: g.case, en: en?.case || '' }
+})
+
 // --- Поисковый индекс -----------------------------------------------------
 // Поиск идёт по трём поверхностям сразу: темы курса, термины глоссария и
 // бизнес-метрики. Индекс собирается здесь, а не в рантайме, по той же причине,
@@ -184,6 +215,8 @@ export default defineConfig({
     __N_TERMS__: N_TERMS,
     __N_ROADMAPS__: N_ROADMAPS,
     __METRIC_INDUSTRY__: JSON.stringify(metricIndustry),
+    __GLOSSARY_METRICS__: JSON.stringify(GLOSSARY_METRICS),
+    __METRIC_CASES__: JSON.stringify(METRIC_CASES),
     __LESSON_INDEX__: JSON.stringify(LESSON_INDEX),
     __SEARCH_RU__: JSON.stringify(SEARCH_RU),
     __SEARCH_EN__: JSON.stringify(SEARCH_EN),

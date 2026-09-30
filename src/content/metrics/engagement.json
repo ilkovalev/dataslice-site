@@ -172,42 +172,17 @@
       ]
     },
     "sql": "-- Messages: human vs bot, and per active user\nSELECT date_trunc('day', ts) AS day,\n       COUNT(*) FILTER (WHERE props->>'sender_type' = 'human') AS human_messages,\n       COUNT(*) FILTER (WHERE props->>'sender_type' = 'bot') AS bot_messages,\n       COUNT(DISTINCT user_id) AS senders,\n       ROUND(1.0 * COUNT(*) FILTER (WHERE props->>'sender_type' = 'human')\n             / NULLIF(COUNT(DISTINCT user_id), 0), 1) AS messages_per_sender\nFROM events\nWHERE event_name = 'message_sent'\nGROUP BY 1\nORDER BY 1;",
-    "related": ["connected-pairs", "dau-mau", "reply-rate", "stickiness"]
-  },
-  {
-    "id": "connected-pairs",
-    "category": "engagement",
-    "title": { "ru": "Связанные пары (двусторонние диалоги)", "en": "Connected pairs (two-way conversations)" },
-    "aliases": ["диалоги", "связи", "граф общения"],
-    "tex": { "ru": "\\text{Пары}=\\#\\{(a,b): a\\to b\\text{ и }b\\to a\\text{ за период}\\}", "en": "\\text{Pairs}=\\#\\{(a,b): a\\to b\\text{ and }b\\to a\\text{ in period}\\}" },
-    "desc": {
-      "ru": "Сколько пар пользователей реально переписывались в обе стороны. Честная мера сетевого эффекта мессенджера: односторонняя отправка — это ещё не коммуникация, а вот состоявшийся диалог создаёт связь, из-за которой уйти с платформы становится невозможно в одиночку.",
-      "en": "How many user pairs actually exchanged messages both ways. The honest measure of a messenger's network effect: one-way sending isn't communication yet, while a real dialogue creates the tie that makes leaving the platform impossible to do alone."
-    },
-    "pitfalls": {
-      "ru": [
-        "Односторонние рассылки и каналы сюда не входят — и правильно: это медиа, а не связь.",
-        "Метрика тяжёлая: пары растут квадратично, считайте на семплах или инкрементально.",
-        "Пары в мессенджере концентрированы: у большинства людей 5–10 живых контактов, а не сотни — среднее по графу обманывает."
-      ],
-      "en": [
-        "One-way broadcasts and channels don't count — rightly so: that's media, not connection.",
-        "The metric is heavy: pairs grow quadratically, so compute on samples or incrementally.",
-        "Messenger pairs are concentrated: most people have 5–10 live contacts, not hundreds — the graph average deceives."
-      ]
-    },
-    "sql": "-- Two-way conversation pairs per week\nWITH directed AS (\n  SELECT DISTINCT date_trunc('week', ts) AS week,\n         user_id AS sender,\n         (props->>'recipient_id')::text AS recipient\n  FROM events\n  WHERE event_name = 'message_sent'\n    AND props->>'chat_type' = 'private'\n)\nSELECT a.week,\n       COUNT(*) / 2 AS connected_pairs,\n       COUNT(DISTINCT a.sender) AS users_in_dialogue\nFROM directed a\nJOIN directed b\n  ON b.week = a.week\n AND b.sender = a.recipient\n AND b.recipient = a.sender::text\nGROUP BY a.week\nORDER BY a.week;",
-    "related": ["messages-sent", "follow-graph", "retention-n-day", "viral-coefficient"]
+    "related": ["dau-mau", "reply-rate", "stickiness"]
   },
   {
     "id": "reply-rate",
     "category": "engagement",
-    "title": { "ru": "Доля отвеченных сообщений", "en": "Reply rate" },
+    "title": {"ru": "Response rate — доля ответов", "en": "Response rate"},
     "aliases": ["ответы", "отвеченные диалоги"],
-    "tex": { "ru": "\\text{Reply Rate}=\\dfrac{\\text{диалоги с ответом}}{\\text{начатые диалоги}}", "en": "\\text{Reply rate}=\\dfrac{\\text{conversations with a reply}}{\\text{conversations started}}" },
+    "tex": {"ru": "\\text{Response rate}=\\dfrac{\\text{запросы с ответом в окне}}{\\text{все входящие запросы}}", "en": "\\text{Response rate}=\\dfrac{\\text{inquiries answered within the window}}{\\text{all incoming inquiries}}"},
     "desc": {
-      "ru": "Какая доля сообщений получает ответ. Метрика качества коммуникации: сообщение без ответа — несостоявшаяся ценность, а для нового пользователя первый неотвеченный диалог часто означает, что он не вернётся. Растёт с доставляемостью и скоростью пушей — техника здесь напрямую влияет на продукт.",
-      "en": "What share of messages gets a reply. The communication-quality metric: an unanswered message is value that didn't happen, and for a new user the first unanswered dialogue often means they won't return. It rises with deliverability and push speed — here infrastructure directly drives the product."
+      "ru": "Доля входящих сообщений или запросов, получивших ответ в заданное окно. У площадок аренды стандарт задаёт Airbnb: ответ в течение 24 часов в скользящем окне 30 дней. В мессенджере так же считают долю начатых диалогов, на которые собеседник ответил: сообщение без ответа — несостоявшаяся ценность.",
+      "en": "The share of incoming messages or inquiries answered within a set window. For rental platforms Airbnb sets the standard: a reply within 24 hours over a rolling 30 days. In a messenger the same logic gives the share of started conversations that got a reply: an unanswered message is value that did not happen."
     },
     "pitfalls": {
       "ru": [
@@ -222,7 +197,7 @@
       ]
     },
     "sql": "-- Reply rate within an hour, by sender type\nWITH msgs AS (\n  SELECT e.props->>'chat_id' AS chat_id,\n         e.user_id AS sender,\n         e.props->>'sender_type' AS sender_type,\n         e.ts,\n         MIN(r.ts) AS replied_at\n  FROM events e\n  LEFT JOIN events r\n    ON r.props->>'chat_id' = e.props->>'chat_id'\n   AND r.event_name = 'message_sent'\n   AND r.user_id <> e.user_id\n   AND r.ts > e.ts\n  WHERE e.event_name = 'message_sent'\n  GROUP BY 1, 2, 3, 4\n)\nSELECT sender_type,\n       COUNT(*) AS messages,\n       ROUND(100.0 * COUNT(*) FILTER (\n         WHERE replied_at <= ts + INTERVAL '1 hour') / COUNT(*), 1) AS replied_1h_pct\nFROM msgs\nGROUP BY 1;",
-    "related": ["messages-sent", "connected-pairs", "latency-p95"]
+    "related": ["messages-sent", "latency-p95"]
   },
   {
     "id": "follow-graph",

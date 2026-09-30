@@ -38,19 +38,19 @@
       {
         "key": "activation",
         "note": {
-          "ru": "Активация в мессенджере — это не регистрация, а первый диалог, который дошёл до ответа. Одностороннее сообщение сети не создаёт.",
-          "en": "Activation in a messenger isn't a signup but a first conversation that got a reply. A one-way message creates no network."
+          "ru": "Активация в мессенджере — это не регистрация, а появление своего круга контактов, с которыми человек переписывается. Без него продукт пуст.",
+          "en": "Activation in a messenger isn't a signup but the appearance of one's own circle of contacts to message. Without it the product is empty."
         },
         "metrics": [
           {
-            "metricId": "connected-pairs",
+            "metricId": "follow-graph",
             "label": {
-              "ru": "Первые связанные пары",
-              "en": "First connected pairs"
+              "ru": "Контакты за первую неделю",
+              "en": "Contacts in week one"
             },
             "def": {
-              "ru": "Сколько собеседников с двусторонним обменом набрал новичок за первую неделю: порог обычно два-три, ниже него удержание обваливается.",
-              "en": "How many two-way conversation partners a newcomer gained in week one: the threshold is usually two or three, below which retention collapses."
+              "ru": "Сколько живых контактов новичок нашёл в мессенджере за первые дни. Та же логика, что у известного ориентира Facebook «7 друзей за 10 дней»: пока у человека нет своего круга общения, продукт ему не нужен.",
+              "en": "How many live contacts a newcomer found on the messenger in the first days. The same logic as Facebook's well-known \"7 friends in 10 days\" benchmark: until a person has their own circle, the product is of no use to them."
             }
           },
           {
@@ -218,9 +218,6 @@
           },
           {
             "metricId": "reply-rate"
-          },
-          {
-            "metricId": "connected-pairs"
           }
         ]
       },

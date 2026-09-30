@@ -275,31 +275,6 @@
     "related": ["successful-contacts", "arppu", "seller-retention"]
   },
   {
-    "id": "listing-freshness",
-    "category": "marketplace",
-    "title": { "ru": "Свежесть объявлений", "en": "Listing freshness" },
-    "aliases": ["актуальность", "протухшие объявления"],
-    "tex": { "ru": "\\text{Свежесть}=\\dfrac{\\text{актуальные объявления}}{\\text{все активные}}", "en": "\\text{Freshness}=\\dfrac{\\text{current listings}}{\\text{all active}}" },
-    "desc": {
-      "ru": "Какая доля объявлений всё ещё соответствует реальности: товар не продан, цена та же, продавец отвечает. Тихий убийца классифайда: «позвонил — уже продано» обходится дороже, чем отсутствие объявления вовсе, потому что тратит время покупателя и убивает доверие ко всей выдаче.",
-      "en": "What share of listings still matches reality: the item is unsold, the price holds, the seller replies. A classified's silent killer: \"called — already sold\" costs more than having no listing at all, because it wastes the buyer's time and poisons trust in the whole catalog."
-    },
-    "pitfalls": {
-      "ru": [
-        "Продавцы не снимают проданное: отсутствие сигнала — не признак актуальности, нужны активные проверки.",
-        "Автопродление ради красивой ширины каталога прямо конфликтует со свежестью.",
-        "Метрика по каталогу врёт: считайте взвешенно по показам — важна свежесть того, что видят люди."
-      ],
-      "en": [
-        "Sellers don't remove sold items: no signal isn't proof of freshness — active checks are required.",
-        "Auto-renewal for a pretty catalog width directly conflicts with freshness.",
-        "A catalog-wide metric lies: weight by impressions — what matters is the freshness of what people actually see."
-      ]
-    },
-    "sql": "-- Freshness weighted by impressions, not by catalog\nSELECT props->>'category' AS category,\n       COUNT(*) AS listing_views,\n       ROUND(100.0 * COUNT(*) FILTER (\n         WHERE (props->>'listing_age_days')::int <= 30) / COUNT(*), 1) AS fresh_30d_pct,\n       ROUND(100.0 * COUNT(*) FILTER (\n         WHERE props->>'contact_outcome' = 'already_sold')\n         / NULLIF(COUNT(*) FILTER (WHERE props->>'contact_outcome' IS NOT NULL), 0), 1) AS already_sold_pct\nFROM events\nWHERE event_name = 'listing_view'\nGROUP BY 1\nORDER BY listing_views DESC;",
-    "related": ["active-listings", "fraud-rate", "successful-contacts"]
-  },
-  {
     "id": "content-supply",
     "category": "marketplace",
     "title": { "ru": "Поток контента от авторов", "en": "Creator content supply" },

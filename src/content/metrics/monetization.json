@@ -102,12 +102,12 @@
   {
     "id": "retained-subscribers",
     "category": "monetization",
-    "title": { "ru": "Retained Paying Subscribers", "en": "Retained paying subscribers" },
+    "title": {"ru": "Paid subscribers — платящие подписчики", "en": "Paid subscribers"},
     "aliases": ["удерживаемые платящие"],
     "tex": { "ru": "\\text{База}_{t}=\\text{База}_{t-1}+\\text{новые}-\\text{ушедшие}", "en": "\\text{Base}_{t}=\\text{Base}_{t-1}+\\text{new}-\\text{churned}" },
     "desc": {
-      "ru": "Число активных платящих подписчиков на конец периода. North Star подписочных продуктов: база — это накопленный итог всех прошлых решений о привлечении и удержании, и на зрелом рынке отток решает её судьбу сильнее притока.",
-      "en": "The count of active paying subscribers at period end. The North Star of subscription products: the base is the accumulated result of every past acquisition and retention decision, and in a mature market churn decides its fate more than inflow."
+      "ru": "Число активных платящих подписок на конец периода. Так отчитываются стриминги: у Netflix это paid memberships — подписки с привязанным способом оплаты, без бесплатного триала и промо-доступа. База — накопленный итог всех прошлых решений о привлечении и удержании, и на зрелом рынке её судьбу сильнее решает отток, чем приток.",
+      "en": "The number of active paid subscriptions at period end. This is how streaming services report: Netflix calls them paid memberships — subscriptions with a payment method on file, excluding free trials and promotional access. The base is the accumulated result of every past acquisition and retention decision, and in a mature market churn decides its fate more than inflow."
     },
     "pitfalls": {
       "ru": [
@@ -354,7 +354,7 @@
     "category": "monetization",
     "title": { "ru": "LTV — пожизненная ценность клиента", "en": "LTV — customer lifetime value" },
     "aliases": ["lifetime value", "пожизненная ценность"],
-    "tex": { "ru": "\\mathrm{LTV}\\approx \\mathrm{ARPU}_{\\text{мес}}\\times\\text{средний срок жизни (мес)}", "en": "\\mathrm{LTV}\\approx \\mathrm{ARPU}_{month}\\times\\text{avg lifetime (months)}" },
+    "tex": {"ru": "\\mathrm{LTV}\\approx\\dfrac{\\mathrm{ARPU}_{\\text{мес}}\\times\\text{маржинальность}}{\\text{отток}_{\\text{мес}}}", "en": "\\mathrm{LTV}\\approx\\dfrac{\\mathrm{ARPU}_{\\text{month}}\\times\\text{margin}}{\\text{churn}_{\\text{month}}}"},
     "desc": {
       "ru": "Сколько денег приносит клиент за всё время отношений с продуктом. Определяет потолок допустимого CAC и смещает фокус с разовой сделки на удержание. Честный способ считать — по кумулятивной выручке когорт, а не по формуле с «средним сроком жизни».",
       "en": "How much money a customer brings over their whole relationship with the product. Sets the ceiling for acceptable CAC and shifts focus from one-off deals to retention. The honest way to compute it is cumulative cohort revenue, not the \"average lifetime\" formula."

@@ -67,13 +67,6 @@
               "ru": "Доля просмотров объявления, закончившихся обращением к продавцу; главный показатель качества карточки и цены.",
               "en": "The share of listing views ending in a contact with the seller; the key indicator of listing quality and price."
             }
-          },
-          {
-            "metricId": "listing-freshness",
-            "def": {
-              "ru": "Доля актуальных объявлений в выдаче: проданное, но не снятое объявление тратит контакты впустую и подрывает доверие.",
-              "en": "The share of live listings in results: a sold-but-not-removed listing wastes contacts and erodes trust."
-            }
           }
         ]
       },
@@ -295,9 +288,6 @@
         "metrics": [
           {
             "metricId": "successful-contacts"
-          },
-          {
-            "metricId": "listing-freshness"
           }
         ]
       }

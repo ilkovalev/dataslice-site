@@ -135,16 +135,4 @@ export const glossaryPitfalls = {
       'Exchange rate swings change the GBV of international bookings with no change in the number of trips.',
     ],
   },
-  'match-rate': {
-    ru: [
-      'Запрос, отменённый клиентом до назначения исполнителя, портит метрику, хотя сервис не виноват. Такие случаи выделяют отдельно.',
-      'Средний match rate за день прячет провалы в часы пик, поэтому его смотрят по часам и районам.',
-      'Высокий match rate при долгом ожидании не означает хороший сервис: рядом смотрят время до назначения.',
-    ],
-    en: [
-      'A request the customer cancels before a provider is assigned hurts the metric though the service is not at fault. Such cases are split out.',
-      'A daily average match rate hides peak-hour dips, so it is read by hour and area.',
-      'A high match rate with long waits does not mean good service: time to assignment is checked alongside.',
-    ],
-  },
 }

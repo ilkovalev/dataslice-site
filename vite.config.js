@@ -88,7 +88,7 @@ for (const f of jsonFiles('src/content/industries')) {
 // связанные метрики, а из глоссария в карточку — кейс с числами. Источник
 // у каждого куска один, поэтому текст не разъезжается.
 const glossEntries = (file) =>
-  [...fs.readFileSync(file, 'utf8').matchAll(/\{\s*term:\s*'(?:[^'\\]|\\.)*'[\s\S]*?\}/g)].map((m) => {
+  [...fs.readFileSync(file, 'utf8').matchAll(/^\s*\{\s*term:\s*'(?:[^'\\]|\\.)*'.*$/gm)].map((m) => {
     const f = (n) => (m[0].match(new RegExp('[{,]\\s*' + n + ":\\s*'((?:[^'\\\\]|\\\\.)*)'"))?.[1] || '').replace(/\\'/g, "'")
     return { id: f('id'), metric: f('metric'), case: f('case') }
   })
@@ -98,6 +98,8 @@ const glossRu = glossEntries('src/content/glossary.js')
 const glossEn = glossEntries('src/content/glossary-en.js')
 const termByMetric = {}
 for (const g of glossRu) if (g.metric && g.id && !termByMetric[g.metric]) termByMetric[g.metric] = g.id
+// у каких терминов свой SQL в glossarySql.js — остальным отдаём SQL из каталога
+const ownSql = new Set([...fs.readFileSync('src/content/glossarySql.js', 'utf8').matchAll(/^  '?([a-z0-9-]+)'?: `/gm)].map((m) => m[1]))
 const GLOSSARY_METRICS = {}
 const METRIC_CASES = {}
 glossRu.forEach((g, i) => {
@@ -107,6 +109,7 @@ glossRu.forEach((g, i) => {
     pitfalls: m.pitfalls,
     // связанные — только те, что есть в глоссарии: ссылка ведёт на термин рядом
     related: (m.related || []).map((r) => termByMetric[r]).filter((id) => id && id !== g.id),
+    ...(ownSql.has(g.id) ? {} : { sql: m.sql }),
   }
   const en = glossEn.find((e) => e.id === g.id)
   if (g.case && !METRIC_CASES[g.metric]) METRIC_CASES[g.metric] = { ru: g.case, en: en?.case || '' }
@@ -139,8 +142,9 @@ function buildSearchIndex(locale) {
 
   const glossSrc = fs.readFileSync(en ? 'src/content/glossary-en.js' : 'src/content/glossary.js', 'utf8')
   // Глоссарий — обычный JS-модуль, читать его парсером ради сборки индекса
-  // избыточно: поля вытаскиваем регэкспом по одной записи за раз.
-  for (const m of glossSrc.matchAll(/\{\s*term:\s*'((?:[^'\\]|\\.)*)'[\s\S]*?\}/g)) {
+  // избыточно: поля вытаскиваем регэкспом по одной записи за раз. Запись —
+  // строка целиком: до первой «}» резать нельзя, в TeX-формулах есть \\text{…}.
+  for (const m of glossSrc.matchAll(/^\s*\{\s*term:\s*'((?:[^'\\]|\\.)*)'.*$/gm)) {
     const entry = m[0]
     const field = (name) => entry.match(new RegExp(name + ":\\s*'((?:[^'\\\\]|\\\\.)*)'"))?.[1] || ''
     const aliases = [...entry.matchAll(/aliases:\s*\[([^\]]*)\]/g)]

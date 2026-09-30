@@ -69,32 +69,17 @@
                 },
                 "children": [
                   {
-                    "id": "pairs",
+                    "id": "core-contacts",
                     "level": 4,
-                    "metricId": "connected-pairs",
+                    "metricId": "follow-graph",
                     "title": {
-                      "ru": "Связанные пары",
-                      "en": "Connected pairs"
+                      "ru": "Ядро контактов",
+                      "en": "Core contacts"
                     },
                     "note": {
-                      "ru": "Двусторонние диалоги: настоящая мера сети. Односторонняя отправка — ещё не связь.",
-                      "en": "Two-way dialogues: the real measure of the network. One-way sending isn't a connection yet."
-                    },
-                    "children": [
-                      {
-                        "id": "core-contacts",
-                        "level": 5,
-                        "metricId": "follow-graph",
-                        "title": {
-                          "ru": "Ядро контактов",
-                          "en": "Core contacts"
-                        },
-                        "note": {
-                          "ru": "У человека 5–10 живых контактов, а не сотни: попадание этого ядра в мессенджер и есть порог, после которого он не уходит.",
-                          "en": "A person has 5–10 live contacts, not hundreds: getting that core onto the messenger is the threshold past which they don't leave."
-                        }
-                      }
-                    ]
+                      "ru": "У человека 5–10 живых контактов, а не сотни: попадание этого ядра в мессенджер и есть порог, после которого он не уходит.",
+                      "en": "A person has 5–10 live contacts, not hundreds: getting that core onto the messenger is the threshold past which they don't leave."
+                    }
                   }
                 ]
               }
@@ -452,45 +437,30 @@
                 },
                 "children": [
                   {
-                    "id": "tg-pairs",
+                    "id": "tg-groups",
                     "level": 3,
-                    "metricId": "connected-pairs",
+                    "metricId": "follow-graph",
                     "title": {
-                      "ru": "Связанные пары",
-                      "en": "Connected pairs"
+                      "ru": "Группы и сообщества",
+                      "en": "Groups & communities"
                     },
                     "note": {
-                      "ru": "Живые диалоги, а не установки.",
-                      "en": "Live dialogues, not installs."
+                      "ru": "Группы держат сильнее личных чатов: уйти = потерять сразу все сообщества.",
+                      "en": "Groups hold harder than private chats: leaving means losing every community at once."
                     },
                     "children": [
                       {
-                        "id": "tg-groups",
-                        "level": 4,
-                        "metricId": "follow-graph",
+                        "id": "tg-retention",
+                        "level": 5,
+                        "metricId": "retention-n-day",
                         "title": {
-                          "ru": "Группы и сообщества",
-                          "en": "Groups & communities"
+                          "ru": "Удержание участников групп",
+                          "en": "Group member retention"
                         },
                         "note": {
-                          "ru": "Группы держат сильнее личных чатов: уйти = потерять сразу все сообщества.",
-                          "en": "Groups hold harder than private chats: leaving means losing every community at once."
-                        },
-                        "children": [
-                          {
-                            "id": "tg-retention",
-                            "level": 5,
-                            "metricId": "retention-n-day",
-                            "title": {
-                              "ru": "Удержание участников групп",
-                              "en": "Group member retention"
-                            },
-                            "note": {
-                              "ru": "Удержание участников активных групп против пользователей только с личными чатами — цена сообществ в цифрах.",
-                              "en": "Retention of active-group members versus private-chat-only users — the value of communities in numbers."
-                            }
-                          }
-                        ]
+                          "ru": "Удержание участников активных групп против пользователей только с личными чатами — цена сообществ в цифрах.",
+                          "en": "Retention of active-group members versus private-chat-only users — the value of communities in numbers."
+                        }
                       }
                     ]
                   }
@@ -774,7 +744,6 @@
                   {
                     "id": "wa-penetration",
                     "level": 3,
-                    "metricId": "connected-pairs",
                     "title": {
                       "ru": "Проникновение в стране",
                       "en": "Country penetration"

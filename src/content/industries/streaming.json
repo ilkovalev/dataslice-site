@@ -9,13 +9,13 @@
     "en": "Streaming & subscriptions"
   },
   "northStar": {
-    "ru": "Retained Paying Subscribers (удерживаемые платящие)",
-    "en": "Retained paying subscribers"
+    "ru": "Paid Subscribers (платящие подписчики)",
+    "en": "Paid subscribers"
   },
   "root": {
     "id": "subs",
     "level": 0,
-    "title": "Retained Paying Subscribers",
+    "title": "Paid Subscribers",
     "formula": {
       "ru": "Привлечение − Отток",
       "en": "Acquisition − Churn"
@@ -292,8 +292,8 @@
             "en": "MRR / revenue"
           },
           {
-            "ru": "Удерживаемые платящие",
-            "en": "Retained payers"
+            "ru": "Платящие подписчики",
+            "en": "Paid subscribers"
           },
           "LTV / CAC"
         ]
@@ -391,8 +391,8 @@
       "id": "netflix",
       "name": "Netflix",
       "northStar": {
-        "ru": "Retained Subscribers (вовлечённость контентом)",
-        "en": "Retained subscribers (content engagement)"
+        "ru": "Paid Memberships (вовлечённость контентом)",
+        "en": "Paid memberships (content engagement)"
       },
       "note": {
         "ru": "видео-подписка: удержание тянет каталог и оригиналы; ключ — «нашёл что посмотреть».",
@@ -401,7 +401,7 @@
       "root": {
         "id": "n-subs",
         "level": 0,
-        "title": "Retained Subscribers",
+        "title": "Paid Memberships",
         "formula": {
           "ru": "Привлечение − Отток",
           "en": "Acquisition − Churn"
@@ -612,7 +612,7 @@
                 "ru": "Выручка",
                 "en": "Revenue"
               },
-              "Retained Subscribers"
+              "Paid Memberships"
             ]
           },
           {
@@ -716,8 +716,8 @@
       "id": "spotify",
       "name": "Spotify",
       "northStar": {
-        "ru": "Retained Subscribers (ежедневное прослушивание)",
-        "en": "Retained subscribers (daily listening)"
+        "ru": "Premium Subscribers (ежедневное прослушивание)",
+        "en": "Premium subscribers (daily listening)"
       },
       "note": {
         "ru": "аудио-подписка: ставка на ежедневную привычку и персональные плейлисты; маржа зависит от роялти лейблам.",
@@ -726,7 +726,7 @@
       "root": {
         "id": "s-subs",
         "level": 0,
-        "title": "Retained Subscribers",
+        "title": "Premium Subscribers",
         "formula": {
           "ru": "Привлечение − Отток",
           "en": "Acquisition − Churn"
@@ -924,7 +924,7 @@
                 "ru": "Выручка",
                 "en": "Revenue"
               },
-              "Retained Subscribers",
+              "Premium Subscribers",
               {
                 "ru": "Валовая маржа",
                 "en": "Gross margin"

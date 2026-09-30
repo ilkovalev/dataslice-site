@@ -179,7 +179,7 @@
     "category": "retention",
     "title": { "ru": "NRR — чистое удержание выручки", "en": "NRR — net revenue retention" },
     "aliases": ["net revenue retention", "ndr"],
-    "tex": { "ru": "\\mathrm{NRR}=\\dfrac{\\text{MRR когорты сейчас}}{\\text{MRR той же когорты год назад}}", "en": "\\mathrm{NRR}=\\dfrac{\\text{cohort MRR now}}{\\text{same cohort's MRR a year ago}}" },
+    "tex": {"ru": "\\mathrm{NRR}=\\dfrac{\\mathrm{MRR}_{\\text{начала}}+\\text{расширение}-\\text{сжатие}-\\text{отток}}{\\mathrm{MRR}_{\\text{начала}}}", "en": "\\mathrm{NRR}=\\dfrac{\\mathrm{MRR}_{\\text{start}}+\\text{expansion}-\\text{contraction}-\\text{churn}}{\\mathrm{MRR}_{\\text{start}}}"},
     "desc": {
       "ru": "Сколько выручки сохранила и дорастила когорта существующих клиентов — с учётом расширений (upsell), сжатий (downgrade) и оттока, но без новых продаж. North Star зрелого B2B SaaS: NRR > 100% означает, что бизнес растёт даже без единого нового клиента.",
       "en": "How much revenue a cohort of existing customers kept and grew — counting expansion (upsell), contraction (downgrade) and churn, but excluding new sales. The North Star of mature B2B SaaS: NRR > 100% means the business grows even with zero new customers."
@@ -252,12 +252,12 @@
   {
     "id": "learning-outcome",
     "category": "retention",
-    "title": { "ru": "Достигнутый результат обучения", "en": "Learning outcome achieved" },
+    "title": {"ru": "Job placement rate — трудоустройство выпускников", "en": "Job placement rate"},
     "aliases": ["результат обучения", "трудоустройство", "learning outcome", "навык"],
-    "tex": { "ru": "\\text{Результат}=\\dfrac{\\text{достигли заявленной цели}}{\\text{завершили программу}}", "en": "\\text{Outcome}=\\dfrac{\\text{reached the stated goal}}{\\text{completed the program}}" },
+    "tex": {"ru": "\\text{Job placement}=\\dfrac{\\text{приняли оффер по профилю за 180 дней}}{\\text{выпускники}}", "en": "\\text{Job placement}=\\dfrac{\\text{accepted an in-field offer within 180 days}}{\\text{graduates}}"},
     "desc": {
-      "ru": "Доля выпускников, получивших то, ради чего покупали программу: работу по специальности, подтверждённый навык, сданный экзамен. Держится рядом с доходимостью и страхует её от вырождения: курс можно упростить до стопроцентного прохождения, но результат так не подделаешь.",
-      "en": "The share of graduates who got what they bought the program for: a job in the field, a verified skill, a passed exam. It sits next to completion and insures it against degeneration: a course can be dumbed down to a hundred percent completion, but the outcome can't be faked that way."
+      "ru": "Доля выпускников, получивших работу по специальности в заданный срок после выпуска. Отраслевой стандарт для буткемпов — методика CIRR: принятый оффер на полную ставку по профилю в течение 180 дней, с аудитом данных. Держится рядом с доходимостью и страхует её: курс можно упростить до стопроцентного прохождения, а трудоустройство так не подделать.",
+      "en": "The share of graduates who got a job in their field within a set time after graduating. The industry standard for bootcamps is the CIRR methodology: an accepted full-time in-field offer within 180 days, with audited data. It sits next to completion and insures it: a course can be simplified to a hundred percent completion, but placement cannot be faked that way."
     },
     "pitfalls": {
       "ru": [

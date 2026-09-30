@@ -209,8 +209,7 @@
                       }
                     ]
                   }
-                ],
-                "metricId": "listing-freshness"
+                ]
               }
             ]
           }

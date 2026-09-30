@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useRef, useState } from 'react'
+import { Fragment, Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { glossary } from '../content/glossary.js'
 import { glossaryEn } from '../content/glossary-en.js'
@@ -105,6 +105,9 @@ export default function GlossaryPage() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [query, locale, tab])
 
+  // SQL: у части терминов свой (glossarySql.js), у отраслевых — из каталога.
+  const sqlFor = (term) => glossarySql[term.id] ?? GLOSSARY_METRICS[term.metric]?.sql
+
   // Связанные метрики — термины этого же глоссария, чтобы ссылка вела рядом.
   const byId = {}
   data.forEach((g) => g.terms.forEach((term) => term.id && (byId[term.id] = term)))
@@ -141,7 +144,7 @@ export default function GlossaryPage() {
           </Suspense>
         </dd>
       )}
-      {term.case && glossarySql[term.id] && (
+      {term.case && sqlFor(term) && (
         <dd className="mt-2.5">
           <details className="group">
             <summary className="glass-pill inline-flex items-center gap-1.5 cursor-pointer select-none rounded-full px-3 py-1 text-xs text-gray-600 hover:text-cyanink group-open:text-cyanink transition-colors list-none [&::-webkit-details-marker]:hidden">
@@ -152,7 +155,7 @@ export default function GlossaryPage() {
               <ExampleBlock label={t.metricExample} text={term.case} />
               <div>
                 <SectionLabel>{t.metricCardSql}</SectionLabel>
-                <SqlBlock sql={glossarySql[term.id]} copyLabel={t.metricCardCopy} copiedLabel={t.metricCardCopied} selectedLabel={t.metricCardSelected} />
+                <SqlBlock sql={sqlFor(term)} copyLabel={t.metricCardCopy} copiedLabel={t.metricCardCopied} selectedLabel={t.metricCardSelected} />
               </div>
               <Pitfalls
                 label={t.metricCardPitfalls}
@@ -202,6 +205,11 @@ export default function GlossaryPage() {
               {c.title} <span className="text-sm font-normal text-gray-400">{terms.length}</span>
             </h3>
             {c.desc && <p className="text-sm text-gray-500 leading-snug">{c.desc}</p>}
+            {c.industry && (
+              <Link to={`${p}/metrics?tab=industries&ind=${c.industry}`} className="inline-block mt-1 text-xs text-cyanink hover:underline">
+                {t.glossaryIndustryTree}
+              </Link>
+            )}
           </div>
         </div>
       )}
@@ -274,11 +282,16 @@ export default function GlossaryPage() {
               выдача короткая и идёт по всем разделам. */}
           <aside className="hidden lg:block sticky top-24">
             {!query && current.cats && (
-              <nav className="glass rounded-3xl p-3 flex flex-col gap-0.5">
+              <nav className="glass rounded-3xl p-3 flex flex-col gap-0.5 max-h-[calc(100vh-7rem)] overflow-y-auto">
                 <div className="px-2.5 pt-1 pb-2 text-xs uppercase tracking-wider text-gray-400">{current.group}</div>
-                {current.cats.map((c) => (
+                {current.cats.map((c, k) => (
+                  <Fragment key={c.id}>
+                  {c.industry && !current.cats[k - 1]?.industry && (
+                    <div className="mt-2 mb-1 mx-2.5 pt-3 border-t border-black/10 text-xs uppercase tracking-wider text-gray-400">
+                      {t.glossaryIndustryH}
+                    </div>
+                  )}
                   <a
-                    key={c.id}
                     href={`#g-${c.id}`}
                     className={`flex items-center gap-2 rounded-xl px-2.5 py-1.5 text-sm transition-colors ${
                       active === `g-${c.id}` ? 'glass-pill text-cyanink' : 'text-gray-700 hover:bg-white/50 border border-transparent'
@@ -290,6 +303,7 @@ export default function GlossaryPage() {
                     <span className="flex-1">{c.title}</span>
                     <span className="text-gray-400">{c.terms.length}</span>
                   </a>
+                  </Fragment>
                 ))}
               </nav>
             )}
@@ -324,7 +338,21 @@ export default function GlossaryPage() {
                 {!query && data[g.i].categories?.some((c) => c.step) && (
                   <p className="text-sm text-gray-500 mb-4 px-1">{t.glossaryLifecycle}</p>
                 )}
-                {g.cats ? g.cats.map((c) => renderPanel(c, c.terms)) : renderPanel(null, g.terms)}
+                {g.cats
+                  ? g.cats.map((c, k) => (
+                      <Fragment key={c.id}>
+                        {/* Черта между стадиями жизненного цикла, общими для всех,
+                            и метриками конкретных отраслей. */}
+                        {c.industry && !g.cats[k - 1]?.industry && (
+                          <div className="mt-10 mb-5 pt-6 border-t border-black/10">
+                            <h2 className="text-xl font-semibold tracking-tight text-gray-900">{t.glossaryIndustryH}</h2>
+                            <p className="text-sm text-gray-500 mt-1">{t.glossaryIndustrySub}</p>
+                          </div>
+                        )}
+                        {renderPanel(c, c.terms)}
+                      </Fragment>
+                    ))
+                  : renderPanel(null, g.terms)}
               </section>
             ))}
           </div>

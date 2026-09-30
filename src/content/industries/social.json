@@ -1348,10 +1348,9 @@
                           {
                             "id": "fb-meaningful",
                             "level": 5,
-                            "metricId": "connected-pairs",
                             "title": {
-                              "ru": "Осмысленные взаимодействия",
-                              "en": "Meaningful interactions"
+                              "ru": "Осмысленные взаимодействия (MSI)",
+                              "en": "Meaningful social interactions (MSI)"
                             },
                             "note": {
                               "ru": "Ответ Facebook на закон Гудхарта: после того как погоня за временем привела к пассивному листанию, метрику переопределили через общение с близкими — время просело осознанно.",

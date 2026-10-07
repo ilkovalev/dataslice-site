@@ -171,7 +171,7 @@
         "Counting a sign-up instead of a first purchase as a \"new customer\" makes CAC look better than it is."
       ]
     },
-    "sql": "-- CAC by channel per month: spend / first-time customers\nWITH first_orders AS (\n  SELECT user_id,\n         MIN(created_at)::date AS first_order_dt\n  FROM orders\n  WHERE status = 'paid'\n  GROUP BY user_id\n)\nSELECT date_trunc('month', s.dt) AS month,\n       s.channel,\n       SUM(s.spend) AS spend,\n       COUNT(DISTINCT f.user_id) AS new_customers,\n       SUM(s.spend) / NULLIF(COUNT(DISTINCT f.user_id), 0) AS cac\nFROM marketing_spend s\nLEFT JOIN users u ON u.acq_channel = s.channel\nLEFT JOIN first_orders f\n  ON f.user_id = u.user_id\n AND date_trunc('month', f.first_order_dt) = date_trunc('month', s.dt)\nGROUP BY 1, 2\nORDER BY 1, 2;",
+    "sql": "-- CAC by channel per month: spend / first-time customers\n-- Spend and new customers are aggregated separately, then joined 1:1.\n-- Joining users straight onto marketing_spend fans the spend rows out\n-- across every user of the channel and inflates SUM(spend).\nWITH first_orders AS (\n  SELECT user_id,\n         MIN(created_at)::date AS first_order_dt\n  FROM orders\n  WHERE status = 'paid'\n  GROUP BY user_id\n),\nnew_customers AS (\n  SELECT u.acq_channel AS channel,\n         date_trunc('month', f.first_order_dt) AS month,\n         COUNT(*) AS new_customers\n  FROM first_orders f\n  JOIN users u ON u.user_id = f.user_id\n  GROUP BY 1, 2\n),\nspend AS (\n  SELECT channel,\n         date_trunc('month', dt) AS month,\n         SUM(spend) AS spend\n  FROM marketing_spend\n  GROUP BY 1, 2\n)\nSELECT s.month,\n       s.channel,\n       s.spend,\n       n.new_customers,\n       s.spend / NULLIF(n.new_customers, 0) AS cac\nFROM spend s\nLEFT JOIN new_customers n\n  ON n.channel = s.channel\n AND n.month = s.month\nORDER BY 1, 2;",
     "related": ["ltv-cac", "roas", "conversion-rate", "payback-period"]
   },
   {
@@ -279,7 +279,7 @@
     "category": "acquisition",
     "title": { "ru": "Воронка и потери по шагам", "en": "Funnel step drop-off" },
     "aliases": ["воронка", "funnel"],
-    "tex": { "ru": "\\text{доля шага}=\\dfrac{\\text{дошли до шага }k+1}{\\text{дошли до шага }k}", "en": "\\text{step rate}=\\dfrac{\\text{reached step }k+1}{\\text{reached step }k}" },
+    "tex": { "ru": "\\text{конверсия шага}=\\dfrac{\\text{дошли до шага }k+1}{\\text{дошли до шага }k}", "en": "\\text{step conversion}=\\dfrac{\\text{reached step }k+1}{\\text{reached step }k}" },
     "desc": {
       "ru": "Конверсия, разложенная на последовательные шаги: карточка → корзина → чекаут → оплата. Показывает, где именно теряются пользователи, — общая конверсия отвечает «сколько», воронка отвечает «где чинить».",
       "en": "Conversion broken into sequential steps: product page → cart → checkout → payment. Shows exactly where users leak out — overall CR says \"how much\", the funnel says \"where to fix\"."
